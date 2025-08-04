@@ -1,0 +1,40 @@
+2025-08-05 01:02:38.347 +05:30 [INF] User profile is available. Using 'C:\Users\sunde\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-08-05 01:02:38.414 +05:30 [INF] 🚀 Webhook Queue Worker started.
+2025-08-05 01:02:38.435 +05:30 [INF] 🧹 FailedWebhookLogCleanupService started.
+2025-08-05 01:02:40.287 +05:30 [WRN] Sensitive data logging is enabled. Log entries and exception messages may include sensitive application data; this mode should only be enabled during development.
+2025-08-05 01:02:40.791 +05:30 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2025-08-05 01:02:41.046 +05:30 [INF] Now listening on: http://localhost:7113
+2025-08-05 01:02:41.047 +05:30 [INF] Now listening on: http://localhost:5295
+2025-08-05 01:02:41.050 +05:30 [INF] Application started. Press Ctrl+C to shut down.
+2025-08-05 01:02:41.051 +05:30 [INF] Hosting environment: Development
+2025-08-05 01:02:41.054 +05:30 [INF] Content root path: D:\xbytechat\xbytechat-api\xbytechat-api
+2025-08-05 01:02:41.217 +05:30 [INF] Executed DbCommand (22ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT w."Id", w."AutoCleanupEnabled", w."LastCleanupAt"
+FROM "WebhookSettings" AS w
+LIMIT 1
+2025-08-05 01:02:41.236 +05:30 [INF] Executed DbCommand (38ms) [Parameters=[@__cutoff_0='2025-07-28T19:32:39.6403827Z' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT f."Id", f."CreatedAt", f."ErrorMessage", f."FailureType", f."RawJson", f."SourceModule"
+FROM "FailedWebhookLogs" AS f
+WHERE f."CreatedAt" < @__cutoff_0
+2025-08-05 01:02:50.795 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/swagger - null null
+2025-08-05 01:02:51.035 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/swagger - 301 0 null 251.2101ms
+2025-08-05 01:02:51.042 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/swagger/index.html - null null
+2025-08-05 01:02:51.767 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/swagger/index.html - 200 null text/html;charset=utf-8 724.4024ms
+2025-08-05 01:02:51.788 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/swagger/swagger-ui.css - null null
+2025-08-05 01:02:51.789 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/swagger/swagger-ui-standalone-preset.js - null null
+2025-08-05 01:02:51.789 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/swagger/swagger-ui-bundle.js - null null
+2025-08-05 01:02:51.863 +05:30 [INF] Sending file. Request path: '/swagger-ui-standalone-preset.js'. Physical path: 'N/A'
+2025-08-05 01:02:51.863 +05:30 [INF] Sending file. Request path: '/swagger-ui.css'. Physical path: 'N/A'
+2025-08-05 01:02:51.869 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/swagger/swagger-ui-standalone-preset.js - 200 230280 text/javascript 80.106ms
+2025-08-05 01:02:51.869 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/swagger/swagger-ui.css - 200 152034 text/css 81.4071ms
+2025-08-05 01:02:51.879 +05:30 [INF] Sending file. Request path: '/swagger-ui-bundle.js'. Physical path: 'N/A'
+2025-08-05 01:02:51.885 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/swagger/swagger-ui-bundle.js - 200 1456926 text/javascript 95.9543ms
+2025-08-05 01:02:51.901 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/_framework/aspnetcore-browser-refresh.js - null null
+2025-08-05 01:02:51.905 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/_vs/browserLink - null null
+2025-08-05 01:02:51.910 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/_framework/aspnetcore-browser-refresh.js - 200 13762 application/javascript; charset=utf-8 9.6698ms
+2025-08-05 01:02:52.384 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/_vs/browserLink - 200 null text/javascript; charset=UTF-8 479.5322ms
+2025-08-05 01:02:52.460 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/swagger/v1/swagger.json - null null
+2025-08-05 01:02:52.502 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/swagger/favicon-32x32.png - null null
+2025-08-05 01:02:52.510 +05:30 [INF] Sending file. Request path: '/favicon-32x32.png'. Physical path: 'N/A'
+2025-08-05 01:02:52.513 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/swagger/favicon-32x32.png - 200 628 image/png 10.3789ms
+2025-08-05 01:02:52.794 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 333.9715ms

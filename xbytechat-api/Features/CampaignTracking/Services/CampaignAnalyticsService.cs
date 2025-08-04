@@ -13,6 +13,7 @@ namespace xbytechat.api.Features.CampaignTracking.Services
         public CampaignAnalyticsService(AppDbContext context)
         {
             _context = context;
+            //_context = context;
         }
 
         public async Task<CampaignStatusDashboardDto?> GetCampaignStatsAsync(Guid campaignId)
