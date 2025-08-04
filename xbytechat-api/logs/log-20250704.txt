@@ -1,0 +1,1100 @@
+2025-07-04 08:43:01.723 +05:30 [INF] User profile is available. Using 'C:\Users\sunde\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-07-04 08:43:01.791 +05:30 [INF] 🚀 Webhook Queue Worker started.
+2025-07-04 08:43:01.815 +05:30 [INF] 🧹 FailedWebhookLogCleanupService started.
+2025-07-04 08:43:03.371 +05:30 [WRN] Sensitive data logging is enabled. Log entries and exception messages may include sensitive application data; this mode should only be enabled during development.
+2025-07-04 08:43:04.343 +05:30 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2025-07-04 08:43:04.709 +05:30 [INF] Now listening on: http://localhost:7113
+2025-07-04 08:43:04.710 +05:30 [INF] Now listening on: http://localhost:5295
+2025-07-04 08:43:04.712 +05:30 [INF] Application started. Press Ctrl+C to shut down.
+2025-07-04 08:43:04.713 +05:30 [INF] Hosting environment: Development
+2025-07-04 08:43:04.715 +05:30 [INF] Content root path: D:\xbytechat\xbytechat-api\xbytechat-api
+2025-07-04 08:43:04.723 +05:30 [INF] Executed DbCommand (30ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT w."Id", w."AutoCleanupEnabled", w."LastCleanupAt"
+FROM "WebhookSettings" AS w
+LIMIT 1
+2025-07-04 08:43:04.748 +05:30 [INF] Executed DbCommand (54ms) [Parameters=[@__cutoff_0='2025-06-27T03:13:02.0511975Z' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT f."Id", f."CreatedAt", f."ErrorMessage", f."FailureType", f."RawJson", f."SourceModule"
+FROM "FailedWebhookLogs" AS f
+WHERE f."CreatedAt" < @__cutoff_0
+2025-07-04 08:43:05.328 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/swagger/index.html - null null
+2025-07-04 08:43:05.618 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/swagger/index.html - 200 null text/html;charset=utf-8 300.3916ms
+2025-07-04 08:43:05.757 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/_vs/browserLink - null null
+2025-07-04 08:43:05.757 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/_framework/aspnetcore-browser-refresh.js - null null
+2025-07-04 08:43:05.767 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/_framework/aspnetcore-browser-refresh.js - 200 13762 application/javascript; charset=utf-8 10.4812ms
+2025-07-04 08:43:05.824 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/_vs/browserLink - 200 null text/javascript; charset=UTF-8 67.3977ms
+2025-07-04 08:43:05.949 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/swagger/v1/swagger.json - null null
+2025-07-04 08:43:06.246 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 297.8217ms
+2025-07-04 10:30:01.613 +05:30 [INF] User profile is available. Using 'C:\Users\sunde\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-07-04 10:30:01.674 +05:30 [INF] 🚀 Webhook Queue Worker started.
+2025-07-04 10:30:01.691 +05:30 [INF] 🧹 FailedWebhookLogCleanupService started.
+2025-07-04 10:30:02.671 +05:30 [WRN] Sensitive data logging is enabled. Log entries and exception messages may include sensitive application data; this mode should only be enabled during development.
+2025-07-04 10:30:03.379 +05:30 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2025-07-04 10:30:03.647 +05:30 [INF] Executed DbCommand (62ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT w."Id", w."AutoCleanupEnabled", w."LastCleanupAt"
+FROM "WebhookSettings" AS w
+LIMIT 1
+2025-07-04 10:30:03.655 +05:30 [INF] Now listening on: http://localhost:7113
+2025-07-04 10:30:03.657 +05:30 [INF] Now listening on: http://localhost:5295
+2025-07-04 10:30:03.658 +05:30 [INF] Application started. Press Ctrl+C to shut down.
+2025-07-04 10:30:03.659 +05:30 [INF] Hosting environment: Development
+2025-07-04 10:30:03.660 +05:30 [INF] Content root path: D:\xbytechat\xbytechat-api\xbytechat-api
+2025-07-04 10:30:03.670 +05:30 [INF] Executed DbCommand (83ms) [Parameters=[@__cutoff_0='2025-06-27T05:00:01.8557383Z' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT f."Id", f."CreatedAt", f."ErrorMessage", f."FailureType", f."RawJson", f."SourceModule"
+FROM "FailedWebhookLogs" AS f
+WHERE f."CreatedAt" < @__cutoff_0
+2025-07-04 10:30:05.700 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/swagger/index.html - null null
+2025-07-04 10:30:05.959 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/swagger/index.html - 200 null text/html;charset=utf-8 272.4389ms
+2025-07-04 10:30:06.162 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/_framework/aspnetcore-browser-refresh.js - null null
+2025-07-04 10:30:06.162 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/_vs/browserLink - null null
+2025-07-04 10:30:06.169 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/_framework/aspnetcore-browser-refresh.js - 200 13762 application/javascript; charset=utf-8 7.5026ms
+2025-07-04 10:30:06.232 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/_vs/browserLink - 200 null text/javascript; charset=UTF-8 70.1798ms
+2025-07-04 10:30:06.395 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/swagger/v1/swagger.json - null null
+2025-07-04 10:30:06.700 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 305.7544ms
+2025-07-04 10:30:15.022 +05:30 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:7113/api/auth/login - null null
+2025-07-04 10:30:15.035 +05:30 [WRN] Failed to determine the https port for redirect.
+2025-07-04 10:30:15.039 +05:30 [INF] CORS policy execution successful.
+2025-07-04 10:30:15.044 +05:30 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:7113/api/auth/login - 204 null null 22.0333ms
+2025-07-04 10:30:15.048 +05:30 [INF] Request starting HTTP/1.1 POST http://localhost:7113/api/auth/login - application/json 47
+2025-07-04 10:30:15.064 +05:30 [INF] CORS policy execution successful.
+2025-07-04 10:30:15.151 +05:30 [INF] Executing endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api)'
+2025-07-04 10:30:15.188 +05:30 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(xbytechat.api.AuthModule.DTOs.UserLoginDto) on controller xbytechat.api.AuthModule.Controllers.AuthController (xbytechat.api).
+2025-07-04 10:30:15.309 +05:30 [INF] 🔑 Login attempt for email: ratan@tcs.com
+2025-07-04 10:30:15.474 +05:30 [INF] Executed DbCommand (32ms) [Parameters=[@__dto_Email_0='ratan@tcs.com', @__hashedPassword_1='JAvlGPq9JyTdtvBO6x2llnRI1+gxwIyPqCKAn3THIKk='], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."BusinessId", u."CreatedAt", u."DeletedAt", u."Email", u."IsDeleted", u."Name", u."PasswordHash", u."RefreshToken", u."RefreshTokenExpiry", u."RoleId", u."Status", r."Id", r."CreatedAt", r."Description", r."IsActive", r."IsSystemDefined", r."Name"
+FROM "Users" AS u
+LEFT JOIN "Roles" AS r ON u."RoleId" = r."Id"
+WHERE u."Email" = @__dto_Email_0 AND u."PasswordHash" = @__hashedPassword_1 AND NOT (u."IsDeleted")
+LIMIT 1
+2025-07-04 10:30:15.648 +05:30 [INF] Executed DbCommand (12ms) [Parameters=[@__user_BusinessId_Value_0='c13be597-6ae2-42bb-9d43-925815f24ff8'], CommandType='"Text"', CommandTimeout='30']
+SELECT b."Id", b."Address", b."ApprovedAt", b."ApprovedBy", b."BusinessEmail", b."BusinessName", b."CompanyName", b."CompanyPhone", b."CreatedAt", b."CreatedBy", b."CreatedByPartnerId", b."DeletedAt", b."DeletedBy", b."Industry", b."IsApproved", b."IsDeleted", b."LastLoginAt", b."LogoUrl", b."Notes", b."Phone", b."RepresentativeName", b."Source", b."Status", b."Tags", b."Website", b0."Id", b0."BusinessId", b0."CreatedAt", b0."Plan", b0."QuotaResetDate", b0."RemainingMessages", b0."TotalMonthlyQuota", b0."UpdatedAt", b0."WalletBalance"
+FROM "Businesses" AS b
+LEFT JOIN "BusinessPlanInfos" AS b0 ON b."Id" = b0."BusinessId"
+WHERE b."Id" = @__user_BusinessId_Value_0
+LIMIT 1
+2025-07-04 10:30:15.785 +05:30 [INF] Executed DbCommand (5ms) [Parameters=[@__user_RoleId_0='00000000-0000-0000-0000-000000000004' (Nullable = true)], CommandType='"Text"', CommandTimeout='30']
+SELECT r."Id", r."AssignedAt", r."AssignedBy", r."IsActive", r."IsRevoked", r."PermissionId", r."RoleId"
+FROM "RolePermissions" AS r
+WHERE r."RoleId" = @__user_RoleId_0 AND NOT (r."IsRevoked")
+2025-07-04 10:30:15.827 +05:30 [INF] Executed DbCommand (8ms) [Parameters=[@__userId_0='2870e1d8-0e80-4b12-88bd-70a8113307d6'], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."AssignedAt", u."AssignedBy", u."IsGranted", u."IsRevoked", u."PermissionId", u."UserId"
+FROM "UserPermissions" AS u
+WHERE u."UserId" = @__userId_0 AND NOT (u."IsRevoked")
+2025-07-04 10:30:15.957 +05:30 [INF] Executed DbCommand (77ms) [Parameters=[@__permissionIds_0={ '30000000-0000-0000-0000-000000000000', '30000000-0000-0000-0000-000000000004', '30000000-0000-0000-0000-000000000001', '30000000-0000-0000-0000-000000000007' } (DbType = Object)], CommandType='"Text"', CommandTimeout='30']
+SELECT p."Id", p."Code", p."CreatedAt", p."Description", p."Group", p."IsActive", p."Name"
+FROM "Permissions" AS p
+WHERE p."Id" = ANY (@__permissionIds_0)
+2025-07-04 10:30:15.991 +05:30 [INF] ✅ Token generated for: ratan@tcs.com
+2025-07-04 10:30:16.047 +05:30 [INF] ✅ Login successful for ratan@tcs.com, Role: business, Plan: Smart
+2025-07-04 10:30:16.060 +05:30 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType0`3[[System.Boolean, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Object, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2025-07-04 10:30:16.099 +05:30 [INF] Executed action xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api) in 901.4708ms
+2025-07-04 10:30:16.103 +05:30 [INF] Executed endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api)'
+2025-07-04 10:30:16.112 +05:30 [INF] Request finished HTTP/1.1 POST http://localhost:7113/api/auth/login - 200 null application/json; charset=utf-8 1064.9083ms
+2025-07-04 10:30:16.433 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/api/auth/session - null null
+2025-07-04 10:30:16.528 +05:30 [INF] Executing endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.GetSession (xbytechat.api)'
+2025-07-04 10:30:16.533 +05:30 [INF] Route matched with {action = "GetSession", controller = "Auth"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult GetSession() on controller xbytechat.api.AuthModule.Controllers.AuthController (xbytechat.api).
+2025-07-04 10:30:16.542 +05:30 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType3`4[[System.Boolean, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2025-07-04 10:30:16.547 +05:30 [INF] Executed action xbytechat.api.AuthModule.Controllers.AuthController.GetSession (xbytechat.api) in 10.9291ms
+2025-07-04 10:30:16.553 +05:30 [INF] Executed endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.GetSession (xbytechat.api)'
+2025-07-04 10:30:16.555 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/api/auth/session - 200 null application/json; charset=utf-8 121.5684ms
+2025-07-04 10:30:16.701 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/api/feature-access/me - null null
+2025-07-04 10:30:16.714 +05:30 [INF] Executing endpoint 'xbytechat.api.Features.FeatureAccessModule.Controllers.FeatureAccessController.GetMyFeatures (xbytechat.api)'
+2025-07-04 10:30:16.723 +05:30 [INF] Route matched with {action = "GetMyFeatures", controller = "FeatureAccess"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[xbytechat.api.Features.FeatureAccess.DTOs.FeatureStatusDto]]] GetMyFeatures() on controller xbytechat.api.Features.FeatureAccessModule.Controllers.FeatureAccessController (xbytechat.api).
+2025-07-04 10:30:16.758 +05:30 [INF] Executed DbCommand (2ms) [Parameters=[@__businessId_0='c13be597-6ae2-42bb-9d43-925815f24ff8'], CommandType='"Text"', CommandTimeout='30']
+SELECT b."Id", b."Address", b."ApprovedAt", b."ApprovedBy", b."BusinessEmail", b."BusinessName", b."CompanyName", b."CompanyPhone", b."CreatedAt", b."CreatedBy", b."CreatedByPartnerId", b."DeletedAt", b."DeletedBy", b."Industry", b."IsApproved", b."IsDeleted", b."LastLoginAt", b."LogoUrl", b."Notes", b."Phone", b."RepresentativeName", b."Source", b."Status", b."Tags", b."Website", b0."Id", b0."BusinessId", b0."CreatedAt", b0."Plan", b0."QuotaResetDate", b0."RemainingMessages", b0."TotalMonthlyQuota", b0."UpdatedAt", b0."WalletBalance"
+FROM "Businesses" AS b
+LEFT JOIN "BusinessPlanInfos" AS b0 ON b."Id" = b0."BusinessId"
+WHERE b."Id" = @__businessId_0
+LIMIT 1
+2025-07-04 10:30:16.767 +05:30 [INF] 📦 Resolved plan for Business "c13be597-6ae2-42bb-9d43-925815f24ff8": Smart
+2025-07-04 10:30:16.788 +05:30 [INF] Executed DbCommand (7ms) [Parameters=[@__businessId_0='c13be597-6ae2-42bb-9d43-925815f24ff8'], CommandType='"Text"', CommandTimeout='30']
+SELECT f."Id", f."BusinessId", f."CreatedAt", f."Description", f."FeatureName", f."Group", f."IsEnabled", f."Notes", f."Plan"
+FROM "FeatureAccess" AS f
+WHERE f."BusinessId" = @__businessId_0
+2025-07-04 10:30:16.817 +05:30 [INF] 🔧 Feature override: AddProduct = False
+2025-07-04 10:30:16.818 +05:30 [INF] 🔧 Feature override: Automation = True
+2025-07-04 10:30:16.820 +05:30 [INF] 🔧 Feature override: Campaigns = True
+2025-07-04 10:30:16.822 +05:30 [INF] 🔧 Feature override: Catalog = True
+2025-07-04 10:30:16.824 +05:30 [INF] 🔧 Feature override: CRM = True
+2025-07-04 10:30:16.828 +05:30 [INF] 🔧 Feature override: CRMInsights = True
+2025-07-04 10:30:16.829 +05:30 [INF] 🔧 Feature override: CTAFlow = True
+2025-07-04 10:30:16.831 +05:30 [INF] 🔧 Feature override: FlowInsights = True
+2025-07-04 10:30:16.832 +05:30 [INF] 🔧 Feature override: Messaging = True
+2025-07-04 10:30:16.834 +05:30 [INF] 🔧 Feature override: ProfileCompletion = True
+2025-07-04 10:30:16.835 +05:30 [INF] 🔧 Feature override: UpgradePlan = True
+2025-07-04 10:30:16.836 +05:30 [INF] 🔧 Feature override: WhatsAppSettings = True
+2025-07-04 10:30:16.844 +05:30 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[xbytechat.api.Features.FeatureAccess.DTOs.FeatureStatusDto, xbytechat.api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-07-04 10:30:16.854 +05:30 [INF] Executed action xbytechat.api.Features.FeatureAccessModule.Controllers.FeatureAccessController.GetMyFeatures (xbytechat.api) in 124.3441ms
+2025-07-04 10:30:16.857 +05:30 [INF] Executed endpoint 'xbytechat.api.Features.FeatureAccessModule.Controllers.FeatureAccessController.GetMyFeatures (xbytechat.api)'
+2025-07-04 10:30:16.859 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/api/feature-access/me - 200 null application/json; charset=utf-8 158.3218ms
+2025-07-04 10:30:23.347 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/api/whatsappsettings/me - null null
+2025-07-04 10:30:23.375 +05:30 [INF] CORS policy execution successful.
+2025-07-04 10:30:23.379 +05:30 [INF] Executing endpoint 'xbytechat_api.WhatsAppSettings.Controllers.WhatsAppSettingsController.GetMySettings (xbytechat.api)'
+2025-07-04 10:30:23.396 +05:30 [INF] Route matched with {action = "GetMySettings", controller = "WhatsAppSettings"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetMySettings() on controller xbytechat_api.WhatsAppSettings.Controllers.WhatsAppSettingsController (xbytechat.api).
+2025-07-04 10:30:23.428 +05:30 [INF] Executed DbCommand (6ms) [Parameters=[@__businessId_0='c13be597-6ae2-42bb-9d43-925815f24ff8'], CommandType='"Text"', CommandTimeout='30']
+SELECT w."Id", w."ApiToken", w."ApiUrl", w."BusinessId", w."CreatedAt", w."IsActive", w."PhoneNumberId", w."SenderDisplayName", w."UpdatedAt", w."WabaId", w."WhatsAppBusinessNumber"
+FROM "WhatsAppSettings" AS w
+WHERE w."BusinessId" = @__businessId_0 AND w."IsActive"
+LIMIT 1
+2025-07-04 10:30:23.463 +05:30 [INF] Executing OkObjectResult, writing value of type 'xbytechat_api.WhatsAppSettings.Models.WhatsAppSettingEntity'.
+2025-07-04 10:30:23.488 +05:30 [INF] Executed action xbytechat_api.WhatsAppSettings.Controllers.WhatsAppSettingsController.GetMySettings (xbytechat.api) in 88.8547ms
+2025-07-04 10:30:23.491 +05:30 [INF] Executed endpoint 'xbytechat_api.WhatsAppSettings.Controllers.WhatsAppSettingsController.GetMySettings (xbytechat.api)'
+2025-07-04 10:30:23.492 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/api/whatsappsettings/me - 200 null application/json; charset=utf-8 145.6449ms
+2025-07-04 10:30:38.813 +05:30 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:7113/api/whatsappsettings/update - null null
+2025-07-04 10:30:38.825 +05:30 [INF] CORS policy execution successful.
+2025-07-04 10:30:38.828 +05:30 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:7113/api/whatsappsettings/update - 204 null null 14.7946ms
+2025-07-04 10:30:38.834 +05:30 [INF] Request starting HTTP/1.1 PUT http://localhost:7113/api/whatsappsettings/update - application/json 469
+2025-07-04 10:30:38.844 +05:30 [INF] CORS policy execution successful.
+2025-07-04 10:30:38.847 +05:30 [INF] Executing endpoint 'xbytechat_api.WhatsAppSettings.Controllers.WhatsAppSettingsController.UpdateSetting (xbytechat.api)'
+2025-07-04 10:30:38.854 +05:30 [INF] Route matched with {action = "UpdateSetting", controller = "WhatsAppSettings"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] UpdateSetting(xbytechat_api.WhatsAppSettings.DTOs.SaveWhatsAppSettingDto) on controller xbytechat_api.WhatsAppSettings.Controllers.WhatsAppSettingsController (xbytechat.api).
+2025-07-04 10:30:38.870 +05:30 [INF] 🔧 [UpdateSetting] Request received for WhatsApp settings update.
+2025-07-04 10:30:38.872 +05:30 [INF] 💾 [UpdateSetting] Saving/updating WhatsApp settings for businessId="c13be597-6ae2-42bb-9d43-925815f24ff8".
+2025-07-04 10:30:38.889 +05:30 [INF] Executed DbCommand (2ms) [Parameters=[@__dto_BusinessId_0='c13be597-6ae2-42bb-9d43-925815f24ff8'], CommandType='"Text"', CommandTimeout='30']
+SELECT w."Id", w."ApiToken", w."ApiUrl", w."BusinessId", w."CreatedAt", w."IsActive", w."PhoneNumberId", w."SenderDisplayName", w."UpdatedAt", w."WabaId", w."WhatsAppBusinessNumber"
+FROM "WhatsAppSettings" AS w
+WHERE w."BusinessId" = @__dto_BusinessId_0
+LIMIT 1
+2025-07-04 10:30:39.007 +05:30 [INF] Executed DbCommand (10ms) [Parameters=[@p2='36de2595-f729-4b07-9958-11c8a56db12f', @p0='EAAIo1fBYKV8BPARkXf0YeUyxTXrqcXhZBfwjdas1oi2gmRzmkZBKnlYxWzeh8wpUCbpgas5lu0kUIxcyz5QpBWsxuUDk385mwallvnVQ4oR0DgpI78xaCH9ZBghovDdiR7l42D0VKStzZCHtxd9fXveZB7OBAWbwA21EnuYr1K4UdN12bnR3Wu0ZBcYAKTjZCd6Y8bvDTI2C3XpgorXTYcxfwl6YD0O261iq5Av0Ukx3uWfR2I3ZBp81cbHiA988SiOx' (Nullable = false), @p1='2025-07-04T05:00:38.8959595Z' (Nullable = true) (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+UPDATE "WhatsAppSettings" SET "ApiToken" = @p0, "UpdatedAt" = @p1
+WHERE "Id" = @p2;
+2025-07-04 10:30:39.023 +05:30 [INF] ✅ [UpdateSetting] WhatsApp settings updated successfully.
+2025-07-04 10:30:39.024 +05:30 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType16`1[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2025-07-04 10:30:39.028 +05:30 [INF] Executed action xbytechat_api.WhatsAppSettings.Controllers.WhatsAppSettingsController.UpdateSetting (xbytechat.api) in 171.185ms
+2025-07-04 10:30:39.031 +05:30 [INF] Executed endpoint 'xbytechat_api.WhatsAppSettings.Controllers.WhatsAppSettingsController.UpdateSetting (xbytechat.api)'
+2025-07-04 10:30:39.034 +05:30 [INF] Request finished HTTP/1.1 PUT http://localhost:7113/api/whatsappsettings/update - 200 null application/json; charset=utf-8 199.8116ms
+2025-07-04 10:30:39.555 +05:30 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:7113/api/whatsappsettings/test-connection - null null
+2025-07-04 10:30:39.560 +05:30 [INF] CORS policy execution successful.
+2025-07-04 10:30:39.562 +05:30 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:7113/api/whatsappsettings/test-connection - 204 null null 6.8124ms
+2025-07-04 10:30:39.564 +05:30 [INF] Request starting HTTP/1.1 POST http://localhost:7113/api/whatsappsettings/test-connection - application/json 469
+2025-07-04 10:30:39.570 +05:30 [INF] CORS policy execution successful.
+2025-07-04 10:30:39.572 +05:30 [INF] Executing endpoint 'xbytechat_api.WhatsAppSettings.Controllers.WhatsAppSettingsController.TestConnection (xbytechat.api)'
+2025-07-04 10:30:39.581 +05:30 [INF] Route matched with {action = "TestConnection", controller = "WhatsAppSettings"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] TestConnection(xbytechat_api.WhatsAppSettings.DTOs.SaveWhatsAppSettingDto) on controller xbytechat_api.WhatsAppSettings.Controllers.WhatsAppSettingsController (xbytechat.api).
+2025-07-04 10:30:41.904 +05:30 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType16`1[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2025-07-04 10:30:41.909 +05:30 [INF] Executed action xbytechat_api.WhatsAppSettings.Controllers.WhatsAppSettingsController.TestConnection (xbytechat.api) in 2324.9073ms
+2025-07-04 10:30:41.910 +05:30 [INF] Executed endpoint 'xbytechat_api.WhatsAppSettings.Controllers.WhatsAppSettingsController.TestConnection (xbytechat.api)'
+2025-07-04 10:30:41.912 +05:30 [INF] Request finished HTTP/1.1 POST http://localhost:7113/api/whatsappsettings/test-connection - 200 null application/json; charset=utf-8 2348.3859ms
+2025-07-04 10:31:38.170 +05:30 [INF] Request starting HTTP/1.1 GET http://a4a5-2401-4900-5d24-f81e-9d84-242f-f53b-b90a.ngrok-free.app/api/webhooks/whatsapp?hub.mode=subscribe&hub.challenge=11429722&hub.verify_token=xbytechat-secret-token - null null
+2025-07-04 10:31:38.175 +05:30 [INF] Executing endpoint 'xbytechat.api.Features.Webhooks.Controllers.WhatsAppWebhookController.VerifyWebhook (xbytechat.api)'
+2025-07-04 10:31:38.200 +05:30 [INF] Route matched with {action = "VerifyWebhook", controller = "WhatsAppWebhook"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult VerifyWebhook(System.String, System.String, System.String) on controller xbytechat.api.Features.Webhooks.Controllers.WhatsAppWebhookController (xbytechat.api).
+2025-07-04 10:31:38.215 +05:30 [INF] ✅ WhatsApp webhook verified successfully.
+2025-07-04 10:31:38.216 +05:30 [INF] Executing OkObjectResult, writing value of type 'System.String'.
+2025-07-04 10:31:38.218 +05:30 [INF] Executed action xbytechat.api.Features.Webhooks.Controllers.WhatsAppWebhookController.VerifyWebhook (xbytechat.api) in 15.1826ms
+2025-07-04 10:31:38.221 +05:30 [INF] Executed endpoint 'xbytechat.api.Features.Webhooks.Controllers.WhatsAppWebhookController.VerifyWebhook (xbytechat.api)'
+2025-07-04 10:31:38.222 +05:30 [INF] Request finished HTTP/1.1 GET http://a4a5-2401-4900-5d24-f81e-9d84-242f-f53b-b90a.ngrok-free.app/api/webhooks/whatsapp?hub.mode=subscribe&hub.challenge=11429722&hub.verify_token=xbytechat-secret-token - 200 null text/plain; charset=utf-8 52.2681ms
+2025-07-04 10:32:17.005 +05:30 [INF] Request starting HTTP/1.1 POST http://a4a5-2401-4900-5d24-f81e-9d84-242f-f53b-b90a.ngrok-free.app/api/webhooks/whatsapp - application/json 494
+2025-07-04 10:32:17.013 +05:30 [INF] Executing endpoint 'xbytechat.api.Features.Webhooks.Controllers.WhatsAppWebhookController.HandleStatus (xbytechat.api)'
+2025-07-04 10:32:17.018 +05:30 [INF] Route matched with {action = "HandleStatus", controller = "WhatsAppWebhook"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult HandleStatus(System.Text.Json.JsonElement) on controller xbytechat.api.Features.Webhooks.Controllers.WhatsAppWebhookController (xbytechat.api).
+2025-07-04 10:32:17.041 +05:30 [WRN] 📥 Webhook received at controller:
+{"object":"whatsapp_business_account","entry":[{"id":"999432368375320","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"15556395845","phone_number_id":"601884673011340"},"contacts":[{"profile":{"name":"\ua9c1S.K\ua9c2"},"wa_id":"917082156227"}],"messages":[{"from":"917082156227","id":"wamid.HBgMOTE3MDgyMTU2MjI3FQIAEhggQzM0QzU3MERGNDc1RDczREIxNjE1MDkxNkIyMUEzQUUA","timestamp":"1751605335","text":{"body":"pizza"},"type":"text"}]},"field":"messages"}]}]}
+2025-07-04 10:32:17.049 +05:30 [INF] 📥 Webhook payload enqueued successfully.
+2025-07-04 10:32:17.054 +05:30 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType73`1[[System.Boolean, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2025-07-04 10:32:17.058 +05:30 [INF] Executed action xbytechat.api.Features.Webhooks.Controllers.WhatsAppWebhookController.HandleStatus (xbytechat.api) in 36.3276ms
+2025-07-04 10:32:17.061 +05:30 [INF] Executed endpoint 'xbytechat.api.Features.Webhooks.Controllers.WhatsAppWebhookController.HandleStatus (xbytechat.api)'
+2025-07-04 10:32:17.065 +05:30 [INF] Request finished HTTP/1.1 POST http://a4a5-2401-4900-5d24-f81e-9d84-242f-f53b-b90a.ngrok-free.app/api/webhooks/whatsapp - 200 null application/json; charset=utf-8 59.3429ms
+2025-07-04 10:32:17.288 +05:30 [WRN] 📦 Dispatcher Raw Payload:
+{"object":"whatsapp_business_account","entry":[{"id":"999432368375320","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"15556395845","phone_number_id":"601884673011340"},"contacts":[{"profile":{"name":"\ua9c1S.K\ua9c2"},"wa_id":"917082156227"}],"messages":[{"from":"917082156227","id":"wamid.HBgMOTE3MDgyMTU2MjI3FQIAEhggQzM0QzU3MERGNDc1RDczREIxNjE1MDkxNkIyMUEzQUUA","timestamp":"1751605335","text":{"body":"pizza"},"type":"text"}]},"field":"messages"}]}]}
+2025-07-04 10:32:17.291 +05:30 [INF] 💬 Routing to InboundMessageProcessor (type: text)
+2025-07-04 10:32:17.320 +05:30 [INF] Executed DbCommand (4ms) [Parameters=[@__businessNumber_0='15556395845'], CommandType='"Text"', CommandTimeout='30']
+SELECT b."Id", b."Address", b."ApprovedAt", b."ApprovedBy", b."BusinessEmail", b."BusinessName", b."CompanyName", b."CompanyPhone", b."CreatedAt", b."CreatedBy", b."CreatedByPartnerId", b."DeletedAt", b."DeletedBy", b."Industry", b."IsApproved", b."IsDeleted", b."LastLoginAt", b."LogoUrl", b."Notes", b."Phone", b."RepresentativeName", b."Source", b."Status", b."Tags", b."Website", w."Id", w."ApiToken", w."ApiUrl", w."BusinessId", w."CreatedAt", w."IsActive", w."PhoneNumberId", w."SenderDisplayName", w."UpdatedAt", w."WabaId", w."WhatsAppBusinessNumber"
+FROM "Businesses" AS b
+LEFT JOIN "WhatsAppSettings" AS w ON b."Id" = w."BusinessId"
+WHERE w."WhatsAppBusinessNumber" = @__businessNumber_0
+LIMIT 1
+2025-07-04 10:32:17.328 +05:30 [INF] FindOrCreateAsync: businessId="c13be597-6ae2-42bb-9d43-925815f24ff8", phoneNumber=917082156227
+2025-07-04 10:32:17.343 +05:30 [INF] Executed DbCommand (4ms) [Parameters=[@__businessId_0='c13be597-6ae2-42bb-9d43-925815f24ff8', @__phoneNumber_1='917082156227'], CommandType='"Text"', CommandTimeout='30']
+SELECT c."Id", c."AssignedAgentId", c."BusinessId", c."CreatedAt", c."Email", c."Group", c."IsActive", c."IsArchived", c."IsAutomationPaused", c."IsFavorite", c."LastCTAInteraction", c."LastCTAType", c."LastClickedProductId", c."LastContactedAt", c."LeadSource", c."Name", c."NextFollowUpAt", c."Notes", c."PhoneNumber", c."Tags"
+FROM "Contacts" AS c
+WHERE c."BusinessId" = @__businessId_0 AND c."PhoneNumber" = @__phoneNumber_1
+LIMIT 1
+2025-07-04 10:32:17.398 +05:30 [INF] Contact already exists: contactId="0876f654-a362-420f-a912-6bce793436a5"
+2025-07-04 10:32:17.411 +05:30 [INF] Executed DbCommand (3ms) [Parameters=[@__businessId_0='c13be597-6ae2-42bb-9d43-925815f24ff8', @__contactId_1='0876f654-a362-420f-a912-6bce793436a5'], CommandType='"Text"', CommandTimeout='30']
+SELECT c."Id", c."BusinessId", c."ContactId", c."LastUpdatedAt", c."Mode", c."UpdatedBy"
+FROM "ChatSessionStates" AS c
+WHERE c."BusinessId" = @__businessId_0 AND c."ContactId" = @__contactId_1
+LIMIT 1
+2025-07-04 10:32:17.573 +05:30 [INF] Executed DbCommand (21ms) [Parameters=[@p0='6ef1e26c-366f-4883-a6e3-aed3204fa3c7', @p1='c13be597-6ae2-42bb-9d43-925815f24ff8', @p2=NULL (DbType = Guid), @p3=NULL (DbType = Guid), @p4=NULL (DbType = Guid), @p5='0876f654-a362-420f-a912-6bce793436a5' (Nullable = true), @p6='2025-07-04T05:02:17.4163529Z' (DbType = DateTime), @p7=NULL, @p8='True', @p9=NULL, @p10='pizza' (Nullable = false), @p11=NULL, @p12=NULL, @p13='917082156227' (Nullable = false), @p14=NULL (DbType = Guid), @p15=NULL, @p16='2025-07-04T05:02:17.4164641Z' (Nullable = true) (DbType = DateTime), @p17=NULL, @p18='received' (Nullable = false)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "MessageLogs" ("Id", "BusinessId", "CTAFlowConfigId", "CTAFlowStepId", "CampaignId", "ContactId", "CreatedAt", "ErrorMessage", "IsIncoming", "MediaUrl", "MessageContent", "MessageId", "RawResponse", "RecipientNumber", "RefMessageId", "RenderedBody", "SentAt", "Source", "Status")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15, @p16, @p17, @p18);
+2025-07-04 10:32:17.594 +05:30 [INF] Executed DbCommand (5ms) [Parameters=[@__businessId_0='c13be597-6ae2-42bb-9d43-925815f24ff8'], CommandType='"Text"', CommandTimeout='30']
+SELECT a."Id", a."BusinessId", a."CreatedAt", a."FlowId", a."FlowName", a."IsActive", a."MediaUrl", a."Priority", a."ReplyMessage", a."TriggerKeyword", a."UpdatedAt"
+FROM "AutoReplyRules" AS a
+WHERE a."BusinessId" = @__businessId_0 AND a."IsActive"
+2025-07-04 10:32:24.054 +05:30 [INF] Executed DbCommand (4ms) [Parameters=[@__flowId_0='d6c0e208-6966-468d-93cc-bd4409423860'], CommandType='"Text"', CommandTimeout='30']
+SELECT a."Id", a."ConfigJson", a."CreatedAt", a."FlowId", a."Label", a."NodeType", a."Order", a."Position_X", a."Position_Y"
+FROM "AutoReplyFlowNodes" AS a
+WHERE a."FlowId" = @__flowId_0
+2025-07-04 10:32:25.906 +05:30 [INF] Executed DbCommand (25ms) [Parameters=[@__flowId_0='d6c0e208-6966-468d-93cc-bd4409423860'], CommandType='"Text"', CommandTimeout='30']
+SELECT a."Id", a."CreatedAt", a."FlowId", a."SourceHandle", a."SourceNodeId", a."TargetHandle", a."TargetNodeId"
+FROM "AutoReplyFlowEdges" AS a
+WHERE a."FlowId" = @__flowId_0
+2025-07-04 10:32:33.000 +05:30 [INF] FindOrCreateAsync: businessId="c13be597-6ae2-42bb-9d43-925815f24ff8", phoneNumber=917082156227
+2025-07-04 10:32:33.008 +05:30 [INF] Executed DbCommand (2ms) [Parameters=[@__businessId_0='c13be597-6ae2-42bb-9d43-925815f24ff8', @__phoneNumber_1='917082156227'], CommandType='"Text"', CommandTimeout='30']
+SELECT c."Id", c."AssignedAgentId", c."BusinessId", c."CreatedAt", c."Email", c."Group", c."IsActive", c."IsArchived", c."IsAutomationPaused", c."IsFavorite", c."LastCTAInteraction", c."LastCTAType", c."LastClickedProductId", c."LastContactedAt", c."LeadSource", c."Name", c."NextFollowUpAt", c."Notes", c."PhoneNumber", c."Tags"
+FROM "Contacts" AS c
+WHERE c."BusinessId" = @__businessId_0 AND c."PhoneNumber" = @__phoneNumber_1
+LIMIT 1
+2025-07-04 10:32:33.031 +05:30 [INF] Contact already exists: contactId="0876f654-a362-420f-a912-6bce793436a5"
+2025-07-04 10:32:37.098 +05:30 [INF] ⚙️ Executing node "5b25d482-4701-4644-b1aa-94ec65cc5d89" [start]
+2025-07-04 10:32:43.036 +05:30 [INF] 🚦 Start node reached: "5b25d482-4701-4644-b1aa-94ec65cc5d89"
+2025-07-04 10:33:06.660 +05:30 [INF] ⚡ Flow triggered: Pizza Order Flow by keyword: pizza
+2025-07-04 10:33:14.532 +05:30 [INF] Executed DbCommand (24ms) [Parameters=[@p0='40119511-2729-4f11-bcf9-1b20faaf0c13', @p1='c13be597-6ae2-42bb-9d43-925815f24ff8', @p2=NULL (DbType = Guid), @p3=NULL (DbType = Guid), @p4=NULL (DbType = Guid), @p5='0876f654-a362-420f-a912-6bce793436a5' (Nullable = true), @p6='2025-07-04T05:03:12.1119635Z' (DbType = DateTime), @p7=NULL, @p8='True', @p9=NULL, @p10='pizza' (Nullable = false), @p11=NULL, @p12=NULL, @p13='917082156227' (Nullable = false), @p14=NULL (DbType = Guid), @p15=NULL, @p16=NULL (DbType = DateTime), @p17=NULL, @p18='Queued' (Nullable = false)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "MessageLogs" ("Id", "BusinessId", "CTAFlowConfigId", "CTAFlowStepId", "CampaignId", "ContactId", "CreatedAt", "ErrorMessage", "IsIncoming", "MediaUrl", "MessageContent", "MessageId", "RawResponse", "RecipientNumber", "RefMessageId", "RenderedBody", "SentAt", "Source", "Status")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15, @p16, @p17, @p18);
+2025-07-04 10:33:22.469 +05:30 [INF] Checking if agent is available for business "c13be597-6ae2-42bb-9d43-925815f24ff8"
+2025-07-04 10:33:27.547 +05:30 [INF] Assigning agent to contact "0876f654-a362-420f-a912-6bce793436a5" for business "c13be597-6ae2-42bb-9d43-925815f24ff8"
+2025-07-04 10:33:28.644 +05:30 [INF] 🙋 Agent assigned to contact 917082156227
+2025-07-04 10:38:10.964 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/swagger/index.html - null null
+2025-07-04 10:38:10.977 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/swagger/index.html - 200 null text/html;charset=utf-8 13.2376ms
+2025-07-04 10:38:10.995 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/_vs/browserLink - null null
+2025-07-04 10:38:10.996 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/_framework/aspnetcore-browser-refresh.js - null null
+2025-07-04 10:38:11.002 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/_framework/aspnetcore-browser-refresh.js - 200 13762 application/javascript; charset=utf-8 6.1199ms
+2025-07-04 10:38:11.011 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/_vs/browserLink - 200 null text/javascript; charset=UTF-8 15.6344ms
+2025-07-04 10:38:11.472 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/swagger/v1/swagger.json - null null
+2025-07-04 10:38:11.487 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/swagger/favicon-32x32.png - null null
+2025-07-04 10:38:11.499 +05:30 [INF] Sending file. Request path: '/favicon-32x32.png'. Physical path: 'N/A'
+2025-07-04 10:38:11.501 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/swagger/favicon-32x32.png - 200 628 image/png 13.7622ms
+2025-07-04 10:38:11.535 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 62.7006ms
+2025-07-04 10:38:53.427 +05:30 [INF] User profile is available. Using 'C:\Users\sunde\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-07-04 10:38:53.467 +05:30 [INF] 🚀 Webhook Queue Worker started.
+2025-07-04 10:38:53.481 +05:30 [INF] 🧹 FailedWebhookLogCleanupService started.
+2025-07-04 10:38:54.177 +05:30 [WRN] Sensitive data logging is enabled. Log entries and exception messages may include sensitive application data; this mode should only be enabled during development.
+2025-07-04 10:38:54.692 +05:30 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2025-07-04 10:38:54.856 +05:30 [INF] Now listening on: http://localhost:7113
+2025-07-04 10:38:54.857 +05:30 [INF] Now listening on: http://localhost:5295
+2025-07-04 10:38:54.858 +05:30 [INF] Application started. Press Ctrl+C to shut down.
+2025-07-04 10:38:54.860 +05:30 [INF] Hosting environment: Development
+2025-07-04 10:38:54.861 +05:30 [INF] Content root path: D:\xbytechat\xbytechat-api\xbytechat-api
+2025-07-04 10:38:54.895 +05:30 [INF] Executed DbCommand (20ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT w."Id", w."AutoCleanupEnabled", w."LastCleanupAt"
+FROM "WebhookSettings" AS w
+LIMIT 1
+2025-07-04 10:38:54.916 +05:30 [INF] Executed DbCommand (37ms) [Parameters=[@__cutoff_0='2025-06-27T05:08:53.5923742Z' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT f."Id", f."CreatedAt", f."ErrorMessage", f."FailureType", f."RawJson", f."SourceModule"
+FROM "FailedWebhookLogs" AS f
+WHERE f."CreatedAt" < @__cutoff_0
+2025-07-04 10:38:57.090 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/swagger/index.html - null null
+2025-07-04 10:38:57.269 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/swagger/index.html - 200 null text/html;charset=utf-8 189.246ms
+2025-07-04 10:38:57.284 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/_framework/aspnetcore-browser-refresh.js - null null
+2025-07-04 10:38:57.290 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/_framework/aspnetcore-browser-refresh.js - 200 13762 application/javascript; charset=utf-8 6.1242ms
+2025-07-04 10:38:57.366 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/_vs/browserLink - null null
+2025-07-04 10:38:57.402 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/_vs/browserLink - 200 null text/javascript; charset=UTF-8 35.5635ms
+2025-07-04 10:38:57.622 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/swagger/v1/swagger.json - null null
+2025-07-04 10:38:57.799 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 177.4511ms
+2025-07-04 10:39:25.019 +05:30 [INF] Request starting HTTP/1.1 POST http://a4a5-2401-4900-5d24-f81e-9d84-242f-f53b-b90a.ngrok-free.app/api/webhooks/whatsapp - application/json 494
+2025-07-04 10:39:25.023 +05:30 [WRN] Failed to determine the https port for redirect.
+2025-07-04 10:39:25.056 +05:30 [INF] Executing endpoint 'xbytechat.api.Features.Webhooks.Controllers.WhatsAppWebhookController.HandleStatus (xbytechat.api)'
+2025-07-04 10:39:25.067 +05:30 [INF] Route matched with {action = "HandleStatus", controller = "WhatsAppWebhook"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult HandleStatus(System.Text.Json.JsonElement) on controller xbytechat.api.Features.Webhooks.Controllers.WhatsAppWebhookController (xbytechat.api).
+2025-07-04 10:39:25.083 +05:30 [WRN] 📥 Webhook received at controller:
+{"object":"whatsapp_business_account","entry":[{"id":"999432368375320","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"15556395845","phone_number_id":"601884673011340"},"contacts":[{"profile":{"name":"\ua9c1S.K\ua9c2"},"wa_id":"917082156227"}],"messages":[{"from":"917082156227","id":"wamid.HBgMOTE3MDgyMTU2MjI3FQIAEhggN0FGNDIzNTQyNkYzMEJGMjAyM0QxRTJCMjk3OTEyNDMA","timestamp":"1751605765","text":{"body":"pizza"},"type":"text"}]},"field":"messages"}]}]}
+2025-07-04 10:39:25.085 +05:30 [INF] 📥 Webhook payload enqueued successfully.
+2025-07-04 10:39:25.089 +05:30 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType73`1[[System.Boolean, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2025-07-04 10:39:25.098 +05:30 [INF] Executed action xbytechat.api.Features.Webhooks.Controllers.WhatsAppWebhookController.HandleStatus (xbytechat.api) in 26.8781ms
+2025-07-04 10:39:25.099 +05:30 [INF] Executed endpoint 'xbytechat.api.Features.Webhooks.Controllers.WhatsAppWebhookController.HandleStatus (xbytechat.api)'
+2025-07-04 10:39:25.104 +05:30 [INF] Request finished HTTP/1.1 POST http://a4a5-2401-4900-5d24-f81e-9d84-242f-f53b-b90a.ngrok-free.app/api/webhooks/whatsapp - 200 null application/json; charset=utf-8 84.9053ms
+2025-07-04 10:39:25.179 +05:30 [WRN] 📦 Dispatcher Raw Payload:
+{"object":"whatsapp_business_account","entry":[{"id":"999432368375320","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"15556395845","phone_number_id":"601884673011340"},"contacts":[{"profile":{"name":"\ua9c1S.K\ua9c2"},"wa_id":"917082156227"}],"messages":[{"from":"917082156227","id":"wamid.HBgMOTE3MDgyMTU2MjI3FQIAEhggN0FGNDIzNTQyNkYzMEJGMjAyM0QxRTJCMjk3OTEyNDMA","timestamp":"1751605765","text":{"body":"pizza"},"type":"text"}]},"field":"messages"}]}]}
+2025-07-04 10:39:25.181 +05:30 [INF] 💬 Routing to InboundMessageProcessor (type: text)
+2025-07-04 10:39:25.274 +05:30 [INF] Executed DbCommand (4ms) [Parameters=[@__businessNumber_0='15556395845'], CommandType='"Text"', CommandTimeout='30']
+SELECT b."Id", b."Address", b."ApprovedAt", b."ApprovedBy", b."BusinessEmail", b."BusinessName", b."CompanyName", b."CompanyPhone", b."CreatedAt", b."CreatedBy", b."CreatedByPartnerId", b."DeletedAt", b."DeletedBy", b."Industry", b."IsApproved", b."IsDeleted", b."LastLoginAt", b."LogoUrl", b."Notes", b."Phone", b."RepresentativeName", b."Source", b."Status", b."Tags", b."Website", w."Id", w."ApiToken", w."ApiUrl", w."BusinessId", w."CreatedAt", w."IsActive", w."PhoneNumberId", w."SenderDisplayName", w."UpdatedAt", w."WabaId", w."WhatsAppBusinessNumber"
+FROM "Businesses" AS b
+LEFT JOIN "WhatsAppSettings" AS w ON b."Id" = w."BusinessId"
+WHERE w."WhatsAppBusinessNumber" = @__businessNumber_0
+LIMIT 1
+2025-07-04 10:39:25.366 +05:30 [INF] FindOrCreateAsync: businessId="c13be597-6ae2-42bb-9d43-925815f24ff8", phoneNumber=917082156227
+2025-07-04 10:39:25.378 +05:30 [INF] Executed DbCommand (3ms) [Parameters=[@__businessId_0='c13be597-6ae2-42bb-9d43-925815f24ff8', @__phoneNumber_1='917082156227'], CommandType='"Text"', CommandTimeout='30']
+SELECT c."Id", c."AssignedAgentId", c."BusinessId", c."CreatedAt", c."Email", c."Group", c."IsActive", c."IsArchived", c."IsAutomationPaused", c."IsFavorite", c."LastCTAInteraction", c."LastCTAType", c."LastClickedProductId", c."LastContactedAt", c."LeadSource", c."Name", c."NextFollowUpAt", c."Notes", c."PhoneNumber", c."Tags"
+FROM "Contacts" AS c
+WHERE c."BusinessId" = @__businessId_0 AND c."PhoneNumber" = @__phoneNumber_1
+LIMIT 1
+2025-07-04 10:39:25.408 +05:30 [INF] Contact already exists: contactId="0876f654-a362-420f-a912-6bce793436a5"
+2025-07-04 10:39:25.415 +05:30 [INF] Executed DbCommand (1ms) [Parameters=[@__businessId_0='c13be597-6ae2-42bb-9d43-925815f24ff8', @__contactId_1='0876f654-a362-420f-a912-6bce793436a5'], CommandType='"Text"', CommandTimeout='30']
+SELECT c."Id", c."BusinessId", c."ContactId", c."LastUpdatedAt", c."Mode", c."UpdatedBy"
+FROM "ChatSessionStates" AS c
+WHERE c."BusinessId" = @__businessId_0 AND c."ContactId" = @__contactId_1
+LIMIT 1
+2025-07-04 10:39:25.540 +05:30 [INF] Executed DbCommand (4ms) [Parameters=[@p0='bc934cb9-5d1d-4d4e-9d01-154359de6ee1', @p1='c13be597-6ae2-42bb-9d43-925815f24ff8', @p2=NULL (DbType = Guid), @p3=NULL (DbType = Guid), @p4=NULL (DbType = Guid), @p5='0876f654-a362-420f-a912-6bce793436a5' (Nullable = true), @p6='2025-07-04T05:09:25.4177662Z' (DbType = DateTime), @p7=NULL, @p8='True', @p9=NULL, @p10='pizza' (Nullable = false), @p11=NULL, @p12=NULL, @p13='917082156227' (Nullable = false), @p14=NULL (DbType = Guid), @p15=NULL, @p16='2025-07-04T05:09:25.4178094Z' (Nullable = true) (DbType = DateTime), @p17=NULL, @p18='received' (Nullable = false)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "MessageLogs" ("Id", "BusinessId", "CTAFlowConfigId", "CTAFlowStepId", "CampaignId", "ContactId", "CreatedAt", "ErrorMessage", "IsIncoming", "MediaUrl", "MessageContent", "MessageId", "RawResponse", "RecipientNumber", "RefMessageId", "RenderedBody", "SentAt", "Source", "Status")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15, @p16, @p17, @p18);
+2025-07-04 10:39:25.557 +05:30 [INF] Executed DbCommand (1ms) [Parameters=[@__businessId_0='c13be597-6ae2-42bb-9d43-925815f24ff8'], CommandType='"Text"', CommandTimeout='30']
+SELECT a."Id", a."BusinessId", a."CreatedAt", a."FlowId", a."FlowName", a."IsActive", a."MediaUrl", a."Priority", a."ReplyMessage", a."TriggerKeyword", a."UpdatedAt"
+FROM "AutoReplyRules" AS a
+WHERE a."BusinessId" = @__businessId_0 AND a."IsActive"
+2025-07-04 10:39:31.804 +05:30 [INF] Executed DbCommand (1ms) [Parameters=[@__flowId_0='d6c0e208-6966-468d-93cc-bd4409423860'], CommandType='"Text"', CommandTimeout='30']
+SELECT a."Id", a."ConfigJson", a."CreatedAt", a."FlowId", a."Label", a."NodeType", a."Order", a."Position_X", a."Position_Y"
+FROM "AutoReplyFlowNodes" AS a
+WHERE a."FlowId" = @__flowId_0
+2025-07-04 10:39:32.232 +05:30 [INF] Executed DbCommand (1ms) [Parameters=[@__flowId_0='d6c0e208-6966-468d-93cc-bd4409423860'], CommandType='"Text"', CommandTimeout='30']
+SELECT a."Id", a."CreatedAt", a."FlowId", a."SourceHandle", a."SourceNodeId", a."TargetHandle", a."TargetNodeId"
+FROM "AutoReplyFlowEdges" AS a
+WHERE a."FlowId" = @__flowId_0
+2025-07-04 10:39:34.060 +05:30 [INF] FindOrCreateAsync: businessId="c13be597-6ae2-42bb-9d43-925815f24ff8", phoneNumber=917082156227
+2025-07-04 10:39:34.065 +05:30 [INF] Executed DbCommand (1ms) [Parameters=[@__businessId_0='c13be597-6ae2-42bb-9d43-925815f24ff8', @__phoneNumber_1='917082156227'], CommandType='"Text"', CommandTimeout='30']
+SELECT c."Id", c."AssignedAgentId", c."BusinessId", c."CreatedAt", c."Email", c."Group", c."IsActive", c."IsArchived", c."IsAutomationPaused", c."IsFavorite", c."LastCTAInteraction", c."LastCTAType", c."LastClickedProductId", c."LastContactedAt", c."LeadSource", c."Name", c."NextFollowUpAt", c."Notes", c."PhoneNumber", c."Tags"
+FROM "Contacts" AS c
+WHERE c."BusinessId" = @__businessId_0 AND c."PhoneNumber" = @__phoneNumber_1
+LIMIT 1
+2025-07-04 10:39:34.078 +05:30 [INF] Contact already exists: contactId="0876f654-a362-420f-a912-6bce793436a5"
+2025-07-04 10:39:36.676 +05:30 [INF] ⚙️ Executing node "5b25d482-4701-4644-b1aa-94ec65cc5d89" [start]
+2025-07-04 10:39:52.740 +05:30 [INF] 🚦 Start node reached: "5b25d482-4701-4644-b1aa-94ec65cc5d89"
+2025-07-04 10:40:05.591 +05:30 [INF] ⚡ Flow triggered: Pizza Order Flow by keyword: pizza
+2025-07-04 10:40:11.327 +05:30 [INF] Executed DbCommand (21ms) [Parameters=[@p0='1cbeab92-12f9-4bc8-9eea-70da8e089d12', @p1='c13be597-6ae2-42bb-9d43-925815f24ff8', @p2=NULL (DbType = Guid), @p3=NULL (DbType = Guid), @p4=NULL (DbType = Guid), @p5='0876f654-a362-420f-a912-6bce793436a5' (Nullable = true), @p6='2025-07-04T05:10:10.3009046Z' (DbType = DateTime), @p7=NULL, @p8='True', @p9=NULL, @p10='pizza' (Nullable = false), @p11=NULL, @p12=NULL, @p13='917082156227' (Nullable = false), @p14=NULL (DbType = Guid), @p15=NULL, @p16=NULL (DbType = DateTime), @p17=NULL, @p18='Queued' (Nullable = false)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "MessageLogs" ("Id", "BusinessId", "CTAFlowConfigId", "CTAFlowStepId", "CampaignId", "ContactId", "CreatedAt", "ErrorMessage", "IsIncoming", "MediaUrl", "MessageContent", "MessageId", "RawResponse", "RecipientNumber", "RefMessageId", "RenderedBody", "SentAt", "Source", "Status")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15, @p16, @p17, @p18);
+2025-07-04 10:40:35.548 +05:30 [INF] Application is shutting down...
+2025-07-04 10:40:35.613 +05:30 [INF] 🛑 Graceful shutdown requested.
+2025-07-04 10:40:35.614 +05:30 [INF] 🛑 Webhook Queue Worker stopped.
+2025-07-04 10:47:38.747 +05:30 [INF] User profile is available. Using 'C:\Users\sunde\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-07-04 10:47:38.784 +05:30 [INF] 🚀 Webhook Queue Worker started.
+2025-07-04 10:47:38.797 +05:30 [INF] 🧹 FailedWebhookLogCleanupService started.
+2025-07-04 10:47:39.468 +05:30 [WRN] Sensitive data logging is enabled. Log entries and exception messages may include sensitive application data; this mode should only be enabled during development.
+2025-07-04 10:47:39.958 +05:30 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2025-07-04 10:47:40.151 +05:30 [INF] Now listening on: http://localhost:7113
+2025-07-04 10:47:40.153 +05:30 [INF] Now listening on: http://localhost:5295
+2025-07-04 10:47:40.154 +05:30 [INF] Application started. Press Ctrl+C to shut down.
+2025-07-04 10:47:40.155 +05:30 [INF] Hosting environment: Development
+2025-07-04 10:47:40.156 +05:30 [INF] Content root path: D:\xbytechat\xbytechat-api\xbytechat-api
+2025-07-04 10:47:40.166 +05:30 [INF] Executed DbCommand (19ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT w."Id", w."AutoCleanupEnabled", w."LastCleanupAt"
+FROM "WebhookSettings" AS w
+LIMIT 1
+2025-07-04 10:47:40.184 +05:30 [INF] Executed DbCommand (40ms) [Parameters=[@__cutoff_0='2025-06-27T05:17:38.8818456Z' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT f."Id", f."CreatedAt", f."ErrorMessage", f."FailureType", f."RawJson", f."SourceModule"
+FROM "FailedWebhookLogs" AS f
+WHERE f."CreatedAt" < @__cutoff_0
+2025-07-04 10:47:42.318 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/swagger/index.html - null null
+2025-07-04 10:47:42.596 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/swagger/index.html - 200 null text/html;charset=utf-8 286.5843ms
+2025-07-04 10:47:42.614 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/_framework/aspnetcore-browser-refresh.js - null null
+2025-07-04 10:47:42.623 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/_framework/aspnetcore-browser-refresh.js - 200 13762 application/javascript; charset=utf-8 9.6328ms
+2025-07-04 10:47:42.722 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/_vs/browserLink - null null
+2025-07-04 10:47:42.769 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/_vs/browserLink - 200 null text/javascript; charset=UTF-8 47.4582ms
+2025-07-04 10:47:42.967 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/swagger/v1/swagger.json - null null
+2025-07-04 10:47:43.165 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 198.5558ms
+2025-07-04 10:47:50.185 +05:30 [INF] Request starting HTTP/1.1 POST http://a4a5-2401-4900-5d24-f81e-9d84-242f-f53b-b90a.ngrok-free.app/api/webhooks/whatsapp - application/json 494
+2025-07-04 10:47:50.190 +05:30 [WRN] Failed to determine the https port for redirect.
+2025-07-04 10:47:50.227 +05:30 [INF] Executing endpoint 'xbytechat.api.Features.Webhooks.Controllers.WhatsAppWebhookController.HandleStatus (xbytechat.api)'
+2025-07-04 10:47:50.239 +05:30 [INF] Route matched with {action = "HandleStatus", controller = "WhatsAppWebhook"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult HandleStatus(System.Text.Json.JsonElement) on controller xbytechat.api.Features.Webhooks.Controllers.WhatsAppWebhookController (xbytechat.api).
+2025-07-04 10:47:50.254 +05:30 [WRN] 📥 Webhook received at controller:
+{"object":"whatsapp_business_account","entry":[{"id":"999432368375320","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"15556395845","phone_number_id":"601884673011340"},"contacts":[{"profile":{"name":"\ua9c1S.K\ua9c2"},"wa_id":"917082156227"}],"messages":[{"from":"917082156227","id":"wamid.HBgMOTE3MDgyMTU2MjI3FQIAEhggRTUxRDc1REMyQkE2NDZCRjM0N0VBNjkwMUI5NkY0QkIA","timestamp":"1751606271","text":{"body":"pizza"},"type":"text"}]},"field":"messages"}]}]}
+2025-07-04 10:47:50.257 +05:30 [INF] 📥 Webhook payload enqueued successfully.
+2025-07-04 10:47:50.262 +05:30 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType73`1[[System.Boolean, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2025-07-04 10:47:50.269 +05:30 [INF] Executed action xbytechat.api.Features.Webhooks.Controllers.WhatsAppWebhookController.HandleStatus (xbytechat.api) in 26.1251ms
+2025-07-04 10:47:50.271 +05:30 [INF] Executed endpoint 'xbytechat.api.Features.Webhooks.Controllers.WhatsAppWebhookController.HandleStatus (xbytechat.api)'
+2025-07-04 10:47:50.274 +05:30 [INF] Request finished HTTP/1.1 POST http://a4a5-2401-4900-5d24-f81e-9d84-242f-f53b-b90a.ngrok-free.app/api/webhooks/whatsapp - 200 null application/json; charset=utf-8 89.2201ms
+2025-07-04 10:47:50.350 +05:30 [WRN] 📦 Dispatcher Raw Payload:
+{"object":"whatsapp_business_account","entry":[{"id":"999432368375320","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"15556395845","phone_number_id":"601884673011340"},"contacts":[{"profile":{"name":"\ua9c1S.K\ua9c2"},"wa_id":"917082156227"}],"messages":[{"from":"917082156227","id":"wamid.HBgMOTE3MDgyMTU2MjI3FQIAEhggRTUxRDc1REMyQkE2NDZCRjM0N0VBNjkwMUI5NkY0QkIA","timestamp":"1751606271","text":{"body":"pizza"},"type":"text"}]},"field":"messages"}]}]}
+2025-07-04 10:47:50.353 +05:30 [INF] 💬 Routing to InboundMessageProcessor (type: text)
+2025-07-04 10:47:50.449 +05:30 [INF] Executed DbCommand (5ms) [Parameters=[@__businessNumber_0='15556395845'], CommandType='"Text"', CommandTimeout='30']
+SELECT b."Id", b."Address", b."ApprovedAt", b."ApprovedBy", b."BusinessEmail", b."BusinessName", b."CompanyName", b."CompanyPhone", b."CreatedAt", b."CreatedBy", b."CreatedByPartnerId", b."DeletedAt", b."DeletedBy", b."Industry", b."IsApproved", b."IsDeleted", b."LastLoginAt", b."LogoUrl", b."Notes", b."Phone", b."RepresentativeName", b."Source", b."Status", b."Tags", b."Website", w."Id", w."ApiToken", w."ApiUrl", w."BusinessId", w."CreatedAt", w."IsActive", w."PhoneNumberId", w."SenderDisplayName", w."UpdatedAt", w."WabaId", w."WhatsAppBusinessNumber"
+FROM "Businesses" AS b
+LEFT JOIN "WhatsAppSettings" AS w ON b."Id" = w."BusinessId"
+WHERE w."WhatsAppBusinessNumber" = @__businessNumber_0
+LIMIT 1
+2025-07-04 10:47:50.543 +05:30 [INF] FindOrCreateAsync: businessId="c13be597-6ae2-42bb-9d43-925815f24ff8", phoneNumber=917082156227
+2025-07-04 10:47:50.554 +05:30 [INF] Executed DbCommand (4ms) [Parameters=[@__businessId_0='c13be597-6ae2-42bb-9d43-925815f24ff8', @__phoneNumber_1='917082156227'], CommandType='"Text"', CommandTimeout='30']
+SELECT c."Id", c."AssignedAgentId", c."BusinessId", c."CreatedAt", c."Email", c."Group", c."IsActive", c."IsArchived", c."IsAutomationPaused", c."IsFavorite", c."LastCTAInteraction", c."LastCTAType", c."LastClickedProductId", c."LastContactedAt", c."LeadSource", c."Name", c."NextFollowUpAt", c."Notes", c."PhoneNumber", c."Tags"
+FROM "Contacts" AS c
+WHERE c."BusinessId" = @__businessId_0 AND c."PhoneNumber" = @__phoneNumber_1
+LIMIT 1
+2025-07-04 10:47:50.588 +05:30 [INF] Contact already exists: contactId="0876f654-a362-420f-a912-6bce793436a5"
+2025-07-04 10:47:50.595 +05:30 [INF] Executed DbCommand (1ms) [Parameters=[@__businessId_0='c13be597-6ae2-42bb-9d43-925815f24ff8', @__contactId_1='0876f654-a362-420f-a912-6bce793436a5'], CommandType='"Text"', CommandTimeout='30']
+SELECT c."Id", c."BusinessId", c."ContactId", c."LastUpdatedAt", c."Mode", c."UpdatedBy"
+FROM "ChatSessionStates" AS c
+WHERE c."BusinessId" = @__businessId_0 AND c."ContactId" = @__contactId_1
+LIMIT 1
+2025-07-04 10:47:50.762 +05:30 [INF] Executed DbCommand (23ms) [Parameters=[@p0='358edf73-06f7-4ccd-87bc-09a34abd420b', @p1='c13be597-6ae2-42bb-9d43-925815f24ff8', @p2=NULL (DbType = Guid), @p3=NULL (DbType = Guid), @p4=NULL (DbType = Guid), @p5='0876f654-a362-420f-a912-6bce793436a5' (Nullable = true), @p6='2025-07-04T05:17:50.5977597Z' (DbType = DateTime), @p7=NULL, @p8='True', @p9=NULL, @p10='pizza' (Nullable = false), @p11=NULL, @p12=NULL, @p13='917082156227' (Nullable = false), @p14=NULL (DbType = Guid), @p15=NULL, @p16='2025-07-04T05:17:50.5978026Z' (Nullable = true) (DbType = DateTime), @p17=NULL, @p18='received' (Nullable = false)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "MessageLogs" ("Id", "BusinessId", "CTAFlowConfigId", "CTAFlowStepId", "CampaignId", "ContactId", "CreatedAt", "ErrorMessage", "IsIncoming", "MediaUrl", "MessageContent", "MessageId", "RawResponse", "RecipientNumber", "RefMessageId", "RenderedBody", "SentAt", "Source", "Status")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15, @p16, @p17, @p18);
+2025-07-04 10:47:50.780 +05:30 [INF] Executed DbCommand (1ms) [Parameters=[@__businessId_0='c13be597-6ae2-42bb-9d43-925815f24ff8'], CommandType='"Text"', CommandTimeout='30']
+SELECT a."Id", a."BusinessId", a."CreatedAt", a."FlowId", a."FlowName", a."IsActive", a."MediaUrl", a."Priority", a."ReplyMessage", a."TriggerKeyword", a."UpdatedAt"
+FROM "AutoReplyRules" AS a
+WHERE a."BusinessId" = @__businessId_0 AND a."IsActive"
+2025-07-04 10:47:52.514 +05:30 [INF] Executed DbCommand (2ms) [Parameters=[@__flowId_0='d6c0e208-6966-468d-93cc-bd4409423860'], CommandType='"Text"', CommandTimeout='30']
+SELECT a."Id", a."ConfigJson", a."CreatedAt", a."FlowId", a."Label", a."NodeType", a."Order", a."Position_X", a."Position_Y"
+FROM "AutoReplyFlowNodes" AS a
+WHERE a."FlowId" = @__flowId_0
+2025-07-04 10:47:52.556 +05:30 [INF] Executed DbCommand (2ms) [Parameters=[@__flowId_0='d6c0e208-6966-468d-93cc-bd4409423860'], CommandType='"Text"', CommandTimeout='30']
+SELECT a."Id", a."CreatedAt", a."FlowId", a."SourceHandle", a."SourceNodeId", a."TargetHandle", a."TargetNodeId"
+FROM "AutoReplyFlowEdges" AS a
+WHERE a."FlowId" = @__flowId_0
+2025-07-04 10:47:52.577 +05:30 [INF] FindOrCreateAsync: businessId="c13be597-6ae2-42bb-9d43-925815f24ff8", phoneNumber=917082156227
+2025-07-04 10:47:52.582 +05:30 [INF] Executed DbCommand (1ms) [Parameters=[@__businessId_0='c13be597-6ae2-42bb-9d43-925815f24ff8', @__phoneNumber_1='917082156227'], CommandType='"Text"', CommandTimeout='30']
+SELECT c."Id", c."AssignedAgentId", c."BusinessId", c."CreatedAt", c."Email", c."Group", c."IsActive", c."IsArchived", c."IsAutomationPaused", c."IsFavorite", c."LastCTAInteraction", c."LastCTAType", c."LastClickedProductId", c."LastContactedAt", c."LeadSource", c."Name", c."NextFollowUpAt", c."Notes", c."PhoneNumber", c."Tags"
+FROM "Contacts" AS c
+WHERE c."BusinessId" = @__businessId_0 AND c."PhoneNumber" = @__phoneNumber_1
+LIMIT 1
+2025-07-04 10:47:52.584 +05:30 [INF] Contact already exists: contactId="0876f654-a362-420f-a912-6bce793436a5"
+2025-07-04 10:47:52.585 +05:30 [INF] ⚙️ Executing node "5b25d482-4701-4644-b1aa-94ec65cc5d89" [start]
+2025-07-04 10:47:52.587 +05:30 [INF] 🚦 Start node reached: "5b25d482-4701-4644-b1aa-94ec65cc5d89"
+2025-07-04 10:47:52.661 +05:30 [INF] ⚡ Flow triggered: Pizza Order Flow by keyword: pizza
+2025-07-04 10:47:53.496 +05:30 [INF] Executed DbCommand (20ms) [Parameters=[@p0='662dfeb6-f4b0-4c35-857b-7011c50102f8', @p1='c13be597-6ae2-42bb-9d43-925815f24ff8', @p2=NULL (DbType = Guid), @p3=NULL (DbType = Guid), @p4=NULL (DbType = Guid), @p5='0876f654-a362-420f-a912-6bce793436a5' (Nullable = true), @p6='2025-07-04T05:17:53.4488385Z' (DbType = DateTime), @p7=NULL, @p8='True', @p9=NULL, @p10='pizza' (Nullable = false), @p11=NULL, @p12=NULL, @p13='917082156227' (Nullable = false), @p14=NULL (DbType = Guid), @p15=NULL, @p16=NULL (DbType = DateTime), @p17=NULL, @p18='Queued' (Nullable = false)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "MessageLogs" ("Id", "BusinessId", "CTAFlowConfigId", "CTAFlowStepId", "CampaignId", "ContactId", "CreatedAt", "ErrorMessage", "IsIncoming", "MediaUrl", "MessageContent", "MessageId", "RawResponse", "RecipientNumber", "RefMessageId", "RenderedBody", "SentAt", "Source", "Status")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15, @p16, @p17, @p18);
+2025-07-04 11:02:34.049 +05:30 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:7113/api/whatsappsettings/test-connection - null null
+2025-07-04 11:02:34.056 +05:30 [INF] CORS policy execution successful.
+2025-07-04 11:02:34.058 +05:30 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:7113/api/whatsappsettings/test-connection - 204 null null 9.9148ms
+2025-07-04 11:02:34.061 +05:30 [INF] Request starting HTTP/1.1 POST http://localhost:7113/api/whatsappsettings/test-connection - application/json 469
+2025-07-04 11:02:34.069 +05:30 [INF] CORS policy execution successful.
+2025-07-04 11:02:34.170 +05:30 [INF] Executing endpoint 'xbytechat_api.WhatsAppSettings.Controllers.WhatsAppSettingsController.TestConnection (xbytechat.api)'
+2025-07-04 11:02:34.177 +05:30 [INF] Route matched with {action = "TestConnection", controller = "WhatsAppSettings"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] TestConnection(xbytechat_api.WhatsAppSettings.DTOs.SaveWhatsAppSettingDto) on controller xbytechat_api.WhatsAppSettings.Controllers.WhatsAppSettingsController (xbytechat.api).
+2025-07-04 11:02:35.694 +05:30 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType16`1[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2025-07-04 11:02:35.698 +05:30 [INF] Executed action xbytechat_api.WhatsAppSettings.Controllers.WhatsAppSettingsController.TestConnection (xbytechat.api) in 1518.3943ms
+2025-07-04 11:02:35.699 +05:30 [INF] Executed endpoint 'xbytechat_api.WhatsAppSettings.Controllers.WhatsAppSettingsController.TestConnection (xbytechat.api)'
+2025-07-04 11:02:35.701 +05:30 [INF] Request finished HTTP/1.1 POST http://localhost:7113/api/whatsappsettings/test-connection - 200 null application/json; charset=utf-8 1639.4117ms
+2025-07-04 11:02:39.379 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/api/contacts - null null
+2025-07-04 11:02:39.379 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/api/reporting/messages/recent?limit=10 - null null
+2025-07-04 11:02:39.387 +05:30 [INF] CORS policy execution successful.
+2025-07-04 11:02:39.391 +05:30 [INF] CORS policy execution successful.
+2025-07-04 11:02:39.394 +05:30 [INF] Executing endpoint 'xbytechat.api.CRM.Controllers.ContactsController.GetAllContacts (xbytechat.api)'
+2025-07-04 11:02:39.394 +05:30 [INF] Executing endpoint 'xbytechat.api.Features.ReportingModule.Controllers.MessageAnalyticsController.GetRecentLogs (xbytechat.api)'
+2025-07-04 11:02:39.400 +05:30 [INF] Route matched with {action = "GetRecentLogs", controller = "MessageAnalytics"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetRecentLogs(Int32) on controller xbytechat.api.Features.ReportingModule.Controllers.MessageAnalyticsController (xbytechat.api).
+2025-07-04 11:02:39.400 +05:30 [INF] Route matched with {action = "GetAllContacts", controller = "Contacts"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAllContacts(System.String, Int32, Int32) on controller xbytechat.api.CRM.Controllers.ContactsController (xbytechat.api).
+2025-07-04 11:02:39.408 +05:30 [INF] GetPagedContactsAsync: businessId="c13be597-6ae2-42bb-9d43-925815f24ff8", tab=all, page=1, pageSize=25
+2025-07-04 11:02:39.544 +05:30 [INF] Executed DbCommand (4ms) [Parameters=[@__businessId_0='c13be597-6ae2-42bb-9d43-925815f24ff8', @__p_1='10'], CommandType='"Text"', CommandTimeout='30']
+SELECT m."Id", m."RecipientNumber", m."MessageContent", m."CreatedAt", m."CampaignId", m."Status", m."SentAt"
+FROM "MessageLogs" AS m
+WHERE m."BusinessId" = @__businessId_0
+ORDER BY m."CreatedAt" DESC
+LIMIT @__p_1
+2025-07-04 11:02:39.547 +05:30 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType30`2[[System.Boolean, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Collections.Generic.List`1[[xbytechat.api.Features.ReportingModule.DTOs.RecentMessageLogDto, xbytechat.api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2025-07-04 11:02:39.562 +05:30 [INF] Executed action xbytechat.api.Features.ReportingModule.Controllers.MessageAnalyticsController.GetRecentLogs (xbytechat.api) in 160.4793ms
+2025-07-04 11:02:39.563 +05:30 [INF] Executed endpoint 'xbytechat.api.Features.ReportingModule.Controllers.MessageAnalyticsController.GetRecentLogs (xbytechat.api)'
+2025-07-04 11:02:39.566 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/api/reporting/messages/recent?limit=10 - 200 null application/json; charset=utf-8 186.8288ms
+2025-07-04 11:02:39.613 +05:30 [INF] Executed DbCommand (1ms) [Parameters=[@__businessId_0='c13be597-6ae2-42bb-9d43-925815f24ff8'], CommandType='"Text"', CommandTimeout='30']
+SELECT count(*)::int
+FROM "Contacts" AS c
+WHERE c."BusinessId" = @__businessId_0 AND c."IsActive"
+2025-07-04 11:02:39.654 +05:30 [INF] Executed DbCommand (5ms) [Parameters=[@__businessId_0='c13be597-6ae2-42bb-9d43-925815f24ff8', @__p_2='25', @__p_1='0'], CommandType='"Text"', CommandTimeout='30']
+SELECT t."Id", t."AssignedAgentId", t."BusinessId", t."CreatedAt", t."Email", t."Group", t."IsActive", t."IsArchived", t."IsAutomationPaused", t."IsFavorite", t."LastCTAInteraction", t."LastCTAType", t."LastClickedProductId", t."LastContactedAt", t."LeadSource", t."Name", t."NextFollowUpAt", t."Notes", t."PhoneNumber", t."Tags", t0."Id", t0."AssignedAt", t0."AssignedBy", t0."BusinessId", t0."ContactId", t0."TagId", t0."Id0", t0."BusinessId0", t0."Category", t0."ColorHex", t0."CreatedAt", t0."IsActive", t0."IsSystemTag", t0."LastUsedAt", t0."Name", t0."Notes"
+FROM (
+    SELECT c."Id", c."AssignedAgentId", c."BusinessId", c."CreatedAt", c."Email", c."Group", c."IsActive", c."IsArchived", c."IsAutomationPaused", c."IsFavorite", c."LastCTAInteraction", c."LastCTAType", c."LastClickedProductId", c."LastContactedAt", c."LeadSource", c."Name", c."NextFollowUpAt", c."Notes", c."PhoneNumber", c."Tags"
+    FROM "Contacts" AS c
+    WHERE c."BusinessId" = @__businessId_0 AND c."IsActive"
+    ORDER BY c."Name"
+    LIMIT @__p_2 OFFSET @__p_1
+) AS t
+LEFT JOIN (
+    SELECT c0."Id", c0."AssignedAt", c0."AssignedBy", c0."BusinessId", c0."ContactId", c0."TagId", t1."Id" AS "Id0", t1."BusinessId" AS "BusinessId0", t1."Category", t1."ColorHex", t1."CreatedAt", t1."IsActive", t1."IsSystemTag", t1."LastUsedAt", t1."Name", t1."Notes"
+    FROM "ContactTags" AS c0
+    INNER JOIN "Tags" AS t1 ON c0."TagId" = t1."Id"
+) AS t0 ON t."Id" = t0."ContactId"
+ORDER BY t."Name", t."Id", t0."Id"
+2025-07-04 11:02:39.684 +05:30 [INF] Executing OkObjectResult, writing value of type 'xbytechat.api.Helpers.ResponseResult'.
+2025-07-04 11:02:39.692 +05:30 [INF] Executed action xbytechat.api.CRM.Controllers.ContactsController.GetAllContacts (xbytechat.api) in 289.099ms
+2025-07-04 11:02:39.693 +05:30 [INF] Executed endpoint 'xbytechat.api.CRM.Controllers.ContactsController.GetAllContacts (xbytechat.api)'
+2025-07-04 11:02:39.694 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/api/contacts - 200 null application/json; charset=utf-8 314.8598ms
+2025-07-04 11:02:44.129 +05:30 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:7113/api/messageengine/send-text - null null
+2025-07-04 11:02:44.132 +05:30 [INF] CORS policy execution successful.
+2025-07-04 11:02:44.133 +05:30 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:7113/api/messageengine/send-text - 204 null null 3.8074ms
+2025-07-04 11:02:44.134 +05:30 [INF] Request starting HTTP/1.1 POST http://localhost:7113/api/messageengine/send-text - application/json 57
+2025-07-04 11:02:44.138 +05:30 [INF] CORS policy execution successful.
+2025-07-04 11:02:44.140 +05:30 [INF] Executing endpoint 'xbytechat.api.Features.MessagesEngine.Controllers.MessageEngineController.SendTextMessage (xbytechat.api)'
+2025-07-04 11:02:44.144 +05:30 [INF] Route matched with {action = "SendTextMessage", controller = "MessageEngine"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SendTextMessage(xbytechat.api.Features.MessagesEngine.DTOs.TextMessageSendDto) on controller xbytechat.api.Features.MessagesEngine.Controllers.MessageEngineController (xbytechat.api).
+2025-07-04 11:02:56.551 +05:30 [INF] FindOrCreateAsync: businessId="c13be597-6ae2-42bb-9d43-925815f24ff8", phoneNumber=+917082156227
+2025-07-04 11:02:56.555 +05:30 [INF] Executed DbCommand (2ms) [Parameters=[@__businessId_0='c13be597-6ae2-42bb-9d43-925815f24ff8', @__phoneNumber_1='+917082156227'], CommandType='"Text"', CommandTimeout='30']
+SELECT c."Id", c."AssignedAgentId", c."BusinessId", c."CreatedAt", c."Email", c."Group", c."IsActive", c."IsArchived", c."IsAutomationPaused", c."IsFavorite", c."LastCTAInteraction", c."LastCTAType", c."LastClickedProductId", c."LastContactedAt", c."LeadSource", c."Name", c."NextFollowUpAt", c."Notes", c."PhoneNumber", c."Tags"
+FROM "Contacts" AS c
+WHERE c."BusinessId" = @__businessId_0 AND c."PhoneNumber" = @__phoneNumber_1
+LIMIT 1
+2025-07-04 11:02:56.558 +05:30 [INF] Contact already exists: contactId="8aac7c57-6699-4511-897b-4121b407eb1c"
+2025-07-04 11:02:56.622 +05:30 [INF] Executed DbCommand (3ms) [Parameters=[@__businessId_0='c13be597-6ae2-42bb-9d43-925815f24ff8'], CommandType='"Text"', CommandTimeout='30']
+SELECT b."Id", b."Address", b."ApprovedAt", b."ApprovedBy", b."BusinessEmail", b."BusinessName", b."CompanyName", b."CompanyPhone", b."CreatedAt", b."CreatedBy", b."CreatedByPartnerId", b."DeletedAt", b."DeletedBy", b."Industry", b."IsApproved", b."IsDeleted", b."LastLoginAt", b."LogoUrl", b."Notes", b."Phone", b."RepresentativeName", b."Source", b."Status", b."Tags", b."Website", w."Id", w."ApiToken", w."ApiUrl", w."BusinessId", w."CreatedAt", w."IsActive", w."PhoneNumberId", w."SenderDisplayName", w."UpdatedAt", w."WabaId", w."WhatsAppBusinessNumber"
+FROM "Businesses" AS b
+LEFT JOIN "WhatsAppSettings" AS w ON b."Id" = w."BusinessId"
+WHERE b."Id" = @__businessId_0
+LIMIT 1
+2025-07-04 11:02:56.630 +05:30 [INF] Start processing HTTP request POST https://graph.facebook.com/v22.0/601884673011340/messages
+2025-07-04 11:02:56.633 +05:30 [INF] Sending HTTP request POST https://graph.facebook.com/v22.0/601884673011340/messages
+2025-07-04 11:02:57.504 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/swagger/index.html - null null
+2025-07-04 11:02:57.514 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/swagger/index.html - 200 null text/html;charset=utf-8 9.5004ms
+2025-07-04 11:02:57.545 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/_vs/browserLink - null null
+2025-07-04 11:02:57.545 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/_framework/aspnetcore-browser-refresh.js - null null
+2025-07-04 11:02:57.581 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/_framework/aspnetcore-browser-refresh.js - 200 13762 application/javascript; charset=utf-8 35.5701ms
+2025-07-04 11:02:57.587 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/_vs/browserLink - 200 null text/javascript; charset=UTF-8 42.1342ms
+2025-07-04 11:02:57.915 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/swagger/v1/swagger.json - null null
+2025-07-04 11:02:57.984 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 68.8278ms
+2025-07-04 11:02:58.071 +05:30 [INF] Received HTTP response headers after 1434.7978ms - 200
+2025-07-04 11:02:58.073 +05:30 [INF] End processing HTTP request after 1444.6368ms - 200
+2025-07-04 11:02:58.164 +05:30 [INF] Executed DbCommand (3ms) [Parameters=[@p0='3c262117-1594-4639-85a8-313d28228097', @p1='c13be597-6ae2-42bb-9d43-925815f24ff8', @p2=NULL (DbType = Guid), @p3=NULL (DbType = Guid), @p4=NULL (DbType = Guid), @p5='8aac7c57-6699-4511-897b-4121b407eb1c' (Nullable = true), @p6='2025-07-04T05:32:58.1596375Z' (DbType = DateTime), @p7=NULL, @p8='False', @p9=NULL, @p10='dfsdf' (Nullable = false), @p11='wamid.HBgMOTE3MDgyMTU2MjI3FQIAERgSNjZGNDIyRkE0QjExNjIxODdFAA==', @p12='{"Success":true,"Message":"✅ Message sent successfully","Data":null,"ErrorMessage":null,"RawResponse":"{\"messaging_product\":\"whatsapp\",\"contacts\":[{\"input\":\"+917082156227\",\"wa_id\":\"917082156227\"}],\"messages\":[{\"id\":\"wamid.HBgMOTE3MDgyMTU2MjI3FQIAERgSNjZGNDIyRkE0QjExNjIxODdFAA==\"}]}","MessageId":"wamid.HBgMOTE3MDgyMTU2MjI3FQIAERgSNjZGNDIyRkE0QjExNjIxODdFAA==","LogId":null,"Token":null,"RefreshToken":null}', @p13='+917082156227' (Nullable = false), @p14=NULL (DbType = Guid), @p15='dfsdf', @p16='2025-07-04T05:32:58.1596377Z' (Nullable = true) (DbType = DateTime), @p17=NULL, @p18='Sent' (Nullable = false)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "MessageLogs" ("Id", "BusinessId", "CTAFlowConfigId", "CTAFlowStepId", "CampaignId", "ContactId", "CreatedAt", "ErrorMessage", "IsIncoming", "MediaUrl", "MessageContent", "MessageId", "RawResponse", "RecipientNumber", "RefMessageId", "RenderedBody", "SentAt", "Source", "Status")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15, @p16, @p17, @p18);
+2025-07-04 11:02:58.167 +05:30 [INF] Executing OkObjectResult, writing value of type 'xbytechat.api.Helpers.ResponseResult'.
+2025-07-04 11:02:58.174 +05:30 [INF] Executed action xbytechat.api.Features.MessagesEngine.Controllers.MessageEngineController.SendTextMessage (xbytechat.api) in 14028.7989ms
+2025-07-04 11:02:58.175 +05:30 [INF] Executed endpoint 'xbytechat.api.Features.MessagesEngine.Controllers.MessageEngineController.SendTextMessage (xbytechat.api)'
+2025-07-04 11:02:58.177 +05:30 [INF] Request finished HTTP/1.1 POST http://localhost:7113/api/messageengine/send-text - 200 null application/json; charset=utf-8 14042.1741ms
+2025-07-04 11:02:59.146 +05:30 [INF] Request starting HTTP/1.1 POST http://a4a5-2401-4900-5d24-f81e-9d84-242f-f53b-b90a.ngrok-free.app/api/webhooks/whatsapp - application/json 613
+2025-07-04 11:02:59.148 +05:30 [INF] Executing endpoint 'xbytechat.api.Features.Webhooks.Controllers.WhatsAppWebhookController.HandleStatus (xbytechat.api)'
+2025-07-04 11:02:59.150 +05:30 [INF] Route matched with {action = "HandleStatus", controller = "WhatsAppWebhook"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult HandleStatus(System.Text.Json.JsonElement) on controller xbytechat.api.Features.Webhooks.Controllers.WhatsAppWebhookController (xbytechat.api).
+2025-07-04 11:02:59.152 +05:30 [WRN] 📥 Webhook received at controller:
+{"object":"whatsapp_business_account","entry":[{"id":"999432368375320","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"15556395845","phone_number_id":"601884673011340"},"statuses":[{"id":"wamid.HBgMOTE3MDgyMTU2MjI3FQIAERgSNjZGNDIyRkE0QjExNjIxODdFAA==","status":"sent","timestamp":"1751607180","recipient_id":"917082156227","conversation":{"id":"8727c7db09b6cd545da662d5b86b420f","expiration_timestamp":"1751607180","origin":{"type":"service"}},"pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]}
+2025-07-04 11:02:59.153 +05:30 [INF] 📥 Webhook payload enqueued successfully.
+2025-07-04 11:02:59.153 +05:30 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType73`1[[System.Boolean, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2025-07-04 11:02:59.154 +05:30 [WRN] 📦 Dispatcher Raw Payload:
+{"object":"whatsapp_business_account","entry":[{"id":"999432368375320","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"15556395845","phone_number_id":"601884673011340"},"statuses":[{"id":"wamid.HBgMOTE3MDgyMTU2MjI3FQIAERgSNjZGNDIyRkE0QjExNjIxODdFAA==","status":"sent","timestamp":"1751607180","recipient_id":"917082156227","conversation":{"id":"8727c7db09b6cd545da662d5b86b420f","expiration_timestamp":"1751607180","origin":{"type":"service"}},"pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]}
+2025-07-04 11:02:59.155 +05:30 [INF] Executed action xbytechat.api.Features.Webhooks.Controllers.WhatsAppWebhookController.HandleStatus (xbytechat.api) in 3.7415ms
+2025-07-04 11:02:59.155 +05:30 [INF] 📦 Routing to Status Processor
+2025-07-04 11:02:59.156 +05:30 [INF] Executed endpoint 'xbytechat.api.Features.Webhooks.Controllers.WhatsAppWebhookController.HandleStatus (xbytechat.api)'
+2025-07-04 11:02:59.157 +05:30 [WRN] 🔍 Incoming timestamp raw value: {"object":"whatsapp_business_account","entry":[{"id":"999432368375320","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"15556395845","phone_number_id":"601884673011340"},"statuses":[{"id":"wamid.HBgMOTE3MDgyMTU2MjI3FQIAERgSNjZGNDIyRkE0QjExNjIxODdFAA==","status":"sent","timestamp":"1751607180","recipient_id":"917082156227","conversation":{"id":"8727c7db09b6cd545da662d5b86b420f","expiration_timestamp":"1751607180","origin":{"type":"service"}},"pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]}
+2025-07-04 11:02:59.157 +05:30 [INF] Request finished HTTP/1.1 POST http://a4a5-2401-4900-5d24-f81e-9d84-242f-f53b-b90a.ngrok-free.app/api/webhooks/whatsapp - 200 null application/json; charset=utf-8 11.8466ms
+2025-07-04 11:02:59.191 +05:30 [INF] Executed DbCommand (5ms) [Parameters=[@__messageId_0='wamid.HBgMOTE3MDgyMTU2MjI3FQIAERgSNjZGNDIyRkE0QjExNjIxODdFAA=='], CommandType='"Text"', CommandTimeout='30']
+SELECT c."Id", c."AllowRetry", c."Browser", c."BusinessId", c."CampaignId", c."City", c."ClickType", c."ClickedAt", c."ContactId", c."Country", c."CreatedAt", c."CreatedBy", c."DeliveredAt", c."DeviceInfo", c."DeviceType", c."ErrorMessage", c."IpAddress", c."IsClicked", c."LastRetryAt", c."LastRetryStatus", c."MacAddress", c."MessageBody", c."MessageId", c."MessageLogId", c."ReadAt", c."RecipientId", c."RetryCount", c."SendStatus", c."SentAt", c."SourceChannel", c."TemplateId", c."UserId"
+FROM "CampaignSendLogs" AS c
+WHERE c."MessageId" = @__messageId_0
+LIMIT 1
+2025-07-04 11:02:59.194 +05:30 [WRN] ⚠️ CampaignSendLog not found for MessageId: wamid.HBgMOTE3MDgyMTU2MjI3FQIAERgSNjZGNDIyRkE0QjExNjIxODdFAA==
+2025-07-04 11:02:59.196 +05:30 [WRN] ⚠️ No matching CampaignSendLog for MessageId: wamid.HBgMOTE3MDgyMTU2MjI3FQIAERgSNjZGNDIyRkE0QjExNjIxODdFAA==
+2025-07-04 11:03:00.942 +05:30 [INF] Request starting HTTP/1.1 POST http://a4a5-2401-4900-5d24-f81e-9d84-242f-f53b-b90a.ngrok-free.app/api/webhooks/whatsapp - application/json 582
+2025-07-04 11:03:00.948 +05:30 [INF] Executing endpoint 'xbytechat.api.Features.Webhooks.Controllers.WhatsAppWebhookController.HandleStatus (xbytechat.api)'
+2025-07-04 11:03:00.950 +05:30 [INF] Route matched with {action = "HandleStatus", controller = "WhatsAppWebhook"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult HandleStatus(System.Text.Json.JsonElement) on controller xbytechat.api.Features.Webhooks.Controllers.WhatsAppWebhookController (xbytechat.api).
+2025-07-04 11:03:00.952 +05:30 [WRN] 📥 Webhook received at controller:
+{"object":"whatsapp_business_account","entry":[{"id":"999432368375320","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"15556395845","phone_number_id":"601884673011340"},"statuses":[{"id":"wamid.HBgMOTE3MDgyMTU2MjI3FQIAERgSNjZGNDIyRkE0QjExNjIxODdFAA==","status":"delivered","timestamp":"1751607182","recipient_id":"917082156227","conversation":{"id":"8727c7db09b6cd545da662d5b86b420f","origin":{"type":"service"}},"pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]}
+2025-07-04 11:03:00.953 +05:30 [INF] 📥 Webhook payload enqueued successfully.
+2025-07-04 11:03:00.954 +05:30 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType73`1[[System.Boolean, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2025-07-04 11:03:00.955 +05:30 [INF] Executed action xbytechat.api.Features.Webhooks.Controllers.WhatsAppWebhookController.HandleStatus (xbytechat.api) in 3.8103ms
+2025-07-04 11:03:00.956 +05:30 [INF] Executed endpoint 'xbytechat.api.Features.Webhooks.Controllers.WhatsAppWebhookController.HandleStatus (xbytechat.api)'
+2025-07-04 11:03:00.957 +05:30 [INF] Request finished HTTP/1.1 POST http://a4a5-2401-4900-5d24-f81e-9d84-242f-f53b-b90a.ngrok-free.app/api/webhooks/whatsapp - 200 null application/json; charset=utf-8 14.93ms
+2025-07-04 11:03:00.959 +05:30 [WRN] 📦 Dispatcher Raw Payload:
+{"object":"whatsapp_business_account","entry":[{"id":"999432368375320","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"15556395845","phone_number_id":"601884673011340"},"statuses":[{"id":"wamid.HBgMOTE3MDgyMTU2MjI3FQIAERgSNjZGNDIyRkE0QjExNjIxODdFAA==","status":"delivered","timestamp":"1751607182","recipient_id":"917082156227","conversation":{"id":"8727c7db09b6cd545da662d5b86b420f","origin":{"type":"service"}},"pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]}
+2025-07-04 11:03:00.960 +05:30 [INF] 📦 Routing to Status Processor
+2025-07-04 11:03:00.961 +05:30 [WRN] 🔍 Incoming timestamp raw value: {"object":"whatsapp_business_account","entry":[{"id":"999432368375320","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"15556395845","phone_number_id":"601884673011340"},"statuses":[{"id":"wamid.HBgMOTE3MDgyMTU2MjI3FQIAERgSNjZGNDIyRkE0QjExNjIxODdFAA==","status":"delivered","timestamp":"1751607182","recipient_id":"917082156227","conversation":{"id":"8727c7db09b6cd545da662d5b86b420f","origin":{"type":"service"}},"pricing":{"billable":false,"pricing_model":"PMP","category":"service","type":"free_customer_service"}}]},"field":"messages"}]}]}
+2025-07-04 11:03:00.964 +05:30 [INF] Executed DbCommand (1ms) [Parameters=[@__messageId_0='wamid.HBgMOTE3MDgyMTU2MjI3FQIAERgSNjZGNDIyRkE0QjExNjIxODdFAA=='], CommandType='"Text"', CommandTimeout='30']
+SELECT c."Id", c."AllowRetry", c."Browser", c."BusinessId", c."CampaignId", c."City", c."ClickType", c."ClickedAt", c."ContactId", c."Country", c."CreatedAt", c."CreatedBy", c."DeliveredAt", c."DeviceInfo", c."DeviceType", c."ErrorMessage", c."IpAddress", c."IsClicked", c."LastRetryAt", c."LastRetryStatus", c."MacAddress", c."MessageBody", c."MessageId", c."MessageLogId", c."ReadAt", c."RecipientId", c."RetryCount", c."SendStatus", c."SentAt", c."SourceChannel", c."TemplateId", c."UserId"
+FROM "CampaignSendLogs" AS c
+WHERE c."MessageId" = @__messageId_0
+LIMIT 1
+2025-07-04 11:03:00.965 +05:30 [WRN] ⚠️ CampaignSendLog not found for MessageId: wamid.HBgMOTE3MDgyMTU2MjI3FQIAERgSNjZGNDIyRkE0QjExNjIxODdFAA==
+2025-07-04 11:03:00.966 +05:30 [WRN] ⚠️ No matching CampaignSendLog for MessageId: wamid.HBgMOTE3MDgyMTU2MjI3FQIAERgSNjZGNDIyRkE0QjExNjIxODdFAA==
+2025-07-04 11:06:58.802 +05:30 [INF] User profile is available. Using 'C:\Users\sunde\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-07-04 11:06:58.853 +05:30 [INF] 🚀 Webhook Queue Worker started.
+2025-07-04 11:06:58.870 +05:30 [INF] 🧹 FailedWebhookLogCleanupService started.
+2025-07-04 11:06:59.594 +05:30 [WRN] Sensitive data logging is enabled. Log entries and exception messages may include sensitive application data; this mode should only be enabled during development.
+2025-07-04 11:07:00.112 +05:30 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2025-07-04 11:07:00.302 +05:30 [INF] Now listening on: http://localhost:7113
+2025-07-04 11:07:00.303 +05:30 [INF] Now listening on: http://localhost:5295
+2025-07-04 11:07:00.304 +05:30 [INF] Application started. Press Ctrl+C to shut down.
+2025-07-04 11:07:00.305 +05:30 [INF] Hosting environment: Development
+2025-07-04 11:07:00.306 +05:30 [INF] Content root path: D:\xbytechat\xbytechat-api\xbytechat-api
+2025-07-04 11:07:00.379 +05:30 [INF] Executed DbCommand (23ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT w."Id", w."AutoCleanupEnabled", w."LastCleanupAt"
+FROM "WebhookSettings" AS w
+LIMIT 1
+2025-07-04 11:07:00.403 +05:30 [INF] Executed DbCommand (49ms) [Parameters=[@__cutoff_0='2025-06-27T05:36:58.9754976Z' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT f."Id", f."CreatedAt", f."ErrorMessage", f."FailureType", f."RawJson", f."SourceModule"
+FROM "FailedWebhookLogs" AS f
+WHERE f."CreatedAt" < @__cutoff_0
+2025-07-04 11:07:02.757 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/swagger/index.html - null null
+2025-07-04 11:07:03.013 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/swagger/index.html - 200 null text/html;charset=utf-8 267.145ms
+2025-07-04 11:07:03.035 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/_framework/aspnetcore-browser-refresh.js - null null
+2025-07-04 11:07:03.045 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/_framework/aspnetcore-browser-refresh.js - 200 13762 application/javascript; charset=utf-8 9.4209ms
+2025-07-04 11:07:03.153 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/_vs/browserLink - null null
+2025-07-04 11:07:03.206 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/_vs/browserLink - 200 null text/javascript; charset=UTF-8 52.1319ms
+2025-07-04 11:07:03.416 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/swagger/v1/swagger.json - null null
+2025-07-04 11:07:03.617 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 201.26ms
+2025-07-04 11:07:20.816 +05:30 [INF] Request starting HTTP/1.1 POST http://a4a5-2401-4900-5d24-f81e-9d84-242f-f53b-b90a.ngrok-free.app/api/webhooks/whatsapp - application/json 494
+2025-07-04 11:07:20.820 +05:30 [WRN] Failed to determine the https port for redirect.
+2025-07-04 11:07:20.866 +05:30 [INF] Executing endpoint 'xbytechat.api.Features.Webhooks.Controllers.WhatsAppWebhookController.HandleStatus (xbytechat.api)'
+2025-07-04 11:07:20.878 +05:30 [INF] Route matched with {action = "HandleStatus", controller = "WhatsAppWebhook"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult HandleStatus(System.Text.Json.JsonElement) on controller xbytechat.api.Features.Webhooks.Controllers.WhatsAppWebhookController (xbytechat.api).
+2025-07-04 11:07:20.893 +05:30 [WRN] 📥 Webhook received at controller:
+{"object":"whatsapp_business_account","entry":[{"id":"999432368375320","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"15556395845","phone_number_id":"601884673011340"},"contacts":[{"profile":{"name":"\ua9c1S.K\ua9c2"},"wa_id":"917082156227"}],"messages":[{"from":"917082156227","id":"wamid.HBgMOTE3MDgyMTU2MjI3FQIAEhggNDNGRDE4RkU5QjlBODAzRDJGNTI0RTUwOTQxNTAxMzYA","timestamp":"1751607442","text":{"body":"pizza"},"type":"text"}]},"field":"messages"}]}]}
+2025-07-04 11:07:20.896 +05:30 [INF] 📥 Webhook payload enqueued successfully.
+2025-07-04 11:07:20.900 +05:30 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType73`1[[System.Boolean, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2025-07-04 11:07:20.908 +05:30 [INF] Executed action xbytechat.api.Features.Webhooks.Controllers.WhatsAppWebhookController.HandleStatus (xbytechat.api) in 26.5212ms
+2025-07-04 11:07:20.909 +05:30 [INF] Executed endpoint 'xbytechat.api.Features.Webhooks.Controllers.WhatsAppWebhookController.HandleStatus (xbytechat.api)'
+2025-07-04 11:07:20.911 +05:30 [INF] Request finished HTTP/1.1 POST http://a4a5-2401-4900-5d24-f81e-9d84-242f-f53b-b90a.ngrok-free.app/api/webhooks/whatsapp - 200 null application/json; charset=utf-8 95.1163ms
+2025-07-04 11:07:20.987 +05:30 [WRN] 📦 Dispatcher Raw Payload:
+{"object":"whatsapp_business_account","entry":[{"id":"999432368375320","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"15556395845","phone_number_id":"601884673011340"},"contacts":[{"profile":{"name":"\ua9c1S.K\ua9c2"},"wa_id":"917082156227"}],"messages":[{"from":"917082156227","id":"wamid.HBgMOTE3MDgyMTU2MjI3FQIAEhggNDNGRDE4RkU5QjlBODAzRDJGNTI0RTUwOTQxNTAxMzYA","timestamp":"1751607442","text":{"body":"pizza"},"type":"text"}]},"field":"messages"}]}]}
+2025-07-04 11:07:20.989 +05:30 [INF] 💬 Routing to InboundMessageProcessor (type: text)
+2025-07-04 11:07:21.087 +05:30 [INF] Executed DbCommand (5ms) [Parameters=[@__businessNumber_0='15556395845'], CommandType='"Text"', CommandTimeout='30']
+SELECT b."Id", b."Address", b."ApprovedAt", b."ApprovedBy", b."BusinessEmail", b."BusinessName", b."CompanyName", b."CompanyPhone", b."CreatedAt", b."CreatedBy", b."CreatedByPartnerId", b."DeletedAt", b."DeletedBy", b."Industry", b."IsApproved", b."IsDeleted", b."LastLoginAt", b."LogoUrl", b."Notes", b."Phone", b."RepresentativeName", b."Source", b."Status", b."Tags", b."Website", w."Id", w."ApiToken", w."ApiUrl", w."BusinessId", w."CreatedAt", w."IsActive", w."PhoneNumberId", w."SenderDisplayName", w."UpdatedAt", w."WabaId", w."WhatsAppBusinessNumber"
+FROM "Businesses" AS b
+LEFT JOIN "WhatsAppSettings" AS w ON b."Id" = w."BusinessId"
+WHERE w."WhatsAppBusinessNumber" = @__businessNumber_0
+LIMIT 1
+2025-07-04 11:07:21.181 +05:30 [INF] FindOrCreateAsync: businessId="c13be597-6ae2-42bb-9d43-925815f24ff8", phoneNumber=917082156227
+2025-07-04 11:07:21.193 +05:30 [INF] Executed DbCommand (3ms) [Parameters=[@__businessId_0='c13be597-6ae2-42bb-9d43-925815f24ff8', @__phoneNumber_1='917082156227'], CommandType='"Text"', CommandTimeout='30']
+SELECT c."Id", c."AssignedAgentId", c."BusinessId", c."CreatedAt", c."Email", c."Group", c."IsActive", c."IsArchived", c."IsAutomationPaused", c."IsFavorite", c."LastCTAInteraction", c."LastCTAType", c."LastClickedProductId", c."LastContactedAt", c."LeadSource", c."Name", c."NextFollowUpAt", c."Notes", c."PhoneNumber", c."Tags"
+FROM "Contacts" AS c
+WHERE c."BusinessId" = @__businessId_0 AND c."PhoneNumber" = @__phoneNumber_1
+LIMIT 1
+2025-07-04 11:07:21.225 +05:30 [INF] Contact already exists: contactId="0876f654-a362-420f-a912-6bce793436a5"
+2025-07-04 11:07:21.231 +05:30 [INF] Executed DbCommand (1ms) [Parameters=[@__businessId_0='c13be597-6ae2-42bb-9d43-925815f24ff8', @__contactId_1='0876f654-a362-420f-a912-6bce793436a5'], CommandType='"Text"', CommandTimeout='30']
+SELECT c."Id", c."BusinessId", c."ContactId", c."LastUpdatedAt", c."Mode", c."UpdatedBy"
+FROM "ChatSessionStates" AS c
+WHERE c."BusinessId" = @__businessId_0 AND c."ContactId" = @__contactId_1
+LIMIT 1
+2025-07-04 11:07:21.362 +05:30 [INF] Executed DbCommand (4ms) [Parameters=[@p0='1e462659-b2bc-4eca-8a03-2e8e98a887b1', @p1='c13be597-6ae2-42bb-9d43-925815f24ff8', @p2=NULL (DbType = Guid), @p3=NULL (DbType = Guid), @p4=NULL (DbType = Guid), @p5='0876f654-a362-420f-a912-6bce793436a5' (Nullable = true), @p6='2025-07-04T05:37:21.2338332Z' (DbType = DateTime), @p7=NULL, @p8='True', @p9=NULL, @p10='pizza' (Nullable = false), @p11=NULL, @p12=NULL, @p13='917082156227' (Nullable = false), @p14=NULL (DbType = Guid), @p15=NULL, @p16='2025-07-04T05:37:21.2338783Z' (Nullable = true) (DbType = DateTime), @p17=NULL, @p18='received' (Nullable = false)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "MessageLogs" ("Id", "BusinessId", "CTAFlowConfigId", "CTAFlowStepId", "CampaignId", "ContactId", "CreatedAt", "ErrorMessage", "IsIncoming", "MediaUrl", "MessageContent", "MessageId", "RawResponse", "RecipientNumber", "RefMessageId", "RenderedBody", "SentAt", "Source", "Status")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15, @p16, @p17, @p18);
+2025-07-04 11:07:21.380 +05:30 [INF] Executed DbCommand (2ms) [Parameters=[@__businessId_0='c13be597-6ae2-42bb-9d43-925815f24ff8'], CommandType='"Text"', CommandTimeout='30']
+SELECT a."Id", a."BusinessId", a."CreatedAt", a."FlowId", a."FlowName", a."IsActive", a."MediaUrl", a."Priority", a."ReplyMessage", a."TriggerKeyword", a."UpdatedAt"
+FROM "AutoReplyRules" AS a
+WHERE a."BusinessId" = @__businessId_0 AND a."IsActive"
+2025-07-04 11:07:28.044 +05:30 [INF] Executed DbCommand (1ms) [Parameters=[@__flowId_0='d6c0e208-6966-468d-93cc-bd4409423860'], CommandType='"Text"', CommandTimeout='30']
+SELECT a."Id", a."ConfigJson", a."CreatedAt", a."FlowId", a."Label", a."NodeType", a."Order", a."Position_X", a."Position_Y"
+FROM "AutoReplyFlowNodes" AS a
+WHERE a."FlowId" = @__flowId_0
+2025-07-04 11:07:32.285 +05:30 [INF] Executed DbCommand (1ms) [Parameters=[@__flowId_0='d6c0e208-6966-468d-93cc-bd4409423860'], CommandType='"Text"', CommandTimeout='30']
+SELECT a."Id", a."CreatedAt", a."FlowId", a."SourceHandle", a."SourceNodeId", a."TargetHandle", a."TargetNodeId"
+FROM "AutoReplyFlowEdges" AS a
+WHERE a."FlowId" = @__flowId_0
+2025-07-04 11:07:37.458 +05:30 [INF] FindOrCreateAsync: businessId="c13be597-6ae2-42bb-9d43-925815f24ff8", phoneNumber=917082156227
+2025-07-04 11:07:37.463 +05:30 [INF] Executed DbCommand (1ms) [Parameters=[@__businessId_0='c13be597-6ae2-42bb-9d43-925815f24ff8', @__phoneNumber_1='917082156227'], CommandType='"Text"', CommandTimeout='30']
+SELECT c."Id", c."AssignedAgentId", c."BusinessId", c."CreatedAt", c."Email", c."Group", c."IsActive", c."IsArchived", c."IsAutomationPaused", c."IsFavorite", c."LastCTAInteraction", c."LastCTAType", c."LastClickedProductId", c."LastContactedAt", c."LeadSource", c."Name", c."NextFollowUpAt", c."Notes", c."PhoneNumber", c."Tags"
+FROM "Contacts" AS c
+WHERE c."BusinessId" = @__businessId_0 AND c."PhoneNumber" = @__phoneNumber_1
+LIMIT 1
+2025-07-04 11:07:37.477 +05:30 [INF] Contact already exists: contactId="0876f654-a362-420f-a912-6bce793436a5"
+2025-07-04 11:07:41.739 +05:30 [INF] ⚙️ Executing node "5b25d482-4701-4644-b1aa-94ec65cc5d89" [start]
+2025-07-04 11:07:46.547 +05:30 [INF] 🚦 Start node reached: "5b25d482-4701-4644-b1aa-94ec65cc5d89"
+2025-07-04 11:07:58.880 +05:30 [INF] ⚡ Flow triggered: Pizza Order Flow by keyword: pizza
+2025-07-04 11:08:06.307 +05:30 [INF] Executed DbCommand (3ms) [Parameters=[@p0='579459e8-89e8-4ed4-b974-6acf15260f00', @p1='c13be597-6ae2-42bb-9d43-925815f24ff8', @p2=NULL (DbType = Guid), @p3=NULL (DbType = Guid), @p4=NULL (DbType = Guid), @p5='0876f654-a362-420f-a912-6bce793436a5' (Nullable = true), @p6='2025-07-04T05:38:05.1459723Z' (DbType = DateTime), @p7=NULL, @p8='True', @p9=NULL, @p10='pizza' (Nullable = false), @p11=NULL, @p12=NULL, @p13='917082156227' (Nullable = false), @p14=NULL (DbType = Guid), @p15=NULL, @p16=NULL (DbType = DateTime), @p17=NULL, @p18='Queued' (Nullable = false)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "MessageLogs" ("Id", "BusinessId", "CTAFlowConfigId", "CTAFlowStepId", "CampaignId", "ContactId", "CreatedAt", "ErrorMessage", "IsIncoming", "MediaUrl", "MessageContent", "MessageId", "RawResponse", "RecipientNumber", "RefMessageId", "RenderedBody", "SentAt", "Source", "Status")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15, @p16, @p17, @p18);
+2025-07-04 12:13:41.935 +05:30 [INF] Request starting HTTP/1.1 POST http://a4a5-2401-4900-5d24-f81e-9d84-242f-f53b-b90a.ngrok-free.app/api/webhooks/whatsapp - application/json 482
+2025-07-04 12:13:41.946 +05:30 [INF] Executing endpoint 'xbytechat.api.Features.Webhooks.Controllers.WhatsAppWebhookController.HandleStatus (xbytechat.api)'
+2025-07-04 12:13:41.948 +05:30 [INF] Route matched with {action = "HandleStatus", controller = "WhatsAppWebhook"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult HandleStatus(System.Text.Json.JsonElement) on controller xbytechat.api.Features.Webhooks.Controllers.WhatsAppWebhookController (xbytechat.api).
+2025-07-04 12:13:41.951 +05:30 [WRN] 📥 Webhook received at controller:
+{"object":"whatsapp_business_account","entry":[{"id":"999432368375320","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"15556395845","phone_number_id":"601884673011340"},"contacts":[{"profile":{"name":"S K"},"wa_id":"918974005240"}],"messages":[{"from":"918974005240","id":"wamid.HBgMOTE4OTc0MDA1MjQwFQIAEhggRkQ2RjM0Qjc2MDc0QTJFNUY5RDFEMTcwRjcxRkYwODYA","timestamp":"1751611422","text":{"body":"pizza"},"type":"text"}]},"field":"messages"}]}]}
+2025-07-04 12:13:41.953 +05:30 [INF] 📥 Webhook payload enqueued successfully.
+2025-07-04 12:13:41.953 +05:30 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType73`1[[System.Boolean, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2025-07-04 12:13:41.955 +05:30 [WRN] 📦 Dispatcher Raw Payload:
+{"object":"whatsapp_business_account","entry":[{"id":"999432368375320","changes":[{"value":{"messaging_product":"whatsapp","metadata":{"display_phone_number":"15556395845","phone_number_id":"601884673011340"},"contacts":[{"profile":{"name":"S K"},"wa_id":"918974005240"}],"messages":[{"from":"918974005240","id":"wamid.HBgMOTE4OTc0MDA1MjQwFQIAEhggRkQ2RjM0Qjc2MDc0QTJFNUY5RDFEMTcwRjcxRkYwODYA","timestamp":"1751611422","text":{"body":"pizza"},"type":"text"}]},"field":"messages"}]}]}
+2025-07-04 12:13:41.956 +05:30 [INF] Executed action xbytechat.api.Features.Webhooks.Controllers.WhatsAppWebhookController.HandleStatus (xbytechat.api) in 6.2156ms
+2025-07-04 12:13:41.959 +05:30 [INF] 💬 Routing to InboundMessageProcessor (type: text)
+2025-07-04 12:13:41.960 +05:30 [INF] Executed endpoint 'xbytechat.api.Features.Webhooks.Controllers.WhatsAppWebhookController.HandleStatus (xbytechat.api)'
+2025-07-04 12:14:09.900 +05:30 [INF] Request finished HTTP/1.1 POST http://a4a5-2401-4900-5d24-f81e-9d84-242f-f53b-b90a.ngrok-free.app/api/webhooks/whatsapp - 200 null application/json; charset=utf-8 27964.7671ms
+2025-07-04 12:14:53.400 +05:30 [INF] Executed DbCommand (3ms) [Parameters=[@__businessNumber_0='15556395845'], CommandType='"Text"', CommandTimeout='30']
+SELECT b."Id", b."Address", b."ApprovedAt", b."ApprovedBy", b."BusinessEmail", b."BusinessName", b."CompanyName", b."CompanyPhone", b."CreatedAt", b."CreatedBy", b."CreatedByPartnerId", b."DeletedAt", b."DeletedBy", b."Industry", b."IsApproved", b."IsDeleted", b."LastLoginAt", b."LogoUrl", b."Notes", b."Phone", b."RepresentativeName", b."Source", b."Status", b."Tags", b."Website", w."Id", w."ApiToken", w."ApiUrl", w."BusinessId", w."CreatedAt", w."IsActive", w."PhoneNumberId", w."SenderDisplayName", w."UpdatedAt", w."WabaId", w."WhatsAppBusinessNumber"
+FROM "Businesses" AS b
+LEFT JOIN "WhatsAppSettings" AS w ON b."Id" = w."BusinessId"
+WHERE w."WhatsAppBusinessNumber" = @__businessNumber_0
+LIMIT 1
+2025-07-04 12:15:04.835 +05:30 [INF] FindOrCreateAsync: businessId="c13be597-6ae2-42bb-9d43-925815f24ff8", phoneNumber=918974005240
+2025-07-04 12:15:04.839 +05:30 [INF] Executed DbCommand (2ms) [Parameters=[@__businessId_0='c13be597-6ae2-42bb-9d43-925815f24ff8', @__phoneNumber_1='918974005240'], CommandType='"Text"', CommandTimeout='30']
+SELECT c."Id", c."AssignedAgentId", c."BusinessId", c."CreatedAt", c."Email", c."Group", c."IsActive", c."IsArchived", c."IsAutomationPaused", c."IsFavorite", c."LastCTAInteraction", c."LastCTAType", c."LastClickedProductId", c."LastContactedAt", c."LeadSource", c."Name", c."NextFollowUpAt", c."Notes", c."PhoneNumber", c."Tags"
+FROM "Contacts" AS c
+WHERE c."BusinessId" = @__businessId_0 AND c."PhoneNumber" = @__phoneNumber_1
+LIMIT 1
+2025-07-04 12:15:04.851 +05:30 [INF] Contact already exists: contactId="a307d00b-239b-4c7b-bb16-77838875fbec"
+2025-07-04 12:15:17.294 +05:30 [INF] Executed DbCommand (1ms) [Parameters=[@__businessId_0='c13be597-6ae2-42bb-9d43-925815f24ff8', @__contactId_1='a307d00b-239b-4c7b-bb16-77838875fbec'], CommandType='"Text"', CommandTimeout='30']
+SELECT c."Id", c."BusinessId", c."ContactId", c."LastUpdatedAt", c."Mode", c."UpdatedBy"
+FROM "ChatSessionStates" AS c
+WHERE c."BusinessId" = @__businessId_0 AND c."ContactId" = @__contactId_1
+LIMIT 1
+2025-07-04 12:15:26.137 +05:30 [INF] Executed DbCommand (22ms) [Parameters=[@p0='5217df5b-1ad1-4688-ad5f-560f48e74d51', @p1='c13be597-6ae2-42bb-9d43-925815f24ff8', @p2=NULL (DbType = Guid), @p3=NULL (DbType = Guid), @p4=NULL (DbType = Guid), @p5='a307d00b-239b-4c7b-bb16-77838875fbec' (Nullable = true), @p6='2025-07-04T06:45:21.4650970Z' (DbType = DateTime), @p7=NULL, @p8='True', @p9=NULL, @p10='pizza' (Nullable = false), @p11=NULL, @p12=NULL, @p13='918974005240' (Nullable = false), @p14=NULL (DbType = Guid), @p15=NULL, @p16='2025-07-04T06:45:21.4726983Z' (Nullable = true) (DbType = DateTime), @p17=NULL, @p18='received' (Nullable = false)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "MessageLogs" ("Id", "BusinessId", "CTAFlowConfigId", "CTAFlowStepId", "CampaignId", "ContactId", "CreatedAt", "ErrorMessage", "IsIncoming", "MediaUrl", "MessageContent", "MessageId", "RawResponse", "RecipientNumber", "RefMessageId", "RenderedBody", "SentAt", "Source", "Status")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15, @p16, @p17, @p18);
+2025-07-04 12:15:48.822 +05:30 [INF] Executed DbCommand (1ms) [Parameters=[@__businessId_0='c13be597-6ae2-42bb-9d43-925815f24ff8'], CommandType='"Text"', CommandTimeout='30']
+SELECT a."Id", a."BusinessId", a."CreatedAt", a."FlowId", a."FlowName", a."IsActive", a."MediaUrl", a."Priority", a."ReplyMessage", a."TriggerKeyword", a."UpdatedAt"
+FROM "AutoReplyRules" AS a
+WHERE a."BusinessId" = @__businessId_0 AND a."IsActive"
+2025-07-04 12:16:35.891 +05:30 [INF] Executed DbCommand (1ms) [Parameters=[@__flowId_0='d6c0e208-6966-468d-93cc-bd4409423860'], CommandType='"Text"', CommandTimeout='30']
+SELECT a."Id", a."ConfigJson", a."CreatedAt", a."FlowId", a."Label", a."NodeType", a."Order", a."Position_X", a."Position_Y"
+FROM "AutoReplyFlowNodes" AS a
+WHERE a."FlowId" = @__flowId_0
+2025-07-04 12:16:36.621 +05:30 [INF] Executed DbCommand (1ms) [Parameters=[@__flowId_0='d6c0e208-6966-468d-93cc-bd4409423860'], CommandType='"Text"', CommandTimeout='30']
+SELECT a."Id", a."CreatedAt", a."FlowId", a."SourceHandle", a."SourceNodeId", a."TargetHandle", a."TargetNodeId"
+FROM "AutoReplyFlowEdges" AS a
+WHERE a."FlowId" = @__flowId_0
+2025-07-04 12:16:50.389 +05:30 [INF] FindOrCreateAsync: businessId="c13be597-6ae2-42bb-9d43-925815f24ff8", phoneNumber=918974005240
+2025-07-04 12:16:50.392 +05:30 [INF] Executed DbCommand (1ms) [Parameters=[@__businessId_0='c13be597-6ae2-42bb-9d43-925815f24ff8', @__phoneNumber_1='918974005240'], CommandType='"Text"', CommandTimeout='30']
+SELECT c."Id", c."AssignedAgentId", c."BusinessId", c."CreatedAt", c."Email", c."Group", c."IsActive", c."IsArchived", c."IsAutomationPaused", c."IsFavorite", c."LastCTAInteraction", c."LastCTAType", c."LastClickedProductId", c."LastContactedAt", c."LeadSource", c."Name", c."NextFollowUpAt", c."Notes", c."PhoneNumber", c."Tags"
+FROM "Contacts" AS c
+WHERE c."BusinessId" = @__businessId_0 AND c."PhoneNumber" = @__phoneNumber_1
+LIMIT 1
+2025-07-04 12:16:50.405 +05:30 [INF] Contact already exists: contactId="a307d00b-239b-4c7b-bb16-77838875fbec"
+2025-07-04 12:16:55.516 +05:30 [INF] ⚙️ Executing node "5b25d482-4701-4644-b1aa-94ec65cc5d89" [start]
+2025-07-04 12:17:14.930 +05:30 [INF] 🚦 Start node reached: "5b25d482-4701-4644-b1aa-94ec65cc5d89"
+2025-07-04 12:17:39.162 +05:30 [INF] ⚡ Flow triggered: Pizza Order Flow by keyword: pizza
+2025-07-04 12:17:46.398 +05:30 [INF] Executed DbCommand (20ms) [Parameters=[@p0='81332f7f-3764-48e6-b2c9-01d1b8247914', @p1='c13be597-6ae2-42bb-9d43-925815f24ff8', @p2=NULL (DbType = Guid), @p3=NULL (DbType = Guid), @p4=NULL (DbType = Guid), @p5='a307d00b-239b-4c7b-bb16-77838875fbec' (Nullable = true), @p6='2025-07-04T06:47:45.2404795Z' (DbType = DateTime), @p7=NULL, @p8='True', @p9=NULL, @p10='pizza' (Nullable = false), @p11=NULL, @p12=NULL, @p13='918974005240' (Nullable = false), @p14=NULL (DbType = Guid), @p15=NULL, @p16=NULL (DbType = DateTime), @p17=NULL, @p18='Queued' (Nullable = false)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "MessageLogs" ("Id", "BusinessId", "CTAFlowConfigId", "CTAFlowStepId", "CampaignId", "ContactId", "CreatedAt", "ErrorMessage", "IsIncoming", "MediaUrl", "MessageContent", "MessageId", "RawResponse", "RecipientNumber", "RefMessageId", "RenderedBody", "SentAt", "Source", "Status")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15, @p16, @p17, @p18);
+2025-07-04 15:01:32.463 +05:30 [WRN] Sensitive data logging is enabled. Log entries and exception messages may include sensitive application data; this mode should only be enabled during development.
+2025-07-04 15:01:52.414 +05:30 [WRN] Sensitive data logging is enabled. Log entries and exception messages may include sensitive application data; this mode should only be enabled during development.
+2025-07-04 15:01:53.237 +05:30 [INF] Executed DbCommand (52ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1 FROM pg_catalog.pg_class c
+    JOIN pg_catalog.pg_namespace n ON n.oid=c.relnamespace
+    WHERE n.nspname='public' AND
+          c.relname='__EFMigrationsHistory'
+)
+2025-07-04 15:01:53.257 +05:30 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+2025-07-04 15:01:53.399 +05:30 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1 FROM pg_catalog.pg_class c
+    JOIN pg_catalog.pg_namespace n ON n.oid=c.relnamespace
+    WHERE n.nspname='public' AND
+          c.relname='__EFMigrationsHistory'
+)
+2025-07-04 15:01:53.548 +05:30 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1 FROM pg_catalog.pg_class c
+    JOIN pg_catalog.pg_namespace n ON n.oid=c.relnamespace
+    WHERE n.nspname='public' AND
+          c.relname='__EFMigrationsHistory'
+)
+2025-07-04 15:01:53.548 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+2025-07-04 15:01:53.561 +05:30 [INF] Applying migration '20250704093133_AddIndustryToAutoReplyRule'.
+2025-07-04 15:01:53.694 +05:30 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "RolePermissions"
+WHERE "Id" = '1418e3c7-df29-4ae2-aa27-2ef426f1933c';
+2025-07-04 15:01:53.695 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "RolePermissions"
+WHERE "Id" = '1c5228fa-c7cd-407a-9933-0f09eb3a554f';
+2025-07-04 15:01:53.695 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "RolePermissions"
+WHERE "Id" = '1e5a3b00-04aa-49ab-8174-6ddacb25726d';
+2025-07-04 15:01:53.696 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "RolePermissions"
+WHERE "Id" = '24262200-285e-4aa6-a065-4c5a49ddc8ac';
+2025-07-04 15:01:53.696 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "RolePermissions"
+WHERE "Id" = '41d4a538-2ca3-4e67-a336-c52b22fb9b0a';
+2025-07-04 15:01:53.696 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "RolePermissions"
+WHERE "Id" = '56e48877-6772-4be4-a827-63bc8f5242c2';
+2025-07-04 15:01:53.697 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "RolePermissions"
+WHERE "Id" = '8bd44ca4-27ea-41d4-835b-8659095ad6c8';
+2025-07-04 15:01:53.697 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "RolePermissions"
+WHERE "Id" = 'a8aea059-6ff2-42ad-a155-219ce78916b3';
+2025-07-04 15:01:53.697 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "RolePermissions"
+WHERE "Id" = 'a98dfe68-3b7f-4a68-b5a8-8e931896206b';
+2025-07-04 15:01:53.698 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "RolePermissions"
+WHERE "Id" = 'bb77f0eb-50a9-49b0-9f29-154872e2970d';
+2025-07-04 15:01:53.698 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "RolePermissions"
+WHERE "Id" = 'c574e6a2-495c-41cf-8aa4-5f9760d83baf';
+2025-07-04 15:01:53.698 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "RolePermissions"
+WHERE "Id" = 'cab676a7-df99-4eaa-bb3d-dfdec1e7ac39';
+2025-07-04 15:01:53.699 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "RolePermissions"
+WHERE "Id" = 'cf233a37-a64c-4ae2-aeb1-bf5c4bd642e3';
+2025-07-04 15:01:53.699 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "RolePermissions"
+WHERE "Id" = 'd18e4159-67dd-490b-9dd1-fb5685e5073a';
+2025-07-04 15:01:53.699 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "RolePermissions"
+WHERE "Id" = 'dcb05ff3-470d-43d9-8af9-0324c2eba91c';
+2025-07-04 15:01:53.700 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "RolePermissions"
+WHERE "Id" = 'dd3a681f-d5f5-47bb-be92-44f360fce9f7';
+2025-07-04 15:01:53.700 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "RolePermissions"
+WHERE "Id" = 'fadff09e-9b6a-44e6-9e1a-07cc6a9c3722';
+2025-07-04 15:01:53.703 +05:30 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Permissions" SET "CreatedAt" = TIMESTAMPTZ '2025-07-04T09:31:32.982278Z'
+WHERE "Id" = '30000000-0000-0000-0000-000000000000';
+2025-07-04 15:01:53.703 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Permissions" SET "CreatedAt" = TIMESTAMPTZ '2025-07-04T09:31:32.982279Z'
+WHERE "Id" = '30000000-0000-0000-0000-000000000001';
+2025-07-04 15:01:53.703 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Permissions" SET "CreatedAt" = TIMESTAMPTZ '2025-07-04T09:31:32.982279Z'
+WHERE "Id" = '30000000-0000-0000-0000-000000000002';
+2025-07-04 15:01:53.704 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Permissions" SET "CreatedAt" = TIMESTAMPTZ '2025-07-04T09:31:32.982279Z'
+WHERE "Id" = '30000000-0000-0000-0000-000000000003';
+2025-07-04 15:01:53.704 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Permissions" SET "CreatedAt" = TIMESTAMPTZ '2025-07-04T09:31:32.98228Z'
+WHERE "Id" = '30000000-0000-0000-0000-000000000004';
+2025-07-04 15:01:53.704 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Permissions" SET "CreatedAt" = TIMESTAMPTZ '2025-07-04T09:31:32.98228Z'
+WHERE "Id" = '30000000-0000-0000-0000-000000000005';
+2025-07-04 15:01:53.705 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Permissions" SET "CreatedAt" = TIMESTAMPTZ '2025-07-04T09:31:32.98228Z'
+WHERE "Id" = '30000000-0000-0000-0000-000000000006';
+2025-07-04 15:01:53.705 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Permissions" SET "CreatedAt" = TIMESTAMPTZ '2025-07-04T09:31:32.982281Z'
+WHERE "Id" = '30000000-0000-0000-0000-000000000007';
+2025-07-04 15:01:53.706 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Permissions" SET "CreatedAt" = TIMESTAMPTZ '2025-07-04T09:31:32.982281Z'
+WHERE "Id" = '30000000-0000-0000-0000-000000000008';
+2025-07-04 15:01:53.706 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Permissions" SET "CreatedAt" = TIMESTAMPTZ '2025-07-04T09:31:32.982281Z'
+WHERE "Id" = '30000000-0000-0000-0000-000000000009';
+2025-07-04 15:01:53.706 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Permissions" SET "CreatedAt" = TIMESTAMPTZ '2025-07-04T09:31:32.982281Z'
+WHERE "Id" = '30000000-0000-0000-0000-000000000010';
+2025-07-04 15:01:53.715 +05:30 [INF] Executed DbCommand (8ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "RolePermissions" ("Id", "AssignedAt", "AssignedBy", "IsActive", "IsRevoked", "PermissionId", "RoleId")
+VALUES ('08e81e86-af2e-44e7-aa98-96ddbb265fd4', TIMESTAMPTZ '2025-07-04T09:31:32.982332Z', NULL, TRUE, FALSE, '30000000-0000-0000-0000-000000000007', '00000000-0000-0000-0000-000000000005');
+INSERT INTO "RolePermissions" ("Id", "AssignedAt", "AssignedBy", "IsActive", "IsRevoked", "PermissionId", "RoleId")
+VALUES ('104a4dec-d683-4af5-b817-5d89b2ae09c0', TIMESTAMPTZ '2025-07-04T09:31:32.982328Z', NULL, TRUE, FALSE, '30000000-0000-0000-0000-000000000009', '00000000-0000-0000-0000-000000000001');
+INSERT INTO "RolePermissions" ("Id", "AssignedAt", "AssignedBy", "IsActive", "IsRevoked", "PermissionId", "RoleId")
+VALUES ('170baea8-4ee1-433c-ae9a-bc9cb7db938f', TIMESTAMPTZ '2025-07-04T09:31:32.98233Z', NULL, TRUE, FALSE, '30000000-0000-0000-0000-000000000007', '00000000-0000-0000-0000-000000000004');
+INSERT INTO "RolePermissions" ("Id", "AssignedAt", "AssignedBy", "IsActive", "IsRevoked", "PermissionId", "RoleId")
+VALUES ('2fb759a5-ff0d-417f-bb97-bd4483b70a22', TIMESTAMPTZ '2025-07-04T09:31:32.982329Z', NULL, TRUE, FALSE, '30000000-0000-0000-0000-000000000000', '00000000-0000-0000-0000-000000000004');
+INSERT INTO "RolePermissions" ("Id", "AssignedAt", "AssignedBy", "IsActive", "IsRevoked", "PermissionId", "RoleId")
+VALUES ('31bd93dc-41dc-4409-8d30-b1c5996624f9', TIMESTAMPTZ '2025-07-04T09:31:32.982326Z', NULL, TRUE, FALSE, '30000000-0000-0000-0000-000000000006', '00000000-0000-0000-0000-000000000001');
+INSERT INTO "RolePermissions" ("Id", "AssignedAt", "AssignedBy", "IsActive", "IsRevoked", "PermissionId", "RoleId")
+VALUES ('37991ff4-bae2-408a-9a00-028fadc69810', TIMESTAMPTZ '2025-07-04T09:31:32.982328Z', NULL, TRUE, FALSE, '30000000-0000-0000-0000-000000000010', '00000000-0000-0000-0000-000000000001');
+INSERT INTO "RolePermissions" ("Id", "AssignedAt", "AssignedBy", "IsActive", "IsRevoked", "PermissionId", "RoleId")
+VALUES ('3bb13eca-7657-4609-ae59-15ef6b008b29', TIMESTAMPTZ '2025-07-04T09:31:32.982327Z', NULL, TRUE, FALSE, '30000000-0000-0000-0000-000000000007', '00000000-0000-0000-0000-000000000001');
+INSERT INTO "RolePermissions" ("Id", "AssignedAt", "AssignedBy", "IsActive", "IsRevoked", "PermissionId", "RoleId")
+VALUES ('4ad7df90-e52f-4dc5-aef8-1a7c0c70e673', TIMESTAMPTZ '2025-07-04T09:31:32.982325Z', NULL, TRUE, FALSE, '30000000-0000-0000-0000-000000000004', '00000000-0000-0000-0000-000000000001');
+INSERT INTO "RolePermissions" ("Id", "AssignedAt", "AssignedBy", "IsActive", "IsRevoked", "PermissionId", "RoleId")
+VALUES ('5633443a-4b94-4adf-af7b-7c59c990c42d', TIMESTAMPTZ '2025-07-04T09:31:32.98233Z', NULL, TRUE, FALSE, '30000000-0000-0000-0000-000000000004', '00000000-0000-0000-0000-000000000004');
+INSERT INTO "RolePermissions" ("Id", "AssignedAt", "AssignedBy", "IsActive", "IsRevoked", "PermissionId", "RoleId")
+VALUES ('665cf6fe-9022-4367-8474-90954e49b350', TIMESTAMPTZ '2025-07-04T09:31:32.982324Z', NULL, TRUE, FALSE, '30000000-0000-0000-0000-000000000001', '00000000-0000-0000-0000-000000000001');
+INSERT INTO "RolePermissions" ("Id", "AssignedAt", "AssignedBy", "IsActive", "IsRevoked", "PermissionId", "RoleId")
+VALUES ('697a8ab6-5898-4ed6-8114-611f34ddc7e8', TIMESTAMPTZ '2025-07-04T09:31:32.98233Z', NULL, TRUE, FALSE, '30000000-0000-0000-0000-000000000001', '00000000-0000-0000-0000-000000000004');
+INSERT INTO "RolePermissions" ("Id", "AssignedAt", "AssignedBy", "IsActive", "IsRevoked", "PermissionId", "RoleId")
+VALUES ('943e78ee-02dc-495e-a212-b3f037b742c7', TIMESTAMPTZ '2025-07-04T09:31:32.982325Z', NULL, TRUE, FALSE, '30000000-0000-0000-0000-000000000002', '00000000-0000-0000-0000-000000000001');
+INSERT INTO "RolePermissions" ("Id", "AssignedAt", "AssignedBy", "IsActive", "IsRevoked", "PermissionId", "RoleId")
+VALUES ('a64bfba6-28df-42e4-94f0-c14a37c081b7', TIMESTAMPTZ '2025-07-04T09:31:32.982323Z', NULL, TRUE, FALSE, '30000000-0000-0000-0000-000000000000', '00000000-0000-0000-0000-000000000001');
+INSERT INTO "RolePermissions" ("Id", "AssignedAt", "AssignedBy", "IsActive", "IsRevoked", "PermissionId", "RoleId")
+VALUES ('a71bc075-0ae0-4903-b0bd-3c5e834eb092', TIMESTAMPTZ '2025-07-04T09:31:32.982331Z', NULL, TRUE, FALSE, '30000000-0000-0000-0000-000000000000', '00000000-0000-0000-0000-000000000005');
+INSERT INTO "RolePermissions" ("Id", "AssignedAt", "AssignedBy", "IsActive", "IsRevoked", "PermissionId", "RoleId")
+VALUES ('a8768168-5817-4ec6-8558-72508caf72d8', TIMESTAMPTZ '2025-07-04T09:31:32.982325Z', NULL, TRUE, FALSE, '30000000-0000-0000-0000-000000000003', '00000000-0000-0000-0000-000000000001');
+INSERT INTO "RolePermissions" ("Id", "AssignedAt", "AssignedBy", "IsActive", "IsRevoked", "PermissionId", "RoleId")
+VALUES ('cf227764-e3bc-4c10-a73a-f104c99b5fc2', TIMESTAMPTZ '2025-07-04T09:31:32.982326Z', NULL, TRUE, FALSE, '30000000-0000-0000-0000-000000000005', '00000000-0000-0000-0000-000000000001');
+INSERT INTO "RolePermissions" ("Id", "AssignedAt", "AssignedBy", "IsActive", "IsRevoked", "PermissionId", "RoleId")
+VALUES ('d585ad3d-c3bc-4d6a-ad03-15bb1bcc61c1', TIMESTAMPTZ '2025-07-04T09:31:32.982327Z', NULL, TRUE, FALSE, '30000000-0000-0000-0000-000000000008', '00000000-0000-0000-0000-000000000001');
+2025-07-04 15:01:53.715 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Roles" SET "CreatedAt" = TIMESTAMPTZ '2025-07-04T09:31:32.982213Z'
+WHERE "Id" = '00000000-0000-0000-0000-000000000001';
+2025-07-04 15:01:53.716 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Roles" SET "CreatedAt" = TIMESTAMPTZ '2025-07-04T09:31:32.982213Z'
+WHERE "Id" = '00000000-0000-0000-0000-000000000002';
+2025-07-04 15:01:53.716 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Roles" SET "CreatedAt" = TIMESTAMPTZ '2025-07-04T09:31:32.982214Z'
+WHERE "Id" = '00000000-0000-0000-0000-000000000003';
+2025-07-04 15:01:53.716 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Roles" SET "CreatedAt" = TIMESTAMPTZ '2025-07-04T09:31:32.982214Z'
+WHERE "Id" = '00000000-0000-0000-0000-000000000004';
+2025-07-04 15:01:53.717 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Roles" SET "CreatedAt" = TIMESTAMPTZ '2025-07-04T09:31:32.982214Z'
+WHERE "Id" = '00000000-0000-0000-0000-000000000005';
+2025-07-04 15:01:53.717 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
+VALUES ('20250704093133_AddIndustryToAutoReplyRule', '8.0.15');
+2025-07-04 19:09:12.720 +05:30 [INF] User profile is available. Using 'C:\Users\sunde\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-07-04 19:09:12.774 +05:30 [INF] 🚀 Webhook Queue Worker started.
+2025-07-04 19:09:12.790 +05:30 [INF] 🧹 FailedWebhookLogCleanupService started.
+2025-07-04 19:09:13.715 +05:30 [WRN] Sensitive data logging is enabled. Log entries and exception messages may include sensitive application data; this mode should only be enabled during development.
+2025-07-04 19:09:14.335 +05:30 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2025-07-04 19:09:14.840 +05:30 [INF] Now listening on: http://localhost:7113
+2025-07-04 19:09:14.842 +05:30 [INF] Now listening on: http://localhost:5295
+2025-07-04 19:09:14.843 +05:30 [INF] Application started. Press Ctrl+C to shut down.
+2025-07-04 19:09:14.845 +05:30 [INF] Hosting environment: Development
+2025-07-04 19:09:14.846 +05:30 [INF] Content root path: D:\xbytechat\xbytechat-api\xbytechat-api
+2025-07-04 19:09:14.909 +05:30 [INF] Executed DbCommand (22ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT w."Id", w."AutoCleanupEnabled", w."LastCleanupAt"
+FROM "WebhookSettings" AS w
+LIMIT 1
+2025-07-04 19:09:14.939 +05:30 [INF] Executed DbCommand (49ms) [Parameters=[@__cutoff_0='2025-06-27T13:39:12.9125125Z' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT f."Id", f."CreatedAt", f."ErrorMessage", f."FailureType", f."RawJson", f."SourceModule"
+FROM "FailedWebhookLogs" AS f
+WHERE f."CreatedAt" < @__cutoff_0
+2025-07-04 19:09:16.674 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/swagger/index.html - null null
+2025-07-04 19:09:16.932 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/swagger/index.html - 200 null text/html;charset=utf-8 269.8515ms
+2025-07-04 19:09:16.955 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/_framework/aspnetcore-browser-refresh.js - null null
+2025-07-04 19:09:16.963 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/_framework/aspnetcore-browser-refresh.js - 200 13762 application/javascript; charset=utf-8 7.6856ms
+2025-07-04 19:09:17.044 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/_vs/browserLink - null null
+2025-07-04 19:09:17.093 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/_vs/browserLink - 200 null text/javascript; charset=UTF-8 48.8632ms
+2025-07-04 19:09:17.328 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/swagger/v1/swagger.json - null null
+2025-07-04 19:09:17.563 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 235.1266ms
+2025-07-04 21:26:17.063 +05:30 [WRN] Sensitive data logging is enabled. Log entries and exception messages may include sensitive application data; this mode should only be enabled during development.
+2025-07-04 21:30:17.937 +05:30 [WRN] Sensitive data logging is enabled. Log entries and exception messages may include sensitive application data; this mode should only be enabled during development.
+2025-07-04 21:30:18.542 +05:30 [INF] Executed DbCommand (36ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1 FROM pg_catalog.pg_class c
+    JOIN pg_catalog.pg_namespace n ON n.oid=c.relnamespace
+    WHERE n.nspname='public' AND
+          c.relname='__EFMigrationsHistory'
+)
+2025-07-04 21:30:18.556 +05:30 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+2025-07-04 21:30:18.690 +05:30 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1 FROM pg_catalog.pg_class c
+    JOIN pg_catalog.pg_namespace n ON n.oid=c.relnamespace
+    WHERE n.nspname='public' AND
+          c.relname='__EFMigrationsHistory'
+)
+2025-07-04 21:30:18.824 +05:30 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1 FROM pg_catalog.pg_class c
+    JOIN pg_catalog.pg_namespace n ON n.oid=c.relnamespace
+    WHERE n.nspname='public' AND
+          c.relname='__EFMigrationsHistory'
+)
+2025-07-04 21:30:18.824 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+2025-07-04 21:30:18.834 +05:30 [INF] Applying migration '20250704155618_AddAutomationFlowModel'.
+2025-07-04 21:30:18.960 +05:30 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "RolePermissions"
+WHERE "Id" = '08e81e86-af2e-44e7-aa98-96ddbb265fd4';
+2025-07-04 21:30:18.960 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "RolePermissions"
+WHERE "Id" = '104a4dec-d683-4af5-b817-5d89b2ae09c0';
+2025-07-04 21:30:18.961 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "RolePermissions"
+WHERE "Id" = '170baea8-4ee1-433c-ae9a-bc9cb7db938f';
+2025-07-04 21:30:18.961 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "RolePermissions"
+WHERE "Id" = '2fb759a5-ff0d-417f-bb97-bd4483b70a22';
+2025-07-04 21:30:18.961 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "RolePermissions"
+WHERE "Id" = '31bd93dc-41dc-4409-8d30-b1c5996624f9';
+2025-07-04 21:30:18.962 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "RolePermissions"
+WHERE "Id" = '37991ff4-bae2-408a-9a00-028fadc69810';
+2025-07-04 21:30:18.962 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "RolePermissions"
+WHERE "Id" = '3bb13eca-7657-4609-ae59-15ef6b008b29';
+2025-07-04 21:30:18.962 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "RolePermissions"
+WHERE "Id" = '4ad7df90-e52f-4dc5-aef8-1a7c0c70e673';
+2025-07-04 21:30:18.963 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "RolePermissions"
+WHERE "Id" = '5633443a-4b94-4adf-af7b-7c59c990c42d';
+2025-07-04 21:30:18.963 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "RolePermissions"
+WHERE "Id" = '665cf6fe-9022-4367-8474-90954e49b350';
+2025-07-04 21:30:18.963 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "RolePermissions"
+WHERE "Id" = '697a8ab6-5898-4ed6-8114-611f34ddc7e8';
+2025-07-04 21:30:18.964 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "RolePermissions"
+WHERE "Id" = '943e78ee-02dc-495e-a212-b3f037b742c7';
+2025-07-04 21:30:18.964 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "RolePermissions"
+WHERE "Id" = 'a64bfba6-28df-42e4-94f0-c14a37c081b7';
+2025-07-04 21:30:18.964 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "RolePermissions"
+WHERE "Id" = 'a71bc075-0ae0-4903-b0bd-3c5e834eb092';
+2025-07-04 21:30:18.964 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "RolePermissions"
+WHERE "Id" = 'a8768168-5817-4ec6-8558-72508caf72d8';
+2025-07-04 21:30:18.965 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "RolePermissions"
+WHERE "Id" = 'cf227764-e3bc-4c10-a73a-f104c99b5fc2';
+2025-07-04 21:30:18.965 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "RolePermissions"
+WHERE "Id" = 'd585ad3d-c3bc-4d6a-ad03-15bb1bcc61c1';
+2025-07-04 21:30:18.968 +05:30 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE "AutoReplyRules" ADD "IndustryTag" text;
+2025-07-04 21:30:18.969 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE "AutoReplyRules" ADD "SourceChannel" text;
+2025-07-04 21:30:18.970 +05:30 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE "AutoReplyFlows" ADD "IndustryTag" text;
+2025-07-04 21:30:18.975 +05:30 [INF] Executed DbCommand (5ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE "AutoReplyFlows" ADD "IsDefaultTemplate" boolean NOT NULL DEFAULT FALSE;
+2025-07-04 21:30:18.976 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE "AutoReplyFlows" ADD "Keyword" text;
+2025-07-04 21:30:18.976 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE "AutoReplyFlows" ADD "UseCase" text;
+2025-07-04 21:30:18.977 +05:30 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE "AutoReplyFlowNodes" ADD "NodeName" text;
+2025-07-04 21:30:18.991 +05:30 [INF] Executed DbCommand (14ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE "AutomationFlows" (
+    "Id" uuid NOT NULL,
+    "BusinessId" uuid NOT NULL,
+    "Name" text NOT NULL,
+    "TriggerKeyword" text NOT NULL,
+    "NodesJson" text NOT NULL,
+    "EdgesJson" text NOT NULL,
+    "IsActive" boolean NOT NULL,
+    "CreatedAt" timestamp with time zone NOT NULL,
+    "UpdatedAt" timestamp with time zone NOT NULL,
+    CONSTRAINT "PK_AutomationFlows" PRIMARY KEY ("Id")
+);
+2025-07-04 21:30:18.992 +05:30 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Permissions" SET "CreatedAt" = TIMESTAMPTZ '2025-07-04T15:56:17.413498Z'
+WHERE "Id" = '30000000-0000-0000-0000-000000000000';
+2025-07-04 21:30:18.992 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Permissions" SET "CreatedAt" = TIMESTAMPTZ '2025-07-04T15:56:17.413499Z'
+WHERE "Id" = '30000000-0000-0000-0000-000000000001';
+2025-07-04 21:30:18.993 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Permissions" SET "CreatedAt" = TIMESTAMPTZ '2025-07-04T15:56:17.413499Z'
+WHERE "Id" = '30000000-0000-0000-0000-000000000002';
+2025-07-04 21:30:18.993 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Permissions" SET "CreatedAt" = TIMESTAMPTZ '2025-07-04T15:56:17.413499Z'
+WHERE "Id" = '30000000-0000-0000-0000-000000000003';
+2025-07-04 21:30:18.993 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Permissions" SET "CreatedAt" = TIMESTAMPTZ '2025-07-04T15:56:17.413499Z'
+WHERE "Id" = '30000000-0000-0000-0000-000000000004';
+2025-07-04 21:30:18.994 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Permissions" SET "CreatedAt" = TIMESTAMPTZ '2025-07-04T15:56:17.4135Z'
+WHERE "Id" = '30000000-0000-0000-0000-000000000005';
+2025-07-04 21:30:18.994 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Permissions" SET "CreatedAt" = TIMESTAMPTZ '2025-07-04T15:56:17.4135Z'
+WHERE "Id" = '30000000-0000-0000-0000-000000000006';
+2025-07-04 21:30:18.994 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Permissions" SET "CreatedAt" = TIMESTAMPTZ '2025-07-04T15:56:17.4135Z'
+WHERE "Id" = '30000000-0000-0000-0000-000000000007';
+2025-07-04 21:30:18.995 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Permissions" SET "CreatedAt" = TIMESTAMPTZ '2025-07-04T15:56:17.413505Z'
+WHERE "Id" = '30000000-0000-0000-0000-000000000008';
+2025-07-04 21:30:18.995 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Permissions" SET "CreatedAt" = TIMESTAMPTZ '2025-07-04T15:56:17.413505Z'
+WHERE "Id" = '30000000-0000-0000-0000-000000000009';
+2025-07-04 21:30:18.995 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Permissions" SET "CreatedAt" = TIMESTAMPTZ '2025-07-04T15:56:17.413506Z'
+WHERE "Id" = '30000000-0000-0000-0000-000000000010';
+2025-07-04 21:30:19.001 +05:30 [INF] Executed DbCommand (5ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "RolePermissions" ("Id", "AssignedAt", "AssignedBy", "IsActive", "IsRevoked", "PermissionId", "RoleId")
+VALUES ('02972145-3fb4-4821-b138-55529fc14140', TIMESTAMPTZ '2025-07-04T15:56:17.41354Z', NULL, TRUE, FALSE, '30000000-0000-0000-0000-000000000007', '00000000-0000-0000-0000-000000000001');
+INSERT INTO "RolePermissions" ("Id", "AssignedAt", "AssignedBy", "IsActive", "IsRevoked", "PermissionId", "RoleId")
+VALUES ('2741a9c5-759a-4d7d-bd75-19b39830fb1d', TIMESTAMPTZ '2025-07-04T15:56:17.413537Z', NULL, TRUE, FALSE, '30000000-0000-0000-0000-000000000001', '00000000-0000-0000-0000-000000000001');
+INSERT INTO "RolePermissions" ("Id", "AssignedAt", "AssignedBy", "IsActive", "IsRevoked", "PermissionId", "RoleId")
+VALUES ('2f815ab0-7114-4d1e-8c11-928a7a1ff3e1', TIMESTAMPTZ '2025-07-04T15:56:17.413544Z', NULL, TRUE, FALSE, '30000000-0000-0000-0000-000000000000', '00000000-0000-0000-0000-000000000005');
+INSERT INTO "RolePermissions" ("Id", "AssignedAt", "AssignedBy", "IsActive", "IsRevoked", "PermissionId", "RoleId")
+VALUES ('31551594-28e8-4307-9ff4-c88c90b8e41e', TIMESTAMPTZ '2025-07-04T15:56:17.413541Z', NULL, TRUE, FALSE, '30000000-0000-0000-0000-000000000009', '00000000-0000-0000-0000-000000000001');
+INSERT INTO "RolePermissions" ("Id", "AssignedAt", "AssignedBy", "IsActive", "IsRevoked", "PermissionId", "RoleId")
+VALUES ('3d68c643-c06a-4d8e-906d-67e431fb8dae', TIMESTAMPTZ '2025-07-04T15:56:17.413542Z', NULL, TRUE, FALSE, '30000000-0000-0000-0000-000000000000', '00000000-0000-0000-0000-000000000004');
+INSERT INTO "RolePermissions" ("Id", "AssignedAt", "AssignedBy", "IsActive", "IsRevoked", "PermissionId", "RoleId")
+VALUES ('418cb051-994a-4227-8191-91f333d022c4', TIMESTAMPTZ '2025-07-04T15:56:17.413543Z', NULL, TRUE, FALSE, '30000000-0000-0000-0000-000000000007', '00000000-0000-0000-0000-000000000004');
+INSERT INTO "RolePermissions" ("Id", "AssignedAt", "AssignedBy", "IsActive", "IsRevoked", "PermissionId", "RoleId")
+VALUES ('4559c220-b214-4867-a5ef-420dfd537530', TIMESTAMPTZ '2025-07-04T15:56:17.413537Z', NULL, TRUE, FALSE, '30000000-0000-0000-0000-000000000002', '00000000-0000-0000-0000-000000000001');
+INSERT INTO "RolePermissions" ("Id", "AssignedAt", "AssignedBy", "IsActive", "IsRevoked", "PermissionId", "RoleId")
+VALUES ('4a7c82bd-282e-4d7f-b06e-942961c578e4', TIMESTAMPTZ '2025-07-04T15:56:17.413542Z', NULL, TRUE, FALSE, '30000000-0000-0000-0000-000000000001', '00000000-0000-0000-0000-000000000004');
+INSERT INTO "RolePermissions" ("Id", "AssignedAt", "AssignedBy", "IsActive", "IsRevoked", "PermissionId", "RoleId")
+VALUES ('4fe0af17-0bce-4ad8-a006-682780ce8e75', TIMESTAMPTZ '2025-07-04T15:56:17.41354Z', NULL, TRUE, FALSE, '30000000-0000-0000-0000-000000000006', '00000000-0000-0000-0000-000000000001');
+INSERT INTO "RolePermissions" ("Id", "AssignedAt", "AssignedBy", "IsActive", "IsRevoked", "PermissionId", "RoleId")
+VALUES ('7f139177-7fec-4f69-ba2a-bff27989f456', TIMESTAMPTZ '2025-07-04T15:56:17.413541Z', NULL, TRUE, FALSE, '30000000-0000-0000-0000-000000000010', '00000000-0000-0000-0000-000000000001');
+INSERT INTO "RolePermissions" ("Id", "AssignedAt", "AssignedBy", "IsActive", "IsRevoked", "PermissionId", "RoleId")
+VALUES ('8f8abd40-9e1c-46d5-af37-3e718062b56b', TIMESTAMPTZ '2025-07-04T15:56:17.413544Z', NULL, TRUE, FALSE, '30000000-0000-0000-0000-000000000007', '00000000-0000-0000-0000-000000000005');
+INSERT INTO "RolePermissions" ("Id", "AssignedAt", "AssignedBy", "IsActive", "IsRevoked", "PermissionId", "RoleId")
+VALUES ('aaff6051-9a29-4693-8587-ec86d1713328', TIMESTAMPTZ '2025-07-04T15:56:17.413536Z', NULL, TRUE, FALSE, '30000000-0000-0000-0000-000000000000', '00000000-0000-0000-0000-000000000001');
+INSERT INTO "RolePermissions" ("Id", "AssignedAt", "AssignedBy", "IsActive", "IsRevoked", "PermissionId", "RoleId")
+VALUES ('aec7e2bc-bf4c-4a5a-805a-a081da6fc861', TIMESTAMPTZ '2025-07-04T15:56:17.413543Z', NULL, TRUE, FALSE, '30000000-0000-0000-0000-000000000004', '00000000-0000-0000-0000-000000000004');
+INSERT INTO "RolePermissions" ("Id", "AssignedAt", "AssignedBy", "IsActive", "IsRevoked", "PermissionId", "RoleId")
+VALUES ('c6128b15-63a3-4cad-97ca-50d153cd97b9', TIMESTAMPTZ '2025-07-04T15:56:17.413538Z', NULL, TRUE, FALSE, '30000000-0000-0000-0000-000000000004', '00000000-0000-0000-0000-000000000001');
+INSERT INTO "RolePermissions" ("Id", "AssignedAt", "AssignedBy", "IsActive", "IsRevoked", "PermissionId", "RoleId")
+VALUES ('dda31ae1-dfd6-42e4-9d47-8de18e30e67c', TIMESTAMPTZ '2025-07-04T15:56:17.413538Z', NULL, TRUE, FALSE, '30000000-0000-0000-0000-000000000003', '00000000-0000-0000-0000-000000000001');
+INSERT INTO "RolePermissions" ("Id", "AssignedAt", "AssignedBy", "IsActive", "IsRevoked", "PermissionId", "RoleId")
+VALUES ('e7332033-fb8e-4ee9-8486-fbc8698c37f8', TIMESTAMPTZ '2025-07-04T15:56:17.41354Z', NULL, TRUE, FALSE, '30000000-0000-0000-0000-000000000008', '00000000-0000-0000-0000-000000000001');
+INSERT INTO "RolePermissions" ("Id", "AssignedAt", "AssignedBy", "IsActive", "IsRevoked", "PermissionId", "RoleId")
+VALUES ('f6fdc533-cf5c-43c3-9906-8437105d0df4', TIMESTAMPTZ '2025-07-04T15:56:17.413538Z', NULL, TRUE, FALSE, '30000000-0000-0000-0000-000000000005', '00000000-0000-0000-0000-000000000001');
+2025-07-04 21:30:19.001 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Roles" SET "CreatedAt" = TIMESTAMPTZ '2025-07-04T15:56:17.41344Z'
+WHERE "Id" = '00000000-0000-0000-0000-000000000001';
+2025-07-04 21:30:19.002 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Roles" SET "CreatedAt" = TIMESTAMPTZ '2025-07-04T15:56:17.41344Z'
+WHERE "Id" = '00000000-0000-0000-0000-000000000002';
+2025-07-04 21:30:19.002 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Roles" SET "CreatedAt" = TIMESTAMPTZ '2025-07-04T15:56:17.413441Z'
+WHERE "Id" = '00000000-0000-0000-0000-000000000003';
+2025-07-04 21:30:19.002 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Roles" SET "CreatedAt" = TIMESTAMPTZ '2025-07-04T15:56:17.413441Z'
+WHERE "Id" = '00000000-0000-0000-0000-000000000004';
+2025-07-04 21:30:19.003 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Roles" SET "CreatedAt" = TIMESTAMPTZ '2025-07-04T15:56:17.413441Z'
+WHERE "Id" = '00000000-0000-0000-0000-000000000005';
+2025-07-04 21:30:19.003 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
+VALUES ('20250704155618_AddAutomationFlowModel', '8.0.15');

@@ -1,0 +1,30 @@
+# Visual Studio
+.vs/
+*.user
+*.suo
+
+# Build results
+bin/
+obj/
+
+# Test results
+TestResults/
+*.log
+
+# .NET Core project lock file
+project.lock.json
+
+# Visual Studio Code
+.vscode/
+
+# User-specific files
+*.swp
+
+# Others
+*.db
+*.DS_Store
+Thumbs.db
+
+# Local config
+*.local
+*.tmp
