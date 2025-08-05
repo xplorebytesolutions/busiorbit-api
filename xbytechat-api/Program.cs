@@ -318,10 +318,10 @@ app.UseMiddleware<GlobalExceptionMiddleware>();
 #endregion
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+   
 }
-
+app.UseSwagger();
+app.UseSwaggerUI();
 app.UseHttpsRedirection();
 // ✅ Secure CORS policy applied BEFORE auth
 app.UseCors("AllowFrontend");
