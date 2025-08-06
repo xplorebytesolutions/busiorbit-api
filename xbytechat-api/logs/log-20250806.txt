@@ -4412,3 +4412,890 @@ WHERE f."BusinessId" = @__businessId_0
 2025-08-06 17:27:55.916 +05:30 [INF] Executed action xbytechat.api.Features.FeatureAccessModule.Controllers.FeatureAccessController.GetMyFeatures (xbytechat.api) in 33.9999ms
 2025-08-06 17:27:55.918 +05:30 [INF] Executed endpoint 'xbytechat.api.Features.FeatureAccessModule.Controllers.FeatureAccessController.GetMyFeatures (xbytechat.api)'
 2025-08-06 17:27:55.920 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/api/feature-access/me - 200 null application/json; charset=utf-8 48.7262ms
+2025-08-06 17:40:14.950 +05:30 [INF] User profile is available. Using 'C:\Users\sunde\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-08-06 17:40:15.005 +05:30 [INF] 🚀 Webhook Queue Worker started.
+2025-08-06 17:40:15.026 +05:30 [INF] 🧹 FailedWebhookLogCleanupService started.
+2025-08-06 17:40:17.631 +05:30 [WRN] Sensitive data logging is enabled. Log entries and exception messages may include sensitive application data; this mode should only be enabled during development.
+2025-08-06 17:40:18.361 +05:30 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2025-08-06 17:40:18.594 +05:30 [INF] Now listening on: http://localhost:7113
+2025-08-06 17:40:18.596 +05:30 [INF] Now listening on: http://localhost:5295
+2025-08-06 17:40:18.597 +05:30 [INF] Application started. Press Ctrl+C to shut down.
+2025-08-06 17:40:18.598 +05:30 [INF] Hosting environment: Development
+2025-08-06 17:40:18.599 +05:30 [INF] Content root path: D:\xbytechat\xbytechat-api\xbytechat-api
+2025-08-06 17:40:18.611 +05:30 [INF] Executed DbCommand (26ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT w."Id", w."AutoCleanupEnabled", w."LastCleanupAt"
+FROM "WebhookSettings" AS w
+LIMIT 1
+2025-08-06 17:40:18.635 +05:30 [INF] Executed DbCommand (51ms) [Parameters=[@__cutoff_0='2025-07-30T12:10:16.6618883Z' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT f."Id", f."CreatedAt", f."ErrorMessage", f."FailureType", f."RawJson", f."SourceModule"
+FROM "FailedWebhookLogs" AS f
+WHERE f."CreatedAt" < @__cutoff_0
+2025-08-06 17:40:19.154 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/swagger/index.html - null null
+2025-08-06 17:40:19.381 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/swagger/index.html - 200 null text/html;charset=utf-8 234.8225ms
+2025-08-06 17:40:19.419 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/_framework/aspnetcore-browser-refresh.js - null null
+2025-08-06 17:40:19.429 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/_framework/aspnetcore-browser-refresh.js - 200 13762 application/javascript; charset=utf-8 9.9887ms
+2025-08-06 17:40:19.502 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/_vs/browserLink - null null
+2025-08-06 17:40:19.547 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/_vs/browserLink - 200 null text/javascript; charset=UTF-8 45.0885ms
+2025-08-06 17:40:19.738 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/swagger/v1/swagger.json - null null
+2025-08-06 17:40:20.000 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 262.0273ms
+2025-08-06 17:41:49.999 +05:30 [INF] User profile is available. Using 'C:\Users\sunde\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-08-06 17:41:50.041 +05:30 [INF] 🚀 Webhook Queue Worker started.
+2025-08-06 17:41:50.057 +05:30 [INF] 🧹 FailedWebhookLogCleanupService started.
+2025-08-06 17:41:50.900 +05:30 [WRN] Sensitive data logging is enabled. Log entries and exception messages may include sensitive application data; this mode should only be enabled during development.
+2025-08-06 17:41:51.452 +05:30 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2025-08-06 17:41:51.609 +05:30 [INF] Now listening on: http://localhost:7113
+2025-08-06 17:41:51.610 +05:30 [INF] Now listening on: http://localhost:5295
+2025-08-06 17:41:51.611 +05:30 [INF] Application started. Press Ctrl+C to shut down.
+2025-08-06 17:41:51.612 +05:30 [INF] Hosting environment: Development
+2025-08-06 17:41:51.613 +05:30 [INF] Content root path: D:\xbytechat\xbytechat-api\xbytechat-api
+2025-08-06 17:41:53.915 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/swagger/index.html - null null
+2025-08-06 17:41:54.123 +05:30 [INF] Executed DbCommand (247ms) [Parameters=[@__cutoff_0='2025-07-30T12:11:50.1664738Z' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT f."Id", f."CreatedAt", f."ErrorMessage", f."FailureType", f."RawJson", f."SourceModule"
+FROM "FailedWebhookLogs" AS f
+WHERE f."CreatedAt" < @__cutoff_0
+2025-08-06 17:41:54.230 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/swagger/index.html - 200 null text/html;charset=utf-8 325.1616ms
+2025-08-06 17:41:54.390 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/_framework/aspnetcore-browser-refresh.js - null null
+2025-08-06 17:41:54.403 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/_framework/aspnetcore-browser-refresh.js - 200 13762 application/javascript; charset=utf-8 12.8668ms
+2025-08-06 17:41:54.442 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/_vs/browserLink - null null
+2025-08-06 17:41:54.494 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/_vs/browserLink - 200 null text/javascript; charset=UTF-8 52.1367ms
+2025-08-06 17:41:54.688 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/swagger/v1/swagger.json - null null
+2025-08-06 17:41:54.733 +05:30 [INF] Executed DbCommand (74ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT w."Id", w."AutoCleanupEnabled", w."LastCleanupAt"
+FROM "WebhookSettings" AS w
+LIMIT 1
+2025-08-06 17:41:54.959 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 271.6183ms
+2025-08-06 17:42:22.033 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/api/auth/session - null null
+2025-08-06 17:42:22.039 +05:30 [WRN] Failed to determine the https port for redirect.
+2025-08-06 17:42:22.392 +05:30 [INF] Executing endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.GetSession (xbytechat.api)'
+2025-08-06 17:42:22.403 +05:30 [INF] Route matched with {action = "GetSession", controller = "Auth"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult GetSession() on controller xbytechat.api.AuthModule.Controllers.AuthController (xbytechat.api).
+2025-08-06 17:42:22.461 +05:30 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType3`4[[System.Boolean, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2025-08-06 17:42:22.476 +05:30 [INF] Executed action xbytechat.api.AuthModule.Controllers.AuthController.GetSession (xbytechat.api) in 66.6029ms
+2025-08-06 17:42:22.478 +05:30 [INF] Executed endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.GetSession (xbytechat.api)'
+2025-08-06 17:42:22.481 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/api/auth/session - 200 null application/json; charset=utf-8 447.6791ms
+2025-08-06 17:42:22.490 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/api/feature-access/me - null null
+2025-08-06 17:42:22.503 +05:30 [INF] Executing endpoint 'xbytechat.api.Features.FeatureAccessModule.Controllers.FeatureAccessController.GetMyFeatures (xbytechat.api)'
+2025-08-06 17:42:22.509 +05:30 [INF] Route matched with {action = "GetMyFeatures", controller = "FeatureAccess"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[xbytechat.api.Features.FeatureAccess.DTOs.FeatureStatusDto]]] GetMyFeatures() on controller xbytechat.api.Features.FeatureAccessModule.Controllers.FeatureAccessController (xbytechat.api).
+2025-08-06 17:42:22.775 +05:30 [INF] Executed DbCommand (195ms) [Parameters=[@__businessId_0='c13be597-6ae2-42bb-9d43-925815f24ff8'], CommandType='"Text"', CommandTimeout='30']
+SELECT b."Id", b."Address", b."ApprovedAt", b."ApprovedBy", b."BusinessEmail", b."BusinessName", b."CompanyName", b."CompanyPhone", b."CreatedAt", b."CreatedBy", b."CreatedByPartnerId", b."DeletedAt", b."DeletedBy", b."Industry", b."IsApproved", b."IsDeleted", b."LastLoginAt", b."LogoUrl", b."Notes", b."Phone", b."RepresentativeName", b."Source", b."Status", b."Tags", b."Website", b0."Id", b0."BusinessId", b0."CreatedAt", b0."Plan", b0."QuotaResetDate", b0."RemainingMessages", b0."TotalMonthlyQuota", b0."UpdatedAt", b0."WalletBalance"
+FROM "Businesses" AS b
+LEFT JOIN "BusinessPlanInfos" AS b0 ON b."Id" = b0."BusinessId"
+WHERE b."Id" = @__businessId_0
+LIMIT 1
+2025-08-06 17:42:22.779 +05:30 [ERR] ❌ Business not found for feature access: "c13be597-6ae2-42bb-9d43-925815f24ff8"
+2025-08-06 17:42:22.782 +05:30 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[xbytechat.api.Features.FeatureAccess.DTOs.FeatureStatusDto, xbytechat.api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-08-06 17:42:22.790 +05:30 [INF] Executed action xbytechat.api.Features.FeatureAccessModule.Controllers.FeatureAccessController.GetMyFeatures (xbytechat.api) in 278.7714ms
+2025-08-06 17:42:22.792 +05:30 [INF] Executed endpoint 'xbytechat.api.Features.FeatureAccessModule.Controllers.FeatureAccessController.GetMyFeatures (xbytechat.api)'
+2025-08-06 17:42:22.797 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/api/feature-access/me - 200 null application/json; charset=utf-8 307.4169ms
+2025-08-06 17:42:30.458 +05:30 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:7113/api/auth/login - null null
+2025-08-06 17:42:30.469 +05:30 [INF] CORS policy execution successful.
+2025-08-06 17:42:30.473 +05:30 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:7113/api/auth/login - 204 null null 14.8312ms
+2025-08-06 17:42:30.476 +05:30 [INF] Request starting HTTP/1.1 POST http://localhost:7113/api/auth/login - application/json 47
+2025-08-06 17:42:30.482 +05:30 [INF] CORS policy execution successful.
+2025-08-06 17:42:30.488 +05:30 [INF] Executing endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api)'
+2025-08-06 17:42:30.502 +05:30 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(xbytechat.api.AuthModule.DTOs.UserLoginDto) on controller xbytechat.api.AuthModule.Controllers.AuthController (xbytechat.api).
+2025-08-06 17:42:30.550 +05:30 [INF] 🔑 Login attempt for email: ratan@tcs.com
+2025-08-06 17:42:30.762 +05:30 [INF] Executed DbCommand (173ms) [Parameters=[@__dto_Email_0='ratan@tcs.com', @__hashedPassword_1='JAvlGPq9JyTdtvBO6x2llnRI1+gxwIyPqCKAn3THIKk='], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."BusinessId", u."CreatedAt", u."DeletedAt", u."Email", u."IsDeleted", u."Name", u."PasswordHash", u."RefreshToken", u."RefreshTokenExpiry", u."RoleId", u."Status", r."Id", r."CreatedAt", r."Description", r."IsActive", r."IsSystemDefined", r."Name"
+FROM "Users" AS u
+LEFT JOIN "Roles" AS r ON u."RoleId" = r."Id"
+WHERE u."Email" = @__dto_Email_0 AND u."PasswordHash" = @__hashedPassword_1 AND NOT (u."IsDeleted")
+LIMIT 1
+2025-08-06 17:42:30.766 +05:30 [WRN] ❌ Login failed: Invalid email or password for ratan@tcs.com
+2025-08-06 17:42:30.772 +05:30 [INF] Executing UnauthorizedObjectResult, writing value of type 'xbytechat.api.Helpers.ResponseResult'.
+2025-08-06 17:42:30.783 +05:30 [INF] Executed action xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api) in 277.8037ms
+2025-08-06 17:42:30.785 +05:30 [INF] Executed endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api)'
+2025-08-06 17:42:30.787 +05:30 [INF] Request finished HTTP/1.1 POST http://localhost:7113/api/auth/login - 401 null application/json; charset=utf-8 311.4117ms
+2025-08-06 17:42:30.792 +05:30 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:7113/api/auth/refresh - null null
+2025-08-06 17:42:30.796 +05:30 [INF] CORS policy execution successful.
+2025-08-06 17:42:30.798 +05:30 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:7113/api/auth/refresh - 204 null null 5.8276ms
+2025-08-06 17:42:30.800 +05:30 [INF] Request starting HTTP/1.1 POST http://localhost:7113/api/auth/refresh - application/json 2
+2025-08-06 17:42:30.814 +05:30 [INF] CORS policy execution successful.
+2025-08-06 17:42:30.817 +05:30 [INF] Request finished HTTP/1.1 POST http://localhost:7113/api/auth/refresh - 404 0 null 16.6305ms
+2025-08-06 17:42:30.822 +05:30 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: POST http://localhost:7113/api/auth/refresh, Response status code: 404
+2025-08-06 17:42:31.187 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/api/auth/session - null null
+2025-08-06 17:42:31.197 +05:30 [INF] Executing endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.GetSession (xbytechat.api)'
+2025-08-06 17:42:31.200 +05:30 [INF] Route matched with {action = "GetSession", controller = "Auth"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult GetSession() on controller xbytechat.api.AuthModule.Controllers.AuthController (xbytechat.api).
+2025-08-06 17:42:31.214 +05:30 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType3`4[[System.Boolean, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2025-08-06 17:42:31.218 +05:30 [INF] Executed action xbytechat.api.AuthModule.Controllers.AuthController.GetSession (xbytechat.api) in 15.5402ms
+2025-08-06 17:42:31.220 +05:30 [INF] Executed endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.GetSession (xbytechat.api)'
+2025-08-06 17:42:31.222 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/api/auth/session - 200 null application/json; charset=utf-8 34.9202ms
+2025-08-06 17:42:31.251 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/api/feature-access/me - null null
+2025-08-06 17:42:31.258 +05:30 [INF] Executing endpoint 'xbytechat.api.Features.FeatureAccessModule.Controllers.FeatureAccessController.GetMyFeatures (xbytechat.api)'
+2025-08-06 17:42:31.260 +05:30 [INF] Route matched with {action = "GetMyFeatures", controller = "FeatureAccess"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[xbytechat.api.Features.FeatureAccess.DTOs.FeatureStatusDto]]] GetMyFeatures() on controller xbytechat.api.Features.FeatureAccessModule.Controllers.FeatureAccessController (xbytechat.api).
+2025-08-06 17:42:31.683 +05:30 [INF] Executed DbCommand (412ms) [Parameters=[@__businessId_0='c13be597-6ae2-42bb-9d43-925815f24ff8'], CommandType='"Text"', CommandTimeout='30']
+SELECT b."Id", b."Address", b."ApprovedAt", b."ApprovedBy", b."BusinessEmail", b."BusinessName", b."CompanyName", b."CompanyPhone", b."CreatedAt", b."CreatedBy", b."CreatedByPartnerId", b."DeletedAt", b."DeletedBy", b."Industry", b."IsApproved", b."IsDeleted", b."LastLoginAt", b."LogoUrl", b."Notes", b."Phone", b."RepresentativeName", b."Source", b."Status", b."Tags", b."Website", b0."Id", b0."BusinessId", b0."CreatedAt", b0."Plan", b0."QuotaResetDate", b0."RemainingMessages", b0."TotalMonthlyQuota", b0."UpdatedAt", b0."WalletBalance"
+FROM "Businesses" AS b
+LEFT JOIN "BusinessPlanInfos" AS b0 ON b."Id" = b0."BusinessId"
+WHERE b."Id" = @__businessId_0
+LIMIT 1
+2025-08-06 17:42:31.686 +05:30 [ERR] ❌ Business not found for feature access: "c13be597-6ae2-42bb-9d43-925815f24ff8"
+2025-08-06 17:42:31.689 +05:30 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[xbytechat.api.Features.FeatureAccess.DTOs.FeatureStatusDto, xbytechat.api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-08-06 17:42:31.692 +05:30 [INF] Executed action xbytechat.api.Features.FeatureAccessModule.Controllers.FeatureAccessController.GetMyFeatures (xbytechat.api) in 428.7209ms
+2025-08-06 17:42:31.693 +05:30 [INF] Executed endpoint 'xbytechat.api.Features.FeatureAccessModule.Controllers.FeatureAccessController.GetMyFeatures (xbytechat.api)'
+2025-08-06 17:42:31.695 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/api/feature-access/me - 200 null application/json; charset=utf-8 444.1368ms
+2025-08-06 17:42:37.102 +05:30 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:7113/api/auth/login - null null
+2025-08-06 17:42:37.108 +05:30 [INF] CORS policy execution successful.
+2025-08-06 17:42:37.109 +05:30 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:7113/api/auth/login - 204 null null 7.6908ms
+2025-08-06 17:42:37.117 +05:30 [INF] Request starting HTTP/1.1 POST http://localhost:7113/api/auth/login - application/json 53
+2025-08-06 17:42:37.121 +05:30 [INF] CORS policy execution successful.
+2025-08-06 17:42:37.124 +05:30 [INF] Executing endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api)'
+2025-08-06 17:42:37.125 +05:30 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(xbytechat.api.AuthModule.DTOs.UserLoginDto) on controller xbytechat.api.AuthModule.Controllers.AuthController (xbytechat.api).
+2025-08-06 17:42:37.132 +05:30 [INF] 🔑 Login attempt for email: admin@xbytechat.com
+2025-08-06 17:42:37.317 +05:30 [INF] Executed DbCommand (182ms) [Parameters=[@__dto_Email_0='admin@xbytechat.com', @__hashedPassword_1='JAvlGPq9JyTdtvBO6x2llnRI1+gxwIyPqCKAn3THIKk='], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."BusinessId", u."CreatedAt", u."DeletedAt", u."Email", u."IsDeleted", u."Name", u."PasswordHash", u."RefreshToken", u."RefreshTokenExpiry", u."RoleId", u."Status", r."Id", r."CreatedAt", r."Description", r."IsActive", r."IsSystemDefined", r."Name"
+FROM "Users" AS u
+LEFT JOIN "Roles" AS r ON u."RoleId" = r."Id"
+WHERE u."Email" = @__dto_Email_0 AND u."PasswordHash" = @__hashedPassword_1 AND NOT (u."IsDeleted")
+LIMIT 1
+2025-08-06 17:42:37.623 +05:30 [INF] Executed DbCommand (152ms) [Parameters=[@__user_RoleId_0='00000000-0000-0000-0000-000000000001' (Nullable = true)], CommandType='"Text"', CommandTimeout='30']
+SELECT r."Id", r."AssignedAt", r."AssignedBy", r."IsActive", r."IsRevoked", r."PermissionId", r."RoleId"
+FROM "RolePermissions" AS r
+WHERE r."RoleId" = @__user_RoleId_0 AND NOT (r."IsRevoked")
+2025-08-06 17:42:37.827 +05:30 [INF] Executed DbCommand (175ms) [Parameters=[@__userId_0='62858aa2-3a54-4fd5-8696-c343d9af7634'], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."AssignedAt", u."AssignedBy", u."IsGranted", u."IsRevoked", u."PermissionId", u."UserId"
+FROM "UserPermissions" AS u
+WHERE u."UserId" = @__userId_0 AND NOT (u."IsRevoked")
+2025-08-06 17:42:38.035 +05:30 [INF] Executed DbCommand (160ms) [Parameters=[@__permissionIds_0={ '30000000-0000-0000-0000-000000000009', '30000000-0000-0000-0000-000000000006', '30000000-0000-0000-0000-000000000003', '30000000-0000-0000-0000-000000000001', '30000000-0000-0000-0000-000000000008', ... } (DbType = Object)], CommandType='"Text"', CommandTimeout='30']
+SELECT p."Id", p."Code", p."CreatedAt", p."Description", p."Group", p."IsActive", p."Name"
+FROM "Permissions" AS p
+WHERE p."Id" = ANY (@__permissionIds_0)
+2025-08-06 17:42:38.065 +05:30 [INF] ✅ Token generated for: admin@xbytechat.com
+2025-08-06 17:42:38.075 +05:30 [INF] ✅ Login successful for admin@xbytechat.com, Role: admin, Plan: admin
+2025-08-06 17:42:38.079 +05:30 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType0`3[[System.Boolean, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Object, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2025-08-06 17:42:38.093 +05:30 [INF] Executed action xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api) in 965.2044ms
+2025-08-06 17:42:38.139 +05:30 [INF] Executed endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api)'
+2025-08-06 17:42:38.171 +05:30 [INF] Request finished HTTP/1.1 POST http://localhost:7113/api/auth/login - 200 null application/json; charset=utf-8 1053.5141ms
+2025-08-06 17:42:38.206 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/api/auth/session - null null
+2025-08-06 17:42:38.214 +05:30 [INF] Executing endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.GetSession (xbytechat.api)'
+2025-08-06 17:42:38.215 +05:30 [INF] Route matched with {action = "GetSession", controller = "Auth"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult GetSession() on controller xbytechat.api.AuthModule.Controllers.AuthController (xbytechat.api).
+2025-08-06 17:42:38.221 +05:30 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType3`4[[System.Boolean, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2025-08-06 17:42:38.223 +05:30 [INF] Executed action xbytechat.api.AuthModule.Controllers.AuthController.GetSession (xbytechat.api) in 3.7242ms
+2025-08-06 17:42:38.226 +05:30 [INF] Executed endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.GetSession (xbytechat.api)'
+2025-08-06 17:42:38.229 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/api/auth/session - 200 null application/json; charset=utf-8 23.1704ms
+2025-08-06 17:42:38.568 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/api/feature-access/me - null null
+2025-08-06 17:42:38.590 +05:30 [INF] Executing endpoint 'xbytechat.api.Features.FeatureAccessModule.Controllers.FeatureAccessController.GetMyFeatures (xbytechat.api)'
+2025-08-06 17:42:38.677 +05:30 [INF] Route matched with {action = "GetMyFeatures", controller = "FeatureAccess"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[xbytechat.api.Features.FeatureAccess.DTOs.FeatureStatusDto]]] GetMyFeatures() on controller xbytechat.api.Features.FeatureAccessModule.Controllers.FeatureAccessController (xbytechat.api).
+2025-08-06 17:42:38.704 +05:30 [INF] Executing ObjectResult, writing value of type 'Microsoft.AspNetCore.Mvc.ProblemDetails'.
+2025-08-06 17:42:38.726 +05:30 [INF] Executed action xbytechat.api.Features.FeatureAccessModule.Controllers.FeatureAccessController.GetMyFeatures (xbytechat.api) in 44.3867ms
+2025-08-06 17:42:38.736 +05:30 [INF] Executed endpoint 'xbytechat.api.Features.FeatureAccessModule.Controllers.FeatureAccessController.GetMyFeatures (xbytechat.api)'
+2025-08-06 17:42:38.738 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/api/feature-access/me - 401 null application/problem+json; charset=utf-8 170.3018ms
+2025-08-06 17:42:43.713 +05:30 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:7113/api/auth/login - null null
+2025-08-06 17:42:43.717 +05:30 [INF] CORS policy execution successful.
+2025-08-06 17:42:43.719 +05:30 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:7113/api/auth/login - 204 null null 5.5703ms
+2025-08-06 17:42:43.721 +05:30 [INF] Request starting HTTP/1.1 POST http://localhost:7113/api/auth/login - application/json 53
+2025-08-06 17:42:43.727 +05:30 [INF] CORS policy execution successful.
+2025-08-06 17:42:43.729 +05:30 [INF] Executing endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api)'
+2025-08-06 17:42:43.731 +05:30 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(xbytechat.api.AuthModule.DTOs.UserLoginDto) on controller xbytechat.api.AuthModule.Controllers.AuthController (xbytechat.api).
+2025-08-06 17:42:43.735 +05:30 [INF] 🔑 Login attempt for email: admin@xbytechat.com
+2025-08-06 17:42:43.869 +05:30 [INF] Executed DbCommand (131ms) [Parameters=[@__dto_Email_0='admin@xbytechat.com', @__hashedPassword_1='JAvlGPq9JyTdtvBO6x2llnRI1+gxwIyPqCKAn3THIKk='], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."BusinessId", u."CreatedAt", u."DeletedAt", u."Email", u."IsDeleted", u."Name", u."PasswordHash", u."RefreshToken", u."RefreshTokenExpiry", u."RoleId", u."Status", r."Id", r."CreatedAt", r."Description", r."IsActive", r."IsSystemDefined", r."Name"
+FROM "Users" AS u
+LEFT JOIN "Roles" AS r ON u."RoleId" = r."Id"
+WHERE u."Email" = @__dto_Email_0 AND u."PasswordHash" = @__hashedPassword_1 AND NOT (u."IsDeleted")
+LIMIT 1
+2025-08-06 17:42:43.971 +05:30 [INF] Executed DbCommand (95ms) [Parameters=[@__user_RoleId_0='00000000-0000-0000-0000-000000000001' (Nullable = true)], CommandType='"Text"', CommandTimeout='30']
+SELECT r."Id", r."AssignedAt", r."AssignedBy", r."IsActive", r."IsRevoked", r."PermissionId", r."RoleId"
+FROM "RolePermissions" AS r
+WHERE r."RoleId" = @__user_RoleId_0 AND NOT (r."IsRevoked")
+2025-08-06 17:42:44.073 +05:30 [INF] Executed DbCommand (97ms) [Parameters=[@__userId_0='62858aa2-3a54-4fd5-8696-c343d9af7634'], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."AssignedAt", u."AssignedBy", u."IsGranted", u."IsRevoked", u."PermissionId", u."UserId"
+FROM "UserPermissions" AS u
+WHERE u."UserId" = @__userId_0 AND NOT (u."IsRevoked")
+2025-08-06 17:42:44.278 +05:30 [INF] Executed DbCommand (200ms) [Parameters=[@__permissionIds_0={ '30000000-0000-0000-0000-000000000009', '30000000-0000-0000-0000-000000000006', '30000000-0000-0000-0000-000000000003', '30000000-0000-0000-0000-000000000001', '30000000-0000-0000-0000-000000000008', ... } (DbType = Object)], CommandType='"Text"', CommandTimeout='30']
+SELECT p."Id", p."Code", p."CreatedAt", p."Description", p."Group", p."IsActive", p."Name"
+FROM "Permissions" AS p
+WHERE p."Id" = ANY (@__permissionIds_0)
+2025-08-06 17:42:44.286 +05:30 [INF] ✅ Token generated for: admin@xbytechat.com
+2025-08-06 17:42:44.289 +05:30 [INF] ✅ Login successful for admin@xbytechat.com, Role: admin, Plan: admin
+2025-08-06 17:42:44.292 +05:30 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType0`3[[System.Boolean, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Object, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2025-08-06 17:42:44.295 +05:30 [INF] Executed action xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api) in 561.5587ms
+2025-08-06 17:42:44.302 +05:30 [INF] Executed endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api)'
+2025-08-06 17:42:44.305 +05:30 [INF] Request finished HTTP/1.1 POST http://localhost:7113/api/auth/login - 200 null application/json; charset=utf-8 584.0588ms
+2025-08-06 17:42:44.321 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/api/auth/session - null null
+2025-08-06 17:42:44.330 +05:30 [INF] Executing endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.GetSession (xbytechat.api)'
+2025-08-06 17:42:44.337 +05:30 [INF] Route matched with {action = "GetSession", controller = "Auth"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult GetSession() on controller xbytechat.api.AuthModule.Controllers.AuthController (xbytechat.api).
+2025-08-06 17:42:44.345 +05:30 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType3`4[[System.Boolean, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2025-08-06 17:42:44.347 +05:30 [INF] Executed action xbytechat.api.AuthModule.Controllers.AuthController.GetSession (xbytechat.api) in 3.9353ms
+2025-08-06 17:42:44.351 +05:30 [INF] Executed endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.GetSession (xbytechat.api)'
+2025-08-06 17:42:44.353 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/api/auth/session - 200 null application/json; charset=utf-8 31.3473ms
+2025-08-06 17:42:44.670 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/api/feature-access/me - null null
+2025-08-06 17:42:44.674 +05:30 [INF] Executing endpoint 'xbytechat.api.Features.FeatureAccessModule.Controllers.FeatureAccessController.GetMyFeatures (xbytechat.api)'
+2025-08-06 17:42:44.676 +05:30 [INF] Route matched with {action = "GetMyFeatures", controller = "FeatureAccess"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[xbytechat.api.Features.FeatureAccess.DTOs.FeatureStatusDto]]] GetMyFeatures() on controller xbytechat.api.Features.FeatureAccessModule.Controllers.FeatureAccessController (xbytechat.api).
+2025-08-06 17:42:44.679 +05:30 [INF] Executing ObjectResult, writing value of type 'Microsoft.AspNetCore.Mvc.ProblemDetails'.
+2025-08-06 17:42:44.681 +05:30 [INF] Executed action xbytechat.api.Features.FeatureAccessModule.Controllers.FeatureAccessController.GetMyFeatures (xbytechat.api) in 2.6899ms
+2025-08-06 17:42:44.683 +05:30 [INF] Executed endpoint 'xbytechat.api.Features.FeatureAccessModule.Controllers.FeatureAccessController.GetMyFeatures (xbytechat.api)'
+2025-08-06 17:42:44.685 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/api/feature-access/me - 401 null application/problem+json; charset=utf-8 15.2843ms
+2025-08-06 17:42:48.451 +05:30 [INF] Request starting HTTP/1.1 POST http://localhost:7113/api/auth/login - application/json 53
+2025-08-06 17:42:48.458 +05:30 [INF] CORS policy execution successful.
+2025-08-06 17:42:48.460 +05:30 [INF] Executing endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api)'
+2025-08-06 17:42:48.461 +05:30 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(xbytechat.api.AuthModule.DTOs.UserLoginDto) on controller xbytechat.api.AuthModule.Controllers.AuthController (xbytechat.api).
+2025-08-06 17:42:48.465 +05:30 [INF] 🔑 Login attempt for email: admin@xbytechat.com
+2025-08-06 17:42:48.579 +05:30 [INF] Executed DbCommand (112ms) [Parameters=[@__dto_Email_0='admin@xbytechat.com', @__hashedPassword_1='JAvlGPq9JyTdtvBO6x2llnRI1+gxwIyPqCKAn3THIKk='], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."BusinessId", u."CreatedAt", u."DeletedAt", u."Email", u."IsDeleted", u."Name", u."PasswordHash", u."RefreshToken", u."RefreshTokenExpiry", u."RoleId", u."Status", r."Id", r."CreatedAt", r."Description", r."IsActive", r."IsSystemDefined", r."Name"
+FROM "Users" AS u
+LEFT JOIN "Roles" AS r ON u."RoleId" = r."Id"
+WHERE u."Email" = @__dto_Email_0 AND u."PasswordHash" = @__hashedPassword_1 AND NOT (u."IsDeleted")
+LIMIT 1
+2025-08-06 17:42:48.682 +05:30 [INF] Executed DbCommand (99ms) [Parameters=[@__user_RoleId_0='00000000-0000-0000-0000-000000000001' (Nullable = true)], CommandType='"Text"', CommandTimeout='30']
+SELECT r."Id", r."AssignedAt", r."AssignedBy", r."IsActive", r."IsRevoked", r."PermissionId", r."RoleId"
+FROM "RolePermissions" AS r
+WHERE r."RoleId" = @__user_RoleId_0 AND NOT (r."IsRevoked")
+2025-08-06 17:42:48.785 +05:30 [INF] Executed DbCommand (97ms) [Parameters=[@__userId_0='62858aa2-3a54-4fd5-8696-c343d9af7634'], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."AssignedAt", u."AssignedBy", u."IsGranted", u."IsRevoked", u."PermissionId", u."UserId"
+FROM "UserPermissions" AS u
+WHERE u."UserId" = @__userId_0 AND NOT (u."IsRevoked")
+2025-08-06 17:42:48.895 +05:30 [INF] Executed DbCommand (106ms) [Parameters=[@__permissionIds_0={ '30000000-0000-0000-0000-000000000009', '30000000-0000-0000-0000-000000000006', '30000000-0000-0000-0000-000000000003', '30000000-0000-0000-0000-000000000001', '30000000-0000-0000-0000-000000000008', ... } (DbType = Object)], CommandType='"Text"', CommandTimeout='30']
+SELECT p."Id", p."Code", p."CreatedAt", p."Description", p."Group", p."IsActive", p."Name"
+FROM "Permissions" AS p
+WHERE p."Id" = ANY (@__permissionIds_0)
+2025-08-06 17:42:48.899 +05:30 [INF] ✅ Token generated for: admin@xbytechat.com
+2025-08-06 17:42:48.901 +05:30 [INF] ✅ Login successful for admin@xbytechat.com, Role: admin, Plan: admin
+2025-08-06 17:42:48.903 +05:30 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType0`3[[System.Boolean, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Object, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2025-08-06 17:42:48.905 +05:30 [INF] Executed action xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api) in 441.2613ms
+2025-08-06 17:42:48.907 +05:30 [INF] Executed endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api)'
+2025-08-06 17:42:48.908 +05:30 [INF] Request finished HTTP/1.1 POST http://localhost:7113/api/auth/login - 200 null application/json; charset=utf-8 457.9274ms
+2025-08-06 17:42:48.924 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/api/auth/session - null null
+2025-08-06 17:42:48.929 +05:30 [INF] Executing endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.GetSession (xbytechat.api)'
+2025-08-06 17:42:48.930 +05:30 [INF] Route matched with {action = "GetSession", controller = "Auth"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult GetSession() on controller xbytechat.api.AuthModule.Controllers.AuthController (xbytechat.api).
+2025-08-06 17:42:48.934 +05:30 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType3`4[[System.Boolean, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2025-08-06 17:42:48.938 +05:30 [INF] Executed action xbytechat.api.AuthModule.Controllers.AuthController.GetSession (xbytechat.api) in 5.0834ms
+2025-08-06 17:42:48.940 +05:30 [INF] Executed endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.GetSession (xbytechat.api)'
+2025-08-06 17:42:48.941 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/api/auth/session - 200 null application/json; charset=utf-8 16.8017ms
+2025-08-06 17:42:49.256 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/api/feature-access/me - null null
+2025-08-06 17:42:49.265 +05:30 [INF] Executing endpoint 'xbytechat.api.Features.FeatureAccessModule.Controllers.FeatureAccessController.GetMyFeatures (xbytechat.api)'
+2025-08-06 17:42:49.267 +05:30 [INF] Route matched with {action = "GetMyFeatures", controller = "FeatureAccess"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[xbytechat.api.Features.FeatureAccess.DTOs.FeatureStatusDto]]] GetMyFeatures() on controller xbytechat.api.Features.FeatureAccessModule.Controllers.FeatureAccessController (xbytechat.api).
+2025-08-06 17:42:49.275 +05:30 [INF] Executing ObjectResult, writing value of type 'Microsoft.AspNetCore.Mvc.ProblemDetails'.
+2025-08-06 17:42:49.277 +05:30 [INF] Executed action xbytechat.api.Features.FeatureAccessModule.Controllers.FeatureAccessController.GetMyFeatures (xbytechat.api) in 2.3462ms
+2025-08-06 17:42:49.279 +05:30 [INF] Executed endpoint 'xbytechat.api.Features.FeatureAccessModule.Controllers.FeatureAccessController.GetMyFeatures (xbytechat.api)'
+2025-08-06 17:42:49.281 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/api/feature-access/me - 401 null application/problem+json; charset=utf-8 25.025ms
+2025-08-06 17:42:53.706 +05:30 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:7113/api/auth/login - null null
+2025-08-06 17:42:53.710 +05:30 [INF] CORS policy execution successful.
+2025-08-06 17:42:53.711 +05:30 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:7113/api/auth/login - 204 null null 5.7354ms
+2025-08-06 17:42:53.714 +05:30 [INF] Request starting HTTP/1.1 POST http://localhost:7113/api/auth/login - application/json 53
+2025-08-06 17:42:53.720 +05:30 [INF] CORS policy execution successful.
+2025-08-06 17:42:53.722 +05:30 [INF] Executing endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api)'
+2025-08-06 17:42:53.724 +05:30 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(xbytechat.api.AuthModule.DTOs.UserLoginDto) on controller xbytechat.api.AuthModule.Controllers.AuthController (xbytechat.api).
+2025-08-06 17:42:53.728 +05:30 [INF] 🔑 Login attempt for email: admin@xbytechat.com
+2025-08-06 17:42:53.905 +05:30 [INF] Executed DbCommand (175ms) [Parameters=[@__dto_Email_0='admin@xbytechat.com', @__hashedPassword_1='JAvlGPq9JyTdtvBO6x2llnRI1+gxwIyPqCKAn3THIKk='], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."BusinessId", u."CreatedAt", u."DeletedAt", u."Email", u."IsDeleted", u."Name", u."PasswordHash", u."RefreshToken", u."RefreshTokenExpiry", u."RoleId", u."Status", r."Id", r."CreatedAt", r."Description", r."IsActive", r."IsSystemDefined", r."Name"
+FROM "Users" AS u
+LEFT JOIN "Roles" AS r ON u."RoleId" = r."Id"
+WHERE u."Email" = @__dto_Email_0 AND u."PasswordHash" = @__hashedPassword_1 AND NOT (u."IsDeleted")
+LIMIT 1
+2025-08-06 17:42:53.978 +05:30 [INF] Executed DbCommand (69ms) [Parameters=[@__user_RoleId_0='00000000-0000-0000-0000-000000000001' (Nullable = true)], CommandType='"Text"', CommandTimeout='30']
+SELECT r."Id", r."AssignedAt", r."AssignedBy", r."IsActive", r."IsRevoked", r."PermissionId", r."RoleId"
+FROM "RolePermissions" AS r
+WHERE r."RoleId" = @__user_RoleId_0 AND NOT (r."IsRevoked")
+2025-08-06 17:42:54.095 +05:30 [INF] Executed DbCommand (110ms) [Parameters=[@__userId_0='62858aa2-3a54-4fd5-8696-c343d9af7634'], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."AssignedAt", u."AssignedBy", u."IsGranted", u."IsRevoked", u."PermissionId", u."UserId"
+FROM "UserPermissions" AS u
+WHERE u."UserId" = @__userId_0 AND NOT (u."IsRevoked")
+2025-08-06 17:42:54.187 +05:30 [INF] Executed DbCommand (88ms) [Parameters=[@__permissionIds_0={ '30000000-0000-0000-0000-000000000009', '30000000-0000-0000-0000-000000000006', '30000000-0000-0000-0000-000000000003', '30000000-0000-0000-0000-000000000001', '30000000-0000-0000-0000-000000000008', ... } (DbType = Object)], CommandType='"Text"', CommandTimeout='30']
+SELECT p."Id", p."Code", p."CreatedAt", p."Description", p."Group", p."IsActive", p."Name"
+FROM "Permissions" AS p
+WHERE p."Id" = ANY (@__permissionIds_0)
+2025-08-06 17:42:54.192 +05:30 [INF] ✅ Token generated for: admin@xbytechat.com
+2025-08-06 17:42:54.194 +05:30 [INF] ✅ Login successful for admin@xbytechat.com, Role: admin, Plan: admin
+2025-08-06 17:42:54.197 +05:30 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType0`3[[System.Boolean, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Object, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2025-08-06 17:42:54.199 +05:30 [INF] Executed action xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api) in 472.9608ms
+2025-08-06 17:42:54.202 +05:30 [INF] Executed endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api)'
+2025-08-06 17:42:54.204 +05:30 [INF] Request finished HTTP/1.1 POST http://localhost:7113/api/auth/login - 200 null application/json; charset=utf-8 490.3368ms
+2025-08-06 17:42:54.217 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/api/auth/session - null null
+2025-08-06 17:42:54.224 +05:30 [INF] Executing endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.GetSession (xbytechat.api)'
+2025-08-06 17:42:54.226 +05:30 [INF] Route matched with {action = "GetSession", controller = "Auth"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult GetSession() on controller xbytechat.api.AuthModule.Controllers.AuthController (xbytechat.api).
+2025-08-06 17:42:54.229 +05:30 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType3`4[[System.Boolean, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2025-08-06 17:42:54.231 +05:30 [INF] Executed action xbytechat.api.AuthModule.Controllers.AuthController.GetSession (xbytechat.api) in 2.8797ms
+2025-08-06 17:42:54.234 +05:30 [INF] Executed endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.GetSession (xbytechat.api)'
+2025-08-06 17:42:54.236 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/api/auth/session - 200 null application/json; charset=utf-8 18.9704ms
+2025-08-06 17:42:54.556 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/api/feature-access/me - null null
+2025-08-06 17:42:54.561 +05:30 [INF] Executing endpoint 'xbytechat.api.Features.FeatureAccessModule.Controllers.FeatureAccessController.GetMyFeatures (xbytechat.api)'
+2025-08-06 17:42:54.563 +05:30 [INF] Route matched with {action = "GetMyFeatures", controller = "FeatureAccess"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[xbytechat.api.Features.FeatureAccess.DTOs.FeatureStatusDto]]] GetMyFeatures() on controller xbytechat.api.Features.FeatureAccessModule.Controllers.FeatureAccessController (xbytechat.api).
+2025-08-06 17:42:54.569 +05:30 [INF] Executing ObjectResult, writing value of type 'Microsoft.AspNetCore.Mvc.ProblemDetails'.
+2025-08-06 17:42:54.571 +05:30 [INF] Executed action xbytechat.api.Features.FeatureAccessModule.Controllers.FeatureAccessController.GetMyFeatures (xbytechat.api) in 3.0385ms
+2025-08-06 17:42:54.573 +05:30 [INF] Executed endpoint 'xbytechat.api.Features.FeatureAccessModule.Controllers.FeatureAccessController.GetMyFeatures (xbytechat.api)'
+2025-08-06 17:42:54.574 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/api/feature-access/me - 401 null application/problem+json; charset=utf-8 18.1321ms
+2025-08-06 17:42:58.463 +05:30 [INF] Request starting HTTP/1.1 POST http://localhost:7113/api/auth/login - application/json 53
+2025-08-06 17:42:58.467 +05:30 [INF] CORS policy execution successful.
+2025-08-06 17:42:58.469 +05:30 [INF] Executing endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api)'
+2025-08-06 17:42:58.471 +05:30 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(xbytechat.api.AuthModule.DTOs.UserLoginDto) on controller xbytechat.api.AuthModule.Controllers.AuthController (xbytechat.api).
+2025-08-06 17:42:58.474 +05:30 [INF] 🔑 Login attempt for email: admin@xbytechat.com
+2025-08-06 17:42:58.614 +05:30 [INF] Executed DbCommand (138ms) [Parameters=[@__dto_Email_0='admin@xbytechat.com', @__hashedPassword_1='JAvlGPq9JyTdtvBO6x2llnRI1+gxwIyPqCKAn3THIKk='], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."BusinessId", u."CreatedAt", u."DeletedAt", u."Email", u."IsDeleted", u."Name", u."PasswordHash", u."RefreshToken", u."RefreshTokenExpiry", u."RoleId", u."Status", r."Id", r."CreatedAt", r."Description", r."IsActive", r."IsSystemDefined", r."Name"
+FROM "Users" AS u
+LEFT JOIN "Roles" AS r ON u."RoleId" = r."Id"
+WHERE u."Email" = @__dto_Email_0 AND u."PasswordHash" = @__hashedPassword_1 AND NOT (u."IsDeleted")
+LIMIT 1
+2025-08-06 17:42:58.823 +05:30 [INF] Executed DbCommand (204ms) [Parameters=[@__user_RoleId_0='00000000-0000-0000-0000-000000000001' (Nullable = true)], CommandType='"Text"', CommandTimeout='30']
+SELECT r."Id", r."AssignedAt", r."AssignedBy", r."IsActive", r."IsRevoked", r."PermissionId", r."RoleId"
+FROM "RolePermissions" AS r
+WHERE r."RoleId" = @__user_RoleId_0 AND NOT (r."IsRevoked")
+2025-08-06 17:42:58.922 +05:30 [INF] Executed DbCommand (95ms) [Parameters=[@__userId_0='62858aa2-3a54-4fd5-8696-c343d9af7634'], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."AssignedAt", u."AssignedBy", u."IsGranted", u."IsRevoked", u."PermissionId", u."UserId"
+FROM "UserPermissions" AS u
+WHERE u."UserId" = @__userId_0 AND NOT (u."IsRevoked")
+2025-08-06 17:42:59.032 +05:30 [INF] Executed DbCommand (106ms) [Parameters=[@__permissionIds_0={ '30000000-0000-0000-0000-000000000009', '30000000-0000-0000-0000-000000000006', '30000000-0000-0000-0000-000000000003', '30000000-0000-0000-0000-000000000001', '30000000-0000-0000-0000-000000000008', ... } (DbType = Object)], CommandType='"Text"', CommandTimeout='30']
+SELECT p."Id", p."Code", p."CreatedAt", p."Description", p."Group", p."IsActive", p."Name"
+FROM "Permissions" AS p
+WHERE p."Id" = ANY (@__permissionIds_0)
+2025-08-06 17:42:59.036 +05:30 [INF] ✅ Token generated for: admin@xbytechat.com
+2025-08-06 17:42:59.038 +05:30 [INF] ✅ Login successful for admin@xbytechat.com, Role: admin, Plan: admin
+2025-08-06 17:42:59.040 +05:30 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType0`3[[System.Boolean, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Object, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2025-08-06 17:42:59.042 +05:30 [INF] Executed action xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api) in 569.3051ms
+2025-08-06 17:42:59.044 +05:30 [INF] Executed endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api)'
+2025-08-06 17:42:59.046 +05:30 [INF] Request finished HTTP/1.1 POST http://localhost:7113/api/auth/login - 200 null application/json; charset=utf-8 582.8123ms
+2025-08-06 17:42:59.064 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/api/auth/session - null null
+2025-08-06 17:42:59.069 +05:30 [INF] Executing endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.GetSession (xbytechat.api)'
+2025-08-06 17:42:59.070 +05:30 [INF] Route matched with {action = "GetSession", controller = "Auth"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult GetSession() on controller xbytechat.api.AuthModule.Controllers.AuthController (xbytechat.api).
+2025-08-06 17:42:59.074 +05:30 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType3`4[[System.Boolean, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2025-08-06 17:42:59.076 +05:30 [INF] Executed action xbytechat.api.AuthModule.Controllers.AuthController.GetSession (xbytechat.api) in 3.1013ms
+2025-08-06 17:42:59.081 +05:30 [INF] Executed endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.GetSession (xbytechat.api)'
+2025-08-06 17:42:59.083 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/api/auth/session - 200 null application/json; charset=utf-8 18.607ms
+2025-08-06 17:42:59.400 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/api/feature-access/me - null null
+2025-08-06 17:42:59.404 +05:30 [INF] Executing endpoint 'xbytechat.api.Features.FeatureAccessModule.Controllers.FeatureAccessController.GetMyFeatures (xbytechat.api)'
+2025-08-06 17:42:59.406 +05:30 [INF] Route matched with {action = "GetMyFeatures", controller = "FeatureAccess"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[xbytechat.api.Features.FeatureAccess.DTOs.FeatureStatusDto]]] GetMyFeatures() on controller xbytechat.api.Features.FeatureAccessModule.Controllers.FeatureAccessController (xbytechat.api).
+2025-08-06 17:42:59.409 +05:30 [INF] Executing ObjectResult, writing value of type 'Microsoft.AspNetCore.Mvc.ProblemDetails'.
+2025-08-06 17:42:59.412 +05:30 [INF] Executed action xbytechat.api.Features.FeatureAccessModule.Controllers.FeatureAccessController.GetMyFeatures (xbytechat.api) in 3.1379ms
+2025-08-06 17:42:59.414 +05:30 [INF] Executed endpoint 'xbytechat.api.Features.FeatureAccessModule.Controllers.FeatureAccessController.GetMyFeatures (xbytechat.api)'
+2025-08-06 17:42:59.416 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/api/feature-access/me - 401 null application/problem+json; charset=utf-8 16.074ms
+2025-08-06 17:43:02.738 +05:30 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:7113/api/auth/login - null null
+2025-08-06 17:43:02.746 +05:30 [INF] CORS policy execution successful.
+2025-08-06 17:43:02.747 +05:30 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:7113/api/auth/login - 204 null null 8.9733ms
+2025-08-06 17:43:02.750 +05:30 [INF] Request starting HTTP/1.1 POST http://localhost:7113/api/auth/login - application/json 53
+2025-08-06 17:43:02.755 +05:30 [INF] CORS policy execution successful.
+2025-08-06 17:43:02.757 +05:30 [INF] Executing endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api)'
+2025-08-06 17:43:02.759 +05:30 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(xbytechat.api.AuthModule.DTOs.UserLoginDto) on controller xbytechat.api.AuthModule.Controllers.AuthController (xbytechat.api).
+2025-08-06 17:43:02.762 +05:30 [INF] 🔑 Login attempt for email: admin@xbytechat.com
+2025-08-06 17:43:02.855 +05:30 [INF] Executed DbCommand (91ms) [Parameters=[@__dto_Email_0='admin@xbytechat.com', @__hashedPassword_1='JAvlGPq9JyTdtvBO6x2llnRI1+gxwIyPqCKAn3THIKk='], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."BusinessId", u."CreatedAt", u."DeletedAt", u."Email", u."IsDeleted", u."Name", u."PasswordHash", u."RefreshToken", u."RefreshTokenExpiry", u."RoleId", u."Status", r."Id", r."CreatedAt", r."Description", r."IsActive", r."IsSystemDefined", r."Name"
+FROM "Users" AS u
+LEFT JOIN "Roles" AS r ON u."RoleId" = r."Id"
+WHERE u."Email" = @__dto_Email_0 AND u."PasswordHash" = @__hashedPassword_1 AND NOT (u."IsDeleted")
+LIMIT 1
+2025-08-06 17:43:02.935 +05:30 [INF] Executed DbCommand (75ms) [Parameters=[@__user_RoleId_0='00000000-0000-0000-0000-000000000001' (Nullable = true)], CommandType='"Text"', CommandTimeout='30']
+SELECT r."Id", r."AssignedAt", r."AssignedBy", r."IsActive", r."IsRevoked", r."PermissionId", r."RoleId"
+FROM "RolePermissions" AS r
+WHERE r."RoleId" = @__user_RoleId_0 AND NOT (r."IsRevoked")
+2025-08-06 17:43:03.013 +05:30 [INF] Executed DbCommand (74ms) [Parameters=[@__userId_0='62858aa2-3a54-4fd5-8696-c343d9af7634'], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."AssignedAt", u."AssignedBy", u."IsGranted", u."IsRevoked", u."PermissionId", u."UserId"
+FROM "UserPermissions" AS u
+WHERE u."UserId" = @__userId_0 AND NOT (u."IsRevoked")
+2025-08-06 17:43:03.105 +05:30 [INF] Executed DbCommand (87ms) [Parameters=[@__permissionIds_0={ '30000000-0000-0000-0000-000000000009', '30000000-0000-0000-0000-000000000006', '30000000-0000-0000-0000-000000000003', '30000000-0000-0000-0000-000000000001', '30000000-0000-0000-0000-000000000008', ... } (DbType = Object)], CommandType='"Text"', CommandTimeout='30']
+SELECT p."Id", p."Code", p."CreatedAt", p."Description", p."Group", p."IsActive", p."Name"
+FROM "Permissions" AS p
+WHERE p."Id" = ANY (@__permissionIds_0)
+2025-08-06 17:43:03.111 +05:30 [INF] ✅ Token generated for: admin@xbytechat.com
+2025-08-06 17:43:03.112 +05:30 [INF] ✅ Login successful for admin@xbytechat.com, Role: admin, Plan: admin
+2025-08-06 17:43:03.114 +05:30 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType0`3[[System.Boolean, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Object, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2025-08-06 17:43:03.116 +05:30 [INF] Executed action xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api) in 355.6382ms
+2025-08-06 17:43:03.118 +05:30 [INF] Executed endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api)'
+2025-08-06 17:43:03.119 +05:30 [INF] Request finished HTTP/1.1 POST http://localhost:7113/api/auth/login - 200 null application/json; charset=utf-8 368.9407ms
+2025-08-06 17:43:03.131 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/api/auth/session - null null
+2025-08-06 17:43:03.136 +05:30 [INF] Executing endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.GetSession (xbytechat.api)'
+2025-08-06 17:43:03.137 +05:30 [INF] Route matched with {action = "GetSession", controller = "Auth"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult GetSession() on controller xbytechat.api.AuthModule.Controllers.AuthController (xbytechat.api).
+2025-08-06 17:43:03.141 +05:30 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType3`4[[System.Boolean, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2025-08-06 17:43:03.143 +05:30 [INF] Executed action xbytechat.api.AuthModule.Controllers.AuthController.GetSession (xbytechat.api) in 2.996ms
+2025-08-06 17:43:03.145 +05:30 [INF] Executed endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.GetSession (xbytechat.api)'
+2025-08-06 17:43:03.147 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/api/auth/session - 200 null application/json; charset=utf-8 15.9743ms
+2025-08-06 17:43:03.461 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/api/feature-access/me - null null
+2025-08-06 17:43:03.467 +05:30 [INF] Executing endpoint 'xbytechat.api.Features.FeatureAccessModule.Controllers.FeatureAccessController.GetMyFeatures (xbytechat.api)'
+2025-08-06 17:43:03.469 +05:30 [INF] Route matched with {action = "GetMyFeatures", controller = "FeatureAccess"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[xbytechat.api.Features.FeatureAccess.DTOs.FeatureStatusDto]]] GetMyFeatures() on controller xbytechat.api.Features.FeatureAccessModule.Controllers.FeatureAccessController (xbytechat.api).
+2025-08-06 17:43:03.471 +05:30 [INF] Executing ObjectResult, writing value of type 'Microsoft.AspNetCore.Mvc.ProblemDetails'.
+2025-08-06 17:43:03.472 +05:30 [INF] Executed action xbytechat.api.Features.FeatureAccessModule.Controllers.FeatureAccessController.GetMyFeatures (xbytechat.api) in 2.1791ms
+2025-08-06 17:43:03.477 +05:30 [INF] Executed endpoint 'xbytechat.api.Features.FeatureAccessModule.Controllers.FeatureAccessController.GetMyFeatures (xbytechat.api)'
+2025-08-06 17:43:03.479 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/api/feature-access/me - 401 null application/problem+json; charset=utf-8 18.004ms
+2025-08-06 17:43:06.714 +05:30 [INF] Request starting HTTP/1.1 POST http://localhost:7113/api/auth/login - application/json 53
+2025-08-06 17:43:06.718 +05:30 [INF] CORS policy execution successful.
+2025-08-06 17:43:06.720 +05:30 [INF] Executing endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api)'
+2025-08-06 17:43:06.721 +05:30 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(xbytechat.api.AuthModule.DTOs.UserLoginDto) on controller xbytechat.api.AuthModule.Controllers.AuthController (xbytechat.api).
+2025-08-06 17:43:06.727 +05:30 [INF] 🔑 Login attempt for email: admin@xbytechat.com
+2025-08-06 17:43:06.823 +05:30 [INF] Executed DbCommand (94ms) [Parameters=[@__dto_Email_0='admin@xbytechat.com', @__hashedPassword_1='JAvlGPq9JyTdtvBO6x2llnRI1+gxwIyPqCKAn3THIKk='], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."BusinessId", u."CreatedAt", u."DeletedAt", u."Email", u."IsDeleted", u."Name", u."PasswordHash", u."RefreshToken", u."RefreshTokenExpiry", u."RoleId", u."Status", r."Id", r."CreatedAt", r."Description", r."IsActive", r."IsSystemDefined", r."Name"
+FROM "Users" AS u
+LEFT JOIN "Roles" AS r ON u."RoleId" = r."Id"
+WHERE u."Email" = @__dto_Email_0 AND u."PasswordHash" = @__hashedPassword_1 AND NOT (u."IsDeleted")
+LIMIT 1
+2025-08-06 17:43:06.900 +05:30 [INF] Executed DbCommand (73ms) [Parameters=[@__user_RoleId_0='00000000-0000-0000-0000-000000000001' (Nullable = true)], CommandType='"Text"', CommandTimeout='30']
+SELECT r."Id", r."AssignedAt", r."AssignedBy", r."IsActive", r."IsRevoked", r."PermissionId", r."RoleId"
+FROM "RolePermissions" AS r
+WHERE r."RoleId" = @__user_RoleId_0 AND NOT (r."IsRevoked")
+2025-08-06 17:43:06.995 +05:30 [INF] Executed DbCommand (90ms) [Parameters=[@__userId_0='62858aa2-3a54-4fd5-8696-c343d9af7634'], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."AssignedAt", u."AssignedBy", u."IsGranted", u."IsRevoked", u."PermissionId", u."UserId"
+FROM "UserPermissions" AS u
+WHERE u."UserId" = @__userId_0 AND NOT (u."IsRevoked")
+2025-08-06 17:43:07.072 +05:30 [INF] Executed DbCommand (71ms) [Parameters=[@__permissionIds_0={ '30000000-0000-0000-0000-000000000009', '30000000-0000-0000-0000-000000000006', '30000000-0000-0000-0000-000000000003', '30000000-0000-0000-0000-000000000001', '30000000-0000-0000-0000-000000000008', ... } (DbType = Object)], CommandType='"Text"', CommandTimeout='30']
+SELECT p."Id", p."Code", p."CreatedAt", p."Description", p."Group", p."IsActive", p."Name"
+FROM "Permissions" AS p
+WHERE p."Id" = ANY (@__permissionIds_0)
+2025-08-06 17:43:07.075 +05:30 [INF] ✅ Token generated for: admin@xbytechat.com
+2025-08-06 17:43:07.077 +05:30 [INF] ✅ Login successful for admin@xbytechat.com, Role: admin, Plan: admin
+2025-08-06 17:43:07.079 +05:30 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType0`3[[System.Boolean, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Object, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2025-08-06 17:43:07.081 +05:30 [INF] Executed action xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api) in 354.7407ms
+2025-08-06 17:43:07.083 +05:30 [INF] Executed endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api)'
+2025-08-06 17:43:07.084 +05:30 [INF] Request finished HTTP/1.1 POST http://localhost:7113/api/auth/login - 200 null application/json; charset=utf-8 370.5962ms
+2025-08-06 17:43:07.100 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/api/auth/session - null null
+2025-08-06 17:43:07.104 +05:30 [INF] Executing endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.GetSession (xbytechat.api)'
+2025-08-06 17:43:07.106 +05:30 [INF] Route matched with {action = "GetSession", controller = "Auth"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult GetSession() on controller xbytechat.api.AuthModule.Controllers.AuthController (xbytechat.api).
+2025-08-06 17:43:07.109 +05:30 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType3`4[[System.Boolean, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2025-08-06 17:43:07.114 +05:30 [INF] Executed action xbytechat.api.AuthModule.Controllers.AuthController.GetSession (xbytechat.api) in 6.6324ms
+2025-08-06 17:43:07.116 +05:30 [INF] Executed endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.GetSession (xbytechat.api)'
+2025-08-06 17:43:07.117 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/api/auth/session - 200 null application/json; charset=utf-8 17.2788ms
+2025-08-06 17:43:07.435 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/api/feature-access/me - null null
+2025-08-06 17:43:07.440 +05:30 [INF] Executing endpoint 'xbytechat.api.Features.FeatureAccessModule.Controllers.FeatureAccessController.GetMyFeatures (xbytechat.api)'
+2025-08-06 17:43:07.442 +05:30 [INF] Route matched with {action = "GetMyFeatures", controller = "FeatureAccess"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[xbytechat.api.Features.FeatureAccess.DTOs.FeatureStatusDto]]] GetMyFeatures() on controller xbytechat.api.Features.FeatureAccessModule.Controllers.FeatureAccessController (xbytechat.api).
+2025-08-06 17:43:07.445 +05:30 [INF] Executing ObjectResult, writing value of type 'Microsoft.AspNetCore.Mvc.ProblemDetails'.
+2025-08-06 17:43:07.447 +05:30 [INF] Executed action xbytechat.api.Features.FeatureAccessModule.Controllers.FeatureAccessController.GetMyFeatures (xbytechat.api) in 2.9534ms
+2025-08-06 17:43:07.450 +05:30 [INF] Executed endpoint 'xbytechat.api.Features.FeatureAccessModule.Controllers.FeatureAccessController.GetMyFeatures (xbytechat.api)'
+2025-08-06 17:43:07.451 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/api/feature-access/me - 401 null application/problem+json; charset=utf-8 16.285ms
+2025-08-06 17:43:10.522 +05:30 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:7113/api/auth/login - null null
+2025-08-06 17:43:10.527 +05:30 [INF] CORS policy execution successful.
+2025-08-06 17:43:10.529 +05:30 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:7113/api/auth/login - 204 null null 6.9404ms
+2025-08-06 17:43:10.531 +05:30 [INF] Request starting HTTP/1.1 POST http://localhost:7113/api/auth/login - application/json 53
+2025-08-06 17:43:10.536 +05:30 [INF] CORS policy execution successful.
+2025-08-06 17:43:10.537 +05:30 [INF] Executing endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api)'
+2025-08-06 17:43:10.539 +05:30 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(xbytechat.api.AuthModule.DTOs.UserLoginDto) on controller xbytechat.api.AuthModule.Controllers.AuthController (xbytechat.api).
+2025-08-06 17:43:10.542 +05:30 [INF] 🔑 Login attempt for email: admin@xbytechat.com
+2025-08-06 17:43:10.698 +05:30 [INF] Executed DbCommand (153ms) [Parameters=[@__dto_Email_0='admin@xbytechat.com', @__hashedPassword_1='JAvlGPq9JyTdtvBO6x2llnRI1+gxwIyPqCKAn3THIKk='], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."BusinessId", u."CreatedAt", u."DeletedAt", u."Email", u."IsDeleted", u."Name", u."PasswordHash", u."RefreshToken", u."RefreshTokenExpiry", u."RoleId", u."Status", r."Id", r."CreatedAt", r."Description", r."IsActive", r."IsSystemDefined", r."Name"
+FROM "Users" AS u
+LEFT JOIN "Roles" AS r ON u."RoleId" = r."Id"
+WHERE u."Email" = @__dto_Email_0 AND u."PasswordHash" = @__hashedPassword_1 AND NOT (u."IsDeleted")
+LIMIT 1
+2025-08-06 17:43:10.904 +05:30 [INF] Executed DbCommand (201ms) [Parameters=[@__user_RoleId_0='00000000-0000-0000-0000-000000000001' (Nullable = true)], CommandType='"Text"', CommandTimeout='30']
+SELECT r."Id", r."AssignedAt", r."AssignedBy", r."IsActive", r."IsRevoked", r."PermissionId", r."RoleId"
+FROM "RolePermissions" AS r
+WHERE r."RoleId" = @__user_RoleId_0 AND NOT (r."IsRevoked")
+2025-08-06 17:43:11.006 +05:30 [INF] Executed DbCommand (98ms) [Parameters=[@__userId_0='62858aa2-3a54-4fd5-8696-c343d9af7634'], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."AssignedAt", u."AssignedBy", u."IsGranted", u."IsRevoked", u."PermissionId", u."UserId"
+FROM "UserPermissions" AS u
+WHERE u."UserId" = @__userId_0 AND NOT (u."IsRevoked")
+2025-08-06 17:43:11.109 +05:30 [INF] Executed DbCommand (100ms) [Parameters=[@__permissionIds_0={ '30000000-0000-0000-0000-000000000009', '30000000-0000-0000-0000-000000000006', '30000000-0000-0000-0000-000000000003', '30000000-0000-0000-0000-000000000001', '30000000-0000-0000-0000-000000000008', ... } (DbType = Object)], CommandType='"Text"', CommandTimeout='30']
+SELECT p."Id", p."Code", p."CreatedAt", p."Description", p."Group", p."IsActive", p."Name"
+FROM "Permissions" AS p
+WHERE p."Id" = ANY (@__permissionIds_0)
+2025-08-06 17:43:11.113 +05:30 [INF] ✅ Token generated for: admin@xbytechat.com
+2025-08-06 17:43:11.115 +05:30 [INF] ✅ Login successful for admin@xbytechat.com, Role: admin, Plan: admin
+2025-08-06 17:43:11.117 +05:30 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType0`3[[System.Boolean, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Object, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2025-08-06 17:43:11.119 +05:30 [INF] Executed action xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api) in 578.2835ms
+2025-08-06 17:43:11.121 +05:30 [INF] Executed endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api)'
+2025-08-06 17:43:11.123 +05:30 [INF] Request finished HTTP/1.1 POST http://localhost:7113/api/auth/login - 200 null application/json; charset=utf-8 591.5374ms
+2025-08-06 17:43:11.138 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/api/auth/session - null null
+2025-08-06 17:43:11.144 +05:30 [INF] Executing endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.GetSession (xbytechat.api)'
+2025-08-06 17:43:11.145 +05:30 [INF] Route matched with {action = "GetSession", controller = "Auth"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult GetSession() on controller xbytechat.api.AuthModule.Controllers.AuthController (xbytechat.api).
+2025-08-06 17:43:11.149 +05:30 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType3`4[[System.Boolean, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2025-08-06 17:43:11.151 +05:30 [INF] Executed action xbytechat.api.AuthModule.Controllers.AuthController.GetSession (xbytechat.api) in 3.2632ms
+2025-08-06 17:43:11.153 +05:30 [INF] Executed endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.GetSession (xbytechat.api)'
+2025-08-06 17:43:11.155 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/api/auth/session - 200 null application/json; charset=utf-8 16.7712ms
+2025-08-06 17:43:11.477 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/api/feature-access/me - null null
+2025-08-06 17:43:11.482 +05:30 [INF] Executing endpoint 'xbytechat.api.Features.FeatureAccessModule.Controllers.FeatureAccessController.GetMyFeatures (xbytechat.api)'
+2025-08-06 17:43:11.483 +05:30 [INF] Route matched with {action = "GetMyFeatures", controller = "FeatureAccess"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[xbytechat.api.Features.FeatureAccess.DTOs.FeatureStatusDto]]] GetMyFeatures() on controller xbytechat.api.Features.FeatureAccessModule.Controllers.FeatureAccessController (xbytechat.api).
+2025-08-06 17:43:11.487 +05:30 [INF] Executing ObjectResult, writing value of type 'Microsoft.AspNetCore.Mvc.ProblemDetails'.
+2025-08-06 17:43:11.489 +05:30 [INF] Executed action xbytechat.api.Features.FeatureAccessModule.Controllers.FeatureAccessController.GetMyFeatures (xbytechat.api) in 2.4992ms
+2025-08-06 17:43:11.491 +05:30 [INF] Executed endpoint 'xbytechat.api.Features.FeatureAccessModule.Controllers.FeatureAccessController.GetMyFeatures (xbytechat.api)'
+2025-08-06 17:43:11.493 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/api/feature-access/me - 401 null application/problem+json; charset=utf-8 15.6108ms
+2025-08-06 17:43:15.414 +05:30 [INF] Request starting HTTP/1.1 POST http://localhost:7113/api/auth/login - application/json 53
+2025-08-06 17:43:15.418 +05:30 [INF] CORS policy execution successful.
+2025-08-06 17:43:15.420 +05:30 [INF] Executing endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api)'
+2025-08-06 17:43:15.422 +05:30 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(xbytechat.api.AuthModule.DTOs.UserLoginDto) on controller xbytechat.api.AuthModule.Controllers.AuthController (xbytechat.api).
+2025-08-06 17:43:15.426 +05:30 [INF] 🔑 Login attempt for email: admin@xbytechat.com
+2025-08-06 17:43:15.614 +05:30 [INF] Executed DbCommand (185ms) [Parameters=[@__dto_Email_0='admin@xbytechat.com', @__hashedPassword_1='JAvlGPq9JyTdtvBO6x2llnRI1+gxwIyPqCKAn3THIKk='], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."BusinessId", u."CreatedAt", u."DeletedAt", u."Email", u."IsDeleted", u."Name", u."PasswordHash", u."RefreshToken", u."RefreshTokenExpiry", u."RoleId", u."Status", r."Id", r."CreatedAt", r."Description", r."IsActive", r."IsSystemDefined", r."Name"
+FROM "Users" AS u
+LEFT JOIN "Roles" AS r ON u."RoleId" = r."Id"
+WHERE u."Email" = @__dto_Email_0 AND u."PasswordHash" = @__hashedPassword_1 AND NOT (u."IsDeleted")
+LIMIT 1
+2025-08-06 17:43:15.718 +05:30 [INF] Executed DbCommand (99ms) [Parameters=[@__user_RoleId_0='00000000-0000-0000-0000-000000000001' (Nullable = true)], CommandType='"Text"', CommandTimeout='30']
+SELECT r."Id", r."AssignedAt", r."AssignedBy", r."IsActive", r."IsRevoked", r."PermissionId", r."RoleId"
+FROM "RolePermissions" AS r
+WHERE r."RoleId" = @__user_RoleId_0 AND NOT (r."IsRevoked")
+2025-08-06 17:43:15.817 +05:30 [INF] Executed DbCommand (96ms) [Parameters=[@__userId_0='62858aa2-3a54-4fd5-8696-c343d9af7634'], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."AssignedAt", u."AssignedBy", u."IsGranted", u."IsRevoked", u."PermissionId", u."UserId"
+FROM "UserPermissions" AS u
+WHERE u."UserId" = @__userId_0 AND NOT (u."IsRevoked")
+2025-08-06 17:43:15.926 +05:30 [INF] Executed DbCommand (105ms) [Parameters=[@__permissionIds_0={ '30000000-0000-0000-0000-000000000009', '30000000-0000-0000-0000-000000000006', '30000000-0000-0000-0000-000000000003', '30000000-0000-0000-0000-000000000001', '30000000-0000-0000-0000-000000000008', ... } (DbType = Object)], CommandType='"Text"', CommandTimeout='30']
+SELECT p."Id", p."Code", p."CreatedAt", p."Description", p."Group", p."IsActive", p."Name"
+FROM "Permissions" AS p
+WHERE p."Id" = ANY (@__permissionIds_0)
+2025-08-06 17:43:15.931 +05:30 [INF] ✅ Token generated for: admin@xbytechat.com
+2025-08-06 17:43:15.932 +05:30 [INF] ✅ Login successful for admin@xbytechat.com, Role: admin, Plan: admin
+2025-08-06 17:43:15.935 +05:30 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType0`3[[System.Boolean, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Object, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2025-08-06 17:43:15.937 +05:30 [INF] Executed action xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api) in 512.9549ms
+2025-08-06 17:43:15.940 +05:30 [INF] Executed endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api)'
+2025-08-06 17:43:15.942 +05:30 [INF] Request finished HTTP/1.1 POST http://localhost:7113/api/auth/login - 200 null application/json; charset=utf-8 527.7013ms
+2025-08-06 17:43:15.958 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/api/auth/session - null null
+2025-08-06 17:43:15.962 +05:30 [INF] Executing endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.GetSession (xbytechat.api)'
+2025-08-06 17:43:15.964 +05:30 [INF] Route matched with {action = "GetSession", controller = "Auth"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult GetSession() on controller xbytechat.api.AuthModule.Controllers.AuthController (xbytechat.api).
+2025-08-06 17:43:15.967 +05:30 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType3`4[[System.Boolean, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2025-08-06 17:43:15.970 +05:30 [INF] Executed action xbytechat.api.AuthModule.Controllers.AuthController.GetSession (xbytechat.api) in 3.6506ms
+2025-08-06 17:43:15.972 +05:30 [INF] Executed endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.GetSession (xbytechat.api)'
+2025-08-06 17:43:15.973 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/api/auth/session - 200 null application/json; charset=utf-8 15.9821ms
+2025-08-06 17:43:16.294 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/api/feature-access/me - null null
+2025-08-06 17:43:16.300 +05:30 [INF] Executing endpoint 'xbytechat.api.Features.FeatureAccessModule.Controllers.FeatureAccessController.GetMyFeatures (xbytechat.api)'
+2025-08-06 17:43:16.302 +05:30 [INF] Route matched with {action = "GetMyFeatures", controller = "FeatureAccess"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[xbytechat.api.Features.FeatureAccess.DTOs.FeatureStatusDto]]] GetMyFeatures() on controller xbytechat.api.Features.FeatureAccessModule.Controllers.FeatureAccessController (xbytechat.api).
+2025-08-06 17:43:16.305 +05:30 [INF] Executing ObjectResult, writing value of type 'Microsoft.AspNetCore.Mvc.ProblemDetails'.
+2025-08-06 17:43:16.307 +05:30 [INF] Executed action xbytechat.api.Features.FeatureAccessModule.Controllers.FeatureAccessController.GetMyFeatures (xbytechat.api) in 2.8457ms
+2025-08-06 17:43:16.309 +05:30 [INF] Executed endpoint 'xbytechat.api.Features.FeatureAccessModule.Controllers.FeatureAccessController.GetMyFeatures (xbytechat.api)'
+2025-08-06 17:43:16.310 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/api/feature-access/me - 401 null application/problem+json; charset=utf-8 15.9633ms
+2025-08-06 17:52:47.066 +05:30 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:7113/api/auth/login - null null
+2025-08-06 17:52:47.081 +05:30 [INF] CORS policy execution successful.
+2025-08-06 17:52:47.083 +05:30 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:7113/api/auth/login - 204 null null 16.4094ms
+2025-08-06 17:52:47.087 +05:30 [INF] Request starting HTTP/1.1 POST http://localhost:7113/api/auth/login - application/json 53
+2025-08-06 17:52:47.099 +05:30 [INF] CORS policy execution successful.
+2025-08-06 17:52:47.101 +05:30 [INF] Executing endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api)'
+2025-08-06 17:52:47.103 +05:30 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(xbytechat.api.AuthModule.DTOs.UserLoginDto) on controller xbytechat.api.AuthModule.Controllers.AuthController (xbytechat.api).
+2025-08-06 17:52:47.107 +05:30 [INF] 🔑 Login attempt for email: admin@xbytechat.com
+2025-08-06 17:52:47.936 +05:30 [INF] Executed DbCommand (103ms) [Parameters=[@__dto_Email_0='admin@xbytechat.com', @__hashedPassword_1='JAvlGPq9JyTdtvBO6x2llnRI1+gxwIyPqCKAn3THIKk='], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."BusinessId", u."CreatedAt", u."DeletedAt", u."Email", u."IsDeleted", u."Name", u."PasswordHash", u."RefreshToken", u."RefreshTokenExpiry", u."RoleId", u."Status", r."Id", r."CreatedAt", r."Description", r."IsActive", r."IsSystemDefined", r."Name"
+FROM "Users" AS u
+LEFT JOIN "Roles" AS r ON u."RoleId" = r."Id"
+WHERE u."Email" = @__dto_Email_0 AND u."PasswordHash" = @__hashedPassword_1 AND NOT (u."IsDeleted")
+LIMIT 1
+2025-08-06 17:52:48.038 +05:30 [INF] Executed DbCommand (98ms) [Parameters=[@__user_RoleId_0='00000000-0000-0000-0000-000000000001' (Nullable = true)], CommandType='"Text"', CommandTimeout='30']
+SELECT r."Id", r."AssignedAt", r."AssignedBy", r."IsActive", r."IsRevoked", r."PermissionId", r."RoleId"
+FROM "RolePermissions" AS r
+WHERE r."RoleId" = @__user_RoleId_0 AND NOT (r."IsRevoked")
+2025-08-06 17:52:48.113 +05:30 [INF] Executed DbCommand (71ms) [Parameters=[@__userId_0='62858aa2-3a54-4fd5-8696-c343d9af7634'], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."AssignedAt", u."AssignedBy", u."IsGranted", u."IsRevoked", u."PermissionId", u."UserId"
+FROM "UserPermissions" AS u
+WHERE u."UserId" = @__userId_0 AND NOT (u."IsRevoked")
+2025-08-06 17:52:48.243 +05:30 [INF] Executed DbCommand (125ms) [Parameters=[@__permissionIds_0={ '30000000-0000-0000-0000-000000000009', '30000000-0000-0000-0000-000000000006', '30000000-0000-0000-0000-000000000003', '30000000-0000-0000-0000-000000000001', '30000000-0000-0000-0000-000000000008', ... } (DbType = Object)], CommandType='"Text"', CommandTimeout='30']
+SELECT p."Id", p."Code", p."CreatedAt", p."Description", p."Group", p."IsActive", p."Name"
+FROM "Permissions" AS p
+WHERE p."Id" = ANY (@__permissionIds_0)
+2025-08-06 17:52:48.247 +05:30 [INF] ✅ Token generated for: admin@xbytechat.com
+2025-08-06 17:52:48.249 +05:30 [INF] ✅ Login successful for admin@xbytechat.com, Role: admin, Plan: admin
+2025-08-06 17:52:48.251 +05:30 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType0`3[[System.Boolean, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Object, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2025-08-06 17:52:48.253 +05:30 [INF] Executed action xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api) in 1147.3449ms
+2025-08-06 17:52:48.257 +05:30 [INF] Executed endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api)'
+2025-08-06 17:52:48.259 +05:30 [INF] Request finished HTTP/1.1 POST http://localhost:7113/api/auth/login - 200 null application/json; charset=utf-8 1171.7019ms
+2025-08-06 17:52:54.717 +05:30 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:7113/api/auth/login - null null
+2025-08-06 17:52:54.720 +05:30 [INF] CORS policy execution successful.
+2025-08-06 17:52:54.721 +05:30 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:7113/api/auth/login - 204 null null 4.6148ms
+2025-08-06 17:52:54.727 +05:30 [INF] Request starting HTTP/1.1 POST http://localhost:7113/api/auth/login - application/json 53
+2025-08-06 17:52:54.730 +05:30 [INF] CORS policy execution successful.
+2025-08-06 17:52:54.732 +05:30 [INF] Executing endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api)'
+2025-08-06 17:52:54.733 +05:30 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(xbytechat.api.AuthModule.DTOs.UserLoginDto) on controller xbytechat.api.AuthModule.Controllers.AuthController (xbytechat.api).
+2025-08-06 17:52:54.737 +05:30 [INF] 🔑 Login attempt for email: admin@xbytechat.com
+2025-08-06 17:52:54.898 +05:30 [INF] Executed DbCommand (159ms) [Parameters=[@__dto_Email_0='admin@xbytechat.com', @__hashedPassword_1='JAvlGPq9JyTdtvBO6x2llnRI1+gxwIyPqCKAn3THIKk='], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."BusinessId", u."CreatedAt", u."DeletedAt", u."Email", u."IsDeleted", u."Name", u."PasswordHash", u."RefreshToken", u."RefreshTokenExpiry", u."RoleId", u."Status", r."Id", r."CreatedAt", r."Description", r."IsActive", r."IsSystemDefined", r."Name"
+FROM "Users" AS u
+LEFT JOIN "Roles" AS r ON u."RoleId" = r."Id"
+WHERE u."Email" = @__dto_Email_0 AND u."PasswordHash" = @__hashedPassword_1 AND NOT (u."IsDeleted")
+LIMIT 1
+2025-08-06 17:52:55.003 +05:30 [INF] Executed DbCommand (99ms) [Parameters=[@__user_RoleId_0='00000000-0000-0000-0000-000000000001' (Nullable = true)], CommandType='"Text"', CommandTimeout='30']
+SELECT r."Id", r."AssignedAt", r."AssignedBy", r."IsActive", r."IsRevoked", r."PermissionId", r."RoleId"
+FROM "RolePermissions" AS r
+WHERE r."RoleId" = @__user_RoleId_0 AND NOT (r."IsRevoked")
+2025-08-06 17:52:55.103 +05:30 [INF] Executed DbCommand (96ms) [Parameters=[@__userId_0='62858aa2-3a54-4fd5-8696-c343d9af7634'], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."AssignedAt", u."AssignedBy", u."IsGranted", u."IsRevoked", u."PermissionId", u."UserId"
+FROM "UserPermissions" AS u
+WHERE u."UserId" = @__userId_0 AND NOT (u."IsRevoked")
+2025-08-06 17:52:55.205 +05:30 [INF] Executed DbCommand (98ms) [Parameters=[@__permissionIds_0={ '30000000-0000-0000-0000-000000000009', '30000000-0000-0000-0000-000000000006', '30000000-0000-0000-0000-000000000003', '30000000-0000-0000-0000-000000000001', '30000000-0000-0000-0000-000000000008', ... } (DbType = Object)], CommandType='"Text"', CommandTimeout='30']
+SELECT p."Id", p."Code", p."CreatedAt", p."Description", p."Group", p."IsActive", p."Name"
+FROM "Permissions" AS p
+WHERE p."Id" = ANY (@__permissionIds_0)
+2025-08-06 17:52:55.209 +05:30 [INF] ✅ Token generated for: admin@xbytechat.com
+2025-08-06 17:52:55.211 +05:30 [INF] ✅ Login successful for admin@xbytechat.com, Role: admin, Plan: admin
+2025-08-06 17:52:55.214 +05:30 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType0`3[[System.Boolean, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Object, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2025-08-06 17:52:55.220 +05:30 [INF] Executed action xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api) in 484.4067ms
+2025-08-06 17:52:55.222 +05:30 [INF] Executed endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api)'
+2025-08-06 17:52:55.224 +05:30 [INF] Request finished HTTP/1.1 POST http://localhost:7113/api/auth/login - 200 null application/json; charset=utf-8 496.5233ms
+2025-08-06 17:53:00.772 +05:30 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:7113/api/auth/login - null null
+2025-08-06 17:53:00.776 +05:30 [INF] CORS policy execution successful.
+2025-08-06 17:53:00.777 +05:30 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:7113/api/auth/login - 204 null null 5.1167ms
+2025-08-06 17:53:00.786 +05:30 [INF] Request starting HTTP/1.1 POST http://localhost:7113/api/auth/login - application/json 53
+2025-08-06 17:53:00.796 +05:30 [INF] CORS policy execution successful.
+2025-08-06 17:53:00.798 +05:30 [INF] Executing endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api)'
+2025-08-06 17:53:00.799 +05:30 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(xbytechat.api.AuthModule.DTOs.UserLoginDto) on controller xbytechat.api.AuthModule.Controllers.AuthController (xbytechat.api).
+2025-08-06 17:53:00.803 +05:30 [INF] 🔑 Login attempt for email: admin@xbytechat.com
+2025-08-06 17:53:00.940 +05:30 [INF] Executed DbCommand (136ms) [Parameters=[@__dto_Email_0='admin@xbytechat.com', @__hashedPassword_1='JAvlGPq9JyTdtvBO6x2llnRI1+gxwIyPqCKAn3THIKk='], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."BusinessId", u."CreatedAt", u."DeletedAt", u."Email", u."IsDeleted", u."Name", u."PasswordHash", u."RefreshToken", u."RefreshTokenExpiry", u."RoleId", u."Status", r."Id", r."CreatedAt", r."Description", r."IsActive", r."IsSystemDefined", r."Name"
+FROM "Users" AS u
+LEFT JOIN "Roles" AS r ON u."RoleId" = r."Id"
+WHERE u."Email" = @__dto_Email_0 AND u."PasswordHash" = @__hashedPassword_1 AND NOT (u."IsDeleted")
+LIMIT 1
+2025-08-06 17:53:01.247 +05:30 [INF] Executed DbCommand (303ms) [Parameters=[@__user_RoleId_0='00000000-0000-0000-0000-000000000001' (Nullable = true)], CommandType='"Text"', CommandTimeout='30']
+SELECT r."Id", r."AssignedAt", r."AssignedBy", r."IsActive", r."IsRevoked", r."PermissionId", r."RoleId"
+FROM "RolePermissions" AS r
+WHERE r."RoleId" = @__user_RoleId_0 AND NOT (r."IsRevoked")
+2025-08-06 17:53:01.453 +05:30 [INF] Executed DbCommand (203ms) [Parameters=[@__userId_0='62858aa2-3a54-4fd5-8696-c343d9af7634'], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."AssignedAt", u."AssignedBy", u."IsGranted", u."IsRevoked", u."PermissionId", u."UserId"
+FROM "UserPermissions" AS u
+WHERE u."UserId" = @__userId_0 AND NOT (u."IsRevoked")
+2025-08-06 17:53:01.657 +05:30 [INF] Executed DbCommand (200ms) [Parameters=[@__permissionIds_0={ '30000000-0000-0000-0000-000000000009', '30000000-0000-0000-0000-000000000006', '30000000-0000-0000-0000-000000000003', '30000000-0000-0000-0000-000000000001', '30000000-0000-0000-0000-000000000008', ... } (DbType = Object)], CommandType='"Text"', CommandTimeout='30']
+SELECT p."Id", p."Code", p."CreatedAt", p."Description", p."Group", p."IsActive", p."Name"
+FROM "Permissions" AS p
+WHERE p."Id" = ANY (@__permissionIds_0)
+2025-08-06 17:53:01.661 +05:30 [INF] ✅ Token generated for: admin@xbytechat.com
+2025-08-06 17:53:01.662 +05:30 [INF] ✅ Login successful for admin@xbytechat.com, Role: admin, Plan: admin
+2025-08-06 17:53:01.665 +05:30 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType0`3[[System.Boolean, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Object, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2025-08-06 17:53:01.667 +05:30 [INF] Executed action xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api) in 865.1529ms
+2025-08-06 17:53:01.669 +05:30 [INF] Executed endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api)'
+2025-08-06 17:53:01.671 +05:30 [INF] Request finished HTTP/1.1 POST http://localhost:7113/api/auth/login - 200 null application/json; charset=utf-8 884.394ms
+2025-08-06 17:53:07.214 +05:30 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:7113/api/auth/login - null null
+2025-08-06 17:53:07.218 +05:30 [INF] CORS policy execution successful.
+2025-08-06 17:53:07.220 +05:30 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:7113/api/auth/login - 204 null null 5.7066ms
+2025-08-06 17:53:07.221 +05:30 [INF] Request starting HTTP/1.1 POST http://localhost:7113/api/auth/login - application/json 53
+2025-08-06 17:53:07.229 +05:30 [INF] CORS policy execution successful.
+2025-08-06 17:53:07.230 +05:30 [INF] Executing endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api)'
+2025-08-06 17:53:07.232 +05:30 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(xbytechat.api.AuthModule.DTOs.UserLoginDto) on controller xbytechat.api.AuthModule.Controllers.AuthController (xbytechat.api).
+2025-08-06 17:53:07.235 +05:30 [INF] 🔑 Login attempt for email: admin@xbytechat.com
+2025-08-06 17:53:07.391 +05:30 [INF] Executed DbCommand (154ms) [Parameters=[@__dto_Email_0='admin@xbytechat.com', @__hashedPassword_1='JAvlGPq9JyTdtvBO6x2llnRI1+gxwIyPqCKAn3THIKk='], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."BusinessId", u."CreatedAt", u."DeletedAt", u."Email", u."IsDeleted", u."Name", u."PasswordHash", u."RefreshToken", u."RefreshTokenExpiry", u."RoleId", u."Status", r."Id", r."CreatedAt", r."Description", r."IsActive", r."IsSystemDefined", r."Name"
+FROM "Users" AS u
+LEFT JOIN "Roles" AS r ON u."RoleId" = r."Id"
+WHERE u."Email" = @__dto_Email_0 AND u."PasswordHash" = @__hashedPassword_1 AND NOT (u."IsDeleted")
+LIMIT 1
+2025-08-06 17:53:07.502 +05:30 [INF] Executed DbCommand (106ms) [Parameters=[@__user_RoleId_0='00000000-0000-0000-0000-000000000001' (Nullable = true)], CommandType='"Text"', CommandTimeout='30']
+SELECT r."Id", r."AssignedAt", r."AssignedBy", r."IsActive", r."IsRevoked", r."PermissionId", r."RoleId"
+FROM "RolePermissions" AS r
+WHERE r."RoleId" = @__user_RoleId_0 AND NOT (r."IsRevoked")
+2025-08-06 17:53:07.697 +05:30 [INF] Executed DbCommand (189ms) [Parameters=[@__userId_0='62858aa2-3a54-4fd5-8696-c343d9af7634'], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."AssignedAt", u."AssignedBy", u."IsGranted", u."IsRevoked", u."PermissionId", u."UserId"
+FROM "UserPermissions" AS u
+WHERE u."UserId" = @__userId_0 AND NOT (u."IsRevoked")
+2025-08-06 17:53:07.801 +05:30 [INF] Executed DbCommand (100ms) [Parameters=[@__permissionIds_0={ '30000000-0000-0000-0000-000000000009', '30000000-0000-0000-0000-000000000006', '30000000-0000-0000-0000-000000000003', '30000000-0000-0000-0000-000000000001', '30000000-0000-0000-0000-000000000008', ... } (DbType = Object)], CommandType='"Text"', CommandTimeout='30']
+SELECT p."Id", p."Code", p."CreatedAt", p."Description", p."Group", p."IsActive", p."Name"
+FROM "Permissions" AS p
+WHERE p."Id" = ANY (@__permissionIds_0)
+2025-08-06 17:53:07.805 +05:30 [INF] ✅ Token generated for: admin@xbytechat.com
+2025-08-06 17:53:07.807 +05:30 [INF] ✅ Login successful for admin@xbytechat.com, Role: admin, Plan: admin
+2025-08-06 17:53:07.810 +05:30 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType0`3[[System.Boolean, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Object, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2025-08-06 17:53:07.812 +05:30 [INF] Executed action xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api) in 578.2556ms
+2025-08-06 17:53:07.814 +05:30 [INF] Executed endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api)'
+2025-08-06 17:53:07.816 +05:30 [INF] Request finished HTTP/1.1 POST http://localhost:7113/api/auth/login - 200 null application/json; charset=utf-8 594.6404ms
+2025-08-06 17:53:13.532 +05:30 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:7113/api/auth/login - null null
+2025-08-06 17:53:13.538 +05:30 [INF] CORS policy execution successful.
+2025-08-06 17:53:13.539 +05:30 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:7113/api/auth/login - 204 null null 7.027ms
+2025-08-06 17:53:13.542 +05:30 [INF] Request starting HTTP/1.1 POST http://localhost:7113/api/auth/login - application/json 53
+2025-08-06 17:53:13.548 +05:30 [INF] CORS policy execution successful.
+2025-08-06 17:53:13.549 +05:30 [INF] Executing endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api)'
+2025-08-06 17:53:13.550 +05:30 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(xbytechat.api.AuthModule.DTOs.UserLoginDto) on controller xbytechat.api.AuthModule.Controllers.AuthController (xbytechat.api).
+2025-08-06 17:53:13.554 +05:30 [INF] 🔑 Login attempt for email: admin@xbytechat.com
+2025-08-06 17:53:13.740 +05:30 [INF] Executed DbCommand (183ms) [Parameters=[@__dto_Email_0='admin@xbytechat.com', @__hashedPassword_1='JAvlGPq9JyTdtvBO6x2llnRI1+gxwIyPqCKAn3THIKk='], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."BusinessId", u."CreatedAt", u."DeletedAt", u."Email", u."IsDeleted", u."Name", u."PasswordHash", u."RefreshToken", u."RefreshTokenExpiry", u."RoleId", u."Status", r."Id", r."CreatedAt", r."Description", r."IsActive", r."IsSystemDefined", r."Name"
+FROM "Users" AS u
+LEFT JOIN "Roles" AS r ON u."RoleId" = r."Id"
+WHERE u."Email" = @__dto_Email_0 AND u."PasswordHash" = @__hashedPassword_1 AND NOT (u."IsDeleted")
+LIMIT 1
+2025-08-06 17:53:13.843 +05:30 [INF] Executed DbCommand (98ms) [Parameters=[@__user_RoleId_0='00000000-0000-0000-0000-000000000001' (Nullable = true)], CommandType='"Text"', CommandTimeout='30']
+SELECT r."Id", r."AssignedAt", r."AssignedBy", r."IsActive", r."IsRevoked", r."PermissionId", r."RoleId"
+FROM "RolePermissions" AS r
+WHERE r."RoleId" = @__user_RoleId_0 AND NOT (r."IsRevoked")
+2025-08-06 17:53:14.047 +05:30 [INF] Executed DbCommand (200ms) [Parameters=[@__userId_0='62858aa2-3a54-4fd5-8696-c343d9af7634'], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."AssignedAt", u."AssignedBy", u."IsGranted", u."IsRevoked", u."PermissionId", u."UserId"
+FROM "UserPermissions" AS u
+WHERE u."UserId" = @__userId_0 AND NOT (u."IsRevoked")
+2025-08-06 17:53:14.162 +05:30 [INF] Executed DbCommand (111ms) [Parameters=[@__permissionIds_0={ '30000000-0000-0000-0000-000000000009', '30000000-0000-0000-0000-000000000006', '30000000-0000-0000-0000-000000000003', '30000000-0000-0000-0000-000000000001', '30000000-0000-0000-0000-000000000008', ... } (DbType = Object)], CommandType='"Text"', CommandTimeout='30']
+SELECT p."Id", p."Code", p."CreatedAt", p."Description", p."Group", p."IsActive", p."Name"
+FROM "Permissions" AS p
+WHERE p."Id" = ANY (@__permissionIds_0)
+2025-08-06 17:53:14.166 +05:30 [INF] ✅ Token generated for: admin@xbytechat.com
+2025-08-06 17:53:14.168 +05:30 [INF] ✅ Login successful for admin@xbytechat.com, Role: admin, Plan: admin
+2025-08-06 17:53:14.171 +05:30 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType0`3[[System.Boolean, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Object, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2025-08-06 17:53:14.173 +05:30 [INF] Executed action xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api) in 619.345ms
+2025-08-06 17:53:14.175 +05:30 [INF] Executed endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api)'
+2025-08-06 17:53:14.177 +05:30 [INF] Request finished HTTP/1.1 POST http://localhost:7113/api/auth/login - 200 null application/json; charset=utf-8 634.3132ms
+2025-08-06 17:53:19.508 +05:30 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:7113/api/auth/login - null null
+2025-08-06 17:53:19.514 +05:30 [INF] CORS policy execution successful.
+2025-08-06 17:53:19.515 +05:30 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:7113/api/auth/login - 204 null null 6.7739ms
+2025-08-06 17:53:19.522 +05:30 [INF] Request starting HTTP/1.1 POST http://localhost:7113/api/auth/login - application/json 53
+2025-08-06 17:53:19.526 +05:30 [INF] CORS policy execution successful.
+2025-08-06 17:53:19.527 +05:30 [INF] Executing endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api)'
+2025-08-06 17:53:19.528 +05:30 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(xbytechat.api.AuthModule.DTOs.UserLoginDto) on controller xbytechat.api.AuthModule.Controllers.AuthController (xbytechat.api).
+2025-08-06 17:53:19.533 +05:30 [INF] 🔑 Login attempt for email: admin@xbytechat.com
+2025-08-06 17:53:19.680 +05:30 [INF] Executed DbCommand (144ms) [Parameters=[@__dto_Email_0='admin@xbytechat.com', @__hashedPassword_1='JAvlGPq9JyTdtvBO6x2llnRI1+gxwIyPqCKAn3THIKk='], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."BusinessId", u."CreatedAt", u."DeletedAt", u."Email", u."IsDeleted", u."Name", u."PasswordHash", u."RefreshToken", u."RefreshTokenExpiry", u."RoleId", u."Status", r."Id", r."CreatedAt", r."Description", r."IsActive", r."IsSystemDefined", r."Name"
+FROM "Users" AS u
+LEFT JOIN "Roles" AS r ON u."RoleId" = r."Id"
+WHERE u."Email" = @__dto_Email_0 AND u."PasswordHash" = @__hashedPassword_1 AND NOT (u."IsDeleted")
+LIMIT 1
+2025-08-06 17:53:19.794 +05:30 [INF] Executed DbCommand (109ms) [Parameters=[@__user_RoleId_0='00000000-0000-0000-0000-000000000001' (Nullable = true)], CommandType='"Text"', CommandTimeout='30']
+SELECT r."Id", r."AssignedAt", r."AssignedBy", r."IsActive", r."IsRevoked", r."PermissionId", r."RoleId"
+FROM "RolePermissions" AS r
+WHERE r."RoleId" = @__user_RoleId_0 AND NOT (r."IsRevoked")
+2025-08-06 17:53:19.884 +05:30 [INF] Executed DbCommand (85ms) [Parameters=[@__userId_0='62858aa2-3a54-4fd5-8696-c343d9af7634'], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."AssignedAt", u."AssignedBy", u."IsGranted", u."IsRevoked", u."PermissionId", u."UserId"
+FROM "UserPermissions" AS u
+WHERE u."UserId" = @__userId_0 AND NOT (u."IsRevoked")
+2025-08-06 17:53:19.988 +05:30 [INF] Executed DbCommand (100ms) [Parameters=[@__permissionIds_0={ '30000000-0000-0000-0000-000000000009', '30000000-0000-0000-0000-000000000006', '30000000-0000-0000-0000-000000000003', '30000000-0000-0000-0000-000000000001', '30000000-0000-0000-0000-000000000008', ... } (DbType = Object)], CommandType='"Text"', CommandTimeout='30']
+SELECT p."Id", p."Code", p."CreatedAt", p."Description", p."Group", p."IsActive", p."Name"
+FROM "Permissions" AS p
+WHERE p."Id" = ANY (@__permissionIds_0)
+2025-08-06 17:53:19.991 +05:30 [INF] ✅ Token generated for: admin@xbytechat.com
+2025-08-06 17:53:19.993 +05:30 [INF] ✅ Login successful for admin@xbytechat.com, Role: admin, Plan: admin
+2025-08-06 17:53:19.995 +05:30 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType0`3[[System.Boolean, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Object, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2025-08-06 17:53:19.998 +05:30 [INF] Executed action xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api) in 465.7067ms
+2025-08-06 17:53:19.999 +05:30 [INF] Executed endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api)'
+2025-08-06 17:53:20.001 +05:30 [INF] Request finished HTTP/1.1 POST http://localhost:7113/api/auth/login - 200 null application/json; charset=utf-8 479.0227ms
+2025-08-06 17:53:27.038 +05:30 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:7113/api/auth/login - null null
+2025-08-06 17:53:27.042 +05:30 [INF] CORS policy execution successful.
+2025-08-06 17:53:27.043 +05:30 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:7113/api/auth/login - 204 null null 4.9665ms
+2025-08-06 17:53:27.051 +05:30 [INF] Request starting HTTP/1.1 POST http://localhost:7113/api/auth/login - application/json 47
+2025-08-06 17:53:27.054 +05:30 [INF] CORS policy execution successful.
+2025-08-06 17:53:27.056 +05:30 [INF] Executing endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api)'
+2025-08-06 17:53:27.061 +05:30 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(xbytechat.api.AuthModule.DTOs.UserLoginDto) on controller xbytechat.api.AuthModule.Controllers.AuthController (xbytechat.api).
+2025-08-06 17:53:27.067 +05:30 [INF] 🔑 Login attempt for email: ratan@tcs.com
+2025-08-06 17:53:27.257 +05:30 [INF] Executed DbCommand (188ms) [Parameters=[@__dto_Email_0='ratan@tcs.com', @__hashedPassword_1='JAvlGPq9JyTdtvBO6x2llnRI1+gxwIyPqCKAn3THIKk='], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."BusinessId", u."CreatedAt", u."DeletedAt", u."Email", u."IsDeleted", u."Name", u."PasswordHash", u."RefreshToken", u."RefreshTokenExpiry", u."RoleId", u."Status", r."Id", r."CreatedAt", r."Description", r."IsActive", r."IsSystemDefined", r."Name"
+FROM "Users" AS u
+LEFT JOIN "Roles" AS r ON u."RoleId" = r."Id"
+WHERE u."Email" = @__dto_Email_0 AND u."PasswordHash" = @__hashedPassword_1 AND NOT (u."IsDeleted")
+LIMIT 1
+2025-08-06 17:53:27.261 +05:30 [WRN] ❌ Login failed: Invalid email or password for ratan@tcs.com
+2025-08-06 17:53:27.262 +05:30 [INF] Executing UnauthorizedObjectResult, writing value of type 'xbytechat.api.Helpers.ResponseResult'.
+2025-08-06 17:53:27.264 +05:30 [INF] Executed action xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api) in 198.6641ms
+2025-08-06 17:53:27.266 +05:30 [INF] Executed endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api)'
+2025-08-06 17:53:27.268 +05:30 [INF] Request finished HTTP/1.1 POST http://localhost:7113/api/auth/login - 401 null application/json; charset=utf-8 217.3479ms
+2025-08-06 17:53:27.272 +05:30 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:7113/api/auth/refresh - null null
+2025-08-06 17:53:27.276 +05:30 [INF] CORS policy execution successful.
+2025-08-06 17:53:27.278 +05:30 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:7113/api/auth/refresh - 204 null null 6.0175ms
+2025-08-06 17:53:27.281 +05:30 [INF] Request starting HTTP/1.1 POST http://localhost:7113/api/auth/refresh - application/json 2
+2025-08-06 17:53:27.293 +05:30 [INF] CORS policy execution successful.
+2025-08-06 17:53:27.294 +05:30 [INF] Request finished HTTP/1.1 POST http://localhost:7113/api/auth/refresh - 404 0 null 13.7954ms
+2025-08-06 17:53:27.299 +05:30 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: POST http://localhost:7113/api/auth/refresh, Response status code: 404
+2025-08-06 17:53:29.081 +05:30 [INF] Request starting HTTP/1.1 POST http://localhost:7113/api/auth/login - application/json 47
+2025-08-06 17:53:29.085 +05:30 [INF] CORS policy execution successful.
+2025-08-06 17:53:29.086 +05:30 [INF] Executing endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api)'
+2025-08-06 17:53:29.088 +05:30 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(xbytechat.api.AuthModule.DTOs.UserLoginDto) on controller xbytechat.api.AuthModule.Controllers.AuthController (xbytechat.api).
+2025-08-06 17:53:29.095 +05:30 [INF] 🔑 Login attempt for email: ratan@tcs.com
+2025-08-06 17:53:29.168 +05:30 [INF] Executed DbCommand (70ms) [Parameters=[@__dto_Email_0='ratan@tcs.com', @__hashedPassword_1='JAvlGPq9JyTdtvBO6x2llnRI1+gxwIyPqCKAn3THIKk='], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."BusinessId", u."CreatedAt", u."DeletedAt", u."Email", u."IsDeleted", u."Name", u."PasswordHash", u."RefreshToken", u."RefreshTokenExpiry", u."RoleId", u."Status", r."Id", r."CreatedAt", r."Description", r."IsActive", r."IsSystemDefined", r."Name"
+FROM "Users" AS u
+LEFT JOIN "Roles" AS r ON u."RoleId" = r."Id"
+WHERE u."Email" = @__dto_Email_0 AND u."PasswordHash" = @__hashedPassword_1 AND NOT (u."IsDeleted")
+LIMIT 1
+2025-08-06 17:53:29.172 +05:30 [WRN] ❌ Login failed: Invalid email or password for ratan@tcs.com
+2025-08-06 17:53:29.174 +05:30 [INF] Executing UnauthorizedObjectResult, writing value of type 'xbytechat.api.Helpers.ResponseResult'.
+2025-08-06 17:53:29.176 +05:30 [INF] Executed action xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api) in 83.1987ms
+2025-08-06 17:53:29.178 +05:30 [INF] Executed endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api)'
+2025-08-06 17:53:29.180 +05:30 [INF] Request finished HTTP/1.1 POST http://localhost:7113/api/auth/login - 401 null application/json; charset=utf-8 98.9852ms
+2025-08-06 17:53:29.185 +05:30 [INF] Request starting HTTP/1.1 POST http://localhost:7113/api/auth/refresh - application/json 2
+2025-08-06 17:53:29.189 +05:30 [INF] CORS policy execution successful.
+2025-08-06 17:53:29.191 +05:30 [INF] Request finished HTTP/1.1 POST http://localhost:7113/api/auth/refresh - 404 0 null 5.7504ms
+2025-08-06 17:53:29.196 +05:30 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: POST http://localhost:7113/api/auth/refresh, Response status code: 404
+2025-08-06 17:53:53.073 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/api/auth/session - null null
+2025-08-06 17:53:53.081 +05:30 [INF] Executing endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.GetSession (xbytechat.api)'
+2025-08-06 17:53:53.082 +05:30 [INF] Route matched with {action = "GetSession", controller = "Auth"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult GetSession() on controller xbytechat.api.AuthModule.Controllers.AuthController (xbytechat.api).
+2025-08-06 17:53:53.085 +05:30 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType3`4[[System.Boolean, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2025-08-06 17:53:53.088 +05:30 [INF] Executed action xbytechat.api.AuthModule.Controllers.AuthController.GetSession (xbytechat.api) in 3.6231ms
+2025-08-06 17:53:53.090 +05:30 [INF] Executed endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.GetSession (xbytechat.api)'
+2025-08-06 17:53:53.091 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/api/auth/session - 200 null application/json; charset=utf-8 17.9536ms
+2025-08-06 17:53:53.221 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/api/feature-access/me - null null
+2025-08-06 17:53:53.225 +05:30 [INF] Executing endpoint 'xbytechat.api.Features.FeatureAccessModule.Controllers.FeatureAccessController.GetMyFeatures (xbytechat.api)'
+2025-08-06 17:53:53.227 +05:30 [INF] Route matched with {action = "GetMyFeatures", controller = "FeatureAccess"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[xbytechat.api.Features.FeatureAccess.DTOs.FeatureStatusDto]]] GetMyFeatures() on controller xbytechat.api.Features.FeatureAccessModule.Controllers.FeatureAccessController (xbytechat.api).
+2025-08-06 17:53:53.230 +05:30 [INF] Executing ObjectResult, writing value of type 'Microsoft.AspNetCore.Mvc.ProblemDetails'.
+2025-08-06 17:53:53.232 +05:30 [INF] Executed action xbytechat.api.Features.FeatureAccessModule.Controllers.FeatureAccessController.GetMyFeatures (xbytechat.api) in 2.3143ms
+2025-08-06 17:53:53.234 +05:30 [INF] Executed endpoint 'xbytechat.api.Features.FeatureAccessModule.Controllers.FeatureAccessController.GetMyFeatures (xbytechat.api)'
+2025-08-06 17:53:53.235 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/api/feature-access/me - 401 null application/problem+json; charset=utf-8 14.5841ms
+2025-08-06 17:54:00.195 +05:30 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:7113/api/auth/login - null null
+2025-08-06 17:54:00.209 +05:30 [INF] CORS policy execution successful.
+2025-08-06 17:54:00.213 +05:30 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:7113/api/auth/login - 204 null null 17.3724ms
+2025-08-06 17:54:00.221 +05:30 [INF] Request starting HTTP/1.1 POST http://localhost:7113/api/auth/login - application/json 47
+2025-08-06 17:54:00.226 +05:30 [INF] CORS policy execution successful.
+2025-08-06 17:54:00.228 +05:30 [INF] Executing endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api)'
+2025-08-06 17:54:00.229 +05:30 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(xbytechat.api.AuthModule.DTOs.UserLoginDto) on controller xbytechat.api.AuthModule.Controllers.AuthController (xbytechat.api).
+2025-08-06 17:54:00.234 +05:30 [INF] 🔑 Login attempt for email: ratan@tcs.com
+2025-08-06 17:54:00.332 +05:30 [INF] Executed DbCommand (96ms) [Parameters=[@__dto_Email_0='ratan@tcs.com', @__hashedPassword_1='JAvlGPq9JyTdtvBO6x2llnRI1+gxwIyPqCKAn3THIKk='], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."BusinessId", u."CreatedAt", u."DeletedAt", u."Email", u."IsDeleted", u."Name", u."PasswordHash", u."RefreshToken", u."RefreshTokenExpiry", u."RoleId", u."Status", r."Id", r."CreatedAt", r."Description", r."IsActive", r."IsSystemDefined", r."Name"
+FROM "Users" AS u
+LEFT JOIN "Roles" AS r ON u."RoleId" = r."Id"
+WHERE u."Email" = @__dto_Email_0 AND u."PasswordHash" = @__hashedPassword_1 AND NOT (u."IsDeleted")
+LIMIT 1
+2025-08-06 17:54:00.336 +05:30 [WRN] ❌ Login failed: Invalid email or password for ratan@tcs.com
+2025-08-06 17:54:00.338 +05:30 [INF] Executing UnauthorizedObjectResult, writing value of type 'xbytechat.api.Helpers.ResponseResult'.
+2025-08-06 17:54:00.341 +05:30 [INF] Executed action xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api) in 107.7582ms
+2025-08-06 17:54:00.343 +05:30 [INF] Executed endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api)'
+2025-08-06 17:54:00.344 +05:30 [INF] Request finished HTTP/1.1 POST http://localhost:7113/api/auth/login - 401 null application/json; charset=utf-8 122.9559ms
+2025-08-06 17:54:00.349 +05:30 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:7113/api/auth/refresh - null null
+2025-08-06 17:54:00.355 +05:30 [INF] CORS policy execution successful.
+2025-08-06 17:54:00.356 +05:30 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:7113/api/auth/refresh - 204 null null 7.3495ms
+2025-08-06 17:54:00.358 +05:30 [INF] Request starting HTTP/1.1 POST http://localhost:7113/api/auth/refresh - application/json 2
+2025-08-06 17:54:00.364 +05:30 [INF] CORS policy execution successful.
+2025-08-06 17:54:00.366 +05:30 [INF] Request finished HTTP/1.1 POST http://localhost:7113/api/auth/refresh - 404 0 null 8.2432ms
+2025-08-06 17:54:00.371 +05:30 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: POST http://localhost:7113/api/auth/refresh, Response status code: 404
+2025-08-06 17:54:00.733 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/api/auth/session - null null
+2025-08-06 17:54:00.738 +05:30 [INF] Executing endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.GetSession (xbytechat.api)'
+2025-08-06 17:54:00.740 +05:30 [INF] Route matched with {action = "GetSession", controller = "Auth"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult GetSession() on controller xbytechat.api.AuthModule.Controllers.AuthController (xbytechat.api).
+2025-08-06 17:54:00.744 +05:30 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType3`4[[System.Boolean, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2025-08-06 17:54:00.748 +05:30 [INF] Executed action xbytechat.api.AuthModule.Controllers.AuthController.GetSession (xbytechat.api) in 4.5613ms
+2025-08-06 17:54:00.751 +05:30 [INF] Executed endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.GetSession (xbytechat.api)'
+2025-08-06 17:54:00.753 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/api/auth/session - 200 null application/json; charset=utf-8 19.7891ms
+2025-08-06 17:54:00.798 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/api/feature-access/me - null null
+2025-08-06 17:54:00.802 +05:30 [INF] Executing endpoint 'xbytechat.api.Features.FeatureAccessModule.Controllers.FeatureAccessController.GetMyFeatures (xbytechat.api)'
+2025-08-06 17:54:00.804 +05:30 [INF] Route matched with {action = "GetMyFeatures", controller = "FeatureAccess"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[xbytechat.api.Features.FeatureAccess.DTOs.FeatureStatusDto]]] GetMyFeatures() on controller xbytechat.api.Features.FeatureAccessModule.Controllers.FeatureAccessController (xbytechat.api).
+2025-08-06 17:54:00.808 +05:30 [INF] Executing ObjectResult, writing value of type 'Microsoft.AspNetCore.Mvc.ProblemDetails'.
+2025-08-06 17:54:00.811 +05:30 [INF] Executed action xbytechat.api.Features.FeatureAccessModule.Controllers.FeatureAccessController.GetMyFeatures (xbytechat.api) in 3.3363ms
+2025-08-06 17:54:00.813 +05:30 [INF] Executed endpoint 'xbytechat.api.Features.FeatureAccessModule.Controllers.FeatureAccessController.GetMyFeatures (xbytechat.api)'
+2025-08-06 17:54:00.817 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/api/feature-access/me - 401 null application/problem+json; charset=utf-8 19.1994ms
+2025-08-06 17:54:05.501 +05:30 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:7113/api/auth/login - null null
+2025-08-06 17:54:05.507 +05:30 [INF] CORS policy execution successful.
+2025-08-06 17:54:05.509 +05:30 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:7113/api/auth/login - 204 null null 7.7496ms
+2025-08-06 17:54:05.512 +05:30 [INF] Request starting HTTP/1.1 POST http://localhost:7113/api/auth/login - application/json 53
+2025-08-06 17:54:05.521 +05:30 [INF] CORS policy execution successful.
+2025-08-06 17:54:05.522 +05:30 [INF] Executing endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api)'
+2025-08-06 17:54:05.523 +05:30 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(xbytechat.api.AuthModule.DTOs.UserLoginDto) on controller xbytechat.api.AuthModule.Controllers.AuthController (xbytechat.api).
+2025-08-06 17:54:05.527 +05:30 [INF] 🔑 Login attempt for email: admin@xbytechat.com
+2025-08-06 17:54:05.760 +05:30 [INF] Executed DbCommand (231ms) [Parameters=[@__dto_Email_0='admin@xbytechat.com', @__hashedPassword_1='JAvlGPq9JyTdtvBO6x2llnRI1+gxwIyPqCKAn3THIKk='], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."BusinessId", u."CreatedAt", u."DeletedAt", u."Email", u."IsDeleted", u."Name", u."PasswordHash", u."RefreshToken", u."RefreshTokenExpiry", u."RoleId", u."Status", r."Id", r."CreatedAt", r."Description", r."IsActive", r."IsSystemDefined", r."Name"
+FROM "Users" AS u
+LEFT JOIN "Roles" AS r ON u."RoleId" = r."Id"
+WHERE u."Email" = @__dto_Email_0 AND u."PasswordHash" = @__hashedPassword_1 AND NOT (u."IsDeleted")
+LIMIT 1
+2025-08-06 17:54:05.871 +05:30 [INF] Executed DbCommand (107ms) [Parameters=[@__user_RoleId_0='00000000-0000-0000-0000-000000000001' (Nullable = true)], CommandType='"Text"', CommandTimeout='30']
+SELECT r."Id", r."AssignedAt", r."AssignedBy", r."IsActive", r."IsRevoked", r."PermissionId", r."RoleId"
+FROM "RolePermissions" AS r
+WHERE r."RoleId" = @__user_RoleId_0 AND NOT (r."IsRevoked")
+2025-08-06 17:54:05.965 +05:30 [INF] Executed DbCommand (89ms) [Parameters=[@__userId_0='62858aa2-3a54-4fd5-8696-c343d9af7634'], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."AssignedAt", u."AssignedBy", u."IsGranted", u."IsRevoked", u."PermissionId", u."UserId"
+FROM "UserPermissions" AS u
+WHERE u."UserId" = @__userId_0 AND NOT (u."IsRevoked")
+2025-08-06 17:54:06.067 +05:30 [INF] Executed DbCommand (97ms) [Parameters=[@__permissionIds_0={ '30000000-0000-0000-0000-000000000009', '30000000-0000-0000-0000-000000000006', '30000000-0000-0000-0000-000000000003', '30000000-0000-0000-0000-000000000001', '30000000-0000-0000-0000-000000000008', ... } (DbType = Object)], CommandType='"Text"', CommandTimeout='30']
+SELECT p."Id", p."Code", p."CreatedAt", p."Description", p."Group", p."IsActive", p."Name"
+FROM "Permissions" AS p
+WHERE p."Id" = ANY (@__permissionIds_0)
+2025-08-06 17:54:06.071 +05:30 [INF] ✅ Token generated for: admin@xbytechat.com
+2025-08-06 17:54:06.073 +05:30 [INF] ✅ Login successful for admin@xbytechat.com, Role: admin, Plan: admin
+2025-08-06 17:54:06.075 +05:30 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType0`3[[System.Boolean, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Object, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2025-08-06 17:54:06.077 +05:30 [INF] Executed action xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api) in 551.1178ms
+2025-08-06 17:54:06.079 +05:30 [INF] Executed endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api)'
+2025-08-06 17:54:06.081 +05:30 [INF] Request finished HTTP/1.1 POST http://localhost:7113/api/auth/login - 200 null application/json; charset=utf-8 569.1463ms
+2025-08-06 17:54:06.095 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/api/auth/session - null null
+2025-08-06 17:54:06.099 +05:30 [INF] Executing endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.GetSession (xbytechat.api)'
+2025-08-06 17:54:06.101 +05:30 [INF] Route matched with {action = "GetSession", controller = "Auth"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult GetSession() on controller xbytechat.api.AuthModule.Controllers.AuthController (xbytechat.api).
+2025-08-06 17:54:06.104 +05:30 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType3`4[[System.Boolean, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2025-08-06 17:54:06.106 +05:30 [INF] Executed action xbytechat.api.AuthModule.Controllers.AuthController.GetSession (xbytechat.api) in 2.8979ms
+2025-08-06 17:54:06.109 +05:30 [INF] Executed endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.GetSession (xbytechat.api)'
+2025-08-06 17:54:06.110 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/api/auth/session - 200 null application/json; charset=utf-8 15.6073ms
+2025-08-06 17:54:06.124 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/api/feature-access/me - null null
+2025-08-06 17:54:06.129 +05:30 [INF] Executing endpoint 'xbytechat.api.Features.FeatureAccessModule.Controllers.FeatureAccessController.GetMyFeatures (xbytechat.api)'
+2025-08-06 17:54:06.130 +05:30 [INF] Route matched with {action = "GetMyFeatures", controller = "FeatureAccess"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[xbytechat.api.Features.FeatureAccess.DTOs.FeatureStatusDto]]] GetMyFeatures() on controller xbytechat.api.Features.FeatureAccessModule.Controllers.FeatureAccessController (xbytechat.api).
+2025-08-06 17:54:06.133 +05:30 [INF] Executing ObjectResult, writing value of type 'Microsoft.AspNetCore.Mvc.ProblemDetails'.
+2025-08-06 17:54:06.135 +05:30 [INF] Executed action xbytechat.api.Features.FeatureAccessModule.Controllers.FeatureAccessController.GetMyFeatures (xbytechat.api) in 2.1782ms
+2025-08-06 17:54:06.137 +05:30 [INF] Executed endpoint 'xbytechat.api.Features.FeatureAccessModule.Controllers.FeatureAccessController.GetMyFeatures (xbytechat.api)'
+2025-08-06 17:54:06.138 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/api/feature-access/me - 401 null application/problem+json; charset=utf-8 14.3308ms
+2025-08-06 19:30:07.719 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/api/auth/session - null null
+2025-08-06 19:30:07.737 +05:30 [INF] Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '06-08-2025 01:24:06 PM', Current time (UTC): '06-08-2025 02:00:07 PM'.
+   at Microsoft.IdentityModel.Tokens.ValidatorUtilities.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+2025-08-06 19:30:07.823 +05:30 [INF] Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '06-08-2025 01:24:06 PM', Current time (UTC): '06-08-2025 02:00:07 PM'.
+2025-08-06 19:30:07.826 +05:30 [INF] Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2025-08-06 19:30:07.904 +05:30 [ERR] ❌ An unhandled exception occurred
+System.InvalidOperationException: StatusCode cannot be set because the response has already started.
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpProtocol.ThrowResponseAlreadyStartedException(String value)
+   at Microsoft.AspNetCore.Http.DefaultHttpResponse.set_StatusCode(Int32 value)
+   at Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler.HandleChallengeAsync(AuthenticationProperties properties)
+   at Microsoft.AspNetCore.Authentication.AuthenticationHandler`1.ChallengeAsync(AuthenticationProperties properties)
+   at Microsoft.AspNetCore.Authentication.AuthenticationService.ChallengeAsync(HttpContext context, String scheme, AuthenticationProperties properties)
+   at Microsoft.AspNetCore.Authorization.Policy.AuthorizationMiddlewareResultHandler.<>c__DisplayClass0_0.<<HandleAsync>g__Handle|0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at GlobalExceptionMiddleware.Invoke(HttpContext context) in D:\xbytechat\xbytechat-api\xbytechat-api\Middlewares\GlobalExceptionMiddleware.cs:line 32
+2025-08-06 19:30:07.925 +05:30 [ERR] Response has already started, unable to write error response for path: /api/auth/session
+2025-08-06 19:30:07.927 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/api/auth/session - 401 null application/json 207.6054ms
