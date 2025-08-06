@@ -71,9 +71,17 @@ Log.Logger = new LoggerConfiguration()
 builder.Host.UseSerilog();
 #endregion
 
-#region 🔷 Database Setup (PostgreSQL)
+//#region 🔷 Database Setup (PostgreSQL)
+//var connStr = builder.Services.AddDbContext<AppDbContext>(options =>
+//    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")).EnableSensitiveDataLogging());
+//Console.WriteLine($"[DEBUG] Using Connection String: {connStr}");
+//#endregion
+#region Database Setup (PostgreSQL)
+var connStr = builder.Configuration.GetConnectionString("DefaultConnection");  // Get actual string
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")).EnableSensitiveDataLogging());
+    options.UseNpgsql(connStr).EnableSensitiveDataLogging()
+);
+Console.WriteLine($"[DEBUG] Using Connection String: {connStr}"); // This prints the REAL connection string
 #endregion
 
 #region 🔷 Generic Repository Pattern
@@ -251,16 +259,30 @@ builder.Services.AddAuthorization();
 #endregion
 #endregion
 #region 🌐 CORS Setup (Secure Cookie-Compatible)
+
+var allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>();
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.WithOrigins("http://localhost:3000") // ✅ React dev URL
-              .AllowAnyHeader()
-              .AllowAnyMethod()
-              .AllowCredentials(); // ✅ Needed for httpOnly cookie
+        policy
+            .WithOrigins(allowedOrigins)
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
     });
 });
+//builder.Services.AddCors(options =>
+//{
+//    options.AddPolicy("AllowFrontend", policy =>
+//    {
+//        policy.WithOrigins("busiorbit-ui-c0dbc0crazd6bae4.centralindia-01.azurewebsites.net") // ✅ React dev URL
+//              .AllowAnyHeader()
+//              .AllowAnyMethod()
+//              .AllowCredentials(); // ✅ Needed for httpOnly cookie
+//    });
+//});
 #endregion
 
 #region ✅ MVC + Swagger + Middleware

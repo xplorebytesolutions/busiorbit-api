@@ -75,3 +75,40 @@ WHERE f."CreatedAt" < @__cutoff_0
 2025-08-05 12:25:51.559 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/_vs/browserLink - 200 null text/javascript; charset=UTF-8 64.4228ms
 2025-08-05 12:25:51.789 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/swagger/v1/swagger.json - null null
 2025-08-05 12:25:52.099 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 309.2746ms
+2025-08-05 15:46:58.825 +05:30 [INF] User profile is available. Using 'C:\Users\sunde\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-08-05 15:46:58.888 +05:30 [INF] 🚀 Webhook Queue Worker started.
+2025-08-05 15:46:58.906 +05:30 [INF] 🧹 FailedWebhookLogCleanupService started.
+2025-08-05 15:46:59.778 +05:30 [WRN] Sensitive data logging is enabled. Log entries and exception messages may include sensitive application data; this mode should only be enabled during development.
+2025-08-05 15:47:00.340 +05:30 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2025-08-05 15:47:00.674 +05:30 [INF] Now listening on: http://localhost:7113
+2025-08-05 15:47:00.675 +05:30 [INF] Now listening on: http://localhost:5295
+2025-08-05 15:47:00.677 +05:30 [INF] Application started. Press Ctrl+C to shut down.
+2025-08-05 15:47:00.678 +05:30 [INF] Hosting environment: Development
+2025-08-05 15:47:00.679 +05:30 [INF] Content root path: D:\xbytechat\xbytechat-api\xbytechat-api
+2025-08-05 15:47:00.698 +05:30 [INF] Executed DbCommand (24ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT w."Id", w."AutoCleanupEnabled", w."LastCleanupAt"
+FROM "WebhookSettings" AS w
+LIMIT 1
+2025-08-05 15:47:00.722 +05:30 [INF] Executed DbCommand (41ms) [Parameters=[@__cutoff_0='2025-07-29T10:16:59.0406509Z' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT f."Id", f."CreatedAt", f."ErrorMessage", f."FailureType", f."RawJson", f."SourceModule"
+FROM "FailedWebhookLogs" AS f
+WHERE f."CreatedAt" < @__cutoff_0
+2025-08-05 15:47:07.169 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/swagger/index.html - null null
+2025-08-05 15:47:07.505 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/swagger/index.html - 200 null text/html;charset=utf-8 349.5194ms
+2025-08-05 15:47:07.666 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/_vs/browserLink - null null
+2025-08-05 15:47:07.666 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/_framework/aspnetcore-browser-refresh.js - null null
+2025-08-05 15:47:07.712 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/_framework/aspnetcore-browser-refresh.js - 200 13762 application/javascript; charset=utf-8 45.8ms
+2025-08-05 15:47:07.758 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/_vs/browserLink - 200 null text/javascript; charset=UTF-8 91.9642ms
+2025-08-05 15:47:08.097 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/swagger/v1/swagger.json - null null
+2025-08-05 15:47:08.415 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 317.9787ms
+2025-08-05 15:47:24.618 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/api/auth/session - null null
+2025-08-05 15:47:24.629 +05:30 [WRN] Failed to determine the https port for redirect.
+2025-08-05 15:47:24.840 +05:30 [INF] Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2025-08-05 15:47:24.844 +05:30 [INF] AuthenticationScheme: Bearer was challenged.
+2025-08-05 15:47:24.846 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/api/auth/session - 401 0 null 227.3739ms
+2025-08-05 20:02:02.834 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/api/auth/session - null null
+2025-08-05 20:02:02.857 +05:30 [INF] Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2025-08-05 20:02:02.859 +05:30 [INF] AuthenticationScheme: Bearer was challenged.
+2025-08-05 20:02:02.862 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/api/auth/session - 401 0 null 28.5283ms
