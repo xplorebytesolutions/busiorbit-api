@@ -5299,3 +5299,674 @@ System.InvalidOperationException: StatusCode cannot be set because the response 
    at GlobalExceptionMiddleware.Invoke(HttpContext context) in D:\xbytechat\xbytechat-api\xbytechat-api\Middlewares\GlobalExceptionMiddleware.cs:line 32
 2025-08-06 19:30:07.925 +05:30 [ERR] Response has already started, unable to write error response for path: /api/auth/session
 2025-08-06 19:30:07.927 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/api/auth/session - 401 null application/json 207.6054ms
+2025-08-06 23:38:02.583 +05:30 [INF] User profile is available. Using 'C:\Users\sunde\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-08-06 23:38:02.626 +05:30 [INF] 🚀 Webhook Queue Worker started.
+2025-08-06 23:38:02.644 +05:30 [INF] 🧹 FailedWebhookLogCleanupService started.
+2025-08-06 23:38:08.399 +05:30 [WRN] Sensitive data logging is enabled. Log entries and exception messages may include sensitive application data; this mode should only be enabled during development.
+2025-08-06 23:38:09.014 +05:30 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2025-08-06 23:38:09.231 +05:30 [INF] Now listening on: http://localhost:7113
+2025-08-06 23:38:09.232 +05:30 [INF] Now listening on: http://localhost:5295
+2025-08-06 23:38:09.235 +05:30 [INF] Application started. Press Ctrl+C to shut down.
+2025-08-06 23:38:09.237 +05:30 [INF] Hosting environment: Development
+2025-08-06 23:38:09.238 +05:30 [INF] Content root path: D:\xbytechat\xbytechat-api\xbytechat-api
+2025-08-06 23:38:09.476 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/swagger/index.html - null null
+2025-08-06 23:38:09.723 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/swagger/index.html - 200 null text/html;charset=utf-8 261.7621ms
+2025-08-06 23:38:09.745 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/_framework/aspnetcore-browser-refresh.js - null null
+2025-08-06 23:38:09.754 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/_framework/aspnetcore-browser-refresh.js - 200 13762 application/javascript; charset=utf-8 9.0719ms
+2025-08-06 23:38:09.826 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/_vs/browserLink - null null
+2025-08-06 23:38:09.862 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/_vs/browserLink - 200 null text/javascript; charset=UTF-8 35.7681ms
+2025-08-06 23:38:10.015 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/swagger/v1/swagger.json - null null
+2025-08-06 23:38:10.254 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 238.1669ms
+2025-08-06 23:38:11.498 +05:30 [INF] Executed DbCommand (175ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT w."Id", w."AutoCleanupEnabled", w."LastCleanupAt"
+FROM "WebhookSettings" AS w
+LIMIT 1
+2025-08-06 23:38:11.582 +05:30 [INF] Executed DbCommand (258ms) [Parameters=[@__cutoff_0='2025-07-30T18:08:07.7710546Z' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT f."Id", f."CreatedAt", f."ErrorMessage", f."FailureType", f."RawJson", f."SourceModule"
+FROM "FailedWebhookLogs" AS f
+WHERE f."CreatedAt" < @__cutoff_0
+2025-08-06 23:38:57.741 +05:30 [INF] Request starting HTTP/1.1 POST http://localhost:7113/api/Auth/login - application/json 62
+2025-08-06 23:38:57.768 +05:30 [WRN] Failed to determine the https port for redirect.
+2025-08-06 23:38:57.772 +05:30 [INF] CORS policy execution failed.
+2025-08-06 23:38:57.773 +05:30 [INF] Request origin http://localhost:7113 does not have permission to access the resource.
+2025-08-06 23:38:58.074 +05:30 [INF] Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '06-08-2025 01:24:06 PM', Current time (UTC): '06-08-2025 06:08:58 PM'.
+   at Microsoft.IdentityModel.Tokens.ValidatorUtilities.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+2025-08-06 23:38:58.111 +05:30 [INF] Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '06-08-2025 01:24:06 PM', Current time (UTC): '06-08-2025 06:08:58 PM'.
+2025-08-06 23:38:58.115 +05:30 [INF] Executing endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api)'
+2025-08-06 23:38:58.131 +05:30 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(xbytechat.api.AuthModule.DTOs.UserLoginDto) on controller xbytechat.api.AuthModule.Controllers.AuthController (xbytechat.api).
+2025-08-06 23:38:58.194 +05:30 [INF] 🔑 Login attempt for email: admin@xbytechat.com
+2025-08-06 23:38:58.563 +05:30 [INF] Executed DbCommand (307ms) [Parameters=[@__dto_Email_0='admin@xbytechat.com', @__hashedPassword_1='JAvlGPq9JyTdtvBO6x2llnRI1+gxwIyPqCKAn3THIKk='], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."BusinessId", u."CreatedAt", u."DeletedAt", u."Email", u."IsDeleted", u."Name", u."PasswordHash", u."RefreshToken", u."RefreshTokenExpiry", u."RoleId", u."Status", r."Id", r."CreatedAt", r."Description", r."IsActive", r."IsSystemDefined", r."Name"
+FROM "Users" AS u
+LEFT JOIN "Roles" AS r ON u."RoleId" = r."Id"
+WHERE u."Email" = @__dto_Email_0 AND u."PasswordHash" = @__hashedPassword_1 AND NOT (u."IsDeleted")
+LIMIT 1
+2025-08-06 23:38:59.044 +05:30 [INF] Executed DbCommand (368ms) [Parameters=[@__user_RoleId_0='00000000-0000-0000-0000-000000000001' (Nullable = true)], CommandType='"Text"', CommandTimeout='30']
+SELECT r."Id", r."AssignedAt", r."AssignedBy", r."IsActive", r."IsRevoked", r."PermissionId", r."RoleId"
+FROM "RolePermissions" AS r
+WHERE r."RoleId" = @__user_RoleId_0 AND NOT (r."IsRevoked")
+2025-08-06 23:38:59.285 +05:30 [INF] Executed DbCommand (225ms) [Parameters=[@__userId_0='62858aa2-3a54-4fd5-8696-c343d9af7634'], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."AssignedAt", u."AssignedBy", u."IsGranted", u."IsRevoked", u."PermissionId", u."UserId"
+FROM "UserPermissions" AS u
+WHERE u."UserId" = @__userId_0 AND NOT (u."IsRevoked")
+2025-08-06 23:38:59.528 +05:30 [INF] Executed DbCommand (212ms) [Parameters=[@__permissionIds_0={ '30000000-0000-0000-0000-000000000009', '30000000-0000-0000-0000-000000000006', '30000000-0000-0000-0000-000000000003', '30000000-0000-0000-0000-000000000001', '30000000-0000-0000-0000-000000000008', ... } (DbType = Object)], CommandType='"Text"', CommandTimeout='30']
+SELECT p."Id", p."Code", p."CreatedAt", p."Description", p."Group", p."IsActive", p."Name"
+FROM "Permissions" AS p
+WHERE p."Id" = ANY (@__permissionIds_0)
+2025-08-06 23:38:59.552 +05:30 [INF] ✅ Token generated for: admin@xbytechat.com
+2025-08-06 23:38:59.659 +05:30 [INF] Executed action xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api) in 1522.0313ms
+2025-08-06 23:38:59.661 +05:30 [INF] Executed endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api)'
+2025-08-06 23:38:59.722 +05:30 [ERR] ❌ An unhandled exception occurred
+System.InvalidOperationException: Headers are read-only, response has already started.
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpHeaders.ThrowHeadersReadOnlyException()
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpResponseHeaders.Microsoft.AspNetCore.Http.IHeaderDictionary.set_SetCookie(StringValues value)
+   at Microsoft.AspNetCore.Http.ResponseCookies.Append(String key, String value, CookieOptions options)
+   at xbytechat.api.AuthModule.Services.AuthService.LoginAsync(UserLoginDto dto) in D:\xbytechat\xbytechat-api\xbytechat-api\AuthModule\Services\AuthService.cs:line 462
+   at xbytechat.api.AuthModule.Controllers.AuthController.Login(UserLoginDto dto) in D:\xbytechat\xbytechat-api\xbytechat-api\AuthModule\Controllers\AuthController.cs:line 29
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at GlobalExceptionMiddleware.Invoke(HttpContext context) in D:\xbytechat\xbytechat-api\xbytechat-api\Middlewares\GlobalExceptionMiddleware.cs:line 32
+2025-08-06 23:38:59.734 +05:30 [ERR] Response has already started, unable to write error response for path: /api/Auth/login
+2025-08-06 23:38:59.738 +05:30 [INF] Request finished HTTP/1.1 POST http://localhost:7113/api/Auth/login - 401 null application/json 1996.8917ms
+2025-08-06 23:39:12.759 +05:30 [INF] Request starting HTTP/1.1 POST http://localhost:7113/api/Auth/login - application/json 62
+2025-08-06 23:39:12.766 +05:30 [INF] CORS policy execution failed.
+2025-08-06 23:39:12.766 +05:30 [INF] Request origin http://localhost:7113 does not have permission to access the resource.
+2025-08-06 23:39:12.769 +05:30 [INF] Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '06-08-2025 01:24:06 PM', Current time (UTC): '06-08-2025 06:09:12 PM'.
+   at Microsoft.IdentityModel.Tokens.ValidatorUtilities.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+2025-08-06 23:39:12.771 +05:30 [INF] Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '06-08-2025 01:24:06 PM', Current time (UTC): '06-08-2025 06:09:12 PM'.
+2025-08-06 23:39:12.772 +05:30 [INF] Executing endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api)'
+2025-08-06 23:39:12.773 +05:30 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(xbytechat.api.AuthModule.DTOs.UserLoginDto) on controller xbytechat.api.AuthModule.Controllers.AuthController (xbytechat.api).
+2025-08-06 23:39:12.779 +05:30 [INF] 🔑 Login attempt for email: admin@xbytechat.com
+2025-08-06 23:39:13.040 +05:30 [INF] Executed DbCommand (258ms) [Parameters=[@__dto_Email_0='admin@xbytechat.com', @__hashedPassword_1='JAvlGPq9JyTdtvBO6x2llnRI1+gxwIyPqCKAn3THIKk='], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."BusinessId", u."CreatedAt", u."DeletedAt", u."Email", u."IsDeleted", u."Name", u."PasswordHash", u."RefreshToken", u."RefreshTokenExpiry", u."RoleId", u."Status", r."Id", r."CreatedAt", r."Description", r."IsActive", r."IsSystemDefined", r."Name"
+FROM "Users" AS u
+LEFT JOIN "Roles" AS r ON u."RoleId" = r."Id"
+WHERE u."Email" = @__dto_Email_0 AND u."PasswordHash" = @__hashedPassword_1 AND NOT (u."IsDeleted")
+LIMIT 1
+2025-08-06 23:39:13.282 +05:30 [INF] Executed DbCommand (237ms) [Parameters=[@__user_RoleId_0='00000000-0000-0000-0000-000000000001' (Nullable = true)], CommandType='"Text"', CommandTimeout='30']
+SELECT r."Id", r."AssignedAt", r."AssignedBy", r."IsActive", r."IsRevoked", r."PermissionId", r."RoleId"
+FROM "RolePermissions" AS r
+WHERE r."RoleId" = @__user_RoleId_0 AND NOT (r."IsRevoked")
+2025-08-06 23:39:13.523 +05:30 [INF] Executed DbCommand (237ms) [Parameters=[@__userId_0='62858aa2-3a54-4fd5-8696-c343d9af7634'], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."AssignedAt", u."AssignedBy", u."IsGranted", u."IsRevoked", u."PermissionId", u."UserId"
+FROM "UserPermissions" AS u
+WHERE u."UserId" = @__userId_0 AND NOT (u."IsRevoked")
+2025-08-06 23:39:13.765 +05:30 [INF] Executed DbCommand (239ms) [Parameters=[@__permissionIds_0={ '30000000-0000-0000-0000-000000000009', '30000000-0000-0000-0000-000000000006', '30000000-0000-0000-0000-000000000003', '30000000-0000-0000-0000-000000000001', '30000000-0000-0000-0000-000000000008', ... } (DbType = Object)], CommandType='"Text"', CommandTimeout='30']
+SELECT p."Id", p."Code", p."CreatedAt", p."Description", p."Group", p."IsActive", p."Name"
+FROM "Permissions" AS p
+WHERE p."Id" = ANY (@__permissionIds_0)
+2025-08-06 23:39:13.769 +05:30 [INF] ✅ Token generated for: admin@xbytechat.com
+2025-08-06 23:39:13.850 +05:30 [INF] Executed action xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api) in 1074.9276ms
+2025-08-06 23:39:13.852 +05:30 [INF] Executed endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api)'
+2025-08-06 23:39:13.891 +05:30 [ERR] ❌ An unhandled exception occurred
+System.InvalidOperationException: Headers are read-only, response has already started.
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpHeaders.ThrowHeadersReadOnlyException()
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpResponseHeaders.Microsoft.AspNetCore.Http.IHeaderDictionary.set_SetCookie(StringValues value)
+   at Microsoft.AspNetCore.Http.ResponseCookies.Append(String key, String value, CookieOptions options)
+   at xbytechat.api.AuthModule.Services.AuthService.LoginAsync(UserLoginDto dto) in D:\xbytechat\xbytechat-api\xbytechat-api\AuthModule\Services\AuthService.cs:line 462
+   at xbytechat.api.AuthModule.Controllers.AuthController.Login(UserLoginDto dto) in D:\xbytechat\xbytechat-api\xbytechat-api\AuthModule\Controllers\AuthController.cs:line 29
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at GlobalExceptionMiddleware.Invoke(HttpContext context) in D:\xbytechat\xbytechat-api\xbytechat-api\Middlewares\GlobalExceptionMiddleware.cs:line 32
+2025-08-06 23:39:13.896 +05:30 [ERR] Response has already started, unable to write error response for path: /api/Auth/login
+2025-08-06 23:39:13.897 +05:30 [INF] Request finished HTTP/1.1 POST http://localhost:7113/api/Auth/login - 401 null application/json 1138.1639ms
+2025-08-06 23:43:50.677 +05:30 [INF] User profile is available. Using 'C:\Users\sunde\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-08-06 23:43:50.713 +05:30 [INF] 🚀 Webhook Queue Worker started.
+2025-08-06 23:43:50.730 +05:30 [INF] 🧹 FailedWebhookLogCleanupService started.
+2025-08-06 23:43:51.417 +05:30 [WRN] Sensitive data logging is enabled. Log entries and exception messages may include sensitive application data; this mode should only be enabled during development.
+2025-08-06 23:43:51.873 +05:30 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2025-08-06 23:43:52.016 +05:30 [INF] Now listening on: http://localhost:7113
+2025-08-06 23:43:52.017 +05:30 [INF] Now listening on: http://localhost:5295
+2025-08-06 23:43:52.018 +05:30 [INF] Application started. Press Ctrl+C to shut down.
+2025-08-06 23:43:52.019 +05:30 [INF] Hosting environment: Development
+2025-08-06 23:43:52.020 +05:30 [INF] Content root path: D:\xbytechat\xbytechat-api\xbytechat-api
+2025-08-06 23:43:54.214 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/swagger/index.html - null null
+2025-08-06 23:43:54.423 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/swagger/index.html - 200 null text/html;charset=utf-8 217.5229ms
+2025-08-06 23:43:54.548 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/_framework/aspnetcore-browser-refresh.js - null null
+2025-08-06 23:43:54.548 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/_vs/browserLink - null null
+2025-08-06 23:43:54.554 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/_framework/aspnetcore-browser-refresh.js - 200 13762 application/javascript; charset=utf-8 6.4136ms
+2025-08-06 23:43:54.596 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/_vs/browserLink - 200 null text/javascript; charset=UTF-8 48.569ms
+2025-08-06 23:43:54.704 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/swagger/v1/swagger.json - null null
+2025-08-06 23:43:54.902 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 197.7974ms
+2025-08-06 23:43:55.039 +05:30 [INF] Executed DbCommand (217ms) [Parameters=[@__cutoff_0='2025-07-30T18:13:50.8254305Z' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT f."Id", f."CreatedAt", f."ErrorMessage", f."FailureType", f."RawJson", f."SourceModule"
+FROM "FailedWebhookLogs" AS f
+WHERE f."CreatedAt" < @__cutoff_0
+2025-08-06 23:43:55.039 +05:30 [INF] Executed DbCommand (220ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT w."Id", w."AutoCleanupEnabled", w."LastCleanupAt"
+FROM "WebhookSettings" AS w
+LIMIT 1
+2025-08-06 23:44:45.958 +05:30 [INF] Request starting HTTP/1.1 POST http://localhost:7113/api/Auth/login - application/json 62
+2025-08-06 23:44:45.966 +05:30 [WRN] Failed to determine the https port for redirect.
+2025-08-06 23:44:45.968 +05:30 [INF] CORS policy execution failed.
+2025-08-06 23:44:45.969 +05:30 [INF] Request origin http://localhost:7113 does not have permission to access the resource.
+2025-08-06 23:44:46.073 +05:30 [INF] Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '06-08-2025 01:24:06 PM', Current time (UTC): '06-08-2025 06:14:46 PM'.
+   at Microsoft.IdentityModel.Tokens.ValidatorUtilities.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+2025-08-06 23:44:46.105 +05:30 [INF] Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '06-08-2025 01:24:06 PM', Current time (UTC): '06-08-2025 06:14:46 PM'.
+2025-08-06 23:44:46.108 +05:30 [INF] Executing endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api)'
+2025-08-06 23:44:46.123 +05:30 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(xbytechat.api.AuthModule.DTOs.UserLoginDto) on controller xbytechat.api.AuthModule.Controllers.AuthController (xbytechat.api).
+2025-08-06 23:44:46.195 +05:30 [INF] 🔑 Login attempt for email: admin@xbytechat.com
+2025-08-06 23:44:46.482 +05:30 [INF] Executed DbCommand (204ms) [Parameters=[@__dto_Email_0='admin@xbytechat.com', @__hashedPassword_1='JAvlGPq9JyTdtvBO6x2llnRI1+gxwIyPqCKAn3THIKk='], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."BusinessId", u."CreatedAt", u."DeletedAt", u."Email", u."IsDeleted", u."Name", u."PasswordHash", u."RefreshToken", u."RefreshTokenExpiry", u."RoleId", u."Status", r."Id", r."CreatedAt", r."Description", r."IsActive", r."IsSystemDefined", r."Name"
+FROM "Users" AS u
+LEFT JOIN "Roles" AS r ON u."RoleId" = r."Id"
+WHERE u."Email" = @__dto_Email_0 AND u."PasswordHash" = @__hashedPassword_1 AND NOT (u."IsDeleted")
+LIMIT 1
+2025-08-06 23:44:46.935 +05:30 [INF] Executed DbCommand (372ms) [Parameters=[@__user_RoleId_0='00000000-0000-0000-0000-000000000001' (Nullable = true)], CommandType='"Text"', CommandTimeout='30']
+SELECT r."Id", r."AssignedAt", r."AssignedBy", r."IsActive", r."IsRevoked", r."PermissionId", r."RoleId"
+FROM "RolePermissions" AS r
+WHERE r."RoleId" = @__user_RoleId_0 AND NOT (r."IsRevoked")
+2025-08-06 23:44:47.192 +05:30 [INF] Executed DbCommand (235ms) [Parameters=[@__userId_0='62858aa2-3a54-4fd5-8696-c343d9af7634'], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."AssignedAt", u."AssignedBy", u."IsGranted", u."IsRevoked", u."PermissionId", u."UserId"
+FROM "UserPermissions" AS u
+WHERE u."UserId" = @__userId_0 AND NOT (u."IsRevoked")
+2025-08-06 23:44:47.442 +05:30 [INF] Executed DbCommand (220ms) [Parameters=[@__permissionIds_0={ '30000000-0000-0000-0000-000000000009', '30000000-0000-0000-0000-000000000006', '30000000-0000-0000-0000-000000000003', '30000000-0000-0000-0000-000000000001', '30000000-0000-0000-0000-000000000008', ... } (DbType = Object)], CommandType='"Text"', CommandTimeout='30']
+SELECT p."Id", p."Code", p."CreatedAt", p."Description", p."Group", p."IsActive", p."Name"
+FROM "Permissions" AS p
+WHERE p."Id" = ANY (@__permissionIds_0)
+2025-08-06 23:44:47.460 +05:30 [INF] ✅ Token generated for: admin@xbytechat.com
+2025-08-06 23:44:47.558 +05:30 [INF] Executed action xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api) in 1430.6574ms
+2025-08-06 23:44:47.560 +05:30 [INF] Executed endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api)'
+2025-08-06 23:44:47.610 +05:30 [ERR] ❌ An unhandled exception occurred
+System.InvalidOperationException: Headers are read-only, response has already started.
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpHeaders.ThrowHeadersReadOnlyException()
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpResponseHeaders.Microsoft.AspNetCore.Http.IHeaderDictionary.set_SetCookie(StringValues value)
+   at Microsoft.AspNetCore.Http.ResponseCookies.Append(String key, String value, CookieOptions options)
+   at xbytechat.api.AuthModule.Services.AuthService.LoginAsync(UserLoginDto dto) in D:\xbytechat\xbytechat-api\xbytechat-api\AuthModule\Services\AuthService.cs:line 462
+   at xbytechat.api.AuthModule.Controllers.AuthController.Login(UserLoginDto dto) in D:\xbytechat\xbytechat-api\xbytechat-api\AuthModule\Controllers\AuthController.cs:line 29
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at GlobalExceptionMiddleware.Invoke(HttpContext context) in D:\xbytechat\xbytechat-api\xbytechat-api\Middlewares\GlobalExceptionMiddleware.cs:line 32
+2025-08-06 23:44:47.621 +05:30 [ERR] Response has already started, unable to write error response for path: /api/Auth/login
+2025-08-06 23:44:47.624 +05:30 [INF] Request finished HTTP/1.1 POST http://localhost:7113/api/Auth/login - 401 null application/json 1666.7371ms
+2025-08-06 23:45:45.041 +05:30 [INF] User profile is available. Using 'C:\Users\sunde\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-08-06 23:45:45.076 +05:30 [INF] 🚀 Webhook Queue Worker started.
+2025-08-06 23:45:45.089 +05:30 [INF] 🧹 FailedWebhookLogCleanupService started.
+2025-08-06 23:45:45.794 +05:30 [WRN] Sensitive data logging is enabled. Log entries and exception messages may include sensitive application data; this mode should only be enabled during development.
+2025-08-06 23:45:46.262 +05:30 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2025-08-06 23:45:46.397 +05:30 [INF] Now listening on: http://localhost:7113
+2025-08-06 23:45:46.398 +05:30 [INF] Now listening on: http://localhost:5295
+2025-08-06 23:45:46.399 +05:30 [INF] Application started. Press Ctrl+C to shut down.
+2025-08-06 23:45:46.400 +05:30 [INF] Hosting environment: Development
+2025-08-06 23:45:46.400 +05:30 [INF] Content root path: D:\xbytechat\xbytechat-api\xbytechat-api
+2025-08-06 23:45:48.580 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/swagger/index.html - null null
+2025-08-06 23:45:48.615 +05:30 [INF] Executed DbCommand (258ms) [Parameters=[@__cutoff_0='2025-07-30T18:15:45.1806245Z' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT f."Id", f."CreatedAt", f."ErrorMessage", f."FailureType", f."RawJson", f."SourceModule"
+FROM "FailedWebhookLogs" AS f
+WHERE f."CreatedAt" < @__cutoff_0
+2025-08-06 23:45:48.764 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/swagger/index.html - 200 null text/html;charset=utf-8 192.1263ms
+2025-08-06 23:45:48.783 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/_framework/aspnetcore-browser-refresh.js - null null
+2025-08-06 23:45:48.790 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/_framework/aspnetcore-browser-refresh.js - 200 13762 application/javascript; charset=utf-8 7.4ms
+2025-08-06 23:45:48.845 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/_vs/browserLink - null null
+2025-08-06 23:45:48.882 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/_vs/browserLink - 200 null text/javascript; charset=UTF-8 37.0854ms
+2025-08-06 23:45:49.010 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/swagger/v1/swagger.json - null null
+2025-08-06 23:45:49.081 +05:30 [INF] Executed DbCommand (104ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT w."Id", w."AutoCleanupEnabled", w."LastCleanupAt"
+FROM "WebhookSettings" AS w
+LIMIT 1
+2025-08-06 23:45:49.194 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 184.1962ms
+2025-08-06 23:46:30.843 +05:30 [INF] Request starting HTTP/1.1 POST http://localhost:7113/api/Auth/login - application/json 62
+2025-08-06 23:46:30.852 +05:30 [WRN] Failed to determine the https port for redirect.
+2025-08-06 23:46:30.854 +05:30 [INF] CORS policy execution failed.
+2025-08-06 23:46:30.855 +05:30 [INF] Request origin http://localhost:7113 does not have permission to access the resource.
+2025-08-06 23:46:30.951 +05:30 [INF] Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '06-08-2025 01:24:06 PM', Current time (UTC): '06-08-2025 06:16:30 PM'.
+   at Microsoft.IdentityModel.Tokens.ValidatorUtilities.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+2025-08-06 23:46:30.982 +05:30 [INF] Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '06-08-2025 01:24:06 PM', Current time (UTC): '06-08-2025 06:16:30 PM'.
+2025-08-06 23:46:30.985 +05:30 [INF] Executing endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api)'
+2025-08-06 23:46:30.999 +05:30 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(xbytechat.api.AuthModule.DTOs.UserLoginDto) on controller xbytechat.api.AuthModule.Controllers.AuthController (xbytechat.api).
+2025-08-06 23:46:31.070 +05:30 [INF] 🔑 Login attempt for email: admin@xbytechat.com
+2025-08-06 23:46:31.468 +05:30 [INF] Executed DbCommand (340ms) [Parameters=[@__dto_Email_0='admin@xbytechat.com', @__hashedPassword_1='JAvlGPq9JyTdtvBO6x2llnRI1+gxwIyPqCKAn3THIKk='], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."BusinessId", u."CreatedAt", u."DeletedAt", u."Email", u."IsDeleted", u."Name", u."PasswordHash", u."RefreshToken", u."RefreshTokenExpiry", u."RoleId", u."Status", r."Id", r."CreatedAt", r."Description", r."IsActive", r."IsSystemDefined", r."Name"
+FROM "Users" AS u
+LEFT JOIN "Roles" AS r ON u."RoleId" = r."Id"
+WHERE u."Email" = @__dto_Email_0 AND u."PasswordHash" = @__hashedPassword_1 AND NOT (u."IsDeleted")
+LIMIT 1
+2025-08-06 23:46:31.709 +05:30 [INF] Executed DbCommand (166ms) [Parameters=[@__user_RoleId_0='00000000-0000-0000-0000-000000000001' (Nullable = true)], CommandType='"Text"', CommandTimeout='30']
+SELECT r."Id", r."AssignedAt", r."AssignedBy", r."IsActive", r."IsRevoked", r."PermissionId", r."RoleId"
+FROM "RolePermissions" AS r
+WHERE r."RoleId" = @__user_RoleId_0 AND NOT (r."IsRevoked")
+2025-08-06 23:46:31.951 +05:30 [INF] Executed DbCommand (225ms) [Parameters=[@__userId_0='62858aa2-3a54-4fd5-8696-c343d9af7634'], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."AssignedAt", u."AssignedBy", u."IsGranted", u."IsRevoked", u."PermissionId", u."UserId"
+FROM "UserPermissions" AS u
+WHERE u."UserId" = @__userId_0 AND NOT (u."IsRevoked")
+2025-08-06 23:46:32.193 +05:30 [INF] Executed DbCommand (216ms) [Parameters=[@__permissionIds_0={ '30000000-0000-0000-0000-000000000009', '30000000-0000-0000-0000-000000000006', '30000000-0000-0000-0000-000000000003', '30000000-0000-0000-0000-000000000001', '30000000-0000-0000-0000-000000000008', ... } (DbType = Object)], CommandType='"Text"', CommandTimeout='30']
+SELECT p."Id", p."Code", p."CreatedAt", p."Description", p."Group", p."IsActive", p."Name"
+FROM "Permissions" AS p
+WHERE p."Id" = ANY (@__permissionIds_0)
+2025-08-06 23:46:32.211 +05:30 [INF] ✅ Token generated for: admin@xbytechat.com
+2025-08-06 23:46:32.310 +05:30 [INF] Executed action xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api) in 1306.7512ms
+2025-08-06 23:46:32.312 +05:30 [INF] Executed endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api)'
+2025-08-06 23:46:32.360 +05:30 [ERR] ❌ An unhandled exception occurred
+System.InvalidOperationException: Headers are read-only, response has already started.
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpHeaders.ThrowHeadersReadOnlyException()
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpResponseHeaders.Microsoft.AspNetCore.Http.IHeaderDictionary.set_SetCookie(StringValues value)
+   at Microsoft.AspNetCore.Http.ResponseCookies.Append(String key, String value, CookieOptions options)
+   at xbytechat.api.AuthModule.Services.AuthService.LoginAsync(UserLoginDto dto) in D:\xbytechat\xbytechat-api\xbytechat-api\AuthModule\Services\AuthService.cs:line 462
+   at xbytechat.api.AuthModule.Controllers.AuthController.Login(UserLoginDto dto) in D:\xbytechat\xbytechat-api\xbytechat-api\AuthModule\Controllers\AuthController.cs:line 29
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at GlobalExceptionMiddleware.Invoke(HttpContext context) in D:\xbytechat\xbytechat-api\xbytechat-api\Middlewares\GlobalExceptionMiddleware.cs:line 32
+2025-08-06 23:46:32.370 +05:30 [ERR] Response has already started, unable to write error response for path: /api/Auth/login
+2025-08-06 23:46:32.374 +05:30 [INF] Request finished HTTP/1.1 POST http://localhost:7113/api/Auth/login - 401 null application/json 1530.566ms
+2025-08-06 23:47:44.969 +05:30 [INF] User profile is available. Using 'C:\Users\sunde\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-08-06 23:47:45.000 +05:30 [INF] 🚀 Webhook Queue Worker started.
+2025-08-06 23:47:45.011 +05:30 [INF] 🧹 FailedWebhookLogCleanupService started.
+2025-08-06 23:47:45.661 +05:30 [WRN] Sensitive data logging is enabled. Log entries and exception messages may include sensitive application data; this mode should only be enabled during development.
+2025-08-06 23:47:46.114 +05:30 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2025-08-06 23:47:46.223 +05:30 [INF] Now listening on: http://localhost:7113
+2025-08-06 23:47:46.223 +05:30 [INF] Now listening on: http://localhost:5295
+2025-08-06 23:47:46.225 +05:30 [INF] Application started. Press Ctrl+C to shut down.
+2025-08-06 23:47:46.226 +05:30 [INF] Hosting environment: Development
+2025-08-06 23:47:46.227 +05:30 [INF] Content root path: D:\xbytechat\xbytechat-api\xbytechat-api
+2025-08-06 23:47:48.250 +05:30 [INF] Executed DbCommand (191ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT w."Id", w."AutoCleanupEnabled", w."LastCleanupAt"
+FROM "WebhookSettings" AS w
+LIMIT 1
+2025-08-06 23:47:48.317 +05:30 [INF] Executed DbCommand (259ms) [Parameters=[@__cutoff_0='2025-07-30T18:17:45.0956691Z' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT f."Id", f."CreatedAt", f."ErrorMessage", f."FailureType", f."RawJson", f."SourceModule"
+FROM "FailedWebhookLogs" AS f
+WHERE f."CreatedAt" < @__cutoff_0
+2025-08-06 23:47:48.478 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/swagger/index.html - null null
+2025-08-06 23:47:48.652 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/swagger/index.html - 200 null text/html;charset=utf-8 181.023ms
+2025-08-06 23:47:48.671 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/_framework/aspnetcore-browser-refresh.js - null null
+2025-08-06 23:47:48.680 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/_framework/aspnetcore-browser-refresh.js - 200 13762 application/javascript; charset=utf-8 8.9478ms
+2025-08-06 23:47:48.736 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/_vs/browserLink - null null
+2025-08-06 23:47:48.770 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/_vs/browserLink - 200 null text/javascript; charset=UTF-8 33.9719ms
+2025-08-06 23:47:48.904 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/swagger/v1/swagger.json - null null
+2025-08-06 23:47:49.122 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 217.8835ms
+2025-08-06 23:48:21.257 +05:30 [INF] Request starting HTTP/1.1 POST http://localhost:7113/api/Auth/login - application/json 62
+2025-08-06 23:48:21.262 +05:30 [WRN] Failed to determine the https port for redirect.
+2025-08-06 23:48:21.264 +05:30 [INF] CORS policy execution failed.
+2025-08-06 23:48:21.265 +05:30 [INF] Request origin http://localhost:7113 does not have permission to access the resource.
+2025-08-06 23:48:21.371 +05:30 [INF] Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '06-08-2025 01:24:06 PM', Current time (UTC): '06-08-2025 06:18:21 PM'.
+   at Microsoft.IdentityModel.Tokens.ValidatorUtilities.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+2025-08-06 23:48:21.399 +05:30 [INF] Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '06-08-2025 01:24:06 PM', Current time (UTC): '06-08-2025 06:18:21 PM'.
+2025-08-06 23:48:21.402 +05:30 [INF] Executing endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api)'
+2025-08-06 23:48:21.416 +05:30 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(xbytechat.api.AuthModule.DTOs.UserLoginDto) on controller xbytechat.api.AuthModule.Controllers.AuthController (xbytechat.api).
+2025-08-06 23:48:21.489 +05:30 [INF] 🔑 Login attempt for email: admin@xbytechat.com
+2025-08-06 23:48:21.794 +05:30 [INF] Executed DbCommand (229ms) [Parameters=[@__dto_Email_0='admin@xbytechat.com', @__hashedPassword_1='JAvlGPq9JyTdtvBO6x2llnRI1+gxwIyPqCKAn3THIKk='], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."BusinessId", u."CreatedAt", u."DeletedAt", u."Email", u."IsDeleted", u."Name", u."PasswordHash", u."RefreshToken", u."RefreshTokenExpiry", u."RoleId", u."Status", r."Id", r."CreatedAt", r."Description", r."IsActive", r."IsSystemDefined", r."Name"
+FROM "Users" AS u
+LEFT JOIN "Roles" AS r ON u."RoleId" = r."Id"
+WHERE u."Email" = @__dto_Email_0 AND u."PasswordHash" = @__hashedPassword_1 AND NOT (u."IsDeleted")
+LIMIT 1
+2025-08-06 23:48:22.035 +05:30 [INF] Executed DbCommand (149ms) [Parameters=[@__user_RoleId_0='00000000-0000-0000-0000-000000000001' (Nullable = true)], CommandType='"Text"', CommandTimeout='30']
+SELECT r."Id", r."AssignedAt", r."AssignedBy", r."IsActive", r."IsRevoked", r."PermissionId", r."RoleId"
+FROM "RolePermissions" AS r
+WHERE r."RoleId" = @__user_RoleId_0 AND NOT (r."IsRevoked")
+2025-08-06 23:48:22.276 +05:30 [INF] Executed DbCommand (226ms) [Parameters=[@__userId_0='62858aa2-3a54-4fd5-8696-c343d9af7634'], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."AssignedAt", u."AssignedBy", u."IsGranted", u."IsRevoked", u."PermissionId", u."UserId"
+FROM "UserPermissions" AS u
+WHERE u."UserId" = @__userId_0 AND NOT (u."IsRevoked")
+2025-08-06 23:48:22.519 +05:30 [INF] Executed DbCommand (214ms) [Parameters=[@__permissionIds_0={ '30000000-0000-0000-0000-000000000009', '30000000-0000-0000-0000-000000000006', '30000000-0000-0000-0000-000000000003', '30000000-0000-0000-0000-000000000001', '30000000-0000-0000-0000-000000000008', ... } (DbType = Object)], CommandType='"Text"', CommandTimeout='30']
+SELECT p."Id", p."Code", p."CreatedAt", p."Description", p."Group", p."IsActive", p."Name"
+FROM "Permissions" AS p
+WHERE p."Id" = ANY (@__permissionIds_0)
+2025-08-06 23:48:22.539 +05:30 [INF] ✅ Token generated for: admin@xbytechat.com
+2025-08-06 23:48:22.636 +05:30 [INF] Executed action xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api) in 1215.7707ms
+2025-08-06 23:48:22.638 +05:30 [INF] Executed endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api)'
+2025-08-06 23:48:22.687 +05:30 [ERR] ❌ An unhandled exception occurred
+System.InvalidOperationException: Headers are read-only, response has already started.
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpHeaders.ThrowHeadersReadOnlyException()
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpResponseHeaders.Microsoft.AspNetCore.Http.IHeaderDictionary.set_SetCookie(StringValues value)
+   at Microsoft.AspNetCore.Http.ResponseCookies.Append(String key, String value, CookieOptions options)
+   at xbytechat.api.AuthModule.Services.AuthService.LoginAsync(UserLoginDto dto) in D:\xbytechat\xbytechat-api\xbytechat-api\AuthModule\Services\AuthService.cs:line 462
+   at xbytechat.api.AuthModule.Controllers.AuthController.Login(UserLoginDto dto) in D:\xbytechat\xbytechat-api\xbytechat-api\AuthModule\Controllers\AuthController.cs:line 29
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at GlobalExceptionMiddleware.Invoke(HttpContext context) in D:\xbytechat\xbytechat-api\xbytechat-api\Middlewares\GlobalExceptionMiddleware.cs:line 32
+2025-08-06 23:48:22.697 +05:30 [ERR] Response has already started, unable to write error response for path: /api/Auth/login
+2025-08-06 23:48:22.701 +05:30 [INF] Request finished HTTP/1.1 POST http://localhost:7113/api/Auth/login - 401 null application/json 1443.3706ms
+2025-08-06 23:49:10.470 +05:30 [INF] User profile is available. Using 'C:\Users\sunde\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-08-06 23:49:10.503 +05:30 [INF] 🚀 Webhook Queue Worker started.
+2025-08-06 23:49:10.514 +05:30 [INF] 🧹 FailedWebhookLogCleanupService started.
+2025-08-06 23:49:11.151 +05:30 [WRN] Sensitive data logging is enabled. Log entries and exception messages may include sensitive application data; this mode should only be enabled during development.
+2025-08-06 23:49:11.635 +05:30 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2025-08-06 23:49:11.757 +05:30 [INF] Now listening on: http://localhost:7113
+2025-08-06 23:49:11.758 +05:30 [INF] Now listening on: http://localhost:5295
+2025-08-06 23:49:11.759 +05:30 [INF] Application started. Press Ctrl+C to shut down.
+2025-08-06 23:49:11.760 +05:30 [INF] Hosting environment: Development
+2025-08-06 23:49:11.760 +05:30 [INF] Content root path: D:\xbytechat\xbytechat-api\xbytechat-api
+2025-08-06 23:49:13.956 +05:30 [INF] Executed DbCommand (225ms) [Parameters=[@__cutoff_0='2025-07-30T18:19:10.5941537Z' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT f."Id", f."CreatedAt", f."ErrorMessage", f."FailureType", f."RawJson", f."SourceModule"
+FROM "FailedWebhookLogs" AS f
+WHERE f."CreatedAt" < @__cutoff_0
+2025-08-06 23:49:13.956 +05:30 [INF] Executed DbCommand (228ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT w."Id", w."AutoCleanupEnabled", w."LastCleanupAt"
+FROM "WebhookSettings" AS w
+LIMIT 1
+2025-08-06 23:49:14.064 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/swagger/index.html - null null
+2025-08-06 23:49:14.257 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/swagger/index.html - 200 null text/html;charset=utf-8 202.3576ms
+2025-08-06 23:49:14.275 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/_framework/aspnetcore-browser-refresh.js - null null
+2025-08-06 23:49:14.283 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/_framework/aspnetcore-browser-refresh.js - 200 13762 application/javascript; charset=utf-8 7.5251ms
+2025-08-06 23:49:14.352 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/_vs/browserLink - null null
+2025-08-06 23:49:14.394 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/_vs/browserLink - 200 null text/javascript; charset=UTF-8 41.9711ms
+2025-08-06 23:49:14.555 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/swagger/v1/swagger.json - null null
+2025-08-06 23:49:14.773 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 218.303ms
+2025-08-06 23:50:14.810 +05:30 [INF] Request starting HTTP/1.1 POST http://localhost:7113/api/Auth/login - application/json 62
+2025-08-06 23:50:14.820 +05:30 [WRN] Failed to determine the https port for redirect.
+2025-08-06 23:50:14.823 +05:30 [INF] CORS policy execution failed.
+2025-08-06 23:50:14.824 +05:30 [INF] Request origin http://localhost:7113 does not have permission to access the resource.
+2025-08-06 23:50:14.923 +05:30 [INF] Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '06-08-2025 01:24:06 PM', Current time (UTC): '06-08-2025 06:20:14 PM'.
+   at Microsoft.IdentityModel.Tokens.ValidatorUtilities.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+2025-08-06 23:50:14.955 +05:30 [INF] Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '06-08-2025 01:24:06 PM', Current time (UTC): '06-08-2025 06:20:14 PM'.
+2025-08-06 23:50:14.959 +05:30 [INF] Executing endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api)'
+2025-08-06 23:50:14.974 +05:30 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(xbytechat.api.AuthModule.DTOs.UserLoginDto) on controller xbytechat.api.AuthModule.Controllers.AuthController (xbytechat.api).
+2025-08-06 23:50:15.052 +05:30 [INF] 🔑 Login attempt for email: admin@xbytechat.com
+2025-08-06 23:50:15.266 +05:30 [INF] Executed DbCommand (155ms) [Parameters=[@__dto_Email_0='admin@xbytechat.com', @__hashedPassword_1='JAvlGPq9JyTdtvBO6x2llnRI1+gxwIyPqCKAn3THIKk='], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."BusinessId", u."CreatedAt", u."DeletedAt", u."Email", u."IsDeleted", u."Name", u."PasswordHash", u."RefreshToken", u."RefreshTokenExpiry", u."RoleId", u."Status", r."Id", r."CreatedAt", r."Description", r."IsActive", r."IsSystemDefined", r."Name"
+FROM "Users" AS u
+LEFT JOIN "Roles" AS r ON u."RoleId" = r."Id"
+WHERE u."Email" = @__dto_Email_0 AND u."PasswordHash" = @__hashedPassword_1 AND NOT (u."IsDeleted")
+LIMIT 1
+2025-08-06 23:50:15.507 +05:30 [INF] Executed DbCommand (164ms) [Parameters=[@__user_RoleId_0='00000000-0000-0000-0000-000000000001' (Nullable = true)], CommandType='"Text"', CommandTimeout='30']
+SELECT r."Id", r."AssignedAt", r."AssignedBy", r."IsActive", r."IsRevoked", r."PermissionId", r."RoleId"
+FROM "RolePermissions" AS r
+WHERE r."RoleId" = @__user_RoleId_0 AND NOT (r."IsRevoked")
+2025-08-06 23:50:16.714 +05:30 [INF] Executed DbCommand (1,191ms) [Parameters=[@__userId_0='62858aa2-3a54-4fd5-8696-c343d9af7634'], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."AssignedAt", u."AssignedBy", u."IsGranted", u."IsRevoked", u."PermissionId", u."UserId"
+FROM "UserPermissions" AS u
+WHERE u."UserId" = @__userId_0 AND NOT (u."IsRevoked")
+2025-08-06 23:50:16.956 +05:30 [INF] Executed DbCommand (213ms) [Parameters=[@__permissionIds_0={ '30000000-0000-0000-0000-000000000009', '30000000-0000-0000-0000-000000000006', '30000000-0000-0000-0000-000000000003', '30000000-0000-0000-0000-000000000001', '30000000-0000-0000-0000-000000000008', ... } (DbType = Object)], CommandType='"Text"', CommandTimeout='30']
+SELECT p."Id", p."Code", p."CreatedAt", p."Description", p."Group", p."IsActive", p."Name"
+FROM "Permissions" AS p
+WHERE p."Id" = ANY (@__permissionIds_0)
+2025-08-06 23:50:16.975 +05:30 [INF] ✅ Token generated for: admin@xbytechat.com
+2025-08-06 23:50:17.053 +05:30 [INF] Executed action xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api) in 2074.1061ms
+2025-08-06 23:50:17.055 +05:30 [INF] Executed endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api)'
+2025-08-06 23:50:17.105 +05:30 [ERR] ❌ An unhandled exception occurred
+System.InvalidOperationException: Headers are read-only, response has already started.
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpHeaders.ThrowHeadersReadOnlyException()
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpResponseHeaders.Microsoft.AspNetCore.Http.IHeaderDictionary.set_SetCookie(StringValues value)
+   at Microsoft.AspNetCore.Http.ResponseCookies.Append(String key, String value, CookieOptions options)
+   at xbytechat.api.AuthModule.Services.AuthService.LoginAsync(UserLoginDto dto) in D:\xbytechat\xbytechat-api\xbytechat-api\AuthModule\Services\AuthService.cs:line 462
+   at xbytechat.api.AuthModule.Controllers.AuthController.Login(UserLoginDto dto) in D:\xbytechat\xbytechat-api\xbytechat-api\AuthModule\Controllers\AuthController.cs:line 29
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at GlobalExceptionMiddleware.Invoke(HttpContext context) in D:\xbytechat\xbytechat-api\xbytechat-api\Middlewares\GlobalExceptionMiddleware.cs:line 32
+2025-08-06 23:50:17.115 +05:30 [ERR] Response has already started, unable to write error response for path: /api/Auth/login
+2025-08-06 23:50:17.119 +05:30 [INF] Request finished HTTP/1.1 POST http://localhost:7113/api/Auth/login - 401 null application/json 2309.5932ms
+2025-08-06 23:50:53.643 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/swagger/index.html - null null
+2025-08-06 23:50:53.660 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/swagger/index.html - 200 null text/html;charset=utf-8 19.229ms
+2025-08-06 23:50:53.696 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/_vs/browserLink - null null
+2025-08-06 23:50:53.696 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/_framework/aspnetcore-browser-refresh.js - null null
+2025-08-06 23:50:53.701 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/_framework/aspnetcore-browser-refresh.js - 200 13762 application/javascript; charset=utf-8 5.0652ms
+2025-08-06 23:50:53.715 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/_vs/browserLink - 200 null text/javascript; charset=UTF-8 19.626ms
+2025-08-06 23:50:53.842 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/swagger/v1/swagger.json - null null
+2025-08-06 23:50:53.850 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/swagger/favicon-32x32.png - null null
+2025-08-06 23:50:53.865 +05:30 [INF] Sending file. Request path: '/favicon-32x32.png'. Physical path: 'N/A'
+2025-08-06 23:50:53.867 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/swagger/favicon-32x32.png - 200 628 image/png 16.2235ms
+2025-08-06 23:50:53.902 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 59.7126ms
+2025-08-06 23:53:16.025 +05:30 [INF] User profile is available. Using 'C:\Users\sunde\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-08-06 23:53:16.085 +05:30 [INF] 🚀 Webhook Queue Worker started.
+2025-08-06 23:53:16.102 +05:30 [INF] 🧹 FailedWebhookLogCleanupService started.
+2025-08-06 23:53:16.848 +05:30 [WRN] Sensitive data logging is enabled. Log entries and exception messages may include sensitive application data; this mode should only be enabled during development.
+2025-08-06 23:53:17.330 +05:30 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2025-08-06 23:53:17.473 +05:30 [INF] Now listening on: http://localhost:7113
+2025-08-06 23:53:17.474 +05:30 [INF] Now listening on: http://localhost:5295
+2025-08-06 23:53:17.475 +05:30 [INF] Application started. Press Ctrl+C to shut down.
+2025-08-06 23:53:17.476 +05:30 [INF] Hosting environment: Development
+2025-08-06 23:53:17.477 +05:30 [INF] Content root path: D:\xbytechat\xbytechat-api\xbytechat-api
+2025-08-06 23:53:17.528 +05:30 [INF] Executed DbCommand (13ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT w."Id", w."AutoCleanupEnabled", w."LastCleanupAt"
+FROM "WebhookSettings" AS w
+LIMIT 1
+2025-08-06 23:53:17.544 +05:30 [INF] Executed DbCommand (38ms) [Parameters=[@__cutoff_0='2025-07-30T18:23:16.2191244Z' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT f."Id", f."CreatedAt", f."ErrorMessage", f."FailureType", f."RawJson", f."SourceModule"
+FROM "FailedWebhookLogs" AS f
+WHERE f."CreatedAt" < @__cutoff_0
+2025-08-06 23:53:19.595 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/swagger/index.html - null null
+2025-08-06 23:53:19.774 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/swagger/index.html - 200 null text/html;charset=utf-8 187.5306ms
+2025-08-06 23:53:19.794 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/_framework/aspnetcore-browser-refresh.js - null null
+2025-08-06 23:53:19.801 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/_framework/aspnetcore-browser-refresh.js - 200 13762 application/javascript; charset=utf-8 6.6405ms
+2025-08-06 23:53:19.865 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/_vs/browserLink - null null
+2025-08-06 23:53:19.896 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/_vs/browserLink - 200 null text/javascript; charset=UTF-8 31.8106ms
+2025-08-06 23:53:20.033 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/swagger/v1/swagger.json - null null
+2025-08-06 23:53:20.202 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 169.3957ms
+2025-08-06 23:53:53.584 +05:30 [INF] Request starting HTTP/1.1 POST http://localhost:7113/api/Auth/login - application/json 62
+2025-08-06 23:53:53.595 +05:30 [WRN] Failed to determine the https port for redirect.
+2025-08-06 23:53:53.597 +05:30 [INF] CORS policy execution failed.
+2025-08-06 23:53:53.599 +05:30 [INF] Request origin http://localhost:7113 does not have permission to access the resource.
+2025-08-06 23:53:53.693 +05:30 [INF] Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '06-08-2025 01:24:06 PM', Current time (UTC): '06-08-2025 06:23:53 PM'.
+   at Microsoft.IdentityModel.Tokens.ValidatorUtilities.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+2025-08-06 23:53:53.721 +05:30 [INF] Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '06-08-2025 01:24:06 PM', Current time (UTC): '06-08-2025 06:23:53 PM'.
+2025-08-06 23:53:53.724 +05:30 [INF] Executing endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api)'
+2025-08-06 23:53:53.744 +05:30 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(xbytechat.api.AuthModule.DTOs.UserLoginDto) on controller xbytechat.api.AuthModule.Controllers.AuthController (xbytechat.api).
+2025-08-06 23:53:53.818 +05:30 [INF] 🔑 Login attempt for email: admin@xbytechat.com
+2025-08-06 23:53:53.900 +05:30 [INF] Executed DbCommand (27ms) [Parameters=[@__dto_Email_0='admin@xbytechat.com', @__hashedPassword_1='JAvlGPq9JyTdtvBO6x2llnRI1+gxwIyPqCKAn3THIKk='], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."BusinessId", u."CreatedAt", u."DeletedAt", u."Email", u."IsDeleted", u."Name", u."PasswordHash", u."RefreshToken", u."RefreshTokenExpiry", u."RoleId", u."Status", r."Id", r."CreatedAt", r."Description", r."IsActive", r."IsSystemDefined", r."Name"
+FROM "Users" AS u
+LEFT JOIN "Roles" AS r ON u."RoleId" = r."Id"
+WHERE u."Email" = @__dto_Email_0 AND u."PasswordHash" = @__hashedPassword_1 AND NOT (u."IsDeleted")
+LIMIT 1
+2025-08-06 23:53:53.979 +05:30 [INF] Executed DbCommand (4ms) [Parameters=[@__user_RoleId_0='00000000-0000-0000-0000-000000000001' (Nullable = true)], CommandType='"Text"', CommandTimeout='30']
+SELECT r."Id", r."AssignedAt", r."AssignedBy", r."IsActive", r."IsRevoked", r."PermissionId", r."RoleId"
+FROM "RolePermissions" AS r
+WHERE r."RoleId" = @__user_RoleId_0 AND NOT (r."IsRevoked")
+2025-08-06 23:53:54.003 +05:30 [INF] Executed DbCommand (2ms) [Parameters=[@__userId_0='62858aa2-3a54-4fd5-8696-c343d9af7634'], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."AssignedAt", u."AssignedBy", u."IsGranted", u."IsRevoked", u."PermissionId", u."UserId"
+FROM "UserPermissions" AS u
+WHERE u."UserId" = @__userId_0 AND NOT (u."IsRevoked")
+2025-08-06 23:53:54.088 +05:30 [INF] Executed DbCommand (43ms) [Parameters=[@__permissionIds_0={ '30000000-0000-0000-0000-000000000007', '30000000-0000-0000-0000-000000000001', '30000000-0000-0000-0000-000000000009', '30000000-0000-0000-0000-000000000002', '30000000-0000-0000-0000-000000000006', ... } (DbType = Object)], CommandType='"Text"', CommandTimeout='30']
+SELECT p."Id", p."Code", p."CreatedAt", p."Description", p."Group", p."IsActive", p."Name"
+FROM "Permissions" AS p
+WHERE p."Id" = ANY (@__permissionIds_0)
+2025-08-06 23:53:54.108 +05:30 [INF] ✅ Token generated for: admin@xbytechat.com
+2025-08-06 23:53:54.181 +05:30 [INF] Executed action xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api) in 431.7728ms
+2025-08-06 23:53:54.183 +05:30 [INF] Executed endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api)'
+2025-08-06 23:53:54.236 +05:30 [ERR] ❌ An unhandled exception occurred
+System.InvalidOperationException: Headers are read-only, response has already started.
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpHeaders.ThrowHeadersReadOnlyException()
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpResponseHeaders.Microsoft.AspNetCore.Http.IHeaderDictionary.set_SetCookie(StringValues value)
+   at Microsoft.AspNetCore.Http.ResponseCookies.Append(String key, String value, CookieOptions options)
+   at xbytechat.api.AuthModule.Services.AuthService.LoginAsync(UserLoginDto dto) in D:\xbytechat\xbytechat-api\xbytechat-api\AuthModule\Services\AuthService.cs:line 462
+   at xbytechat.api.AuthModule.Controllers.AuthController.Login(UserLoginDto dto) in D:\xbytechat\xbytechat-api\xbytechat-api\AuthModule\Controllers\AuthController.cs:line 29
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at GlobalExceptionMiddleware.Invoke(HttpContext context) in D:\xbytechat\xbytechat-api\xbytechat-api\Middlewares\GlobalExceptionMiddleware.cs:line 32
+2025-08-06 23:53:54.251 +05:30 [ERR] Response has already started, unable to write error response for path: /api/Auth/login
+2025-08-06 23:53:54.256 +05:30 [INF] Request finished HTTP/1.1 POST http://localhost:7113/api/Auth/login - 401 null application/json 671.7969ms
+2025-08-06 23:56:41.472 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/swagger/index.html - null null
+2025-08-06 23:56:41.486 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/swagger/index.html - 200 null text/html;charset=utf-8 14.1401ms
+2025-08-06 23:56:41.525 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/_vs/browserLink - null null
+2025-08-06 23:56:41.525 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/_framework/aspnetcore-browser-refresh.js - null null
+2025-08-06 23:56:41.531 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/_framework/aspnetcore-browser-refresh.js - 200 13762 application/javascript; charset=utf-8 6.0525ms
+2025-08-06 23:56:41.543 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/_vs/browserLink - 200 null text/javascript; charset=UTF-8 18.3407ms
+2025-08-06 23:56:41.899 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/swagger/v1/swagger.json - null null
+2025-08-06 23:56:57.544 +05:30 [INF] User profile is available. Using 'C:\Users\sunde\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-08-06 23:56:57.577 +05:30 [INF] 🚀 Webhook Queue Worker started.
+2025-08-06 23:56:57.589 +05:30 [INF] 🧹 FailedWebhookLogCleanupService started.
+2025-08-06 23:56:58.250 +05:30 [WRN] Sensitive data logging is enabled. Log entries and exception messages may include sensitive application data; this mode should only be enabled during development.
+2025-08-06 23:56:58.703 +05:30 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2025-08-06 23:56:58.895 +05:30 [INF] Now listening on: http://localhost:7113
+2025-08-06 23:56:58.897 +05:30 [INF] Now listening on: http://localhost:5295
+2025-08-06 23:56:58.898 +05:30 [INF] Application started. Press Ctrl+C to shut down.
+2025-08-06 23:56:58.899 +05:30 [INF] Hosting environment: Development
+2025-08-06 23:56:58.899 +05:30 [INF] Content root path: D:\xbytechat\xbytechat-api\xbytechat-api
+2025-08-06 23:56:58.915 +05:30 [INF] Executed DbCommand (22ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT w."Id", w."AutoCleanupEnabled", w."LastCleanupAt"
+FROM "WebhookSettings" AS w
+LIMIT 1
+2025-08-06 23:56:58.932 +05:30 [INF] Executed DbCommand (38ms) [Parameters=[@__cutoff_0='2025-07-30T18:26:57.6763910Z' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT f."Id", f."CreatedAt", f."ErrorMessage", f."FailureType", f."RawJson", f."SourceModule"
+FROM "FailedWebhookLogs" AS f
+WHERE f."CreatedAt" < @__cutoff_0
+2025-08-06 23:57:01.108 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/swagger/index.html - null null
+2025-08-06 23:57:01.298 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/swagger/index.html - 200 null text/html;charset=utf-8 197.9967ms
+2025-08-06 23:57:01.311 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/_framework/aspnetcore-browser-refresh.js - null null
+2025-08-06 23:57:01.319 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/_framework/aspnetcore-browser-refresh.js - 200 13762 application/javascript; charset=utf-8 8.5827ms
+2025-08-06 23:57:01.398 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/_vs/browserLink - null null
+2025-08-06 23:57:01.434 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/_vs/browserLink - 200 null text/javascript; charset=UTF-8 35.7829ms
+2025-08-06 23:57:01.662 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/swagger/v1/swagger.json - null null
+2025-08-06 23:57:01.845 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 183.6025ms
+2025-08-06 23:57:46.098 +05:30 [INF] Request starting HTTP/1.1 POST http://localhost:7113/api/Auth/login - application/json 62
+2025-08-06 23:57:46.107 +05:30 [WRN] Failed to determine the https port for redirect.
+2025-08-06 23:57:46.110 +05:30 [INF] CORS policy execution failed.
+2025-08-06 23:57:46.111 +05:30 [INF] Request origin http://localhost:7113 does not have permission to access the resource.
+2025-08-06 23:57:46.200 +05:30 [INF] Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '06-08-2025 01:24:06 PM', Current time (UTC): '06-08-2025 06:27:46 PM'.
+   at Microsoft.IdentityModel.Tokens.ValidatorUtilities.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+2025-08-06 23:57:46.228 +05:30 [INF] Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '06-08-2025 01:24:06 PM', Current time (UTC): '06-08-2025 06:27:46 PM'.
+2025-08-06 23:57:46.232 +05:30 [INF] Executing endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api)'
+2025-08-06 23:57:46.249 +05:30 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(xbytechat.api.AuthModule.DTOs.UserLoginDto) on controller xbytechat.api.AuthModule.Controllers.AuthController (xbytechat.api).
+2025-08-06 23:57:46.349 +05:30 [INF] 🔑 Login attempt for email: admin@xbytechat.com
+2025-08-06 23:57:46.414 +05:30 [INF] Executed DbCommand (4ms) [Parameters=[@__dto_Email_0='admin@xbytechat.com', @__hashedPassword_1='JAvlGPq9JyTdtvBO6x2llnRI1+gxwIyPqCKAn3THIKk='], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."BusinessId", u."CreatedAt", u."DeletedAt", u."Email", u."IsDeleted", u."Name", u."PasswordHash", u."RefreshToken", u."RefreshTokenExpiry", u."RoleId", u."Status", r."Id", r."CreatedAt", r."Description", r."IsActive", r."IsSystemDefined", r."Name"
+FROM "Users" AS u
+LEFT JOIN "Roles" AS r ON u."RoleId" = r."Id"
+WHERE u."Email" = @__dto_Email_0 AND u."PasswordHash" = @__hashedPassword_1 AND NOT (u."IsDeleted")
+LIMIT 1
+2025-08-06 23:57:46.500 +05:30 [INF] Executed DbCommand (2ms) [Parameters=[@__user_RoleId_0='00000000-0000-0000-0000-000000000001' (Nullable = true)], CommandType='"Text"', CommandTimeout='30']
+SELECT r."Id", r."AssignedAt", r."AssignedBy", r."IsActive", r."IsRevoked", r."PermissionId", r."RoleId"
+FROM "RolePermissions" AS r
+WHERE r."RoleId" = @__user_RoleId_0 AND NOT (r."IsRevoked")
+2025-08-06 23:57:46.519 +05:30 [INF] Executed DbCommand (1ms) [Parameters=[@__userId_0='62858aa2-3a54-4fd5-8696-c343d9af7634'], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."AssignedAt", u."AssignedBy", u."IsGranted", u."IsRevoked", u."PermissionId", u."UserId"
+FROM "UserPermissions" AS u
+WHERE u."UserId" = @__userId_0 AND NOT (u."IsRevoked")
+2025-08-06 23:57:46.590 +05:30 [INF] Executed DbCommand (42ms) [Parameters=[@__permissionIds_0={ '30000000-0000-0000-0000-000000000007', '30000000-0000-0000-0000-000000000001', '30000000-0000-0000-0000-000000000009', '30000000-0000-0000-0000-000000000002', '30000000-0000-0000-0000-000000000006', ... } (DbType = Object)], CommandType='"Text"', CommandTimeout='30']
+SELECT p."Id", p."Code", p."CreatedAt", p."Description", p."Group", p."IsActive", p."Name"
+FROM "Permissions" AS p
+WHERE p."Id" = ANY (@__permissionIds_0)
+2025-08-06 23:57:46.609 +05:30 [INF] ✅ Token generated for: admin@xbytechat.com
+2025-08-06 23:57:46.686 +05:30 [INF] Executed action xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api) in 431.6745ms
+2025-08-06 23:57:46.688 +05:30 [INF] Executed endpoint 'xbytechat.api.AuthModule.Controllers.AuthController.Login (xbytechat.api)'
+2025-08-06 23:57:46.739 +05:30 [ERR] ❌ An unhandled exception occurred
+System.InvalidOperationException: Headers are read-only, response has already started.
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpHeaders.ThrowHeadersReadOnlyException()
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpResponseHeaders.Microsoft.AspNetCore.Http.IHeaderDictionary.set_SetCookie(StringValues value)
+   at Microsoft.AspNetCore.Http.ResponseCookies.Append(String key, String value, CookieOptions options)
+   at xbytechat.api.AuthModule.Services.AuthService.LoginAsync(UserLoginDto dto) in D:\xbytechat\xbytechat-api\xbytechat-api\AuthModule\Services\AuthService.cs:line 462
+   at xbytechat.api.AuthModule.Controllers.AuthController.Login(UserLoginDto dto) in D:\xbytechat\xbytechat-api\xbytechat-api\AuthModule\Controllers\AuthController.cs:line 29
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at GlobalExceptionMiddleware.Invoke(HttpContext context) in D:\xbytechat\xbytechat-api\xbytechat-api\Middlewares\GlobalExceptionMiddleware.cs:line 32
+2025-08-06 23:57:46.750 +05:30 [ERR] Response has already started, unable to write error response for path: /api/Auth/login
+2025-08-06 23:57:46.754 +05:30 [INF] Request finished HTTP/1.1 POST http://localhost:7113/api/Auth/login - 401 null application/json 655.1982ms

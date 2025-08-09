@@ -381,6 +381,127 @@ namespace xbytechat.api.AuthModule.Services
         //        Token = token
         //    };
         //}
+
+        #region // Below Code comeneted to replace cokkies to bearer
+
+        //public async Task<ResponseResult> LoginAsync(UserLoginDto dto)
+        //{
+        //    _logger.LogInformation("🔑 Login attempt for email: {Email}", dto.Email);
+        //    var hashedPassword = HashPassword(dto.Password);
+
+        //    var user = await _userRepo
+        //        .AsQueryable()
+        //        .Where(u => u.Email == dto.Email && u.PasswordHash == hashedPassword && !u.IsDeleted)
+        //        .Include(u => u.Role)
+        //        .FirstOrDefaultAsync();
+
+        //    if (user == null)
+        //    {
+        //        _logger.LogWarning("❌ Login failed: Invalid email or password for {Email}", dto.Email);
+        //        return ResponseResult.ErrorInfo("❌ Invalid email or password");
+        //    }
+
+        //    var roleName = user.Role?.Name?.Trim().ToLower() ?? "unknown";
+        //    var isAdminType = roleName == "admin" || roleName == "superadmin" || roleName == "partner" || roleName == "reseller";
+
+        //    if (user.BusinessId == null && !isAdminType)
+        //    {
+        //        _logger.LogWarning("❌ Login denied for {Email}: No BusinessId and not admin", dto.Email);
+        //        return ResponseResult.ErrorInfo("❌ Your account approval is pending. Please contact your administrator or support.");
+        //    }
+
+        //    Business business = null;
+        //    if (user.BusinessId != null)
+        //    {
+        //        business = await _businessService.Query()
+        //            .Include(b => b.BusinessPlanInfo)
+        //            .FirstOrDefaultAsync(b => b.Id == user.BusinessId.Value);
+
+        //        if (business == null)
+        //        {
+        //            _logger.LogError("❌ Login error: Business not found for user {UserId}", user.Id);
+        //            return ResponseResult.ErrorInfo("❌ Associated business not found.");
+        //        }
+
+        //        if (business.Status == Business.StatusType.Pending)
+        //        {
+        //            _logger.LogWarning("⏳ Login blocked: Business under review (BusinessId: {BusinessId})", business.Id);
+        //            return ResponseResult.ErrorInfo("⏳ Your business is under review. Please wait for approval.");
+        //        }
+        //    }
+
+        //    var permissions = await _accessControlService.GetPermissionsAsync(user.Id);
+
+        //    string planName;
+        //    string companyName;
+        //    string businessId = user.BusinessId?.ToString() ?? "";
+
+        //    if (isAdminType)
+        //    {
+        //        planName = roleName; // e.g., 'superadmin'
+        //        companyName = "xByte Admin";
+        //        businessId = ""; // Admins are not tied to a business
+        //    }
+        //    else
+        //    {
+        //        planName = business?.BusinessPlanInfo?.Plan.ToString() ?? "";
+        //        companyName = business?.CompanyName ?? "";
+        //    }
+
+        //    // ✅ Generate JWT with lowercase claim keys
+        //    var token = _jwtTokenService.GenerateToken(
+        //        user.Id.ToString(),
+        //        roleName,
+        //        user.Name ?? "",
+        //        user.Email ?? "",
+        //        user.Status ?? "unknown",
+        //        businessId,
+        //        companyName,
+        //        planName,
+        //        permissions ?? new List<string>()
+        //    );
+
+        //    // ✅ Store token securely as cookie (must match JwtBearer event)
+        //    _httpContextAccessor.HttpContext.Response.Cookies.Append("xbyte_token", token, 
+
+        //        new CookieOptions
+        //    {
+        //        HttpOnly = true,
+        //        Secure = true,
+        //       // SameSite = SameSiteMode.Strict,
+        //        SameSite = SameSiteMode.None,
+        //        Expires = DateTime.UtcNow.AddDays(7),
+        //        Domain = "http://localhost:3000"
+        //    });
+
+        //    // ✅ Build user info for frontend
+        //    var userDto = new UserDto
+        //    {
+        //        Id = user.Id,
+        //        Name = user.Name,
+        //        Email = user.Email,
+        //        Role = roleName,
+        //        Status = user.Status,
+        //        CreatedAt = user.CreatedAt,
+        //        BusinessId = string.IsNullOrEmpty(businessId) ? Guid.Empty : Guid.Parse(businessId),
+        //        CompanyName = companyName,
+        //        Plan = planName,
+        //        AccessToken = null // Not needed since we're using secure cookie
+        //    };
+
+        //    _logger.LogInformation("✅ Login successful for {Email}, Role: {Role}, Plan: {Plan}", dto.Email, roleName, planName);
+
+        //    return new ResponseResult
+        //    {
+        //        Success = true,
+        //        Message = "✅ Login successful",
+        //        Data = userDto,
+        //        Token = token
+        //    };
+        //}
+
+        #endregion
+
         public async Task<ResponseResult> LoginAsync(UserLoginDto dto)
         {
             _logger.LogInformation("🔑 Login attempt for email: {Email}", dto.Email);
@@ -399,7 +520,7 @@ namespace xbytechat.api.AuthModule.Services
             }
 
             var roleName = user.Role?.Name?.Trim().ToLower() ?? "unknown";
-            var isAdminType = roleName == "admin" || roleName == "superadmin" || roleName == "partner" || roleName == "reseller";
+            var isAdminType = roleName is "admin" or "superadmin" or "partner" or "reseller";
 
             if (user.BusinessId == null && !isAdminType)
             {
@@ -407,7 +528,7 @@ namespace xbytechat.api.AuthModule.Services
                 return ResponseResult.ErrorInfo("❌ Your account approval is pending. Please contact your administrator or support.");
             }
 
-            Business business = null;
+            Business? business = null;
             if (user.BusinessId != null)
             {
                 business = await _businessService.Query()
@@ -415,16 +536,10 @@ namespace xbytechat.api.AuthModule.Services
                     .FirstOrDefaultAsync(b => b.Id == user.BusinessId.Value);
 
                 if (business == null)
-                {
-                    _logger.LogError("❌ Login error: Business not found for user {UserId}", user.Id);
                     return ResponseResult.ErrorInfo("❌ Associated business not found.");
-                }
 
                 if (business.Status == Business.StatusType.Pending)
-                {
-                    _logger.LogWarning("⏳ Login blocked: Business under review (BusinessId: {BusinessId})", business.Id);
                     return ResponseResult.ErrorInfo("⏳ Your business is under review. Please wait for approval.");
-                }
             }
 
             var permissions = await _accessControlService.GetPermissionsAsync(user.Id);
@@ -435,17 +550,17 @@ namespace xbytechat.api.AuthModule.Services
 
             if (isAdminType)
             {
-                planName = roleName; // e.g., 'superadmin'
+                planName = roleName;        // admin types treated as plan in UI
                 companyName = "xByte Admin";
-                businessId = ""; // Admins are not tied to a business
+                businessId = "";
             }
             else
             {
-                planName = business?.BusinessPlanInfo?.Plan.ToString() ?? "";
+                planName = business?.BusinessPlanInfo?.Plan.ToString() ?? "basic";
                 companyName = business?.CompanyName ?? "";
             }
 
-            // ✅ Generate JWT with lowercase claim keys
+            // ✅ Generate JWT (includes role/plan/biz + ClaimTypes.Role)
             var token = _jwtTokenService.GenerateToken(
                 user.Id.ToString(),
                 roleName,
@@ -458,16 +573,8 @@ namespace xbytechat.api.AuthModule.Services
                 permissions ?? new List<string>()
             );
 
-            // ✅ Store token securely as cookie (must match JwtBearer event)
-            _httpContextAccessor.HttpContext.Response.Cookies.Append("xbyte_token", token, new CookieOptions
-            {
-                HttpOnly = true,
-                Secure = true,
-                SameSite = SameSiteMode.Strict,
-                Expires = DateTime.UtcNow.AddDays(7)
-            });
+            // ❌ NO cookie writes in Bearer mode
 
-            // ✅ Build user info for frontend
             var userDto = new UserDto
             {
                 Id = user.Id,
@@ -479,7 +586,7 @@ namespace xbytechat.api.AuthModule.Services
                 BusinessId = string.IsNullOrEmpty(businessId) ? Guid.Empty : Guid.Parse(businessId),
                 CompanyName = companyName,
                 Plan = planName,
-                AccessToken = null // Not needed since we're using secure cookie
+                AccessToken = null
             };
 
             _logger.LogInformation("✅ Login successful for {Email}, Role: {Role}, Plan: {Plan}", dto.Email, roleName, planName);
