@@ -292,12 +292,15 @@ builder.Services.AddSingleton<IUserIdProvider, NameUserIdProvider>();
 
 var app = builder.Build();
 
-app.MapGet("/debug/cors", () => Results.Ok(new
+app.MapGet("/api/debug/cors", () => Results.Ok(new
 {
     Allowed = app.Services.GetRequiredService<IConfiguration>()
               .GetSection("Cors:AllowedOrigins").Get<string[]>()
 }));
-
+app.MapGet("/api/debug/db", async (AppDbContext db) => {
+    try { await db.Database.OpenConnectionAsync(); await db.Database.CloseConnectionAsync(); return Results.Ok("ok"); }
+    catch (Exception ex) { return Results.Problem(ex.Message); }
+});
 #region 🌐 Middleware Pipeline Setup
 AuditLoggingHelper.Configure(app.Services);
 

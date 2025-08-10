@@ -37,3 +37,42 @@ WHERE f."CreatedAt" < @__cutoff_0
 2025-08-10 13:03:46.363 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/favicon.ico - null null
 2025-08-10 13:03:46.368 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/favicon.ico - 404 0 null 5.199ms
 2025-08-10 13:03:46.371 +05:30 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:7113/favicon.ico, Response status code: 404
+2025-08-10 14:11:17.515 +05:30 [INF] User profile is available. Using 'C:\Users\sunde\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-08-10 14:11:17.557 +05:30 [INF] 🚀 Webhook Queue Worker started.
+2025-08-10 14:11:17.572 +05:30 [INF] 🧹 FailedWebhookLogCleanupService started.
+2025-08-10 14:11:19.118 +05:30 [WRN] Sensitive data logging is enabled. Log entries and exception messages may include sensitive application data; this mode should only be enabled during development.
+2025-08-10 14:11:19.631 +05:30 [WRN] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2025-08-10 14:11:19.865 +05:30 [INF] Executed DbCommand (37ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT w."Id", w."AutoCleanupEnabled", w."LastCleanupAt"
+FROM "WebhookSettings" AS w
+LIMIT 1
+2025-08-10 14:11:19.869 +05:30 [INF] Now listening on: http://localhost:7113
+2025-08-10 14:11:19.870 +05:30 [INF] Now listening on: http://localhost:5295
+2025-08-10 14:11:19.871 +05:30 [INF] Application started. Press Ctrl+C to shut down.
+2025-08-10 14:11:19.872 +05:30 [INF] Hosting environment: Development
+2025-08-10 14:11:19.872 +05:30 [INF] Content root path: D:\xbytechat\xbytechat-api\xbytechat-api
+2025-08-10 14:11:19.883 +05:30 [INF] Executed DbCommand (53ms) [Parameters=[@__cutoff_0='2025-08-03T08:41:18.5469855Z' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT f."Id", f."CreatedAt", f."ErrorMessage", f."FailureType", f."RawJson", f."SourceModule"
+FROM "FailedWebhookLogs" AS f
+WHERE f."CreatedAt" < @__cutoff_0
+2025-08-10 14:11:20.954 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/swagger/index.html - null null
+2025-08-10 14:11:21.210 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/swagger/index.html - 200 null text/html;charset=utf-8 275.3971ms
+2025-08-10 14:11:21.367 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/_vs/browserLink - null null
+2025-08-10 14:11:21.367 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/_framework/aspnetcore-browser-refresh.js - null null
+2025-08-10 14:11:21.385 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/_framework/aspnetcore-browser-refresh.js - 200 13762 application/javascript; charset=utf-8 15.4752ms
+2025-08-10 14:11:21.430 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/_vs/browserLink - 200 null text/javascript; charset=UTF-8 62.6732ms
+2025-08-10 14:11:21.643 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/swagger/v1/swagger.json - null null
+2025-08-10 14:11:21.820 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 177.8445ms
+2025-08-10 14:11:33.954 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/debug/cors - null null
+2025-08-10 14:11:33.977 +05:30 [WRN] Failed to determine the https port for redirect.
+2025-08-10 14:11:34.223 +05:30 [INF] Executing endpoint 'HTTP: GET /debug/cors'
+2025-08-10 14:11:34.239 +05:30 [INF] Setting HTTP status code 200.
+2025-08-10 14:11:34.247 +05:30 [INF] Writing value of type '<>f__AnonymousType128`1' as Json.
+2025-08-10 14:11:34.252 +05:30 [INF] Executed endpoint 'HTTP: GET /debug/cors'
+2025-08-10 14:11:34.254 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/debug/cors - 200 null application/json; charset=utf-8 300.3462ms
+2025-08-10 14:11:47.142 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/debug/db - null null
+2025-08-10 14:11:47.146 +05:30 [INF] Executing endpoint 'HTTP: GET /debug/db'
+2025-08-10 14:11:47.221 +05:30 [INF] Setting HTTP status code 200.
+2025-08-10 14:11:47.222 +05:30 [INF] Writing value of type 'String' as Json.
+2025-08-10 14:11:47.223 +05:30 [INF] Executed endpoint 'HTTP: GET /debug/db'
+2025-08-10 14:11:47.228 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/debug/db - 200 null application/json; charset=utf-8 85.9763ms
