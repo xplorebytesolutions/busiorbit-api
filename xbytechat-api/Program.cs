@@ -232,7 +232,16 @@ builder.Services.AddAuthorization();
 #endregion
 
 #region 🌐 CORS Setup (Bearer mode, no credentials)
+//var allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>();
+// 🌐 Read allowed origins (array or single string) + log them
 var allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>();
+if (allowedOrigins == null || allowedOrigins.Length == 0)
+{
+    var raw = builder.Configuration["Cors:AllowedOrigins"]; // supports single string or comma/semicolon list
+    if (!string.IsNullOrWhiteSpace(raw))
+        allowedOrigins = raw.Split(new[] { ',', ';', ' ' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+}
+Console.WriteLine("[CORS] Allowed origins => " + string.Join(", ", allowedOrigins ?? Array.Empty<string>()));
 
 builder.Services.AddCors(options =>
 {
@@ -274,6 +283,12 @@ builder.Services.AddSingleton<IUserIdProvider, NameUserIdProvider>();
 #endregion
 
 var app = builder.Build();
+
+app.MapGet("/debug/cors", () => Results.Ok(new
+{
+    Allowed = app.Services.GetRequiredService<IConfiguration>()
+              .GetSection("Cors:AllowedOrigins").Get<string[]>()
+}));
 
 #region 🌐 Middleware Pipeline Setup
 AuditLoggingHelper.Configure(app.Services);
