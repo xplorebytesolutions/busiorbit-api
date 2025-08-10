@@ -234,10 +234,18 @@ builder.Services.AddAuthorization();
 #region 🌐 CORS Setup (Bearer mode, no credentials)
 //var allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>();
 // 🌐 Read allowed origins (array or single string) + log them
+//var allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>();
+//if (allowedOrigins == null || allowedOrigins.Length == 0)
+//{
+//    var raw = builder.Configuration["Cors:AllowedOrigins"]; // supports single string or comma/semicolon list
+//    if (!string.IsNullOrWhiteSpace(raw))
+//        allowedOrigins = raw.Split(new[] { ',', ';', ' ' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+//}
+//Console.WriteLine("[CORS] Allowed origins => " + string.Join(", ", allowedOrigins ?? Array.Empty<string>()));
 var allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>();
 if (allowedOrigins == null || allowedOrigins.Length == 0)
 {
-    var raw = builder.Configuration["Cors:AllowedOrigins"]; // supports single string or comma/semicolon list
+    var raw = builder.Configuration["Cors:AllowedOrigins"];
     if (!string.IsNullOrWhiteSpace(raw))
         allowedOrigins = raw.Split(new[] { ',', ';', ' ' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 }
@@ -331,7 +339,7 @@ app.Run();
 
 
 
-//using FluentValidation;
+//using FluentValidation;;
 //using Microsoft.AspNetCore.Authentication.JwtBearer;
 //using Microsoft.EntityFrameworkCore;
 //using Microsoft.IdentityModel.Tokens;
