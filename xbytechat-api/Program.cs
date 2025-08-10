@@ -56,6 +56,8 @@ using xbytechat.api.Features.FeatureAccessModule.Services;
 using xbytechat.api.Features.ReportingModule.Services;
 using xbytechat.api.Features.Automation.Repositories;
 using xbytechat.api.Features.Automation.Services;
+using Npgsql;
+using System.Net;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -301,6 +303,36 @@ app.MapGet("/api/debug/db", async (AppDbContext db) => {
     try { await db.Database.OpenConnectionAsync(); await db.Database.CloseConnectionAsync(); return Results.Ok("ok"); }
     catch (Exception ex) { return Results.Problem(ex.Message); }
 });
+app.MapGet("/api/debug/conn", (IConfiguration cfg) =>
+{
+    var cs = cfg.GetConnectionString("DefaultConnection") ?? "";
+    var b = new NpgsqlConnectionStringBuilder(cs);
+    return Results.Ok(new
+    {
+        host = b.Host,
+        port = b.Port,
+        database = b.Database,
+        username = b.Username,
+        sslmode = b.SslMode.ToString(),
+        hasPassword = !string.IsNullOrEmpty(b.Password)
+    });
+});
+// Try DNS resolution of the DB host that /api/debug/conn reports
+app.MapGet("/api/debug/dns", (IConfiguration cfg) =>
+{
+    var cs = cfg.GetConnectionString("DefaultConnection") ?? "";
+    var b = new NpgsqlConnectionStringBuilder(cs);
+    try
+    {
+        var ips = Dns.GetHostAddresses(b.Host);
+        return Results.Ok(new { host = b.Host, addresses = ips.Select(i => i.ToString()).ToArray() });
+    }
+    catch (Exception ex)
+    {
+        return Results.Problem($"DNS failed for host '{b.Host}': {ex.Message}");
+    }
+});
+
 #region 🌐 Middleware Pipeline Setup
 AuditLoggingHelper.Configure(app.Services);
 
