@@ -1,17 +1,38 @@
 {
-  "version": "2.1-full",
-  "generatedAt": "2025-08-11 17:18:43 +00:00",
+  "version": "2.2-chunked",
+  "generatedAt": "2025-08-11 17:45:59 +00:00",
   "modules": [
     {
       "name": "xbytechat-api",
       "slug": "xbytechat-api",
-      "fileCount": 442,
-      "bytes": 3058195,
-      "href": "/busiorbit-api/pack/xbytechat-api.json"
+      "mode": "parts",
+      "totalBytes": 3058195,
+      "partCount": 3,
+      "parts": [
+        {
+          "n": 1,
+          "href": "/busiorbit-api/pack/xbytechat-api/parts/1.json",
+          "bytes": 1209960,
+          "fileCount": 378
+        },
+        {
+          "n": 2,
+          "href": "/busiorbit-api/pack/xbytechat-api/parts/2.json",
+          "bytes": 1221640,
+          "fileCount": 18
+        },
+        {
+          "n": 3,
+          "href": "/busiorbit-api/pack/xbytechat-api/parts/3.json",
+          "bytes": 626595,
+          "fileCount": 46
+        }
+      ]
     },
     {
       "name": "xbytechat-tests",
       "slug": "xbytechat-tests",
+      "mode": "single",
       "fileCount": 3,
       "bytes": 1123,
       "href": "/busiorbit-api/pack/xbytechat-tests.json"
@@ -19,6 +40,7 @@
     {
       "name": "xbytechat.api.Tests",
       "slug": "xbytechat-api-tests",
+      "mode": "single",
       "fileCount": 4,
       "bytes": 8882,
       "href": "/busiorbit-api/pack/xbytechat-api-tests.json"
@@ -26,6 +48,7 @@
     {
       "name": "xbytechat.Tests",
       "slug": "xbytechat-tests",
+      "mode": "single",
       "fileCount": 8,
       "bytes": 32821,
       "href": "/busiorbit-api/pack/xbytechat-tests.json"
