@@ -1,14 +1,7 @@
 {
   "version": "2.1-full",
-  "generatedAt": "2025-08-11 14:00:55 +00:00",
+  "generatedAt": "2025-08-11 17:18:43 +00:00",
   "modules": [
-    {
-      "name": "root",
-      "slug": "root",
-      "fileCount": 462,
-      "bytes": 4159249,
-      "href": "/busiorbit-api/pack/root.json"
-    },
     {
       "name": "xbytechat-api",
       "slug": "xbytechat-api",
