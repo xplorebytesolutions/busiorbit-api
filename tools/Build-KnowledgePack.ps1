@@ -1,25 +1,25 @@
 param(
   [string]$RepoRoot = ".",
 
-  # ---- legacy args (ignored if passed by old workflow) ----
+  # legacy args (ignored if passed by old workflow)
   [string]$OutMd   = $null,
   [string]$OutJson = $null,
 
-  # ---- current outputs ----
-  [string]$OutDir   = ".\docs\pack",               # per-module JSONs
-  [string]$IndexOut = ".\docs\pack\index.json",    # small index
-  [string]$TinyRoot = ".\docs\xbc-knowledge-pack.json", # pointer for backward compat
+  # outputs
+  [string]$OutDir   = ".\docs\pack",
+  [string]$IndexOut = ".\docs\pack\index.json",
+  [string]$TinyRoot = ".\docs\xbc-knowledge-pack.json",
 
-  # ---- options ----
-  [switch]$IncludeTests   = $true,   # set to $false to drop test projects
-  [switch]$IncludeSecrets = $false,  # set to $true ONLY if you really want prod secrets included
-  [int]$MaxFileKB = 512             # truncate files larger than this (in KB)
+  # options
+  [switch]$IncludeTests   = $true,
+  [switch]$IncludeSecrets = $false,
+  [int]$MaxFileKB   = 512,     # truncate huge individual files
+  [int]$MaxPartKB   = 1200     # ~1.2 MB per part target (keeps Action responses small)
 )
 
 function Get-FileHashHex($p){ (Get-FileHash -Algorithm SHA256 -Path $p).Hash.ToLower() }
 function Slug($s){ ($s -replace '[^a-zA-Z0-9]+','-').ToLower() }
 
-# Include almost everything a dev/GPT needs to read
 $includeExt = @(
   ".cs",".csproj",".sln",".props",".targets",".editorconfig",
   ".json",".yml",".yaml",".md",".sql",".ts",".tsx",".jsx",
@@ -27,11 +27,11 @@ $includeExt = @(
   ".ps1",".sh",".bat",".dockerfile",".gitattributes",".gitignore"
 )
 
-# Directory excludes
+# exclude noisy/sensitive folders
 $excludeDir = '(?i)(/|\\)(\.git|bin|obj|node_modules|\.vs|logs|docs/pack)(/|\\)'
 if (-not $IncludeTests) { $excludeDir = '(?i)(/|\\)(\.git|bin|obj|node_modules|\.vs|logs|docs/pack|tests|\.tests)(/|\\)' }
 
-# File excludes (secrets)
+# exclude sensitive files
 $excludeFile = '(?i)\.key$|\.pem$|\.pfx$|\.cer$|\.env|secrets'
 if (-not $IncludeSecrets) { $excludeFile += '|appsettings\.Production\.json' }
 
@@ -45,30 +45,22 @@ function Lang($e){
   }
 }
 
-# ---- Output prep ----
+# prep output
 New-Item -ItemType Directory -Force -Path $OutDir | Out-Null
-# keep Pages from parsing anything here
 New-Item -ItemType File -Force -Path (Join-Path $OutDir ".nojekyll") | Out-Null
 
 $generatedAt = Get-Date -Format 'yyyy-MM-dd HH:mm:ss K'
+$index = [ordered]@{ version="2.2-chunked"; generatedAt=$generatedAt; modules=@() }
 
-# ---- Build module list: one per top-level folder + a "root" module ----
-#$top = Get-ChildItem -Path $RepoRoot -Directory |
- # Where-Object { $_.Name -notin @(".git",".github","docs","tools",".vs","obj","bin") }
-
-#$modules = @([ordered]@{ name = "root"; root = (Resolve-Path $RepoRoot).Path })
-#$modules += $top | ForEach-Object { [ordered]@{ name = $_.Name; root = $_.FullName } }
-##------------------------- Remove root from the grouping ------
-# ---- Build module list: one per top-level folder (no 'root' to keep payloads small) ----
+# top-level modules (no giant 'root')
 $top = Get-ChildItem -Path $RepoRoot -Directory |
   Where-Object { $_.Name -notin @(".git",".github","docs","tools",".vs","obj","bin") }
 
 $modules = @()
 $modules += $top | ForEach-Object { [ordered]@{ name = $_.Name; root = $_.FullName } }
 
-# ---- Gather & write per-module JSON ----
-$totalFiles = 0
-$index = [ordered]@{ version="2.1-full"; generatedAt=$generatedAt; modules=@() }
+$MaxBytes   = $MaxFileKB * 1024
+$TargetPart = $MaxPartKB * 1024
 
 foreach ($m in $modules) {
   $name = $m.name; $slug = Slug $name; $root = $m.root
@@ -79,49 +71,96 @@ foreach ($m in $modules) {
     Where-Object { $_.FullName -notmatch $excludeFile } |
     Sort-Object FullName -Unique
 
-  $mod = [ordered]@{ name=$name; generatedAt=$generatedAt; files=@() }
-  $bytes = 0
-  $maxBytes = $MaxFileKB * 1024
-
+  # read/prepare files
+  $prepared = @()
+  $totalBytes = 0
   foreach ($f in $files) {
     $rel = $f.FullName.Replace((Resolve-Path $RepoRoot),"").TrimStart("\","/")
 
-    # Safe read; skip if unreadable
     $text = $null
-    try {
-      $text = Get-Content -LiteralPath $f.FullName -Raw -ErrorAction Stop
-    } catch {
-      Write-Warning "Skipping unreadable file: $($f.FullName) — $_"
-      continue
+    try { $text = Get-Content -LiteralPath $f.FullName -Raw -ErrorAction Stop } catch {
+      Write-Warning "Skip unreadable: $($f.FullName) — $_"; continue
     }
     if ($null -eq $text) { $text = "" }
 
-    $sizeBytes = [Text.Encoding]::UTF8.GetByteCount([string]$text)
-
-    if ($sizeBytes -gt $maxBytes) {
-      $text = $text.Substring(0, [Math]::Min($text.Length, $maxBytes)) + "`n/* TRUNCATED for size */"
-      $sizeBytes = [Text.Encoding]::UTF8.GetByteCount($text)
+    $size = [Text.Encoding]::UTF8.GetByteCount([string]$text)
+    if ($size -gt $MaxBytes) {
+      $text = $text.Substring(0, [Math]::Min($text.Length, $MaxBytes)) + "`n/* TRUNCATED for size */"
+      $size = [Text.Encoding]::UTF8.GetByteCount($text)
     }
 
-    $mod.files += [ordered]@{
-      path=$rel; sha256=(Get-FileHashHex $f.FullName); language=(Lang $f.Extension);
-      size=$sizeBytes; content=$text
+    $prepared += [ordered]@{
+      path=$rel; sha256=(Get-FileHashHex $f.FullName); language=(Lang $f.Extension); size=$size; content=$text
     }
-    $bytes += $sizeBytes
+    $totalBytes += $size
   }
 
-  $outFile = Join-Path $OutDir "$slug.json"
-  ($mod | ConvertTo-Json -Depth 14) | Out-File -Encoding utf8 $outFile
+  # small module => single file
+  if ($totalBytes -le $TargetPart) {
+    $mod = [ordered]@{ name=$name; generatedAt=$generatedAt; files=$prepared }
+    $outFile = Join-Path $OutDir "$slug.json"
+    ($mod | ConvertTo-Json -Depth 14) | Out-File -Encoding utf8 $outFile
+
+    $index.modules += [ordered]@{
+      name=$name; slug=$slug; mode="single"; fileCount=$prepared.Count; bytes=$totalBytes;
+      href="/busiorbit-api/pack/$slug.json"
+    }
+    Write-Host "Module $name -> single ($($prepared.Count) files, $totalBytes bytes)"
+    continue
+  }
+
+  # large module => split into parts
+  $partsDir = Join-Path $OutDir "$slug/parts"
+  New-Item -ItemType Directory -Force -Path $partsDir | Out-Null
+  New-Item -ItemType File -Force -Path (Join-Path $partsDir ".nojekyll") | Out-Null
+
+  $partNum = 1
+  $buf     = New-Object System.Collections.Generic.List[object]
+  $bufBytes = 0
+  $partsMeta = @()
+
+  foreach ($pf in $prepared) {
+    $thisSize = [int]$pf.size
+    if ($bufBytes -gt 0 -and ($bufBytes + $thisSize) -gt $TargetPart) {
+      $out = [ordered]@{ name=$name; part=$partNum; of=0; generatedAt=$generatedAt; files=$buf }
+      $outPath = Join-Path $partsDir "$partNum.json"
+      ($out | ConvertTo-Json -Depth 14) | Out-File -Encoding utf8 $outPath
+
+      $partsMeta += [ordered]@{
+        n=$partNum; href="/busiorbit-api/pack/$slug/parts/$partNum.json"; bytes=$bufBytes; fileCount=$buf.Count
+      }
+      $partNum += 1
+      $buf     = New-Object System.Collections.Generic.List[object]
+      $bufBytes = 0
+    }
+    $buf.Add($pf)
+    $bufBytes += $thisSize
+  }
+  if ($buf.Count -gt 0) {
+    $out = [ordered]@{ name=$name; part=$partNum; of=0; generatedAt=$generatedAt; files=$buf }
+    $outPath = Join-Path $partsDir "$partNum.json"
+    ($out | ConvertTo-Json -Depth 14) | Out-File -Encoding utf8 $outPath
+    $partsMeta += [ordered]@{
+      n=$partNum; href="/busiorbit-api/pack/$slug/parts/$partNum.json"; bytes=$bufBytes; fileCount=$buf.Count
+    }
+  }
+
+  # annotate total part count
+  $totalParts = $partsMeta.Count
+  for ($i=1; $i -le $totalParts; $i++) {
+    $p = Get-Content (Join-Path $partsDir "$i.json") -Raw | ConvertFrom-Json
+    $p.of = $totalParts
+    ($p | ConvertTo-Json -Depth 14) | Out-File -Encoding utf8 (Join-Path $partsDir "$i.json")
+  }
 
   $index.modules += [ordered]@{
-    name=$name; slug=$slug; fileCount=$mod.files.Count; bytes=$bytes; href="/busiorbit-api/pack/$slug.json"
+    name=$name; slug=$slug; mode="parts"; totalBytes=$totalBytes; partCount=$totalParts; parts=$partsMeta
   }
-  $totalFiles += $mod.files.Count
-  Write-Host "Module $name -> $($mod.files.Count) files, $bytes bytes"
+  Write-Host "Module $name -> parts=$totalParts (total $totalBytes bytes)"
 }
 
-# ---- Write index + tiny pointer (for backward compatibility) ----
-($index | ConvertTo-Json -Depth 6) | Out-File -Encoding utf8 $IndexOut
+# write index + tiny pointer
+($index | ConvertTo-Json -Depth 8) | Out-File -Encoding utf8 $IndexOut
 ($index | Select-Object version, generatedAt | ConvertTo-Json) | Out-File -Encoding utf8 $TinyRoot
 
-Write-Host "DONE: modules=$($index.modules.Count), totalFiles=$totalFiles"
+Write-Host "DONE. modules=$($index.modules.Count)"
