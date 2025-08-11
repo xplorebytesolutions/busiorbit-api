@@ -26,12 +26,17 @@ function File-Lang($ext) {
   }
 }
 
-# ---- DISCOVERY: find Features & Migrations anywhere ----
-$featuresHit = Get-ChildItem -Path $RepoRoot -Directory -Recurse -ErrorAction SilentlyContinue |
-  Where-Object { $_.Name -ieq 'Features' } |
-  Sort-Object { $_.FullName.Split([System.IO.Path]::DirectorySeparatorChar).Count } |
-  Select-Object -First 1
-$featuresRoot = if ($featuresHit) { $featuresHit.FullName } else { $null }
+# ---- DISCOVERY: prefer xbytechat-api/Features, else auto-detect anywhere ----
+$explicitFeatures = Join-Path (Join-Path $RepoRoot "xbytechat-api") "Features"
+if (Test-Path $explicitFeatures) {
+  $featuresRoot = (Resolve-Path $explicitFeatures).Path
+} else {
+  $featuresHit = Get-ChildItem -Path $RepoRoot -Directory -Recurse -ErrorAction SilentlyContinue |
+    Where-Object { $_.Name -ieq 'Features' } |
+    Sort-Object { $_.FullName.Split([System.IO.Path]::DirectorySeparatorChar).Count } |
+    Select-Object -First 1
+  $featuresRoot = if ($featuresHit) { $featuresHit.FullName } else { $null }
+}
 
 $migrationDirs = Get-ChildItem -Path $RepoRoot -Directory -Recurse -ErrorAction SilentlyContinue |
   Where-Object { $_.Name -ieq 'Migrations' }
@@ -43,7 +48,7 @@ if ($featuresRoot) {
   $modules = @('Backend')   # fallback: scan whole repo
 }
 
-# Log what we detected (shows up in Actions)
+# Logs (visible in Actions)
 Write-Host "FeaturesRoot: $featuresRoot"
 Write-Host "Modules: $($modules -join ', ')"
 Write-Host "MigrationDirs: $(@($migrationDirs | ForEach-Object {$_.FullName}) -join ' | ')"
@@ -64,12 +69,10 @@ foreach ($m in $modules) {
       $files += Get-ChildItem -Path $modulePath -Recurse -File -ErrorAction SilentlyContinue
     }
   } else {
-    # catch-all: scan whole repo (minus excluded dirs)
     $files += Get-ChildItem -Path $RepoRoot -Recurse -File -ErrorAction SilentlyContinue |
               Where-Object { $_.FullName -notmatch $excludeDirRegex }
   }
 
-  # add ALL migrations
   foreach ($dir in $migrationDirs) {
     $files += Get-ChildItem -Path $dir.FullName -Recurse -File -ErrorAction SilentlyContinue
   }
