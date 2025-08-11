@@ -53,10 +53,17 @@ New-Item -ItemType File -Force -Path (Join-Path $OutDir ".nojekyll") | Out-Null
 $generatedAt = Get-Date -Format 'yyyy-MM-dd HH:mm:ss K'
 
 # ---- Build module list: one per top-level folder + a "root" module ----
+#$top = Get-ChildItem -Path $RepoRoot -Directory |
+ # Where-Object { $_.Name -notin @(".git",".github","docs","tools",".vs","obj","bin") }
+
+#$modules = @([ordered]@{ name = "root"; root = (Resolve-Path $RepoRoot).Path })
+#$modules += $top | ForEach-Object { [ordered]@{ name = $_.Name; root = $_.FullName } }
+##------------------------- Remove root from the grouping ------
+# ---- Build module list: one per top-level folder (no 'root' to keep payloads small) ----
 $top = Get-ChildItem -Path $RepoRoot -Directory |
   Where-Object { $_.Name -notin @(".git",".github","docs","tools",".vs","obj","bin") }
 
-$modules = @([ordered]@{ name = "root"; root = (Resolve-Path $RepoRoot).Path })
+$modules = @()
 $modules += $top | ForEach-Object { [ordered]@{ name = $_.Name; root = $_.FullName } }
 
 # ---- Gather & write per-module JSON ----
