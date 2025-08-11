@@ -1,101 +1,69 @@
 param(
   [string]$RepoRoot = ".",
-  [string]$OutMd = ".\docs\xbc-knowledge-pack.md",
+  [string]$OutMd   = ".\docs\xbc-knowledge-pack.md",
   [string]$OutJson = ".\docs\xbc-knowledge-pack.json"
 )
 
-function Get-FileHashHex($path) { (Get-FileHash -Algorithm SHA256 -Path $path).Hash.ToLower() }
+function Get-FileHashHex($p){ (Get-FileHash -Algorithm SHA256 -Path $p).Hash.ToLower() }
 
-# ---- CONFIG ----
+# What we include / exclude
 $includeExt = @(".cs",".ts",".tsx",".jsx",".json",".sql",".md",".css",".scss")
-$excludeFileRegex = '(?i)\.env|secrets|appsettings\.Production\.json'
-$excludeDirRegex  = '(?i)(/|\\)(\.git|bin|obj|node_modules|docs|tests|\.vs)(/|\\)'
+$excludeFile = '(?i)\.env|secrets|appsettings\.Production\.json'
+$excludeDir  = '(?i)(/|\\)(\.git|bin|obj|node_modules|\.vs|logs|docs|tests)(/|\\)'
 
-function File-Lang($ext) {
-  switch ($ext.ToLower()) {
-    ".cs"  { "csharp" }
-    ".ts"  { "typescript" }
-    ".tsx" { "tsx" }
-    ".jsx" { "jsx" }
-    ".json"{ "json" }
-    ".sql" { "sql" }
-    ".md"  { "markdown" }
-    ".css" { "css" }
-    ".scss"{ "scss" }
-    default { "text" }
+function Lang($e){
+  switch ($e.ToLower()) {
+    ".cs"{"csharp"}; ".ts"{"typescript"}; ".tsx"{"tsx"}; ".jsx"{"jsx"}
+    ".json"{"json"}; ".sql"{"sql"}; ".md"{"markdown"}; ".css"{"css"}; ".scss"{"scss"}
+    default{"text"}
   }
 }
 
-# ---- DISCOVERY: prefer xbytechat-api/Features, else auto-detect anywhere ----
-$explicitFeatures = Join-Path (Join-Path $RepoRoot "xbytechat-api") "Features"
-if (Test-Path $explicitFeatures) {
-  $featuresRoot = (Resolve-Path $explicitFeatures).Path
-} else {
-  $featuresHit = Get-ChildItem -Path $RepoRoot -Directory -Recurse -ErrorAction SilentlyContinue |
-    Where-Object { $_.Name -ieq 'Features' } |
-    Sort-Object { $_.FullName.Split([System.IO.Path]::DirectorySeparatorChar).Count } |
-    Select-Object -First 1
-  $featuresRoot = if ($featuresHit) { $featuresHit.FullName } else { $null }
-}
+# Backend root = xbytechat-api (first choice), or xbytechat.api, else repo root
+$backendRoot =
+  @("xbytechat-api","xbytechat.api",".") |
+  ForEach-Object {
+    $p = Join-Path $RepoRoot $_
+    if (Test-Path $p) { (Resolve-Path $p).Path }
+  } | Select-Object -First 1
 
-$migrationDirs = Get-ChildItem -Path $RepoRoot -Directory -Recurse -ErrorAction SilentlyContinue |
+Write-Host "BackendRoot: $backendRoot"
+
+# Collect files
+$files = Get-ChildItem -Path $backendRoot -Recurse -File -ErrorAction SilentlyContinue |
+  Where-Object { $_.FullName -notmatch $excludeDir } |
+  Where-Object { $includeExt -contains $_.Extension } |
+  Where-Object { $_.FullName -notmatch $excludeFile } |
+  Sort-Object FullName -Unique
+
+# Also include any Migrations (even if path contains excluded word)
+$migrationDirs = Get-ChildItem -Path $backendRoot -Directory -Recurse -ErrorAction SilentlyContinue |
   Where-Object { $_.Name -ieq 'Migrations' }
-
-if ($featuresRoot) {
-  $modules = Get-ChildItem -Path $featuresRoot -Directory -ErrorAction SilentlyContinue |
-             Select-Object -ExpandProperty Name
-} else {
-  $modules = @('Backend')   # fallback: scan whole repo
+foreach ($dir in $migrationDirs) {
+  $files += Get-ChildItem -Path $dir.FullName -Recurse -File -ErrorAction SilentlyContinue |
+    Where-Object { $includeExt -contains $_.Extension }
 }
+$files = $files | Sort-Object FullName -Unique
 
-# Logs (visible in Actions)
-Write-Host "FeaturesRoot: $featuresRoot"
-Write-Host "Modules: $($modules -join ', ')"
-Write-Host "MigrationDirs: $(@($migrationDirs | ForEach-Object {$_.FullName}) -join ' | ')"
-
-# ---- OUTPUT PREP ----
+# Write outputs
 New-Item -ItemType Directory -Force -Path (Split-Path $OutMd) | Out-Null
 $generatedAt = Get-Date -Format 'yyyy-MM-dd HH:mm:ss K'
-$md = "# xByteChat Knowledge Pack`nGenerated: $generatedAt`n"
-$pack = [ordered]@{ version = "1.0"; generatedAt = $generatedAt; modules = @() }
+$md   = "# xByteChat Knowledge Pack`nGenerated: $generatedAt`n"
+$pack = [ordered]@{ version="1.0"; generatedAt=$generatedAt; modules=@() }
 
-foreach ($m in $modules) {
-  $md += "`n=== MODULE: $m (updated: $(Get-Date -Format 'yyyy-MM-dd'))`n"
-  $files = @()
+# Single module: Backend
+$jsonFiles = @()
+foreach ($f in $files) {
+  $rel = $f.FullName.Replace((Resolve-Path $RepoRoot),"").TrimStart("\","/")
+  $hash = Get-FileHashHex $f.FullName
+  $lang = Lang $f.Extension
+  $content = Get-Content $f.FullName -Raw
 
-  if ($featuresRoot -and $m -ne 'Backend') {
-    $modulePath = Join-Path $featuresRoot $m
-    if (Test-Path $modulePath) {
-      $files += Get-ChildItem -Path $modulePath -Recurse -File -ErrorAction SilentlyContinue
-    }
-  } else {
-    $files += Get-ChildItem -Path $RepoRoot -Recurse -File -ErrorAction SilentlyContinue |
-              Where-Object { $_.FullName -notmatch $excludeDirRegex }
-  }
-
-  foreach ($dir in $migrationDirs) {
-    $files += Get-ChildItem -Path $dir.FullName -Recurse -File -ErrorAction SilentlyContinue
-  }
-
-  $files = $files |
-    Where-Object { $includeExt -contains $_.Extension } |
-    Where-Object { $_.FullName -notmatch $excludeFileRegex } |
-    Where-Object { $_.FullName -notmatch $excludeDirRegex } |
-    Sort-Object FullName -Unique
-
-  $jsonFiles = @()
-  foreach ($f in $files) {
-    $rel = $f.FullName.Replace((Resolve-Path $RepoRoot), "").TrimStart("\","/")
-    $hash = Get-FileHashHex $f.FullName
-    $lang = File-Lang $f.Extension
-    $content = Get-Content $f.FullName -Raw
-    $md += "`n--- file: $rel  (sha256:$hash)`n```$lang`n$content`n````n"
-    $jsonFiles += [ordered]@{ path = $rel; sha256 = $hash; language = $lang; content = $content }
-  }
-
-  $pack.modules += [ordered]@{ name = $m; files = $jsonFiles }
+  $md += "`n--- file: $rel  (sha256:$hash)`n```$lang`n$content`n````n"
+  $jsonFiles += [ordered]@{ path=$rel; sha256=$hash; language=$lang; content=$content }
 }
+$pack.modules += [ordered]@{ name="Backend"; files=$jsonFiles }
 
 $md | Out-File -Encoding utf8 $OutMd
 ($pack | ConvertTo-Json -Depth 12) | Out-File -Encoding utf8 $OutJson
-Write-Host "Generated: $OutMd, $OutJson (module-count: $($modules.Count))"
+Write-Host "Generated: $OutMd, $OutJson (files: $($jsonFiles.Count))"
