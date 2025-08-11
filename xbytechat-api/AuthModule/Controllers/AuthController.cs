@@ -91,6 +91,14 @@ namespace xbytechat.api.AuthModule.Controllers
 
             return Ok(new { isAuthenticated = true, role, email, plan, businessId = biz });
         }
+
+        [Authorize]
+        [HttpGet("features")]
+        public async Task<IActionResult> GetFeatureAccess()
+        {
+            var result = await _authService.GetFeatureAccessForUserAsync(User);
+            return Ok(result.Features);
+        }
     }
 }
 
@@ -254,11 +262,5 @@ namespace xbytechat.api.AuthModule.Controllers
 
 
 //    }
-//    public static class ClaimsPrincipalExtensions
-//    {
-//        public static string FindFirstValue(this ClaimsPrincipal user, string claimType)
-//        {
-//            return user?.FindFirst(claimType)?.Value ?? "";
-//        }
-//    }
+
 //}

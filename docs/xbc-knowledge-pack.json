@@ -1,0 +1,53 @@
+{
+  "openapi": "3.1.0",
+  "info": { "title": "xByteChat Docs Fetcher", "version": "1.0.0" },
+  "servers": [{ "url": "https://xplorebytesolutions.github.io/busiorbit-api/xbc-knowledge-pack.json" }],
+  "paths": {
+    "/busiorbit-api/xbc-knowledge-pack.json": {
+      "get": {
+        "operationId": "fetch_latest_bundle",
+        "summary": "Fetch latest xByteChat knowledge pack (JSON)",
+        "responses": {
+          "200": {
+            "description": "Knowledge pack JSON containing modules and files",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "version": { "type": "string" },
+                    "generatedAt": { "type": "string" },
+                    "modules": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": { "type": "string" },
+                          "files": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "path": { "type": "string" },
+                                "sha256": { "type": "string" },
+                                "language": { "type": "string" },
+                                "content": { "type": "string" }
+                              },
+                              "required": ["path", "content"]
+                            }
+                          }
+                        },
+                        "required": ["name", "files"]
+                      }
+                    }
+                  },
+                  "required": ["modules"]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

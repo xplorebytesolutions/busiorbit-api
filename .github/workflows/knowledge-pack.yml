@@ -1,0 +1,29 @@
+name: Build Knowledge Pack
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: {}
+
+permissions:
+  contents: write # needed to commit generated files
+
+jobs:
+  build-pack:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Build pack (PowerShell)
+        shell: pwsh
+        run: |
+          ./tools/Build-KnowledgePack.ps1 -RepoRoot . -OutMd ./docs/xbc-knowledge-pack.md -OutJson ./docs/xbc-knowledge-pack.json
+
+      - name: Commit updated docs
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/xbc-knowledge-pack.md docs/xbc-knowledge-pack.json
+          git commit -m "chore(docs): update knowledge pack [skip ci]" || echo "No changes to commit"
+          git push
