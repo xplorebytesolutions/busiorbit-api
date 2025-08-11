@@ -1,0 +1,41 @@
+{
+  "version": "2.1-full",
+  "generatedAt": "2025-08-11 14:00:55 +00:00",
+  "modules": [
+    {
+      "name": "root",
+      "slug": "root",
+      "fileCount": 462,
+      "bytes": 4159249,
+      "href": "/busiorbit-api/pack/root.json"
+    },
+    {
+      "name": "xbytechat-api",
+      "slug": "xbytechat-api",
+      "fileCount": 442,
+      "bytes": 3058195,
+      "href": "/busiorbit-api/pack/xbytechat-api.json"
+    },
+    {
+      "name": "xbytechat-tests",
+      "slug": "xbytechat-tests",
+      "fileCount": 3,
+      "bytes": 1123,
+      "href": "/busiorbit-api/pack/xbytechat-tests.json"
+    },
+    {
+      "name": "xbytechat.api.Tests",
+      "slug": "xbytechat-api-tests",
+      "fileCount": 4,
+      "bytes": 8882,
+      "href": "/busiorbit-api/pack/xbytechat-api-tests.json"
+    },
+    {
+      "name": "xbytechat.Tests",
+      "slug": "xbytechat-tests",
+      "fileCount": 8,
+      "bytes": 32821,
+      "href": "/busiorbit-api/pack/xbytechat-tests.json"
+    }
+  ]
+}
