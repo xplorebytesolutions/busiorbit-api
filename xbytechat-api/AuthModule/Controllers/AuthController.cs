@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using xbytechat.api.AuthModule.DTOs;
 using xbytechat.api.AuthModule.Services;
+using xbytechat.api.Features.BusinessModule.DTOs;
 
 namespace xbytechat.api.AuthModule.Controllers
 {
@@ -44,6 +45,28 @@ namespace xbytechat.api.AuthModule.Controllers
                 accessToken = data.accessToken,
                 refreshToken = data.refreshToken
             });
+        }
+        // ✅ Signup
+        [HttpPost("business-user-signup")]
+        public async Task<IActionResult> Signup([FromBody] SignupBusinessDto dto)
+        {
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Values
+                    .SelectMany(v => v.Errors)
+                    .Select(e => e.ErrorMessage)
+                    .ToList();
+
+                return BadRequest(new
+                {
+                    success = false,
+                    message = "❌ Validation failed.",
+                    errors
+                });
+            }
+
+            var result = await _authService.SignupAsync(dto);
+            return result.Success ? Ok(result) : BadRequest(result);
         }
 
         // ✅ Logout (stateless JWT): nothing server-side to do
