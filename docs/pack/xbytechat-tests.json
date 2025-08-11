@@ -1,6 +1,6 @@
 {
   "name": "xbytechat.Tests",
-  "generatedAt": "2025-08-11 17:45:59 +00:00",
+  "generatedAt": "2025-08-11 18:04:10 +00:00",
   "files": [
     {
       "path": "xbytechat.Tests/Features/AuthModule/Service/AuthServiceTests.cs",
