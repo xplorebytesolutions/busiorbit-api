@@ -784,6 +784,67 @@ app.MapGet("/api/debug/dns", (IConfiguration cfg) =>
     }
 });
 
+// Url Tracking
+//app.MapGet("/{token}", async (string token, HttpContext http, AppDbContext db) =>
+//{
+//    ClickToken payload;
+
+//    try
+//    {
+//        payload = TrackingToken.Decode<ClickToken>(token);
+//    }
+//    catch
+//    {
+//        return Results.BadRequest("Invalid token");
+//    }
+
+//    if (!Uri.TryCreate(payload.to, UriKind.Absolute, out var dest))
+//        return Results.BadRequest("Invalid destination");
+
+//    var log = await db.CampaignSendLogs.FindAsync(payload.cid);
+//    if (log is null) return Results.NotFound("Send log not found");
+
+//    var now = DateTime.UtcNow;
+
+//    // Update your existing fields
+//    log.IsClicked = true;
+//    log.ClickedAt = now;
+//    log.ClickType = payload.btnTitle; // e.g. "View Collection"
+//    log.IpAddress = http.Connection.RemoteIpAddress?.ToString();
+//    log.DeviceInfo = http.Request.Headers.UserAgent.ToString();
+
+//    await db.SaveChangesAsync();
+
+//    return Results.Redirect(dest.ToString(), permanent: false);
+//})
+//.AllowAnonymous();
+app.MapGet("/{token}", async (string token, HttpContext http, AppDbContext db, ILoggerFactory lf) =>
+{
+    var log = lf.CreateLogger("Redirect");
+    log.LogInformation("Redirect hit with token: {Token}", token);
+
+    ClickToken payload;
+    try { payload = TrackingToken.Decode<ClickToken>(token); }
+    catch (Exception ex) { log.LogWarning(ex, "Bad token"); return Results.BadRequest("Invalid token"); }
+
+    log.LogInformation("Decoded payload: cid={Cid}, btn={Btn}, to={To}", payload.cid, payload.btnTitle, payload.to);
+
+    var row = await db.CampaignSendLogs.FindAsync(payload.cid);
+    if (row is null) { log.LogWarning("No send log for cid {Cid}", payload.cid); return Results.NotFound("Send log not found"); }
+
+    row.IsClicked = true;
+    row.ClickedAt = DateTime.UtcNow;
+    row.ClickType = payload.btnTitle;
+    row.IpAddress = http.Connection.RemoteIpAddress?.ToString();
+    row.DeviceInfo = http.Request.Headers.UserAgent.ToString();
+
+    await db.SaveChangesAsync();
+    log.LogInformation("Updated send log {Cid}", payload.cid);
+
+    return Results.Redirect(payload.to, permanent: false);
+})
+.AllowAnonymous();
+
 #region 🌐 Middleware Pipeline Setup
 AuditLoggingHelper.Configure(app.Services);
 

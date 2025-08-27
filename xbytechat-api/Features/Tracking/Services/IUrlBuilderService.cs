@@ -1,4 +1,4 @@
-﻿namespace xbytechat.api.AuthModule.Services
+﻿namespace xbytechat.api.Features.Tracking.Services
 {
     public interface IUrlBuilderService
     {

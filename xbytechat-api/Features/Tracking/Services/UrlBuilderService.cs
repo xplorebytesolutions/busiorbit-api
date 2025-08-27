@@ -2,7 +2,6 @@
 using System.Text;
 using System.Web;
 using Microsoft.AspNetCore.WebUtilities;
-using xbytechat.api.AuthModule.Services;
 
 namespace xbytechat.api.Features.Tracking.Services
 {
@@ -16,19 +15,7 @@ namespace xbytechat.api.Features.Tracking.Services
             // Get your API's base URL from appsettings.json
             _apiBaseUrl = configuration["ApiBaseUrl"] ?? "http://localhost:7113";
         }
-
-        //public string GenerateCampaignTrackingUrl(Guid campaignSendLogId, string buttonType, string finalDestinationUrl)
-        //{
-        //    var trackingUrl = $"{_apiBaseUrl}/api/tracking/redirect/{campaignSendLogId}";
-
-        //    var queryParams = new Dictionary<string, string>
-        //    {
-        //        { "type", buttonType },
-        //        { "to", finalDestinationUrl } // Pass the final destination in the query
-        //    };
-
-        //    return QueryHelpers.AddQueryString(trackingUrl, queryParams);
-        //}
+           
 
         public string GenerateCampaignTrackingUrl(Guid campaignSendLogId, string buttonType, string finalDestinationUrl, string contactPhone)
         {
@@ -50,5 +37,7 @@ namespace xbytechat.api.Features.Tracking.Services
 
             return QueryHelpers.AddQueryString(trackingUrl, queryParams);
         }
+    
+    
     }
 }
