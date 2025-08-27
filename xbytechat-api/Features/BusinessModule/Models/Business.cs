@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using xbytechat.api.AuthModule.Models;
+using xbytechat.api.Features.AccessControl.Models;
 using xbytechat.api.Features.CampaignModule.Models;
 using xbytechat.api.Features.MessageManagement.DTOs;
 using xbytechat.api.Models.BusinessModel;
@@ -60,6 +61,9 @@ namespace xbytechat.api.Features.BusinessModule.Models
 
         /// This is a one-to-one relationship with BusinessPlanInfo
         public BusinessPlanInfo? BusinessPlanInfo { get; set; }
+
+        public Guid? PlanId { get; set; } // Nullable in case no plan is assigned yet
+        public Plan? Plan { get; set; }   // Navigation property to the Plan entity
 
         public WhatsAppSettingEntity WhatsAppSettings { get; set; }
 

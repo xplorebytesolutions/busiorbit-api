@@ -22,5 +22,7 @@ namespace xbytechat.api.Features.AccessControl.Models
         public ICollection<RolePermission> RolePermissions { get; set; }
 
         public ICollection<UserPermission> UserPermissions { get; set; }
+
+        public ICollection<PlanPermission> PlanPermissions { get; set; }
     }
 }

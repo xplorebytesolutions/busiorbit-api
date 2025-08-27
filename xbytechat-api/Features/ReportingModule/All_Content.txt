@@ -1,0 +1,231 @@
+Folder and File Content Report
+ 
+====================================================== 
+FILE: D:\xbytechat\xbytechat-api\xbytechat-api\Features\ReportingModule\All_Content.txt 
+====================================================== 
+ 
+Folder and File Content Report
+ 
+====================================================== 
+FILE: D:\xbytechat\xbytechat-api\xbytechat-api\Features\ReportingModule\All_Content.txt 
+====================================================== 
+ 
+ 
+ 
+====================================================== 
+FILE: D:\xbytechat\xbytechat-api\xbytechat-api\Features\ReportingModule\extract_all.bat 
+====================================================== 
+ 
+@echo off
+REM This script will find all files and output their name and content into one file.
+
+set "outputFile=All_Content.txt"
+
+REM Clear the output file to start fresh
+> "%outputFile%" (echo Folder and File Content Report)
+echo. >> "%outputFile%"
+
+REM Loop through all files in the current directory and subdirectories
+for /R . %%F in (*.*) do (
+    echo ====================================================== >> "%outputFile%"
+    echo FILE: %%F >> "%outputFile%"
+    echo ====================================================== >> "%outputFile%"
+    echo. >> "%outputFile%"
+    type "%%F" >> "%outputFile%"
+    echo. >> "%outputFile%"
+    echo. >> "%outputFile%"
+)
+
+echo Finished! All content has been extracted to %outputFile% 
+ 
+====================================================== 
+FILE: D:\xbytechat\xbytechat-api\xbytechat-api\Features\ReportingModule\Controllers\MessageAnalyticsController.cs 
+====================================================== 
+ 
+﻿using Microsoft.AspNetCore.Mvc;
+using xbytechat.api.Features.ReportingModule.Services;
+using xbytechat.api.Shared;
+
+
+namespace xbytechat.api.Features.ReportingModule.Controllers
+{
+    [ApiController]
+    [Route("api/reporting/messages")]
+    public class MessageAnalyticsController : ControllerBase
+    {
+        private readonly IMessageAnalyticsService _service;
+
+        public MessageAnalyticsController(IMessageAnalyticsService service)
+        {
+            _service = service;
+        }
+
+        [HttpGet("recent")]
+        public async Task<IActionResult> GetRecentLogs([FromQuery] int limit = 20)
+        {
+            var businessId = User.GetBusinessId(); // 🔒 assumes claims extension
+            var logs = await _service.GetRecentLogsAsync(businessId, limit);
+            return Ok(new { success = true, data = logs });
+        }
+        [HttpGet("history")]
+        public async Task<IActionResult> GetPaginatedLogs([FromQuery] PaginatedRequest request)
+        {
+            var businessId = User.GetBusinessId(); // 🔐 via claims
+            var result = await _service.GetPaginatedLogsAsync(businessId, request);
+            return Ok(new { success = true, data = result });
+        }
+
+    }
+} 
+ 
+====================================================== 
+FILE: D:\xbytechat\xbytechat-api\xbytechat-api\Features\ReportingModule\DTOs\DirectMessageLogFilterDto.cs 
+====================================================== 
+ 
+﻿namespace xbytechat.api.Features.ReportingModule.DTOs
+{
+    public class DirectMessageLogFilterDto
+
+    {
+        public int Page { get; set; } = 1;
+        public int PageSize { get; set; } = 10;
+        public string? Status { get; set; }
+        public string? Search { get; set; }
+    }
+}
+ 
+ 
+====================================================== 
+FILE: D:\xbytechat\xbytechat-api\xbytechat-api\Features\ReportingModule\DTOs\RecentMessageLogDto.cs 
+====================================================== 
+ 
+﻿// 📄 File: Features/ReportingModule/DTOs/RecentMessageLogDto.cs
+using System;
+
+namespace xbytechat.api.Features.ReportingModule.DTOs
+{
+    public class RecentMessageLogDto
+    {
+        public Guid Id { get; set; }
+        public string RecipientNumber { get; set; }
+        public string MessageContent { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime? SentAt { get; set; }             
+        public Guid? CampaignId { get; set; }
+        public string? Status { get; set; }
+        public string? ErrorMessage { get; set; }         
+    }
+}
+
+ 
+ 
+====================================================== 
+FILE: D:\xbytechat\xbytechat-api\xbytechat-api\Features\ReportingModule\Services\IMessageAnalyticsService.cs 
+====================================================== 
+ 
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using xbytechat.api.Features.MessagesEngine.DTOs;
+using xbytechat.api.Features.ReportingModule.DTOs;
+using xbytechat.api.Shared;
+
+namespace xbytechat.api.Features.ReportingModule.Services
+{
+    public interface IMessageAnalyticsService
+    {
+        Task<List<RecentMessageLogDto>> GetRecentLogsAsync(Guid businessId, int limit);
+        Task<PaginatedResponse<RecentMessageLogDto>> GetPaginatedLogsAsync(Guid businessId, PaginatedRequest request);
+    }
+}
+
+ 
+ 
+====================================================== 
+FILE: D:\xbytechat\xbytechat-api\xbytechat-api\Features\ReportingModule\Services\MessageAnalyticsService.cs 
+====================================================== 
+ 
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using xbytechat.api.Features.MessagesEngine.DTOs;
+using xbytechat.api.Features.ReportingModule.DTOs;
+using xbytechat.api.Shared;
+
+namespace xbytechat.api.Features.ReportingModule.Services
+{
+    public class MessageAnalyticsService : IMessageAnalyticsService
+    {
+        private readonly AppDbContext _context;
+
+        public MessageAnalyticsService(AppDbContext context)
+        {
+            _context = context;
+        }
+
+        public async Task<List<RecentMessageLogDto>> GetRecentLogsAsync(Guid businessId, int limit)
+        {
+            return await _context.MessageLogs
+                .Where(x => x.BusinessId == businessId)
+                .OrderByDescending(x => x.CreatedAt)
+                .Take(limit)
+                .Select(x => new RecentMessageLogDto
+                {
+                    Id = x.Id,
+                    RecipientNumber = x.RecipientNumber,
+                    MessageContent = x.MessageContent,
+                    CreatedAt = x.CreatedAt,
+                    CampaignId = x.CampaignId,
+                    Status = x.Status,
+                    SentAt = x.SentAt,
+                })
+                .ToListAsync();
+        }
+
+        public async Task<PaginatedResponse<RecentMessageLogDto>> GetPaginatedLogsAsync(Guid businessId, PaginatedRequest request)
+        {
+            var query = _context.MessageLogs
+                .Where(x => x.BusinessId == businessId);
+
+            if (!string.IsNullOrEmpty(request.Status))
+                query = query.Where(x => x.Status == request.Status);
+
+            if (!string.IsNullOrEmpty(request.Search))
+                query = query.Where(x =>
+                    x.RecipientNumber.Contains(request.Search) ||
+                    x.MessageContent.Contains(request.Search));
+
+            var totalCount = await query.CountAsync();
+
+            var items = await query
+                .OrderByDescending(x => x.CreatedAt)
+                .Skip((request.Page - 1) * request.PageSize)
+                .Take(request.PageSize)
+                .Select(x => new RecentMessageLogDto
+                {
+                    Id = x.Id,
+                    RecipientNumber = x.RecipientNumber,
+                    MessageContent = x.MessageContent,
+                    CreatedAt = x.CreatedAt,
+                    CampaignId = x.CampaignId,
+                    Status = x.Status,
+                    SentAt = x.SentAt,
+                })
+                .ToListAsync();
+
+            return new PaginatedResponse<RecentMessageLogDto>
+            {
+                Items = items,
+                TotalCount = totalCount,
+                Page = request.Page,
+                PageSize = request.PageSize
+            };
+        }
+
+    }
+}
+
+ 
+ 

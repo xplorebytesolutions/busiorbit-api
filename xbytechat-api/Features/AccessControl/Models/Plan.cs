@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using xbytechat.api.Features.BusinessModule.Models;
 
 namespace xbytechat.api.Features.AccessControl.Models
 {
@@ -17,5 +18,6 @@ namespace xbytechat.api.Features.AccessControl.Models
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         public ICollection<PlanPermission> PlanPermissions { get; set; }
+        public ICollection<Business> Businesses { get; set; } = new List<Business>();
     }
 }

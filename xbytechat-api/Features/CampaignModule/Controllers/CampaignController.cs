@@ -203,7 +203,7 @@ namespace xbytechat.api.Features.CampaignModule.Controllers
                 return StatusCode(500, new { message = "Error removing recipient", detail = ex.Message });
             }
         }
-
+        // Send campaign method
         [HttpPost("send-campaign/{campaignId}")] // use to send free text and Template campaigns
         public async Task<IActionResult> SendTemplateCampaign(Guid campaignId)
         {

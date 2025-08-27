@@ -14,5 +14,7 @@
         public string CompanyName { get; set; }
         public string Plan { get; set; }
         public string AccessToken { get; set; }
+
+        public Guid? PlanId { get; set; }
     }
 }

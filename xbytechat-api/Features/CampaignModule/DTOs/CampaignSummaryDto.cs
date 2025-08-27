@@ -7,7 +7,8 @@
         public string? Status { get; set; }
         public DateTime? ScheduledAt { get; set; }
         public DateTime CreatedAt { get; set; }
-
+        public int Delivered { get; set; }
+        public int Read { get; set; }
 
         public string? ImageUrl { get; set; } // ✅ Add this
         public string? ImageCaption { get; set; } // ✅ Add this

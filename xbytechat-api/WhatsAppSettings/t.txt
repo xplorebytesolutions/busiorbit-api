@@ -1,0 +1,37 @@
+Folder PATH listing for volume Software
+Volume serial number is DED9-552B
+D:.
+¦   t.txt
+¦   
++---Abstractions
+¦       ITemplateCatalogProvider.cs
+¦       TemplateCatalogItem.cs
+¦       
++---BackgroundService
++---Controllers
+¦       TemplatesController.cs
+¦       WhatsAppSettingsController.cs
+¦       WhatsAppTemplateFetcherController.cs
+¦       
++---DTOs
+¦       ButtonMetadataDto.cs
+¦       SaveWhatsAppSettingDto.cs
+¦       TemplateMetadataDto.cs
+¦       
++---Models
+¦       WhatsAppSettingEntity.cs
+¦       
++---Providers
+¦       MetaTemplateCatalogProvider.cs
+¦       PinnacleTemplateCatalogProvider.cs
+¦       
++---Services
+¦       IWhatsAppSettingsService.cs
+¦       IWhatsAppTemplateFetcherService.cs
+¦       TemplateSyncService.cs
+¦       WhatsAppSettingsService.cs
+¦       WhatsAppTemplateFetcherService.cs
+¦       
++---Validators
+        SaveWhatsAppSettingValidator.cs
+        

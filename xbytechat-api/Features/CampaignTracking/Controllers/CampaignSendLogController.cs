@@ -22,13 +22,23 @@ namespace xbytechat.api.Features.CampaignTracking.Controllers
             _retryService = retryService;
         }
 
+        //[HttpGet("campaign/{campaignId}")]
+        //public async Task<IActionResult> GetLogsByCampaign(Guid campaignId)
+        //{
+        //    var logs = await _logService.GetLogsByCampaignIdAsync(campaignId);
+        //    return Ok(logs);
+        //}
         [HttpGet("campaign/{campaignId}")]
-        public async Task<IActionResult> GetLogsByCampaign(Guid campaignId)
+        public async Task<IActionResult> GetLogsByCampaign(
+         Guid campaignId,
+         [FromQuery] string? status,
+         [FromQuery] string? search,
+         [FromQuery] int page = 1,
+         [FromQuery] int pageSize = 10)
         {
-            var logs = await _logService.GetLogsByCampaignIdAsync(campaignId);
-            return Ok(logs);
+            var result = await _logService.GetLogsByCampaignIdAsync(campaignId, status, search, page, pageSize);
+            return Ok(result);
         }
-
         [HttpGet("campaign/{campaignId}/contact/{contactId}")]
         public async Task<IActionResult> GetLogsForContact(Guid campaignId, Guid contactId)
         {

@@ -11,6 +11,7 @@
     <Compile Remove="Controllers\BusinessLoginController.cs" />
     <Compile Remove="Controllers\SendMessageController.cs" />
     <Compile Remove="Models\MessageLog.cs" />
+    <Compile Remove="Shared\TemplateParameterHelper.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -43,7 +44,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Features\AccessControl\DTOs\" />
     <Folder Include="Features\AuditTrail\Controllers\" />
     <Folder Include="Features\AuditTrail\Middleware\" />
     <Folder Include="Features\AuditTrail\Background\" />
@@ -62,6 +62,7 @@
     <Folder Include="Features\xbTimelines\Repositories\" />
     <Folder Include="Models\BusinessModel\" />
     <Folder Include="Models\UsersModel\" />
+    <Folder Include="WhatsAppSettings\BackgroundService\" />
   </ItemGroup>
 
 </Project>

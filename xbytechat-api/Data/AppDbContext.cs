@@ -84,7 +84,7 @@ namespace xbytechat.api
         public DbSet<UserFeatureAccess> UserFeatureAccess { get; set; }
         public DbSet<FeatureMaster> FeatureMasters { get; set; }
         public DbSet<AutomationFlow> AutomationFlows { get; set; }
-
+        public DbSet<WhatsAppTemplate> WhatsAppTemplates { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -279,7 +279,13 @@ namespace xbytechat.api
             modelBuilder.Entity<FeatureAccess>()
             .HasIndex(f => new { f.BusinessId, f.FeatureName })
             .IsUnique();
-
+            
+            modelBuilder.Entity<WhatsAppTemplate>(e =>
+            {
+                e.Property(x => x.Body).HasColumnType("text");
+                e.Property(x => x.ButtonsJson).HasColumnType("text");
+                e.Property(x => x.RawJson).HasColumnType("text");
+            });
         }
     }
 }

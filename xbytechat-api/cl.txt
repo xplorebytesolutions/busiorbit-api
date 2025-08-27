@@ -1,0 +1,1093 @@
+Folder PATH listing for volume Software
+Volume serial number is DED9-552B
+D:.
+¦   All_Content.txt
+¦   appsettings.Development.json
+¦   appsettings.json
+¦   appsettings.Production.json
+¦   cl.txt
+¦   cls.tx
+¦   extract_all.bat
+¦   Program.cs
+¦   xbytechat-api.http
+¦   xbytechat.api.csproj
+¦   xbytechat.api.csproj.user
+¦   
++---.vs
+¦   ¦   slnx.sqlite
+¦   ¦   VSWorkspaceState.json
+¦   ¦   
+¦   +---xbytechat-api
+¦       +---FileContentIndex
+¦       ¦       7a7bc19e-c4c1-4fef-91b5-bb95fabbd2ad.vsidx
+¦       ¦       f3557e68-4b04-4f91-ab24-cdd9fde12a1c.vsidx
+¦       ¦       fbe59ce0-44b6-4f7f-939a-c327eb88fe41.vsidx
+¦       ¦       
+¦       +---v17
+¦               workspaceFileList.bin
+¦               
++---AuthModule
+¦   +---Controllers
+¦   ¦       AuthController.cs
+¦   ¦       TestJwtController.cs
+¦   ¦       
+¦   +---DTOs
+¦   ¦       FeatureAccessDto.cs
+¦   ¦       RefreshTokenRequest.cs
+¦   ¦       ResendConfirmationDto.cs
+¦   ¦       ResetPasswordDto.cs
+¦   ¦       UserDto.cs
+¦   ¦       UserLoginDto.cs
+¦   ¦       
+¦   +---Models
+¦   ¦       User.cs
+¦   ¦       WhatsAppTemplate.cs
+¦   ¦       
+¦   +---Roles
+¦   ¦       UserRoles.cs
+¦   ¦       
+¦   +---Services
+¦           AuthService.cs
+¦           IAuthService.cs
+¦           IJwtTokenService.cs
+¦           JwtTokenService.cs
+¦           
++---bin
+¦   +---Debug
+¦   ¦   +---net8.0
+¦   ¦       ¦   appsettings.Development.json
+¦   ¦       ¦   appsettings.json
+¦   ¦       ¦   appsettings.Production.json
+¦   ¦       ¦   AutoMapper.dll
+¦   ¦       ¦   AutoMapper.Extensions.Microsoft.DependencyInjection.dll
+¦   ¦       ¦   BCrypt.Net-Next.dll
+¦   ¦       ¦   CsvHelper.dll
+¦   ¦       ¦   FluentValidation.AspNetCore.dll
+¦   ¦       ¦   FluentValidation.DependencyInjectionExtensions.dll
+¦   ¦       ¦   FluentValidation.dll
+¦   ¦       ¦   Humanizer.dll
+¦   ¦       ¦   Microsoft.AspNetCore.Authentication.JwtBearer.dll
+¦   ¦       ¦   Microsoft.Bcl.AsyncInterfaces.dll
+¦   ¦       ¦   Microsoft.Bcl.Memory.dll
+¦   ¦       ¦   Microsoft.CodeAnalysis.CSharp.dll
+¦   ¦       ¦   Microsoft.CodeAnalysis.CSharp.Workspaces.dll
+¦   ¦       ¦   Microsoft.CodeAnalysis.dll
+¦   ¦       ¦   Microsoft.CodeAnalysis.Workspaces.dll
+¦   ¦       ¦   Microsoft.EntityFrameworkCore.Abstractions.dll
+¦   ¦       ¦   Microsoft.EntityFrameworkCore.Design.dll
+¦   ¦       ¦   Microsoft.EntityFrameworkCore.dll
+¦   ¦       ¦   Microsoft.EntityFrameworkCore.InMemory.dll
+¦   ¦       ¦   Microsoft.EntityFrameworkCore.Relational.Design.dll
+¦   ¦       ¦   Microsoft.EntityFrameworkCore.Relational.dll
+¦   ¦       ¦   Microsoft.Extensions.Caching.Memory.dll
+¦   ¦       ¦   Microsoft.Extensions.DependencyInjection.Abstractions.dll
+¦   ¦       ¦   Microsoft.Extensions.DependencyInjection.dll
+¦   ¦       ¦   Microsoft.Extensions.DependencyModel.dll
+¦   ¦       ¦   Microsoft.Extensions.Diagnostics.Abstractions.dll
+¦   ¦       ¦   Microsoft.Extensions.Hosting.Abstractions.dll
+¦   ¦       ¦   Microsoft.Extensions.Logging.Abstractions.dll
+¦   ¦       ¦   Microsoft.Extensions.Logging.dll
+¦   ¦       ¦   Microsoft.Extensions.ObjectPool.dll
+¦   ¦       ¦   Microsoft.Extensions.Options.dll
+¦   ¦       ¦   Microsoft.IdentityModel.Abstractions.dll
+¦   ¦       ¦   Microsoft.IdentityModel.JsonWebTokens.dll
+¦   ¦       ¦   Microsoft.IdentityModel.Logging.dll
+¦   ¦       ¦   Microsoft.IdentityModel.Protocols.dll
+¦   ¦       ¦   Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+¦   ¦       ¦   Microsoft.IdentityModel.Tokens.dll
+¦   ¦       ¦   Microsoft.OpenApi.dll
+¦   ¦       ¦   Mono.TextTemplating.dll
+¦   ¦       ¦   Newtonsoft.Json.dll
+¦   ¦       ¦   Npgsql.dll
+¦   ¦       ¦   Npgsql.EntityFrameworkCore.PostgreSQL.Design.dll
+¦   ¦       ¦   Npgsql.EntityFrameworkCore.PostgreSQL.dll
+¦   ¦       ¦   Serilog.AspNetCore.dll
+¦   ¦       ¦   Serilog.dll
+¦   ¦       ¦   Serilog.Exceptions.dll
+¦   ¦       ¦   Serilog.Extensions.Hosting.dll
+¦   ¦       ¦   Serilog.Extensions.Logging.dll
+¦   ¦       ¦   Serilog.Formatting.Compact.dll
+¦   ¦       ¦   Serilog.Settings.Configuration.dll
+¦   ¦       ¦   Serilog.Sinks.Console.dll
+¦   ¦       ¦   Serilog.Sinks.Debug.dll
+¦   ¦       ¦   Serilog.Sinks.File.dll
+¦   ¦       ¦   Swashbuckle.AspNetCore.Swagger.dll
+¦   ¦       ¦   Swashbuckle.AspNetCore.SwaggerGen.dll
+¦   ¦       ¦   Swashbuckle.AspNetCore.SwaggerUI.dll
+¦   ¦       ¦   System.CodeDom.dll
+¦   ¦       ¦   System.Composition.AttributedModel.dll
+¦   ¦       ¦   System.Composition.Convention.dll
+¦   ¦       ¦   System.Composition.Hosting.dll
+¦   ¦       ¦   System.Composition.Runtime.dll
+¦   ¦       ¦   System.Composition.TypedParts.dll
+¦   ¦       ¦   System.IdentityModel.Tokens.Jwt.dll
+¦   ¦       ¦   System.Net.WebSockets.WebSocketProtocol.dll
+¦   ¦       ¦   xbytechat.api.deps.json
+¦   ¦       ¦   xbytechat.api.dll
+¦   ¦       ¦   xbytechat.api.exe
+¦   ¦       ¦   xbytechat.api.pdb
+¦   ¦       ¦   xbytechat.api.runtimeconfig.json
+¦   ¦       ¦   
+¦   ¦       +---cs
+¦   ¦       ¦       Microsoft.CodeAnalysis.CSharp.resources.dll
+¦   ¦       ¦       Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+¦   ¦       ¦       Microsoft.CodeAnalysis.resources.dll
+¦   ¦       ¦       Microsoft.CodeAnalysis.Workspaces.resources.dll
+¦   ¦       ¦       
+¦   ¦       +---de
+¦   ¦       ¦       Microsoft.CodeAnalysis.CSharp.resources.dll
+¦   ¦       ¦       Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+¦   ¦       ¦       Microsoft.CodeAnalysis.resources.dll
+¦   ¦       ¦       Microsoft.CodeAnalysis.Workspaces.resources.dll
+¦   ¦       ¦       
+¦   ¦       +---es
+¦   ¦       ¦       Microsoft.CodeAnalysis.CSharp.resources.dll
+¦   ¦       ¦       Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+¦   ¦       ¦       Microsoft.CodeAnalysis.resources.dll
+¦   ¦       ¦       Microsoft.CodeAnalysis.Workspaces.resources.dll
+¦   ¦       ¦       
+¦   ¦       +---fr
+¦   ¦       ¦       Microsoft.CodeAnalysis.CSharp.resources.dll
+¦   ¦       ¦       Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+¦   ¦       ¦       Microsoft.CodeAnalysis.resources.dll
+¦   ¦       ¦       Microsoft.CodeAnalysis.Workspaces.resources.dll
+¦   ¦       ¦       
+¦   ¦       +---it
+¦   ¦       ¦       Microsoft.CodeAnalysis.CSharp.resources.dll
+¦   ¦       ¦       Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+¦   ¦       ¦       Microsoft.CodeAnalysis.resources.dll
+¦   ¦       ¦       Microsoft.CodeAnalysis.Workspaces.resources.dll
+¦   ¦       ¦       
+¦   ¦       +---ja
+¦   ¦       ¦       Microsoft.CodeAnalysis.CSharp.resources.dll
+¦   ¦       ¦       Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+¦   ¦       ¦       Microsoft.CodeAnalysis.resources.dll
+¦   ¦       ¦       Microsoft.CodeAnalysis.Workspaces.resources.dll
+¦   ¦       ¦       
+¦   ¦       +---ko
+¦   ¦       ¦       Microsoft.CodeAnalysis.CSharp.resources.dll
+¦   ¦       ¦       Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+¦   ¦       ¦       Microsoft.CodeAnalysis.resources.dll
+¦   ¦       ¦       Microsoft.CodeAnalysis.Workspaces.resources.dll
+¦   ¦       ¦       
+¦   ¦       +---pl
+¦   ¦       ¦       Microsoft.CodeAnalysis.CSharp.resources.dll
+¦   ¦       ¦       Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+¦   ¦       ¦       Microsoft.CodeAnalysis.resources.dll
+¦   ¦       ¦       Microsoft.CodeAnalysis.Workspaces.resources.dll
+¦   ¦       ¦       
+¦   ¦       +---pt-BR
+¦   ¦       ¦       Microsoft.CodeAnalysis.CSharp.resources.dll
+¦   ¦       ¦       Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+¦   ¦       ¦       Microsoft.CodeAnalysis.resources.dll
+¦   ¦       ¦       Microsoft.CodeAnalysis.Workspaces.resources.dll
+¦   ¦       ¦       
+¦   ¦       +---ru
+¦   ¦       ¦       Microsoft.CodeAnalysis.CSharp.resources.dll
+¦   ¦       ¦       Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+¦   ¦       ¦       Microsoft.CodeAnalysis.resources.dll
+¦   ¦       ¦       Microsoft.CodeAnalysis.Workspaces.resources.dll
+¦   ¦       ¦       
+¦   ¦       +---tr
+¦   ¦       ¦       Microsoft.CodeAnalysis.CSharp.resources.dll
+¦   ¦       ¦       Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+¦   ¦       ¦       Microsoft.CodeAnalysis.resources.dll
+¦   ¦       ¦       Microsoft.CodeAnalysis.Workspaces.resources.dll
+¦   ¦       ¦       
+¦   ¦       +---zh-Hans
+¦   ¦       ¦       Microsoft.CodeAnalysis.CSharp.resources.dll
+¦   ¦       ¦       Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+¦   ¦       ¦       Microsoft.CodeAnalysis.resources.dll
+¦   ¦       ¦       Microsoft.CodeAnalysis.Workspaces.resources.dll
+¦   ¦       ¦       
+¦   ¦       +---zh-Hant
+¦   ¦               Microsoft.CodeAnalysis.CSharp.resources.dll
+¦   ¦               Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll
+¦   ¦               Microsoft.CodeAnalysis.resources.dll
+¦   ¦               Microsoft.CodeAnalysis.Workspaces.resources.dll
+¦   ¦               
+¦   +---Release
+¦       +---net8.0
++---Controllers
+¦       BusinessLoginController.cs
+¦       DevSeedController.cs
+¦       HealthCheckController.cs
+¦       MessageLogsController.cs
+¦       MessagesController.cs
+¦       SendMessageController.cs
+¦       
++---CRM
+¦   +---Controllers
+¦   ¦       ContactsController.cs
+¦   ¦       NotesController.cs
+¦   ¦       RemindersController.cs
+¦   ¦       TagsController.cs
+¦   ¦       
+¦   +---Dtos
+¦   ¦       AssignTagToContactsDto.cs
+¦   ¦       BulkImportResultDto.cs
+¦   ¦       ContactDto.cs
+¦   ¦       ContactDtoCsvMap.cs
+¦   ¦       ContactTagDto.cs
+¦   ¦       CsvImportResult.cs
+¦   ¦       NoteDto.cs
+¦   ¦       PagedResult.cs
+¦   ¦       ReminderDto.cs
+¦   ¦       TagDto.cs
+¦   ¦       
+¦   +---Interfaces
+¦   ¦       IContactService.cs
+¦   ¦       INoteService.cs
+¦   ¦       IReminderService.cs
+¦   ¦       ITagService.cs
+¦   ¦       
+¦   +---Mappers
+¦   ¦       ContactDtoCsvMap.cs
+¦   ¦       NoteMapper.cs
+¦   ¦       ReminderMapper.cs
+¦   ¦       
+¦   +---Models
+¦   ¦       Contact.cs
+¦   ¦       ContactTag.cs
+¦   ¦       Note.cs
+¦   ¦       Reminder.cs
+¦   ¦       Tag.cs
+¦   ¦       
+¦   +---Services
+¦           ContactService.cs
+¦           IPermissionService.cs.cs
+¦           NoteService.cs
+¦           PermissionService.cs
+¦           ReminderService.cs
+¦           TagService.cs
+¦           
++---Data
+¦       AppDbContext.cs
+¦       
++---DTOs
+¦   +---Messages
+¦           BaseMessageDto.cs
+¦           BulkMessageDto.cs
+¦           CtaMessageDto.cs
+¦           ImageMessageDto.cs
+¦           RawMessageWrapper.cs
+¦           TemplateMessageDto.cs
+¦           TextMessageDto.cs
+¦           
++---Features
+¦   +---AccessControl
+¦   ¦   +---Attributes
+¦   ¦   ¦       HasPermissionAttribute.cs
+¦   ¦   ¦       
+¦   ¦   +---Controllers
+¦   ¦   ¦       PermissionController.cs
+¦   ¦   ¦       PlanController.cs
+¦   ¦   ¦       
+¦   ¦   +---DTOs
+¦   ¦   ¦       CreatePlanDto.cs
+¦   ¦   ¦       GroupedPermissionDto.cs
+¦   ¦   ¦       PermissionDto.cs
+¦   ¦   ¦       PlanDto.cs
+¦   ¦   ¦       RoleDto.cs
+¦   ¦   ¦       UpdatePlanDto.cs
+¦   ¦   ¦       UpdatePlanPermissionsRequest.cs
+¦   ¦   ¦       UpdateRolePermissionsDto.cs
+¦   ¦   ¦       
+¦   ¦   +---Models
+¦   ¦   ¦       Permission.cs
+¦   ¦   ¦       Plan.cs
+¦   ¦   ¦       PlanPermission.cs
+¦   ¦   ¦       Role.cs
+¦   ¦   ¦       RolePermission.cs
+¦   ¦   ¦       UserPermission.cs
+¦   ¦   ¦       
+¦   ¦   +---Seeder
+¦   ¦   ¦       PermissionConstants.cs
+¦   ¦   ¦       RolePermissionMapping.cs
+¦   ¦   ¦       
+¦   ¦   +---Services
+¦   ¦           AccessControlService.cs
+¦   ¦           IAccessControlService.cs
+¦   ¦           IPlanService.cs
+¦   ¦           PermissionCacheService.cs
+¦   ¦           PlanService.cs
+¦   ¦           
+¦   +---AuditTrail
+¦   ¦   +---Background
+¦   ¦   +---Controllers
+¦   ¦   +---DTOs
+¦   ¦   ¦       CreateAuditLogDto.cs
+¦   ¦   ¦       
+¦   ¦   +---Middleware
+¦   ¦   +---Models
+¦   ¦   ¦       AuditLog.cs
+¦   ¦   ¦       
+¦   ¦   +---Services
+¦   ¦           AuditLogService.cs
+¦   ¦           IAuditLogService.cs
+¦   ¦           
+¦   +---Automation
+¦   ¦   +---Config
+¦   ¦   ¦       ChoiceConfig.cs
+¦   ¦   ¦       MessageConfig.cs
+¦   ¦   ¦       TagNodeConfig.cs
+¦   ¦   ¦       WaitConfig.cs
+¦   ¦   ¦       
+¦   ¦   +---Controllers
+¦   ¦   ¦       AutomationController.cs
+¦   ¦   ¦       
+¦   ¦   +---DTOs
+¦   ¦   ¦       AutomationEdgeDto.cs
+¦   ¦   ¦       AutomationTriggerRequest.cs
+¦   ¦   ¦       MessageNodeConfig.cs
+¦   ¦   ¦       TagNodeConfig.cs
+¦   ¦   ¦       WaitNodeConfig.cs
+¦   ¦   ¦       
+¦   ¦   +---Enums
+¦   ¦   +---Models
+¦   ¦   ¦       AutomationFlow.cs
+¦   ¦   ¦       AutomationFlowEdge.cs
+¦   ¦   ¦       AutomationFlowNode.cs
+¦   ¦   ¦       AutomationFlowRunResult.cs
+¦   ¦   ¦       FlowExecutionContext.cs
+¦   ¦   ¦       FlowRunResult.cs
+¦   ¦   ¦       NodeConfigs.cs
+¦   ¦   ¦       NodeTypeEnum.cs
+¦   ¦   ¦       TagNodeConfig.cs
+¦   ¦   ¦       WaitConfig.cs
+¦   ¦   ¦       
+¦   ¦   +---Repositories
+¦   ¦   ¦       AutomationFlowRepository.cs
+¦   ¦   ¦       IAutomationFlowRepository.cs
+¦   ¦   ¦       
+¦   ¦   +---Runtime
+¦   ¦   +---Services
+¦   ¦           AutomationRunner.cs
+¦   ¦           AutomationService.cs
+¦   ¦           IAutomationRunner.cs
+¦   ¦           IAutomationService.cs
+¦   ¦           
+¦   +---AutoReplyBuilder
+¦   ¦   +---Controllers
+¦   ¦   ¦       AutoReplyController.cs
+¦   ¦   ¦       AutoReplyFlowsController.cs
+¦   ¦   ¦       AutoReplyRuntimeController.cs
+¦   ¦   ¦       TemplatesController.cs
+¦   ¦   ¦       
+¦   ¦   +---DTOs
+¦   ¦   ¦   ¦   AutoReplyButtonClickDto.cs
+¦   ¦   ¦   ¦   AutoReplyLogDto.cs
+¦   ¦   ¦   ¦   AutoReplyRuleDto.cs
+¦   ¦   ¦   ¦   RenameFlowDto.cs
+¦   ¦   ¦   ¦   SaveFlowDto.cs
+¦   ¦   ¦   ¦   TemplateDto.cs
+¦   ¦   ¦   ¦   
+¦   ¦   ¦   +---FlowNodeConfigs
+¦   ¦   ¦           ButtonChoiceNodeConfig.cs
+¦   ¦   ¦           ConditionNodeConfig.cs
+¦   ¦   ¦           DecisionNodeConfig.cs
+¦   ¦   ¦           FormInputNodeConfig.cs
+¦   ¦   ¦           FormNodeConfig.cs
+¦   ¦   ¦           ForwardToAgentNodeConfig.cs
+¦   ¦   ¦           NodeIconMap.cs
+¦   ¦   ¦           NodeTypeEnum.cs
+¦   ¦   ¦           
+¦   ¦   +---Flows
+¦   ¦   ¦   +---DTOs
+¦   ¦   ¦   ¦   +---FlowNodeConfigs
+¦   ¦   ¦   ¦           AutoReplyEdgeDto.cs
+¦   ¦   ¦   ¦           MessageConfig.cs
+¦   ¦   ¦   ¦           RuntimeConfigs.cs
+¦   ¦   ¦   ¦           TagNodeConfig.cs
+¦   ¦   ¦   ¦           TemplateConfig.cs
+¦   ¦   ¦   ¦           WaitConfig.cs
+¦   ¦   ¦   ¦           
+¦   ¦   ¦   +---Enum
+¦   ¦   ¦           NodeTypes.cs
+¦   ¦   ¦           
+¦   ¦   +---Helpers
+¦   ¦   +---Models
+¦   ¦   ¦       AutoReplyFlow.cs
+¦   ¦   ¦       AutoReplyFlowEdge.cs
+¦   ¦   ¦       AutoReplyFlowNode.cs
+¦   ¦   ¦       AutoReplyLog.cs
+¦   ¦   ¦       AutoReplyRule.cs
+¦   ¦   ¦       FlowExecutionContext.cs
+¦   ¦   ¦       FlowNode.cs
+¦   ¦   ¦       FlowRunResult.cs
+¦   ¦   ¦       Position.cs
+¦   ¦   ¦       
+¦   ¦   +---Repositories
+¦   ¦   ¦       AutoReplyFlowRepository.cs
+¦   ¦   ¦       AutoReplyLogRepository.cs
+¦   ¦   ¦       AutoReplyRepository.cs
+¦   ¦   ¦       FlowRepository.cs
+¦   ¦   ¦       IAutoReplyFlowRepository.cs
+¦   ¦   ¦       IAutoReplyLogRepository.cs
+¦   ¦   ¦       IAutoReplyRepository.cs
+¦   ¦   ¦       IFlowRepository.cs
+¦   ¦   ¦       
+¦   ¦   +---Services
+¦   ¦           AutoReplyFlowService.cs
+¦   ¦           AutoReplyRuntimeService.cs
+¦   ¦           AutoReplyService.cs
+¦   ¦           FlowRunner.cs
+¦   ¦           IAutoReplyFlowService.cs
+¦   ¦           IAutoReplyRuntimeService.cs
+¦   ¦           IAutoReplyService.cs
+¦   ¦           IFlowRunner.cs
+¦   ¦           
+¦   +---AutoReplyTemplates
+¦   ¦   +---Restaurant
+¦   ¦       +---Configs
+¦   ¦       ¦       MenuNodeConfig.cs
+¦   ¦       ¦       
+¦   ¦       +---Templates
+¦   +---BusinessModule
+¦   ¦   +---Controllers
+¦   ¦   ¦       BusinessesController.cs
+¦   ¦   ¦       
+¦   ¦   +---DTOs
+¦   ¦   ¦       PendingBusinessDto.cs
+¦   ¦   ¦       ProfileCompletionDto.cs
+¦   ¦   ¦       SignupBusinessDto.cs
+¦   ¦   ¦       
+¦   ¦   +---Models
+¦   ¦   ¦       Business.cs
+¦   ¦   ¦       
+¦   ¦   +---Services
+¦   ¦           BusinessService.cs
+¦   ¦           IBusinessService.cs
+¦   ¦           
+¦   +---CampaignModule
+¦   ¦   ¦   All_Content.txt
+¦   ¦   ¦   
+¦   ¦   +---Controllers
+¦   ¦   ¦       CampaignController.cs
+¦   ¦   ¦       CampaignRecipientController.cs
+¦   ¦   ¦       
+¦   ¦   +---DTOs
+¦   ¦   ¦       AssignContactsDto.cs
+¦   ¦   ¦       CampaignButtonDto.cs
+¦   ¦   ¦       CampaignButtonParamFromMetaDto.cs
+¦   ¦   ¦       CampaignCreateDto.cs
+¦   ¦   ¦       CampaignDto.cs
+¦   ¦   ¦       CampaignRecipientDto.cs
+¦   ¦   ¦       CampaignSummaryDto.cs
+¦   ¦   ¦       
+¦   ¦   +---Models
+¦   ¦   ¦       Campaign.cs
+¦   ¦   ¦       CampaignButton.cs
+¦   ¦   ¦       CampaignFlowOverride.cs
+¦   ¦   ¦       CampaignRecipient.cs
+¦   ¦   ¦       
+¦   ¦   +---Services
+¦   ¦           CampaignRecipientService.cs
+¦   ¦           CampaignService.cs
+¦   ¦           ICampaignRecipientService.cs
+¦   ¦           ICampaignService.cs
+¦   ¦           
+¦   +---CampaignTracking
+¦   ¦   +---Controllers
+¦   ¦   ¦       CampaignAnalyticsController.cs
+¦   ¦   ¦       CampaignRetryController.cs
+¦   ¦   ¦       CampaignSendLogController.cs
+¦   ¦   ¦       
+¦   ¦   +---DTOs
+¦   ¦   ¦       CampaignLogSummaryDto.cs
+¦   ¦   ¦       CampaignSendLogDto.cs
+¦   ¦   ¦       CampaignStatusDashboardDto.cs
+¦   ¦   ¦       TopCampaignDto.cs
+¦   ¦   ¦       
+¦   ¦   +---Models
+¦   ¦   ¦       CampaignSendLog.cs
+¦   ¦   ¦       
+¦   ¦   +---Repositories
+¦   ¦   +---Services
+¦   ¦           CampaignAnalyticsService.cs
+¦   ¦           CampaignRetryService.cs
+¦   ¦           CampaignSendLogEnricher.cs
+¦   ¦           CampaignSendLogService.cs
+¦   ¦           ICampaignAnalyticsService.cs
+¦   ¦           ICampaignRetryService.cs
+¦   ¦           ICampaignSendLogEnricher.cs
+¦   ¦           ICampaignSendLogService.cs
+¦   ¦           
+¦   +---Catalog
+¦   ¦   +---Controllers
+¦   ¦   ¦       CatalogDashboardController.cs
+¦   ¦   ¦       CatalogTrackingController.cs
+¦   ¦   ¦       ProductController.cs
+¦   ¦   ¦       
+¦   ¦   +---DTOs
+¦   ¦   ¦       CatalogClickLogDto.cs
+¦   ¦   ¦       CatalogDashboardSummaryDto.cs
+¦   ¦   ¦       CreateProductDto.cs
+¦   ¦   ¦       CtaJourneyStatsDto.cs
+¦   ¦   ¦       ProductCtaBreakdownDto.cs
+¦   ¦   ¦       ProductDto.cs
+¦   ¦   ¦       TopProductDto.cs
+¦   ¦   ¦       UpdateProductDto.cs
+¦   ¦   ¦       
+¦   ¦   +---Models
+¦   ¦   ¦       CatalogClickLog.cs
+¦   ¦   ¦       Product.cs
+¦   ¦   ¦       
+¦   ¦   +---Repositories
+¦   ¦   +---Services
+¦   ¦           CatalogDashboardService.cs
+¦   ¦           CatalogTrackingService.cs
+¦   ¦           ICatalogDashboardService.cs
+¦   ¦           ICatalogTrackingService.cs
+¦   ¦           IProductService.cs
+¦   ¦           ProductService.cs
+¦   ¦           
+¦   +---CrmAnalytics
+¦   ¦   +---Controllers
+¦   ¦   ¦       CrmAnalyticsController.cs
+¦   ¦   ¦       
+¦   ¦   +---DTOs
+¦   ¦   ¦       ContactTrendsDto.cs
+¦   ¦   ¦       CrmAnalyticsSummaryDto.cs
+¦   ¦   ¦       
+¦   ¦   +---Models
+¦   ¦   +---Services
+¦   ¦           CrmAnalyticsService.cs
+¦   ¦           ICrmAnalyticsService.cs
+¦   ¦           
+¦   +---CTAFlowBuilder
+¦   ¦   +---Controllers
+¦   ¦   ¦       CTAFlowController.cs
+¦   ¦   ¦       
+¦   ¦   +---DTOs
+¦   ¦   ¦       CreateFlowDto.cs
+¦   ¦   ¦       CTAButtonClickDto.cs
+¦   ¦   ¦       CTAFlowExecutionRequest.cs
+¦   ¦   ¦       FlowEdgeDto.cs
+¦   ¦   ¦       FlowNodeDto.cs
+¦   ¦   ¦       LinkButtonDto.cs
+¦   ¦   ¦       SaveVisualFlowDto.cs
+¦   ¦   ¦       VisualFlowLoadDto.cs
+¦   ¦   ¦       VisualFlowSummaryDto.cs
+¦   ¦   ¦       
+¦   ¦   +---Mappers
+¦   ¦   +---Models
+¦   ¦   ¦       CTAFlowClickLog.cs
+¦   ¦   ¦       CTAFlowConfig.cs
+¦   ¦   ¦       CTAFlowStep.cs
+¦   ¦   ¦       FlowButtonLink.cs
+¦   ¦   ¦       FlowExecutionLog.cs
+¦   ¦   ¦       
+¦   ¦   +---Services
+¦   ¦           CTAFlowService.cs
+¦   ¦           ICTAFlowService.cs
+¦   ¦           StepMatchingHelper.cs
+¦   ¦           
+¦   +---CTAManagement
+¦   ¦   +---Controllers
+¦   ¦   ¦       CTAManagementController.cs
+¦   ¦   ¦       
+¦   ¦   +---DTOs
+¦   ¦   ¦       CTADefinitionDto.cs
+¦   ¦   ¦       
+¦   ¦   +---Models
+¦   ¦   ¦       CTADefinition.cs
+¦   ¦   ¦       
+¦   ¦   +---Services
+¦   ¦           CTAManagementService.cs
+¦   ¦           ICTAManagementService.cs
+¦   ¦           
+¦   +---FeatureAccessModule
+¦   ¦   +---Controllers
+¦   ¦   ¦       FeatureAccessController.cs
+¦   ¦   ¦       
+¦   ¦   +---DTOs
+¦   ¦   ¦       FeatureAccessDto.cs
+¦   ¦   ¦       FeatureMetadataDto.cs
+¦   ¦   ¦       FeatureStatusDto.cs
+¦   ¦   ¦       FeatureTogglePatchDto.cs
+¦   ¦   ¦       FeatureToggleViewDto.cs
+¦   ¦   ¦       UserFeatureAccessDto.cs
+¦   ¦   ¦       
+¦   ¦   +---Models
+¦   ¦   ¦       FeatureAccess.cs
+¦   ¦   ¦       FeatureMaster.cs
+¦   ¦   ¦       UserFeatureAccess.cs
+¦   ¦   ¦       
+¦   ¦   +---Services
+¦   ¦           FeatureAccessEvaluator.cs
+¦   ¦           FeatureAccessService.cs
+¦   ¦           IFeatureAccessEvaluator.cs
+¦   ¦           IFeatureAccessService.cs
+¦   ¦           
+¦   +---FlowAnalytics
+¦   ¦   +---Controllers
+¦   ¦   ¦       FlowAnalyticsController.cs
+¦   ¦   ¦       
+¦   ¦   +---DTOs
+¦   ¦   ¦       FlowAnalyticsStepJourneyDto.cs
+¦   ¦   ¦       FlowAnalyticsSummaryDto.cs
+¦   ¦   ¦       FlowStepAnalyticsDto.cs
+¦   ¦   ¦       MostTriggeredStepDto.cs
+¦   ¦   ¦       
+¦   ¦   +---Services
+¦   ¦           FlowAnalyticsService.cs
+¦   ¦           IFlowAnalyticsService.cs
+¦   ¦           
+¦   +---Inbox
+¦   ¦   +---Controllers
+¦   ¦   ¦       InboxController.cs
+¦   ¦   ¦       
+¦   ¦   +---DTOs
+¦   ¦   ¦       InboxMessageDto.cs
+¦   ¦   ¦       SendInboxMessageDto.cs
+¦   ¦   ¦       SendMessageInputDto.cs
+¦   ¦   ¦       TextOnlyMessageSendDto.cs
+¦   ¦   ¦       
+¦   ¦   +---Hubs
+¦   ¦   ¦       InboxHub.cs
+¦   ¦   ¦       
+¦   ¦   +---Models
+¦   ¦   ¦       ChatSessionState.cs
+¦   ¦   ¦       ContactRead.cs
+¦   ¦   ¦       
+¦   ¦   +---Repositories
+¦   ¦   ¦       IInboxRepository.cs
+¦   ¦   ¦       InboxRepository.cs
+¦   ¦   ¦       
+¦   ¦   +---Services
+¦   ¦   ¦       AgentAssignmentService.cs
+¦   ¦   ¦       ChatSessionStateService.cs
+¦   ¦   ¦       IAgentAssignmentService.cs
+¦   ¦   ¦       IChatSessionStateService.cs
+¦   ¦   ¦       IInboxService.cs
+¦   ¦   ¦       InboxService.cs
+¦   ¦   ¦       
+¦   ¦   +---SignalR
+¦   ¦           NameUserIdProvider.cs
+¦   ¦           
+¦   +---MessageManagement
+¦   ¦   +---Controllers
+¦   ¦   ¦       MessageStatusController.cs
+¦   ¦   ¦       
+¦   ¦   +---DTOs
+¦   ¦   ¦       MessageLogDto.cs
+¦   ¦   ¦       WebhookStatusDto.cs
+¦   ¦   ¦       
+¦   ¦   +---Models
+¦   ¦   ¦       MessageStatusLog.cs
+¦   ¦   ¦       
+¦   ¦   +---Services
+¦   ¦           IMessageStatusService.cs
+¦   ¦           MessageStatusService.cs
+¦   ¦           
+¦   +---MessagesEngine
+¦   ¦   ¦   extract_all.bat
+¦   ¦   ¦   messageengineFilesTree.txt
+¦   ¦   ¦   
+¦   ¦   +---Abstractions
+¦   ¦   ¦       IWhatsAppProvider.cs
+¦   ¦   ¦       WaSendResult.cs
+¦   ¦   ¦       WaSendTemplate.cs
+¦   ¦   ¦       WaSendText.cs
+¦   ¦   ¦       
+¦   ¦   +---Contracts
+¦   ¦   +---Controllers
+¦   ¦   ¦       MessageEngineController.cs
+¦   ¦   ¦       
+¦   ¦   +---DTOs
+¦   ¦   ¦       AutoSendTemplateMessageDto.cs
+¦   ¦   ¦       CtaButtonDto.cs
+¦   ¦   ¦       ImageTemplateMessageDto.cs
+¦   ¦   ¦       MessageTypeEnum.cs
+¦   ¦   ¦       SendMessageDto.cs
+¦   ¦   ¦       SendTemplateMessageSimpleDto.cs
+¦   ¦   ¦       SimpleTemplateMessageDto.cs
+¦   ¦   ¦       TemplateForUIResponseDto.cs
+¦   ¦   ¦       TextMessageSendDto.cs
+¦   ¦   ¦       
+¦   ¦   +---Factory
+¦   ¦   ¦       IWhatsAppProviderFactory.cs
+¦   ¦   ¦       WhatsAppProviderFactory.cs
+¦   ¦   ¦       
+¦   ¦   +---Helpers
+¦   ¦   +---PayloadBuilders
+¦   ¦   ¦       CtaMessagePayloadBuilder.cs
+¦   ¦   ¦       ImageMessagePayloadBuilder.cs
+¦   ¦   ¦       IWhatsAppPayloadBuilder.cs
+¦   ¦   ¦       MessagePayloadBuilder.cs
+¦   ¦   ¦       TemplateMessagePayloadBuilder.cs
+¦   ¦   ¦       TemplateStaticButtonPayloadBuilder.cs
+¦   ¦   ¦       TextMessagePayloadBuilder.cs
+¦   ¦   ¦       
+¦   ¦   +---Providers
+¦   ¦   ¦       MetaCloudProvider.cs
+¦   ¦   ¦       PinbotProvider.cs
+¦   ¦   ¦       
+¦   ¦   +---Services
+¦   ¦   ¦       IMessageEngineService.cs
+¦   ¦   ¦       ITemplateMessageSender.cs
+¦   ¦   ¦       MessageEngineService.cs
+¦   ¦   ¦       TemplateMessageSender.cs
+¦   ¦   ¦       
+¦   ¦   +---Validators
+¦   ¦           ValidateMessageDtoAttribute.cs
+¦   ¦           
+¦   +---PlanManagement
+¦   ¦   ¦   All_Content.txt
+¦   ¦   ¦   extract_all.bat
+¦   ¦   ¦   
+¦   ¦   +---DTOs
+¦   ¦   +---Models
+¦   ¦   ¦       BusinessPlanInfo.cs
+¦   ¦   ¦       PlanFeature.cs
+¦   ¦   ¦       PlanType.cs
+¦   ¦   ¦       
+¦   ¦   +---Services
+¦   ¦           IPlanManager.cs
+¦   ¦           PlanManager.cs
+¦   ¦           
+¦   +---ReportingModule
+¦   ¦   +---Controllers
+¦   ¦   ¦       MessageAnalyticsController.cs
+¦   ¦   ¦       
+¦   ¦   +---DTOs
+¦   ¦   ¦       DirectMessageLogFilterDto.cs
+¦   ¦   ¦       RecentMessageLogDto.cs
+¦   ¦   ¦       
+¦   ¦   +---Services
+¦   ¦           IMessageAnalyticsService.cs
+¦   ¦           MessageAnalyticsService.cs
+¦   ¦           
+¦   +---TemplatesModule
+¦   ¦   +---Controllers
+¦   ¦   ¦       TemplatesController.cs
+¦   ¦   ¦       
+¦   ¦   +---DTOs
+¦   ¦   +---Models
+¦   ¦   +---Services
+¦   ¦           IWhatsAppTemplateService.cs
+¦   ¦           WhatsAppTemplateService.cs
+¦   ¦           
+¦   +---Tracking
+¦   ¦   +---Controllers
+¦   ¦   ¦       TrackingController.cs
+¦   ¦   ¦       TrackingViewerController.cs
+¦   ¦   ¦       
+¦   ¦   +---DTOs
+¦   ¦   ¦       TrackingLogDetailsDto.cs
+¦   ¦   ¦       TrackingLogDto.cs
+¦   ¦   ¦       
+¦   ¦   +---Models
+¦   ¦   ¦       TrackingLog.cs
+¦   ¦   ¦       
+¦   ¦   +---Services
+¦   ¦           ITrackingService.cs
+¦   ¦           TrackingService.cs
+¦   ¦           
+¦   +---Webhooks
+¦   ¦   +---BackgroundWorkers
+¦   ¦   ¦       WebhookAutoCleanupWorker.cs
+¦   ¦   ¦       WebhookQueueWorker.cs
+¦   ¦   ¦       
+¦   ¦   +---Controllers
+¦   ¦   ¦       FailedWebhookLogsController.cs
+¦   ¦   ¦       MaintenanceController.cs
+¦   ¦   ¦       WebhookTestController.cs
+¦   ¦   ¦       WhatsAppWebhookController.cs
+¦   ¦   ¦       
+¦   ¦   +---DTOs
+¦   ¦   ¦       FailedWebhookLogDto.cs
+¦   ¦   ¦       
+¦   ¦   +---Models
+¦   ¦   ¦       FailedWebhookLog.cs
+¦   ¦   ¦       WebhookSettings.cs
+¦   ¦   ¦       
+¦   ¦   +---Services
+¦   ¦       ¦   FailedWebhookLogCleanupService.cs
+¦   ¦       ¦   FailedWebhookLogService.cs
+¦   ¦       ¦   IFailedWebhookLogService.cs
+¦   ¦       ¦   IMaintenanceService.cs
+¦   ¦       ¦   IWebhookQueueService.cs
+¦   ¦       ¦   IWhatsAppWebhookDispatcher.cs
+¦   ¦       ¦   IWhatsAppWebhookService.cs
+¦   ¦       ¦   MaintenanceService.cs
+¦   ¦       ¦   WebhookQueueService.cs
+¦   ¦       ¦   WhatsAppWebhookDispatcher.cs
+¦   ¦       ¦   WhatsAppWebhookService.cs
+¦   ¦       ¦   
+¦   ¦       +---Processors
+¦   ¦       ¦       ClickWebhookProcessor.cs
+¦   ¦       ¦       IClickWebhookProcessor.cs
+¦   ¦       ¦       IInboundMessageProcessor.cs
+¦   ¦       ¦       InboundMessageProcessor.cs
+¦   ¦       ¦       IStatusWebhookProcessor.cs
+¦   ¦       ¦       ITemplateWebhookProcessor.cs
+¦   ¦       ¦       StatusWebhookProcessor.cs
+¦   ¦       ¦       TemplateWebhookProcessor.cs
+¦   ¦       ¦       
+¦   ¦       +---Resolvers
+¦   ¦               IMessageIdResolver.cs
+¦   ¦               MessageIdResolver.cs
+¦   ¦               
+¦   +---WhatsAppIntegration
+¦   ¦   +---Controllers
+¦   ¦   ¦       WhatsAppTemplateController.cs
+¦   ¦   ¦       
+¦   ¦   +---DTOs
+¦   ¦           WhatsAppTemplateDto.cs
+¦   ¦           
+¦   +---xbTimelines
+¦       +---Controllers
+¦       ¦       LeadTimelineController.cs
+¦       ¦       
+¦       +---DTOs
+¦       ¦       CampaignTimelineLogDto.cs
+¦       ¦       CRMTimelineLogDto.cs
+¦       ¦       LeadTimelineDto.cs
+¦       ¦       
+¦       +---Mappers
+¦       ¦       LeadTimelineMapper.cs
+¦       ¦       
+¦       +---Models
+¦       ¦       LeadTimeline.cs
+¦       ¦       
+¦       +---Repositories
+¦       +---Services
+¦               ILeadTimelineService.cs
+¦               ITimelineService.cs
+¦               LeadTimelineService.cs
+¦               TimelineService.cs
+¦               
++---logs
+¦       log-20250626.txt
+¦       log-20250629.txt
+¦       log-20250630.txt
+¦       log-20250702.txt
+¦       log-20250703.txt
+¦       log-20250704.txt
+¦       log-20250705.txt
+¦       log-20250710.txt
+¦       log-20250711.txt
+¦       log-20250714.txt
+¦       log-20250723.txt
+¦       log-20250724.txt
+¦       log-20250729.txt
+¦       log-20250805.txt
+¦       log-20250806.txt
+¦       log-20250807.txt
+¦       log-20250808.txt
+¦       log-20250809.txt
+¦       log-20250810.txt
+¦       log-20250811.txt
+¦       log-20250812.txt
+¦       log-20250813.txt
+¦       log-20250814.txt
+¦       log-20250815.txt
+¦       log-20250816.txt
+¦       log-20250818.txt
+¦       log-20250819.txt
+¦       log-20250820.txt
+¦       log-20250822.txt
+¦       log-20250823.txt
+¦       log-20250824.txt
+¦       
++---Middlewares
+¦       GlobalExceptionMiddleware.cs
+¦       JwtErrorHandlingMiddleware.cs
+¦       RequirePermissionAttribute.cs
+¦       RequirePlanAttribute.cs
+¦       RequireRoleAttribute.cs
+¦       
++---Migrations
+¦       20250617162332_Initial.cs
+¦       20250617162332_Initial.Designer.cs
+¦       20250618065214_AddIsActiveToContact.cs
+¦       20250618065214_AddIsActiveToContact.Designer.cs
+¦       20250618085616_AddPlanAndPermissionsTables.cs
+¦       20250618085616_AddPlanAndPermissionsTables.Designer.cs
+¦       20250618113519_AddFeatureAccessControlTable.cs
+¦       20250618113519_AddFeatureAccessControlTable.Designer.cs
+¦       20250619125213_AddPlanFeatureMatrix.cs
+¦       20250619125213_AddPlanFeatureMatrix.Designer.cs
+¦       20250619125804_AddUserFeatureAccessTable.cs
+¦       20250619125804_AddUserFeatureAccessTable.Designer.cs
+¦       20250619130505_UPdateTablePlanFeatureMatrix.cs
+¦       20250619130505_UPdateTablePlanFeatureMatrix.Designer.cs
+¦       20250621073612_AddRefreshTokenSupport.cs
+¦       20250621073612_AddRefreshTokenSupport.Designer.cs
+¦       20250622062351_AddFeatureMasterTable.cs
+¦       20250622062351_AddFeatureMasterTable.Designer.cs
+¦       20250622070448_AddFeatureMasterTable1.cs
+¦       20250622070448_AddFeatureMasterTable1.Designer.cs
+¦       20250704093133_AddIndustryToAutoReplyRule.cs
+¦       20250704093133_AddIndustryToAutoReplyRule.Designer.cs
+¦       20250704155618_AddAutomationFlowModel.cs
+¦       20250704155618_AddAutomationFlowModel.Designer.cs
+¦       20250806080314_InitialCreate.cs
+¦       20250806080314_InitialCreate.Designer.cs
+¦       20250810122422_InitialCreateToNeon.cs
+¦       20250810122422_InitialCreateToNeon.Designer.cs
+¦       20250815180413_AddPlanIdToBusinesses.cs
+¦       20250815180413_AddPlanIdToBusinesses.Designer.cs
+¦       20250815180648_AddPlanIdToBusinessestbl.cs
+¦       20250815180648_AddPlanIdToBusinessestbl.Designer.cs
+¦       20250823163029_AddProviderAndApiKeyToWhatsAppSettings.cs
+¦       20250823163029_AddProviderAndApiKeyToWhatsAppSettings.Designer.cs
+¦       20250824070703_AddWhatsAppTemplates.cs
+¦       20250824070703_AddWhatsAppTemplates.Designer.cs
+¦       AppDbContextModelSnapshot.cs
+¦       
++---Models
+¦   ¦   WhatsAppResult.cs
+¦   ¦   
+¦   +---BusinessModel
+¦   +---MessagesModel
+¦   ¦       MessageLog.cs
+¦   ¦       
+¦   +---UsersModel
++---obj
+¦   ¦   project.assets.json
+¦   ¦   project.nuget.cache
+¦   ¦   xbytechat.api.csproj.EntityFrameworkCore.targets
+¦   ¦   xbytechat.api.csproj.nuget.dgspec.json
+¦   ¦   xbytechat.api.csproj.nuget.g.props
+¦   ¦   xbytechat.api.csproj.nuget.g.targets
+¦   ¦   
+¦   +---Debug
+¦   ¦   +---net8.0
+¦   ¦       ¦   .NETCoreApp,Version=v8.0.AssemblyAttributes.cs
+¦   ¦       ¦   apphost.exe
+¦   ¦       ¦   staticwebassets.build.json
+¦   ¦       ¦   xbytechat.api.AssemblyInfo.cs
+¦   ¦       ¦   xbytechat.api.AssemblyInfoInputs.cache
+¦   ¦       ¦   xbytechat.api.assets.cache
+¦   ¦       ¦   xbytechat.api.csproj.AssemblyReference.cache
+¦   ¦       ¦   xbytechat.api.csproj.BuildWithSkipAnalyzers
+¦   ¦       ¦   xbytechat.api.csproj.CopyComplete
+¦   ¦       ¦   xbytechat.api.csproj.CoreCompileInputs.cache
+¦   ¦       ¦   xbytechat.api.csproj.FileListAbsolute.txt
+¦   ¦       ¦   xbytechat.api.dll
+¦   ¦       ¦   xbytechat.api.GeneratedMSBuildEditorConfig.editorconfig
+¦   ¦       ¦   xbytechat.api.genruntimeconfig.cache
+¦   ¦       ¦   xbytechat.api.GlobalUsings.g.cs
+¦   ¦       ¦   xbytechat.api.MvcApplicationPartsAssemblyInfo.cache
+¦   ¦       ¦   xbytechat.api.MvcApplicationPartsAssemblyInfo.cs
+¦   ¦       ¦   xbytechat.api.pdb
+¦   ¦       ¦   xbytechat.api.sourcelink.json
+¦   ¦       ¦   
+¦   ¦       +---ref
+¦   ¦       ¦       xbytechat.api.dll
+¦   ¦       ¦       
+¦   ¦       +---refint
+¦   ¦       ¦       xbytechat.api.dll
+¦   ¦       ¦       
+¦   ¦       +---staticwebassets
+¦   ¦               msbuild.build.xbytechat.api.props
+¦   ¦               msbuild.buildMultiTargeting.xbytechat.api.props
+¦   ¦               msbuild.buildTransitive.xbytechat.api.props
+¦   ¦               
+¦   +---Release
+¦       +---net8.0
+¦           ¦   .NETCoreApp,Version=v8.0.AssemblyAttributes.cs
+¦           ¦   xbytechat.api.AssemblyInfo.cs
+¦           ¦   xbytechat.api.AssemblyInfoInputs.cache
+¦           ¦   xbytechat.api.assets.cache
+¦           ¦   xbytechat.api.csproj.AssemblyReference.cache
+¦           ¦   xbytechat.api.GeneratedMSBuildEditorConfig.editorconfig
+¦           ¦   xbytechat.api.GlobalUsings.g.cs
+¦           ¦   
+¦           +---ref
+¦           +---refint
++---PayloadBuilders
+¦       ImageMessagePayloadBuilder.cs
+¦       IWhatsAppPayloadBuilder.cs
+¦       TemplateMessagePayloadBuilder.cs
+¦       TextMessagePayloadBuilder.cs
+¦       
++---Properties
+¦       launchSettings.json
+¦       
++---RepositoriesGen
+¦   +---Implementations
+¦   ¦       GenericRepository.cs
+¦   ¦       
+¦   +---Interfaces
+¦           IGenericRepository.cs
+¦           
++---Services
+¦   ¦   WhatsAppService.cs
+¦   ¦   
+¦   +---MessageModule
+¦       +---Implementations
+¦       ¦       MessageService.cs
+¦       ¦       
+¦       +---Interfaces
+¦               IMessageService.cs
+¦               
++---Shared
+¦   ¦   AutoMapperProfile.cs
+¦   ¦   ClaimsBusinessDetails.cs
+¦   ¦   PaginatedRequest.cs
+¦   ¦   PaginatedResponse.cs
+¦   ¦   
+¦   +---TrackingUtils
+¦   ¦       DeviceHelper.cs
+¦   ¦       GeoHelper.cs
+¦   ¦       TrackingUrlBuilder.cs
+¦   ¦       
+¦   +---utility
+¦           TemplateParameterHelper.cs
+¦           
++---Validators
+¦       MessageTypeValidator.cs
+¦       
++---WhatsAppSettings
+¦   ¦   All_Content.txt
+¦   ¦   extract_all.bat
+¦   ¦   t.txt
+¦   ¦   
+¦   +---Abstractions
+¦   ¦       ITemplateCatalogProvider.cs
+¦   ¦       TemplateCatalogItem.cs
+¦   ¦       
+¦   +---BackgroundService
+¦   +---Controllers
+¦   ¦       TemplatesController.cs
+¦   ¦       WhatsAppSettingsController.cs
+¦   ¦       WhatsAppTemplateFetcherController.cs
+¦   ¦       
+¦   +---DTOs
+¦   ¦       ButtonMetadataDto.cs
+¦   ¦       SaveWhatsAppSettingDto.cs
+¦   ¦       TemplateForUIResponseDto.cs
+¦   ¦       TemplateMetadataDto.cs
+¦   ¦       
+¦   +---Models
+¦   ¦       WhatsAppSettingEntity.cs
+¦   ¦       
+¦   +---Providers
+¦   ¦       MetaTemplateCatalogProvider.cs
+¦   ¦       PinnacleTemplateCatalogProvider.cs
+¦   ¦       
+¦   +---Services
+¦   ¦       IWhatsAppSettingsService.cs
+¦   ¦       IWhatsAppTemplateFetcherService.cs
+¦   ¦       TemplateSyncService.cs
+¦   ¦       WhatsAppSettingsService.cs
+¦   ¦       WhatsAppTemplateFetcherService.cs
+¦   ¦       
+¦   +---Validators
+¦           SaveWhatsAppSettingValidator.cs
+¦           
++---xbytechat-api
+    +---Helpers
+    ¦       AuditLoggingHelper.cs
+    ¦       JwtCookieHelper.cs
+    ¦       ResponseResult.cs
+    ¦       SendResultExtended.cs
+    ¦       UserContextHelper.cs
+    ¦       
+    +---obj
+            xbytechat.api.csproj.EntityFrameworkCore.targets
+            

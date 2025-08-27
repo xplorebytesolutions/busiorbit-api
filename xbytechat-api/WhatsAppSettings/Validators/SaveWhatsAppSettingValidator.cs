@@ -1,30 +1,39 @@
-﻿using FluentValidation;
+﻿// 📄 File: WhatsAppSettings/Validators/SaveWhatsAppSettingValidator.cs
+using FluentValidation;
 using xbytechat_api.WhatsAppSettings.DTOs;
 
 namespace xbytechat_api.WhatsAppSettings.Validators
 {
-    public class SaveWhatsAppSettingValidator : AbstractValidator<SaveWhatsAppSettingDto> // ✅ Inherit properly
+    public class SaveWhatsAppSettingValidator : AbstractValidator<SaveWhatsAppSettingDto>
     {
         public SaveWhatsAppSettingValidator()
         {
-            RuleFor(x => x.BusinessId)
-                .NotEmpty().WithMessage("BusinessId is required.");
+            RuleFor(x => x.Provider)
+                .NotEmpty().WithMessage("Provider is required.")
+                .Must(p => p == "pinnacle" || p == "meta_cloud")
+                .WithMessage("Provider must be 'pinnacle' or 'meta_cloud'.");
 
             RuleFor(x => x.ApiUrl)
-                .NotEmpty().WithMessage("API URL is required.")
-                .MaximumLength(500).WithMessage("API URL must not exceed 500 characters.");
+                .NotEmpty().WithMessage("API URL is required.");
 
-            RuleFor(x => x.ApiToken)
-                .NotEmpty().WithMessage("API Token is required.")
-                .MaximumLength(1000).WithMessage("API Token must not exceed 1000 characters.");
+            // Meta Cloud requirements
+            When(x => x.Provider == "meta_cloud", () =>
+            {
+                RuleFor(x => x.ApiToken)
+                    .NotEmpty().WithMessage("API Token is required for Meta Cloud.");
+                RuleFor(x => x.PhoneNumberId)
+                    .NotEmpty().WithMessage("Phone Number ID is required for Meta Cloud.");
+            });
 
-            RuleFor(x => x.WhatsAppBusinessNumber)
-                .NotEmpty().WithMessage("WhatsApp Business Number is required.")
-                .MaximumLength(20).WithMessage("WhatsApp Business Number must not exceed 20 characters.");
-
-            RuleFor(x => x.SenderDisplayName)
-                .MaximumLength(100).WithMessage("Sender Display Name must not exceed 100 characters.")
-                .When(x => !string.IsNullOrEmpty(x.SenderDisplayName));
+            // Pinbot requirements
+            When(x => x.Provider == "pinnacle", () =>
+            {
+                RuleFor(x => x.ApiKey)
+                    .NotEmpty().WithMessage("API Key is required for Pinbot.");
+                RuleFor(x => x)
+                    .Must(x => !string.IsNullOrWhiteSpace(x.PhoneNumberId) || !string.IsNullOrWhiteSpace(x.WabaId))
+                    .WithMessage("Provide Phone Number ID or WABA ID for Pinbot.");
+            });
         }
     }
 }

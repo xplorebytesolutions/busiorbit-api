@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using xbytechat.api.CRM.Dtos;
 using xbytechat.api.Features.CampaignTracking.DTOs;
 
 namespace xbytechat.api.Features.CampaignTracking.Services
@@ -8,8 +9,10 @@ namespace xbytechat.api.Features.CampaignTracking.Services
     public interface ICampaignSendLogService
     {
         // 📊 Get all logs for a specific campaign
-        Task<List<CampaignSendLogDto>> GetLogsByCampaignIdAsync(Guid campaignId);
-
+        //Task<List<CampaignSendLogDto>> GetLogsByCampaignIdAsync(Guid campaignId);
+        // This is the NEW signature that matches your updated service and controller
+        Task<PagedResult<CampaignSendLogDto>> GetLogsByCampaignIdAsync(
+            Guid campaignId, string? status, string? search, int page, int pageSize);
         // 📍 Get logs for a specific contact in a campaign
         Task<List<CampaignSendLogDto>> GetLogsForContactAsync(Guid campaignId, Guid contactId);
 

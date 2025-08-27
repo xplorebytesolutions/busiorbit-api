@@ -1,0 +1,2946 @@
+Folder and File Content Report
+ 
+====================================================== 
+FILE: D:\xbytechat\xbytechat-api\xbytechat-api\WhatsAppSettings\All_Content.txt 
+====================================================== 
+ 
+Folder and File Content Report
+ 
+====================================================== 
+FILE: D:\xbytechat\xbytechat-api\xbytechat-api\WhatsAppSettings\All_Content.txt 
+====================================================== 
+ 
+ 
+ 
+====================================================== 
+FILE: D:\xbytechat\xbytechat-api\xbytechat-api\WhatsAppSettings\extract_all.bat 
+====================================================== 
+ 
+@echo off
+REM This script will find all files and output their name and content into one file.
+
+set "outputFile=All_Content.txt"
+
+REM Clear the output file to start fresh
+> "%outputFile%" (echo Folder and File Content Report)
+echo. >> "%outputFile%"
+
+REM Loop through all files in the current directory and subdirectories
+for /R . %%F in (*.*) do (
+    echo ====================================================== >> "%outputFile%"
+    echo FILE: %%F >> "%outputFile%"
+    echo ====================================================== >> "%outputFile%"
+    echo. >> "%outputFile%"
+    type "%%F" >> "%outputFile%"
+    echo. >> "%outputFile%"
+    echo. >> "%outputFile%"
+)
+
+echo Finished! All content has been extracted to %outputFile% 
+ 
+====================================================== 
+FILE: D:\xbytechat\xbytechat-api\xbytechat-api\WhatsAppSettings\t.txt 
+====================================================== 
+ 
+Folder PATH listing for volume Software
+Volume serial number is DED9-552B
+D:.
+�   t.txt
+�   
++---Abstractions
+�       ITemplateCatalogProvider.cs
+�       TemplateCatalogItem.cs
+�       
++---BackgroundService
++---Controllers
+�       TemplatesController.cs
+�       WhatsAppSettingsController.cs
+�       WhatsAppTemplateFetcherController.cs
+�       
++---DTOs
+�       ButtonMetadataDto.cs
+�       SaveWhatsAppSettingDto.cs
+�       TemplateMetadataDto.cs
+�       
++---Models
+�       WhatsAppSettingEntity.cs
+�       
++---Providers
+�       MetaTemplateCatalogProvider.cs
+�       PinnacleTemplateCatalogProvider.cs
+�       
++---Services
+�       IWhatsAppSettingsService.cs
+�       IWhatsAppTemplateFetcherService.cs
+�       TemplateSyncService.cs
+�       WhatsAppSettingsService.cs
+�       WhatsAppTemplateFetcherService.cs
+�       
++---Validators
+        SaveWhatsAppSettingValidator.cs
+        
+ 
+ 
+====================================================== 
+FILE: D:\xbytechat\xbytechat-api\xbytechat-api\WhatsAppSettings\Abstractions\ITemplateCatalogProvider.cs 
+====================================================== 
+ 
+﻿using xbytechat_api.WhatsAppSettings.Models;
+
+namespace xbytechat.api.WhatsAppSettings.Abstractions
+{
+    public interface ITemplateCatalogProvider
+    {
+        Task<IReadOnlyList<TemplateCatalogItem>> ListAsync(WhatsAppSettingEntity setting, CancellationToken ct = default);
+        Task<TemplateCatalogItem?> GetByNameAsync(WhatsAppSettingEntity setting, string templateName, CancellationToken ct = default);
+    }
+}
+ 
+ 
+====================================================== 
+FILE: D:\xbytechat\xbytechat-api\xbytechat-api\WhatsAppSettings\Abstractions\TemplateCatalogItem.cs 
+====================================================== 
+ 
+﻿using xbytechat.api.WhatsAppSettings.DTOs;
+
+namespace xbytechat.api.WhatsAppSettings.Abstractions
+{
+    public record TemplateCatalogItem(
+       string Name,
+       string Language,
+       string Body,
+       int PlaceholderCount,
+       bool HasImageHeader,
+       IReadOnlyList<ButtonMetadataDto> Buttons,
+       string Status,
+       string? Category,
+       string? ExternalId,
+       string RawJson
+   );
+}
+
+ 
+ 
+====================================================== 
+FILE: D:\xbytechat\xbytechat-api\xbytechat-api\WhatsAppSettings\Controllers\TemplatesController.cs 
+====================================================== 
+ 
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using xbytechat_api.WhatsAppSettings.Models;
+namespace xbytechat.api.WhatsAppSettings.Controllers
+{
+    [ApiController]
+    [Route("api/templates")]
+    public class TemplatesController : ControllerBase
+    {
+        private readonly AppDbContext _db;
+        private readonly ITemplateSyncService _sync;
+
+        public TemplatesController(AppDbContext db, ITemplateSyncService sync)
+        { _db = db; _sync = sync; }
+
+        [HttpPost("sync/{businessId:guid}")]
+        [Authorize]
+        public async Task<IActionResult> Sync(Guid businessId, [FromQuery] bool force = false)
+        {
+            if (businessId == Guid.Empty) return BadRequest(new { success = false, message = "Invalid businessId" });
+            var result = await _sync.SyncBusinessTemplatesAsync(businessId, force);
+            return Ok(new { success = true, result });
+        }
+
+        [HttpGet("{businessId:guid}")]
+        [Authorize]
+        public async Task<IActionResult> List(Guid businessId, [FromQuery] string? q = null,
+            [FromQuery] string? status = "APPROVED", [FromQuery] string? language = null,
+            [FromQuery] string? provider = null)
+        {
+            var query = _db.WhatsAppTemplates.AsNoTracking()
+                .Where(x => x.BusinessId == businessId && x.IsActive);
+
+            if (!string.IsNullOrWhiteSpace(status))
+                query = query.Where(x => x.Status == status);
+
+            if (!string.IsNullOrWhiteSpace(language))
+                query = query.Where(x => x.Language == language);
+
+            if (!string.IsNullOrWhiteSpace(provider))
+                query = query.Where(x => x.Provider == provider);
+
+            if (!string.IsNullOrWhiteSpace(q))
+                query = query.Where(x => x.Name.Contains(q) || x.Body.Contains(q));
+
+            var items = await query
+                .OrderBy(x => x.Name)
+                .Select(x => new
+                {
+                    x.Name,
+                    x.Language,
+                    x.Status,
+                    x.Category,
+                    x.PlaceholderCount,
+                    x.HasImageHeader,
+                    x.ButtonsJson
+                })
+                .ToListAsync();
+
+            return Ok(new { success = true, templates = items });
+        }
+
+        [HttpGet("{businessId:guid}/{name}")]
+        [Authorize]
+        public async Task<IActionResult> GetOne(Guid businessId, string name, [FromQuery] string? language = null)
+        {
+            var tpl = await _db.WhatsAppTemplates.AsNoTracking()
+                .FirstOrDefaultAsync(x => x.BusinessId == businessId && x.Name == name &&
+                                          (language == null || x.Language == language));
+            if (tpl == null) return NotFound();
+            return Ok(new
+            {
+                tpl.Name,
+                tpl.Language,
+                tpl.Status,
+                tpl.Category,
+                tpl.Body,
+                tpl.PlaceholderCount,
+                tpl.HasImageHeader,
+                tpl.ButtonsJson
+            });
+        }
+    }
+}
+ 
+ 
+====================================================== 
+FILE: D:\xbytechat\xbytechat-api\xbytechat-api\WhatsAppSettings\Controllers\WhatsAppSettingsController.cs 
+====================================================== 
+ 
+﻿// 📄 File: WhatsAppSettings/Controllers/WhatsAppSettingsController.cs
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
+using xbytechat.api.Shared; // for User.GetBusinessId()
+using xbytechat_api.WhatsAppSettings.DTOs;
+using xbytechat_api.WhatsAppSettings.Services;
+
+namespace xbytechat_api.WhatsAppSettings.Controllers
+{
+    [ApiController]
+    [Route("api/[controller]")]
+    [Authorize]
+    public class WhatsAppSettingsController : ControllerBase
+    {
+        private readonly IWhatsAppSettingsService _svc;
+        private readonly ILogger<WhatsAppSettingsController> _logger;
+
+        public WhatsAppSettingsController(
+            IWhatsAppSettingsService svc,
+            ILogger<WhatsAppSettingsController> logger)
+        {
+            _svc = svc;
+            _logger = logger;
+        }
+
+        // ----------------------------
+        // Save/Update settings
+        // ----------------------------
+        [HttpPut("update")]
+        public async Task<IActionResult> UpdateSetting([FromBody] SaveWhatsAppSettingDto dto)
+        {
+            _logger.LogInformation("🔧 [UpdateSetting] Incoming payload for provider={Provider}", dto?.Provider);
+
+            if (!ModelState.IsValid)
+            {
+                var errs = ModelState
+                    .Where(e => e.Value.Errors.Count > 0)
+                    .Select(e => new { Field = e.Key, Errors = e.Value.Errors.Select(x => x.ErrorMessage) });
+
+                _logger.LogWarning("❌ [UpdateSetting] Validation failed: {@Errors}", errs);
+                return BadRequest(new { message = "❌ Invalid input.", errors = errs });
+            }
+
+            Guid businessId;
+            try
+            {
+                businessId = User.GetBusinessId();
+                dto.BusinessId = businessId;
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                _logger.LogWarning("❌ [UpdateSetting] BusinessId claim missing/invalid: {Msg}", ex.Message);
+                return Unauthorized(new { message = "❌ BusinessId missing or invalid in token." });
+            }
+
+            try
+            {
+                // Normalize provider to our canonical set
+                dto.Provider = NormalizeProvider(dto.Provider);
+
+                await _svc.SaveOrUpdateSettingAsync(dto);
+                return Ok(new { message = "✅ WhatsApp settings saved/updated successfully." });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "❌ [UpdateSetting] Exception while saving settings.");
+                return StatusCode(500, new { message = "❌ Error while saving settings.", details = ex.Message });
+            }
+        }
+
+        // ----------------------------
+        // Get the current user's saved settings
+        // ----------------------------
+        [HttpGet("me")]
+        public async Task<IActionResult> GetMySettings()
+        {
+            var businessId = User.GetBusinessId();
+            var setting = await _svc.GetSettingsByBusinessIdAsync(businessId);
+            if (setting == null)
+                return NotFound(new { message = "❌ WhatsApp settings not found." });
+
+            return Ok(setting);
+        }
+
+        // ----------------------------
+        // Test connection using values sent in the body (not necessarily saved)
+        // Accepts Provider = "Pinnacle" or "Meta_cloud"
+        // ----------------------------
+        [HttpPost("test-connection")]
+        public async Task<IActionResult> TestConnection([FromBody] SaveWhatsAppSettingDto dto)
+        {
+            if (dto is null)
+                return BadRequest(new { message = "❌ Missing request body." });
+
+            var provider = NormalizeProvider(dto.Provider);
+            if (provider is null)
+                return BadRequest(new { message = "❌ Provider is required (Pinnacle | Meta_cloud)." });
+
+            dto.Provider = provider; // use canonical
+
+            // Minimal provider-specific validation (service will validate again)
+            if (provider == "Meta_cloud")
+            {
+                if (string.IsNullOrWhiteSpace(dto.ApiUrl) ||
+                    string.IsNullOrWhiteSpace(dto.ApiToken) ||
+                    string.IsNullOrWhiteSpace(dto.PhoneNumberId))
+                {
+                    return BadRequest(new { message = "❌ API URL, Token and Phone Number ID are required for Meta Cloud test." });
+                }
+            }
+            else if (provider == "Pinnacle")
+            {
+                if (string.IsNullOrWhiteSpace(dto.ApiUrl) ||
+                    string.IsNullOrWhiteSpace(dto.ApiKey) ||
+                    (string.IsNullOrWhiteSpace(dto.WabaId) && string.IsNullOrWhiteSpace(dto.PhoneNumberId)) ||
+                    string.IsNullOrWhiteSpace(dto.WhatsAppBusinessNumber))
+                {
+                    return BadRequest(new
+                    {
+                        message = "❌ API URL, API Key, (WABA ID or Phone Number ID), and Business Number are required for Pinnacle test."
+                    });
+                }
+            }
+
+            try
+            {
+                var message = await _svc.TestConnectionAsync(dto);
+
+                // Convention: service returns a human string; we 200 on success (starts with ✅), 400 otherwise
+                if (!string.IsNullOrEmpty(message) && message.StartsWith("✅"))
+                    return Ok(new { message });
+
+                return BadRequest(new { message = string.IsNullOrEmpty(message) ? "❌ Test failed." : message });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "❌ [TestConnection] Failed");
+                return StatusCode(500, new { message = "❌ Test connection failed.", details = ex.Message });
+            }
+        }
+
+        // ----------------------------
+        // Test connection against the SAVED settings for this business
+        // ----------------------------
+        [HttpPost("test-connection/current")]
+        public async Task<IActionResult> TestConnectionCurrent()
+        {
+            var businessId = User.GetBusinessId();
+            var saved = await _svc.GetSettingsByBusinessIdAsync(businessId);
+            if (saved is null)
+                return NotFound(new { message = "❌ No saved WhatsApp settings found." });
+
+            var dto = new SaveWhatsAppSettingDto
+            {
+                BusinessId = businessId,
+                Provider = NormalizeProvider(saved.Provider) ?? saved.Provider,
+                ApiUrl = saved.ApiUrl,
+                ApiKey = saved.ApiKey,
+                ApiToken = saved.ApiToken,
+                PhoneNumberId = saved.PhoneNumberId,
+                WabaId = saved.WabaId,
+                WhatsAppBusinessNumber = saved.WhatsAppBusinessNumber,
+                SenderDisplayName = saved.SenderDisplayName,
+                WebhookSecret = saved.WebhookSecret,
+                WebhookVerifyToken = saved.WebhookVerifyToken,
+                IsActive = saved.IsActive
+            };
+
+            try
+            {
+                var message = await _svc.TestConnectionAsync(dto);
+                if (!string.IsNullOrEmpty(message) && message.StartsWith("✅"))
+                    return Ok(new { message });
+
+                return BadRequest(new { message = string.IsNullOrEmpty(message) ? "❌ Test failed." : message });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "❌ [TestConnectionCurrent] Failed");
+                return StatusCode(500, new { message = "❌ Test connection failed.", details = ex.Message });
+            }
+        }
+
+        // ----------------------------
+        // Delete current user's settings
+        // ----------------------------
+        [HttpDelete("delete")]
+        public async Task<IActionResult> DeleteSetting()
+        {
+            var businessId = User.GetBusinessId();
+            var deleted = await _svc.DeleteSettingsAsync(businessId);
+            if (!deleted) return NotFound(new { message = "❌ No WhatsApp settings found to delete." });
+            return Ok(new { message = "🗑️ WhatsApp settings deleted successfully." });
+        }
+
+        // Optional alias for FE routes that call /delete-current
+        [HttpDelete("delete-current")]
+        public Task<IActionResult> DeleteSettingAlias() => DeleteSetting();
+
+        /// <summary>
+        /// Maps any incoming text to the canonical provider values we support.
+        /// Returns null if unrecognized.
+        /// </summary>
+        private static string? NormalizeProvider(string? providerRaw)
+        {
+            if (string.IsNullOrWhiteSpace(providerRaw)) return null;
+
+            var p = providerRaw.Trim();
+
+            // Accept canonical values exactly and a few common variants
+            if (string.Equals(p, "Pinnacle", StringComparison.Ordinal)) return "Pinnacle";
+            if (string.Equals(p, "Meta_cloud", StringComparison.Ordinal)) return "Meta_cloud";
+
+            // tolerate some user/legacy variants from older UIs
+            var lower = p.ToLowerInvariant();
+            if (lower is "pinbot" or "pinnacle (official)" or "pinnacle (pinnacle)" or "pinnacle official")
+                return "Pinnacle";
+            if (lower is "meta cloud" or "meta" or "meta-cloud")
+                return "Meta_cloud";
+
+            return null;
+        }
+    }
+}
+
+
+//using Microsoft.AspNetCore.Authorization;
+//using Microsoft.AspNetCore.Mvc;
+//using Microsoft.Extensions.Logging;
+//using System;
+//using System.Linq;
+//using System.Security.Claims;
+//using System.Threading.Tasks;
+//using xbytechat.api.Shared;
+//using xbytechat_api.WhatsAppSettings.DTOs;
+//using xbytechat_api.WhatsAppSettings.Services;
+
+//namespace xbytechat_api.WhatsAppSettings.Controllers
+//{
+//    [ApiController]
+//    [Route("api/[controller]")]
+//    [Authorize]
+//    public class WhatsAppSettingsController : ControllerBase
+//    {
+//        private readonly IWhatsAppSettingsService _whatsAppSettingsService;
+//        private readonly ILogger<WhatsAppSettingsController> _logger;
+
+//        public WhatsAppSettingsController(
+//            IWhatsAppSettingsService whatsAppSettingsService,
+//            ILogger<WhatsAppSettingsController> logger)
+//        {
+//            _whatsAppSettingsService = whatsAppSettingsService;
+//            _logger = logger;
+//        }
+
+//        [HttpPut("update")]
+//        public async Task<IActionResult> UpdateSetting([FromBody] SaveWhatsAppSettingDto dto)
+//        {
+//            _logger.LogInformation("🔧 [UpdateSetting] Request received for WhatsApp settings update.");
+
+//            if (!ModelState.IsValid)
+//            {
+//                var validationErrors = ModelState
+//                    .Where(e => e.Value.Errors.Count > 0)
+//                    .Select(e => new
+//                    {
+//                        Field = e.Key,
+//                        Errors = e.Value.Errors.Select(x => x.ErrorMessage)
+//                    });
+
+//                _logger.LogWarning("❌ [UpdateSetting] Validation failed: {@Errors}", validationErrors);
+//                return BadRequest(new { message = "❌ Invalid input.", errors = validationErrors });
+//            }
+
+//            Guid businessId;
+//            try
+//            {
+//                businessId = User.GetBusinessId(); // ✅ Cleaner using your helper
+//                dto.BusinessId = businessId;
+//            }
+//            catch (UnauthorizedAccessException ex)
+//            {
+//                _logger.LogWarning("❌ [UpdateSetting] BusinessId claim missing or invalid: {Message}", ex.Message);
+//                return Unauthorized(new { message = "❌ BusinessId missing or invalid in token." });
+//            }
+
+//            if (string.IsNullOrWhiteSpace(dto.ApiToken) || string.IsNullOrWhiteSpace(dto.PhoneNumberId))
+//            {
+//                _logger.LogWarning("❌ [UpdateSetting] Missing ApiToken or PhoneNumberId.");
+//                return BadRequest(new { message = "❌ API Token and Phone Number ID are required." });
+//            }
+
+//            try
+//            {
+//                _logger.LogInformation("💾 [UpdateSetting] Saving/updating WhatsApp settings for businessId={BusinessId}.", businessId);
+//                await _whatsAppSettingsService.SaveOrUpdateSettingAsync(dto);
+//                _logger.LogInformation("✅ [UpdateSetting] WhatsApp settings updated successfully.");
+//                return Ok(new { message = "✅ WhatsApp settings saved/updated successfully." });
+//            }
+//            catch (Exception ex)
+//            {
+//                _logger.LogError(ex, "❌ [UpdateSetting] Exception occurred while saving settings.");
+//                return StatusCode(500, new { message = "❌ Error while saving settings.", details = ex.Message });
+//            }
+//        }
+
+//        [HttpGet("me")]
+//        public async Task<IActionResult> GetMySettings()
+//        {
+
+//            var businessId = User.GetBusinessId();
+//            var setting = await _whatsAppSettingsService.GetSettingsByBusinessIdAsync(businessId);
+//            if (setting == null)
+//                return NotFound(new { message = "❌ WhatsApp settings not found." });
+
+//            return Ok(setting);
+//        }
+
+//        [HttpGet("{businessId}")]
+//        public async Task<IActionResult> GetSetting(Guid businessId)
+//        {
+//            if (businessId == Guid.Empty)
+//                return BadRequest(new { message = "❌ Invalid businessId." });
+
+//            var setting = await _whatsAppSettingsService.GetSettingsByBusinessIdAsync(businessId);
+//            if (setting == null)
+//                return NotFound(new { message = "❌ WhatsApp settings not found." });
+
+//            return Ok(setting);
+//        }
+//        //[HttpPost("test-connection")]
+//        //public async Task<IActionResult> TestConnection([FromBody] SaveWhatsAppSettingDto dto)
+//        //{
+//        //    if (string.IsNullOrWhiteSpace(dto.ApiToken) || string.IsNullOrWhiteSpace(dto.ApiUrl))
+//        //        return BadRequest(new { message = "❌ API Token and API URL are required for testing connection." });
+
+//        //    try
+//        //    {
+//        //        var result = await _whatsAppSettingsService.TestConnectionAsync(dto);
+//        //        return Ok(new { message = result });
+//        //    }
+//        //    catch (Exception ex)
+//        //    {
+//        //        return StatusCode(500, new { message = "❌ Test connection failed.", details = ex.Message });
+//        //    }
+//        //}
+//        [HttpPost("test-connection")]
+//        public async Task<IActionResult> TestConnection([FromBody] SaveWhatsAppSettingDto dto)
+//        {
+//            if (string.IsNullOrWhiteSpace(dto.ApiToken) || string.IsNullOrWhiteSpace(dto.ApiUrl))
+//                return BadRequest(new { message = "❌ API Token and API URL are required for testing connection." });
+
+//            try
+//            {
+//                var result = await _whatsAppSettingsService.TestConnectionAsync(dto);
+//                return Ok(new { message = result });
+//            }
+//            catch (Exception ex)
+//            {
+//                return StatusCode(500, new { message = "❌ Test connection failed.", details = ex.Message });
+//            }
+//        }
+
+//        [HttpDelete("delete")]
+//        public async Task<IActionResult> DeleteSetting()
+//        {
+//            var businessIdStr = User.FindFirst("BusinessId")?.Value;
+//            if (!Guid.TryParse(businessIdStr, out var businessId))
+//                return Unauthorized(new { message = "❌ BusinessId missing or invalid in token." });
+
+//            var result = await _whatsAppSettingsService.DeleteSettingsAsync(businessId);
+//            if (!result)
+//                return NotFound(new { message = "❌ No WhatsApp settings found to delete." });
+
+//            return Ok(new { message = "🗑️ WhatsApp settings deleted successfully." });
+//        }
+//    }
+//}
+
+
+//using Microsoft.AspNetCore.Mvc;
+//using System;
+//using System.Threading.Tasks;
+//using xbytechat_api.WhatsAppSettings.DTOs;
+//using xbytechat_api.WhatsAppSettings.Services;
+
+//namespace xbytechat_api.WhatsAppSettings.Controllers
+//{
+//    [ApiController]
+//    [Route("api/[controller]")]
+//    public class WhatsAppSettingsController : ControllerBase
+//    {
+//        private readonly IWhatsAppSettingsService _whatsAppSettingsService;
+
+//        public WhatsAppSettingsController(IWhatsAppSettingsService whatsAppSettingsService)
+//        {
+//            _whatsAppSettingsService = whatsAppSettingsService;
+//        }
+
+
+//        [HttpPut("update")]
+//        public async Task<IActionResult> UpdateSetting([FromBody] SaveWhatsAppSettingDto dto)
+//        {
+//            if (!ModelState.IsValid)
+//                return BadRequest(new { message = "❌ Invalid input.", errors = ModelState });
+
+//            if (string.IsNullOrWhiteSpace(dto.ApiToken) || string.IsNullOrWhiteSpace(dto.PhoneNumberId))
+//                return BadRequest(new { message = "❌ API Token and Phone Number ID are required." });
+
+//            try
+//            {
+//                await _whatsAppSettingsService.SaveOrUpdateSettingAsync(dto);
+//                return Ok(new { message = "✅ WhatsApp settings saved/updated successfully." });
+//            }
+//            catch (Exception ex)
+//            {
+//                return StatusCode(500, new { message = "❌ Error while saving settings.", details = ex.Message });
+//            }
+//        }
+
+//        /// <summary>
+//        /// Get WhatsApp Settings by BusinessId
+//        /// </summary>
+//        [HttpGet("{businessId}")]
+//        public async Task<IActionResult> GetSetting(Guid businessId)
+//        {
+//            if (businessId == Guid.Empty)
+//                return BadRequest(new { message = "❌ Invalid businessId." });
+
+//            var setting = await _whatsAppSettingsService.GetSettingsByBusinessIdAsync(businessId);
+//            if (setting == null)
+//                return NotFound(new { message = "❌ WhatsApp settings not found." });
+
+//            return Ok(setting);
+//        }
+
+//        /// <summary>
+//        /// Test WhatsApp Connection (API URL + Token)
+//        /// </summary>
+//        [HttpPost("test-connection")]
+//        public async Task<IActionResult> TestConnection([FromBody] SaveWhatsAppSettingDto dto)
+//        {
+//            if (string.IsNullOrWhiteSpace(dto.ApiToken) || string.IsNullOrWhiteSpace(dto.ApiUrl))
+//                return BadRequest(new { message = "❌ API Token and API URL are required for testing connection." });
+
+//            try
+//            {
+//                var result = await _whatsAppSettingsService.TestConnectionAsync(dto);
+//                return Ok(new { message = result });
+//            }
+//            catch (Exception ex)
+//            {
+//                return StatusCode(500, new { message = "❌ Test connection failed.", details = ex.Message });
+//            }
+//        }
+
+//        /// <summary>
+//        /// Delete WhatsApp Settings for a Business
+//        /// </summary>
+//        [HttpDelete("delete/{businessId}")]
+//        public async Task<IActionResult> DeleteSetting(Guid businessId)
+//        {
+//            if (businessId == Guid.Empty)
+//                return BadRequest(new { message = "❌ Invalid businessId." });
+
+//            var result = await _whatsAppSettingsService.DeleteSettingsAsync(businessId);
+//            if (!result)
+//                return NotFound(new { message = "❌ No WhatsApp settings found to delete." });
+
+//            return Ok(new { message = "🗑️ WhatsApp settings deleted successfully." });
+//        }
+//    }
+//}
+ 
+ 
+====================================================== 
+FILE: D:\xbytechat\xbytechat-api\xbytechat-api\WhatsAppSettings\Controllers\WhatsAppTemplateFetcherController.cs 
+====================================================== 
+ 
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using xbytechat_api.WhatsAppSettings.Services;
+
+namespace xbytechat_api.WhatsAppSettings.Controllers
+{
+    [ApiController]
+    [Route("api/[controller]")]
+    public class WhatsAppTemplateFetcherController : ControllerBase
+    {
+        private readonly IWhatsAppTemplateFetcherService _templateFetcherService;
+
+        public WhatsAppTemplateFetcherController(IWhatsAppTemplateFetcherService templateFetcherService)
+        {
+            _templateFetcherService = templateFetcherService;
+        }
+
+        [HttpGet("get-template/{businessId}")]
+        [Authorize] // ✅ Optional: Require authentication if your project uses JWT auth
+        public async Task<IActionResult> FetchTemplates(Guid businessId)
+        {
+            if (businessId == Guid.Empty)
+                return BadRequest(new { message = "❌ Invalid BusinessId." });
+
+            var templates = await _templateFetcherService.FetchTemplatesAsync(businessId); // comment this line to stop fetch template as per businessid
+            //var templates = await _templateFetcherService.FetchAllTemplatesAsync(); // comment this line to stop fetch template as per businessid
+
+            return Ok(new
+            {
+                success = true,
+                templates = templates
+            });
+        }
+
+      
+
+        [HttpGet("get-template-all")]
+        public async Task<IActionResult> GetAllTemplatesAsync()
+        {
+            try
+            {
+                var templates = await _templateFetcherService.FetchAllTemplatesAsync();
+                return Ok(new { success = true, templates });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    success = false,
+                    message = "Error fetching templates",
+                    detail = ex.Message
+                });
+            }
+        }
+
+        [HttpGet("get-template-by-name")]
+        public async Task<IActionResult> GetTemplateByName([FromQuery] string name)
+        {
+            var businessId = Guid.Parse(User.FindFirst("businessId")?.Value);
+            var template = await _templateFetcherService.GetTemplateByNameAsync(businessId, name, true);
+            return template == null ? NotFound() : Ok(template);
+        }
+        [HttpGet("get-by-name/{businessId}/{templateName}")]
+        public async Task<IActionResult> GetByName(Guid businessId, string templateName, [FromQuery] bool includeButtons = true)
+        {
+            if (businessId == Guid.Empty || string.IsNullOrWhiteSpace(templateName))
+                return BadRequest(new { success = false, message = "❌ Missing or invalid parameters." });
+
+            var template = await _templateFetcherService.GetTemplateByNameAsync(businessId, templateName, includeButtons);
+
+            if (template == null)
+                return NotFound();
+
+            return Ok(new
+            {
+                success = true,
+                template
+            });
+        }
+    }
+}
+
+ 
+ 
+====================================================== 
+FILE: D:\xbytechat\xbytechat-api\xbytechat-api\WhatsAppSettings\DTOs\ButtonMetadataDto.cs 
+====================================================== 
+ 
+﻿namespace xbytechat.api.WhatsAppSettings.DTOs
+{
+    public class ButtonMetadataDto
+    {
+        public string Type { get; set; } // Example: "URL" or "PHONE_NUMBER"
+        public string Text { get; set; } // Button Text
+        public string SubType { get; set; } // (optional) for URL, Phone Number etc
+        public int Index { get; set; } // Index like 0, 1
+                                       // Optional: dynamic parameter value for validation
+        public string? ParameterValue { get; set; } // e.g. coupon_code
+    }
+
+}
+ 
+ 
+====================================================== 
+FILE: D:\xbytechat\xbytechat-api\xbytechat-api\WhatsAppSettings\DTOs\SaveWhatsAppSettingDto.cs 
+====================================================== 
+ 
+﻿// 📄 File: WhatsAppSettings/DTOs/SaveWhatsAppSettingDto.cs
+using System;
+using System.ComponentModel.DataAnnotations;
+
+namespace xbytechat_api.WhatsAppSettings.DTOs
+{
+    public class SaveWhatsAppSettingDto
+    {
+        public Guid BusinessId { get; set; }
+
+        // Which provider: "pinbot" | "meta_cloud"
+        [Required, MaxLength(50)]
+        public string Provider { get; set; } //= "pinbot";
+
+        [Required, MaxLength(500)]
+        public string ApiUrl { get; set; } = string.Empty;
+
+        [MaxLength(1000)]
+        public string? ApiKey { get; set; } // Pinbot
+
+        [MaxLength(1000)]
+        public string? ApiToken { get; set; } // Meta Cloud
+
+        [MaxLength(100)]
+        public string? PhoneNumberId { get; set; } // Meta Cloud
+
+        [MaxLength(100)]
+        public string? WabaId { get; set; } // Optional (Pinbot/Meta)
+
+        [MaxLength(50)]
+        public string? WhatsAppBusinessNumber { get; set; }
+
+        [MaxLength(100)]
+        public string? SenderDisplayName { get; set; }
+
+        [MaxLength(200)]
+        public string? WebhookSecret { get; set; }
+
+        [MaxLength(200)]
+        public string? WebhookVerifyToken { get; set; }
+
+        public bool IsActive { get; set; } = true;
+    }
+}
+
+
+
+//using System;
+//using System.ComponentModel.DataAnnotations;
+
+//namespace xbytechat_api.WhatsAppSettings.DTOs
+//{
+//    public class SaveWhatsAppSettingDto
+//    {
+
+//        public Guid BusinessId { get; set; }
+
+//        [Required]
+//        [MaxLength(1000)]
+//        public string ApiToken { get; set; }
+
+//        [Required]
+//        [MaxLength(100)]
+//        public string PhoneNumberId { get; set; }  // ✅ NEW: Needed to send messages
+
+//        [MaxLength(100)]
+//        public string? WabaId { get; set; } // Optional
+
+//        [MaxLength(100)]
+//        public string? SenderDisplayName { get; set; }
+
+//        [Required]
+//        [MaxLength(500)]
+//        public string ApiUrl { get; set; } = "https://graph.facebook.com/v18.0/";
+
+//        [Required]
+//        [MaxLength(50)]
+//        public string WhatsAppBusinessNumber { get; set; }  // ✅ Still used for testing via `/me` or WABA ID
+
+//        public bool IsActive { get; set; } = true;
+//    }
+//}
+ 
+ 
+====================================================== 
+FILE: D:\xbytechat\xbytechat-api\xbytechat-api\WhatsAppSettings\DTOs\TemplateMetadataDto.cs 
+====================================================== 
+ 
+﻿namespace xbytechat.api.WhatsAppSettings.DTOs
+{
+    /// <summary>
+    /// DTO representing a simplified view of WhatsApp template metadata.
+    /// </summary>
+    public class TemplateMetadataDto
+    {
+        /// Unique name of the template.
+        public string Name { get; set; } = string.Empty;
+
+        /// Language code used when creating the template (e.g., en_US, hi_IN).
+        public string Language { get; set; } = "en_US";
+
+        /// The message body content with placeholders (e.g., "Hi {{1}}, your order is ready").
+        public string Body { get; set; } = string.Empty;
+
+        /// Number of dynamic parameters required (e.g., 2 for {{1}} and {{2}}).
+        public int PlaceholderCount { get; set; }
+
+        public List<ButtonMetadataDto> ButtonParams { get; set; } = new List<ButtonMetadataDto>(); // ✅ Added Buttons
+        public bool HasImageHeader { get; set; } = false;
+
+    }
+}
+ 
+ 
+====================================================== 
+FILE: D:\xbytechat\xbytechat-api\xbytechat-api\WhatsAppSettings\Models\WhatsAppSettingEntity.cs 
+====================================================== 
+ 
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+
+namespace xbytechat_api.WhatsAppSettings.Models
+{
+    public class WhatsAppSettingEntity
+    {
+        [Key]
+        public Guid Id { get; set; }
+
+        [Required]
+        public Guid BusinessId { get; set; }
+
+        // NEW: which provider this row belongs to ("pinbot", "meta_cloud", "twilio", etc.)
+        [Required]
+        [MaxLength(50)]
+        public string Provider { get; set; } //= "pinbot";
+
+        [Required]
+        [MaxLength(500)]
+        public string ApiUrl { get; set; }  // e.g. https://partnersv1.pinbot.ai/v3
+
+        [MaxLength(1000)]
+        public string ApiKey { get; set; }
+
+        [Required]
+        [MaxLength(1000)]
+        public string ApiToken { get; set; } // store encrypted
+
+        [MaxLength(20)]
+        public string? WhatsAppBusinessNumber { get; set; }
+
+        public string? PhoneNumberId { get; set; } // used by Meta Cloud; Pinbot doesn't need it
+        public string? WabaId { get; set; } = string.Empty;
+
+        [MaxLength(100)]
+        public string? SenderDisplayName { get; set; }
+
+        // Optional: for webhook signature/verification if provider supports it
+        [MaxLength(200)]
+        public string? WebhookSecret { get; set; }
+
+        [MaxLength(200)]
+        public string? WebhookVerifyToken { get; set; }
+
+        [Required]
+        public bool IsActive { get; set; } = true;
+
+        [Required]
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        public DateTime? UpdatedAt { get; set; }
+    }
+}
+
+
+//using System;
+//using System.ComponentModel.DataAnnotations;
+
+//namespace xbytechat_api.WhatsAppSettings.Models
+//{
+//    public class WhatsAppSettingEntity
+//    {
+//        [Key]
+//        public Guid Id { get; set; }
+
+//        [Required]
+//        public Guid BusinessId { get; set; }
+
+//        [Required]
+//        [MaxLength(500)]
+//        public string ApiUrl { get; set; }
+
+//        [Required]
+//        [MaxLength(1000)]
+//        public string ApiToken { get; set; }
+
+//        [Required]
+//        [MaxLength(20)]
+//        public string? WhatsAppBusinessNumber { get; set; }
+
+//        public string? PhoneNumberId { get; set; } //Meta Business phone number ID
+//        public string? WabaId { get; set; } = string.Empty; //WhatsApp Business Account ID
+
+//        [MaxLength(100)]
+//        public string? SenderDisplayName { get; set; }
+
+//        [Required]
+//        public bool IsActive { get; set; } = true;
+
+//        [Required]
+//        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+//        public DateTime? UpdatedAt { get; set; }
+
+//        // string ApiVersion { get; set; } = "v18.0";
+
+//    }
+//}
+ 
+ 
+====================================================== 
+FILE: D:\xbytechat\xbytechat-api\xbytechat-api\WhatsAppSettings\Providers\MetaTemplateCatalogProvider.cs 
+====================================================== 
+ 
+﻿using Newtonsoft.Json;
+using System.Net.Http.Headers;
+using System.Text.RegularExpressions;
+using xbytechat.api.WhatsAppSettings.Abstractions;
+using xbytechat.api.WhatsAppSettings.DTOs;
+using xbytechat_api.WhatsAppSettings.Models;
+
+namespace xbytechat.api.WhatsAppSettings.Providers
+{
+    public sealed class MetaTemplateCatalogProvider : ITemplateCatalogProvider
+    {
+        private readonly HttpClient _http;
+        private readonly ILogger<MetaTemplateCatalogProvider> _log;
+
+        public MetaTemplateCatalogProvider(HttpClient http, ILogger<MetaTemplateCatalogProvider> log)
+        { _http = http; _log = log; }
+
+        public async Task<IReadOnlyList<TemplateCatalogItem>> ListAsync(WhatsAppSettingEntity s, CancellationToken ct = default)
+        {
+            var items = new List<TemplateCatalogItem>();
+            if (string.IsNullOrWhiteSpace(s.ApiToken) || string.IsNullOrWhiteSpace(s.WabaId))
+                return items;
+
+            var baseUrl = s.ApiUrl?.TrimEnd('/') ?? "https://graph.facebook.com/v22.0";
+            var next = $"{baseUrl}/{s.WabaId}/message_templates?limit=100";
+
+            _http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", s.ApiToken);
+
+            while (!string.IsNullOrWhiteSpace(next))
+            {
+                var res = await _http.GetAsync(next, ct);
+                var json = await res.Content.ReadAsStringAsync(ct);
+                if (!res.IsSuccessStatusCode) break;
+
+                dynamic parsed = JsonConvert.DeserializeObject(json);
+
+                foreach (var tpl in parsed.data)
+                {
+                    // Filter APPROVED/ACTIVE
+                    string status = (tpl.status?.ToString() ?? "").ToUpperInvariant();
+                    if (status != "APPROVED" && status != "ACTIVE") continue;
+
+                    string name = tpl.name;
+                    string language = tpl.language ?? "en_US";
+                    string body = "";
+                    bool hasImageHeader = false;
+                    var buttons = new List<ButtonMetadataDto>();
+
+                    foreach (var comp in tpl.components)
+                    {
+                        string type = comp.type?.ToString()?.ToUpperInvariant();
+
+                        if (type == "BODY")
+                            body = comp.text?.ToString() ?? "";
+
+                        if (type == "HEADER" && (comp.format?.ToString()?.ToUpperInvariant() == "IMAGE"))
+                            hasImageHeader = true;
+
+                        if (type == "BUTTONS")
+                        {
+                            foreach (var b in comp.buttons)
+                            {
+                                try
+                                {
+                                    string btnType = b.type?.ToString()?.ToUpperInvariant() ?? "";
+                                    string text = b.text?.ToString() ?? "";
+                                    int index = buttons.Count;
+
+                                    string subType = btnType switch
+                                    {
+                                        "URL" => "url",
+                                        "PHONE_NUMBER" => "voice_call",
+                                        "QUICK_REPLY" => "quick_reply",
+                                        "COPY_CODE" => "copy_code",
+                                        "CATALOG" => "catalog",
+                                        "FLOW" => "flow",
+                                        "REMINDER" => "reminder",
+                                        "ORDER_DETAILS" => "order_details",
+                                        _ => "unknown"
+                                    };
+
+                                    string? param = b.url != null ? b.url.ToString()
+                                                 : b.phone_number != null ? b.phone_number.ToString()
+                                                 : b.coupon_code != null ? b.coupon_code.ToString()
+                                                 : b.flow_id != null ? b.flow_id.ToString()
+                                                 : null;
+
+                                    bool hasExample = b.example != null;
+                                    bool isDynamic = hasExample && Regex.IsMatch(b.example.ToString(), @"\{\{[0-9]+\}\}");
+                                    bool requiresParam = new[] { "url", "flow", "copy_code", "catalog", "reminder" }.Contains(subType);
+                                    bool needsRuntimeValue = requiresParam && isDynamic;
+                                    if (subType == "unknown" || (param == null && needsRuntimeValue)) continue;
+
+                                    buttons.Add(new ButtonMetadataDto
+                                    {
+                                        Text = text,
+                                        Type = btnType,
+                                        SubType = subType,
+                                        Index = index,
+                                        ParameterValue = param ?? ""
+                                    });
+                                }
+                                catch (Exception ex)
+                                { _log.LogWarning(ex, "Button parse failed for template {Name}", (string)name); }
+                            }
+                        }
+                    }
+
+                    int placeholders = Regex.Matches(body ?? "", "{{(.*?)}}").Count;
+                    var raw = JsonConvert.SerializeObject(tpl);
+
+                    items.Add(new TemplateCatalogItem(
+                        Name: name,
+                        Language: language,
+                        Body: body,
+                        PlaceholderCount: placeholders,
+                        HasImageHeader: hasImageHeader,
+                        Buttons: buttons,
+                        Status: status,
+                        Category: tpl.category?.ToString(),
+                        ExternalId: tpl.id?.ToString(),
+                        RawJson: raw
+                    ));
+                }
+
+                next = parsed?.paging?.next?.ToString();
+            }
+
+            return items;
+        }
+
+        public async Task<TemplateCatalogItem?> GetByNameAsync(WhatsAppSettingEntity s, string templateName, CancellationToken ct = default)
+            => (await ListAsync(s, ct)).FirstOrDefault(t => t.Name.Equals(templateName, StringComparison.OrdinalIgnoreCase));
+    }
+} 
+ 
+====================================================== 
+FILE: D:\xbytechat\xbytechat-api\xbytechat-api\WhatsAppSettings\Providers\PinnacleTemplateCatalogProvider.cs 
+====================================================== 
+ 
+﻿using xbytechat.api.WhatsAppSettings.Abstractions;
+using xbytechat_api.WhatsAppSettings.Models;
+
+namespace xbytechat.api.WhatsAppSettings.Providers
+{
+    public sealed class PinnacleTemplateCatalogProvider : ITemplateCatalogProvider
+    {
+        private readonly HttpClient _http;
+        private readonly ILogger<PinnacleTemplateCatalogProvider> _log;
+
+        public PinnacleTemplateCatalogProvider(HttpClient http, ILogger<PinnacleTemplateCatalogProvider> log)
+        { _http = http; _log = log; }
+
+        public async Task<IReadOnlyList<TemplateCatalogItem>> ListAsync(WhatsAppSettingEntity s, CancellationToken ct = default)
+        {
+            // If your BSP supports listing:
+            // var baseUrl = (s.ApiUrl ?? "").TrimEnd('/');
+            // var url = $"{baseUrl}/templates?limit=100";
+            // using var req = new HttpRequestMessage(HttpMethod.Get, url);
+            // req.Headers.Add("x-api-key", s.ApiKey);
+            // var res = await _http.SendAsync(req, ct);
+            // var json = await res.Content.ReadAsStringAsync(ct);
+            // if (!res.IsSuccessStatusCode) return Array.Empty<TemplateCatalogItem>();
+            // dynamic parsed = JsonConvert.DeserializeObject(json);
+            // map to TemplateCatalogItem and return
+
+            // If not supported (common): return empty to trigger UI fallback
+            _log.LogInformation("Pinnacle does not expose template listing (returning empty).");
+            return Array.Empty<TemplateCatalogItem>();
+        }
+
+        public Task<TemplateCatalogItem?> GetByNameAsync(WhatsAppSettingEntity s, string templateName, CancellationToken ct = default)
+            => Task.FromResult<TemplateCatalogItem?>(null);
+    }
+} 
+ 
+====================================================== 
+FILE: D:\xbytechat\xbytechat-api\xbytechat-api\WhatsAppSettings\Services\IWhatsAppSettingsService.cs 
+====================================================== 
+ 
+﻿using System;
+using System.Threading.Tasks;
+using xbytechat_api.WhatsAppSettings.DTOs;
+using xbytechat_api.WhatsAppSettings.Models;
+
+namespace xbytechat_api.WhatsAppSettings.Services
+{
+    public interface IWhatsAppSettingsService
+    {
+        Task SaveOrUpdateSettingAsync(SaveWhatsAppSettingDto dto);
+        Task<WhatsAppSettingEntity?> GetSettingsByBusinessIdAsync(Guid businessId);
+        Task<bool> DeleteSettingsAsync(Guid businessId);
+        Task<string> TestConnectionAsync(SaveWhatsAppSettingDto dto);
+        Task<string?> GetSenderNumberAsync(Guid businessId);
+    }
+}
+ 
+ 
+====================================================== 
+FILE: D:\xbytechat\xbytechat-api\xbytechat-api\WhatsAppSettings\Services\IWhatsAppTemplateFetcherService.cs 
+====================================================== 
+ 
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using xbytechat.api.WhatsAppSettings.DTOs;
+
+namespace xbytechat_api.WhatsAppSettings.Services
+{
+    public interface IWhatsAppTemplateFetcherService
+    {
+        Task<List<TemplateMetadataDto>> FetchTemplatesAsync(Guid businessId);
+        // 🔹 (NEW) Load all templates across all businesses (admin/debug mode)
+        Task<List<TemplateForUIResponseDto>> FetchAllTemplatesAsync();
+
+        Task<TemplateMetadataDto?> GetTemplateByNameAsync(Guid businessId, string templateName, bool includeButtons);
+
+
+    }
+}
+ 
+ 
+====================================================== 
+FILE: D:\xbytechat\xbytechat-api\xbytechat-api\WhatsAppSettings\Services\TemplateSyncService.cs 
+====================================================== 
+ 
+﻿// 📄 Features/TemplateCatalog/Services/TemplateSyncService.cs
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using xbytechat.api.AuthModule.Models;
+using xbytechat.api;
+using xbytechat.api.WhatsAppSettings.Abstractions;
+using xbytechat.api.WhatsAppSettings.Providers;
+using xbytechat_api.WhatsAppSettings.Models;
+
+public record TemplateSyncResult(int Added, int Updated, int Skipped, DateTime SyncedAt);
+
+public interface ITemplateSyncService
+{
+    Task<TemplateSyncResult> SyncBusinessTemplatesAsync(Guid businessId, bool force = false, CancellationToken ct = default);
+}
+
+public sealed class TemplateSyncService : ITemplateSyncService
+{
+    private readonly AppDbContext _db;
+    private readonly MetaTemplateCatalogProvider _meta;
+    private readonly PinnacleTemplateCatalogProvider _pinnacle;
+    private readonly ILogger<TemplateSyncService> _log;
+
+    private static readonly TimeSpan TTL = TimeSpan.FromHours(12);
+
+    public TemplateSyncService(AppDbContext db,
+        MetaTemplateCatalogProvider meta,
+        PinnacleTemplateCatalogProvider pinnacle,
+        ILogger<TemplateSyncService> log)
+    { _db = db; _meta = meta; _pinnacle = pinnacle; _log = log; }
+
+    public async Task<TemplateSyncResult> SyncBusinessTemplatesAsync(Guid businessId, bool force = false, CancellationToken ct = default)
+    {
+        var setting = await _db.WhatsAppSettings.FirstOrDefaultAsync(x => x.BusinessId == businessId && x.IsActive, ct)
+                      ?? throw new InvalidOperationException("Active WhatsApp settings not found.");
+
+        var now = DateTime.UtcNow;
+
+        // TTL short-circuit
+        if (!force)
+        {
+            var recent = await _db.WhatsAppTemplates
+                .Where(t => t.BusinessId == businessId)
+                .OrderByDescending(t => t.LastSyncedAt)
+                .Select(t => t.LastSyncedAt)
+                .FirstOrDefaultAsync(ct);
+
+            if (recent != default && now - recent < TTL)
+            {
+                _log.LogInformation("⏭️ Skipping sync for {BusinessId}; TTL not expired.", businessId);
+                return new TemplateSyncResult(0, 0, 0, recent);
+            }
+        }
+
+        var providerKey = (setting.Provider ?? "meta_cloud").Trim().ToLowerInvariant();
+        IReadOnlyList<TemplateCatalogItem> incoming = providerKey switch
+        {
+            "meta_cloud" => await _meta.ListAsync(setting, ct),
+            "pinnacle" => await _pinnacle.ListAsync(setting, ct),
+            _ => Array.Empty<TemplateCatalogItem>()
+        };
+
+        int added = 0, updated = 0, skipped = 0;
+
+        foreach (var it in incoming)
+        {
+            var existing = await _db.WhatsAppTemplates.FirstOrDefaultAsync(t =>
+                t.BusinessId == businessId &&
+                t.Provider == providerKey &&
+                t.Name == it.Name &&
+                t.Language == it.Language, ct);
+
+            var buttonsJson = JsonConvert.SerializeObject(it.Buttons);
+
+            if (existing == null)
+            {
+                await _db.WhatsAppTemplates.AddAsync(new WhatsAppTemplate
+                {
+                    BusinessId = businessId,
+                    Provider = providerKey,
+                    ExternalId = it.ExternalId,
+                    Name = it.Name,
+                    Language = it.Language,
+                    Status = string.IsNullOrWhiteSpace(it.Status) ? "APPROVED" : it.Status,
+                    Category = it.Category,
+                    Body = it.Body ?? "",
+                    HasImageHeader = it.HasImageHeader,
+                    PlaceholderCount = it.PlaceholderCount,
+                    ButtonsJson = buttonsJson,
+                    RawJson = it.RawJson,
+                    LastSyncedAt = now,
+                    CreatedAt = now,
+                    UpdatedAt = now,
+                    IsActive = true
+                }, ct);
+                added++;
+            }
+            else
+            {
+                existing.ExternalId = it.ExternalId ?? existing.ExternalId;
+                existing.Status = string.IsNullOrWhiteSpace(it.Status) ? existing.Status : it.Status;
+                existing.Category = it.Category ?? existing.Category;
+                existing.Body = it.Body ?? existing.Body;
+                existing.HasImageHeader = it.HasImageHeader;
+                existing.PlaceholderCount = it.PlaceholderCount;
+                existing.ButtonsJson = buttonsJson;
+                existing.RawJson = it.RawJson ?? existing.RawJson;
+                existing.LastSyncedAt = now;
+                existing.UpdatedAt = now;
+                existing.IsActive = true;
+                updated++;
+            }
+        }
+
+        await _db.SaveChangesAsync(ct);
+
+        return new TemplateSyncResult(added, updated, skipped, now);
+    }
+}
+ 
+ 
+====================================================== 
+FILE: D:\xbytechat\xbytechat-api\xbytechat-api\WhatsAppSettings\Services\WhatsAppSettingsService.cs 
+====================================================== 
+ 
+﻿// 📄 xbytechat_api/WhatsAppSettings/Services/WhatsAppSettingsService.cs
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
+using System.Text.Json;
+using System.Threading.Tasks;
+using xbytechat.api;
+using xbytechat_api.WhatsAppSettings.DTOs;
+using xbytechat_api.WhatsAppSettings.Models;
+
+namespace xbytechat_api.WhatsAppSettings.Services
+{
+    public class WhatsAppSettingsService : IWhatsAppSettingsService
+    {
+        private readonly AppDbContext _dbContext;
+        private readonly HttpClient _http;                    // kept for any other callers you may have
+        private readonly IHttpClientFactory _httpClientFactory;
+
+        public WhatsAppSettingsService(
+            AppDbContext dbContext,
+            HttpClient http,
+            IHttpClientFactory httpClientFactory)
+        {
+            _dbContext = dbContext;
+            _http = http;
+            _httpClientFactory = httpClientFactory;
+        }
+
+        public async Task SaveOrUpdateSettingAsync(SaveWhatsAppSettingDto dto)
+        {
+            if (dto.BusinessId == Guid.Empty)
+                throw new ArgumentException("Invalid BusinessId provided.");
+
+            var existing = await _dbContext.WhatsAppSettings
+                .FirstOrDefaultAsync(x => x.BusinessId == dto.BusinessId);
+
+            if (existing != null)
+            {
+                // keep provider if not passed; otherwise trim
+                existing.Provider = dto.Provider?.Trim() ?? existing.Provider;
+
+                if (!string.IsNullOrWhiteSpace(dto.ApiUrl)) existing.ApiUrl = dto.ApiUrl.Trim();
+                if (!string.IsNullOrWhiteSpace(dto.ApiKey)) existing.ApiKey = dto.ApiKey.Trim();
+                if (!string.IsNullOrWhiteSpace(dto.ApiToken)) existing.ApiToken = dto.ApiToken.Trim();
+                if (!string.IsNullOrWhiteSpace(dto.PhoneNumberId)) existing.PhoneNumberId = dto.PhoneNumberId.Trim();
+                if (!string.IsNullOrWhiteSpace(dto.WhatsAppBusinessNumber)) existing.WhatsAppBusinessNumber = dto.WhatsAppBusinessNumber.Trim();
+                if (!string.IsNullOrWhiteSpace(dto.SenderDisplayName)) existing.SenderDisplayName = dto.SenderDisplayName.Trim();
+                if (!string.IsNullOrWhiteSpace(dto.WabaId)) existing.WabaId = dto.WabaId.Trim();
+
+                existing.IsActive = dto.IsActive;
+                existing.UpdatedAt = DateTime.UtcNow;
+            }
+            else
+            {
+                var newSetting = new WhatsAppSettingEntity
+                {
+                    Id = Guid.NewGuid(),
+                    BusinessId = dto.BusinessId,
+                    // default to Pinnacle
+                    Provider = dto.Provider?.Trim() ?? "Pinnacle",
+                    ApiUrl = (dto.ApiUrl ?? string.Empty).Trim(),
+                    ApiKey = string.IsNullOrWhiteSpace(dto.ApiKey) ? null : dto.ApiKey.Trim(),
+                    ApiToken = string.IsNullOrWhiteSpace(dto.ApiToken) ? null : dto.ApiToken.Trim(),
+                    PhoneNumberId = string.IsNullOrWhiteSpace(dto.PhoneNumberId) ? null : dto.PhoneNumberId.Trim(),
+                    WhatsAppBusinessNumber = string.IsNullOrWhiteSpace(dto.WhatsAppBusinessNumber) ? null : dto.WhatsAppBusinessNumber.Trim(),
+                    SenderDisplayName = string.IsNullOrWhiteSpace(dto.SenderDisplayName) ? null : dto.SenderDisplayName.Trim(),
+                    WabaId = string.IsNullOrWhiteSpace(dto.WabaId) ? null : dto.WabaId.Trim(),
+                    IsActive = dto.IsActive,
+                    CreatedAt = DateTime.UtcNow
+                };
+
+                await _dbContext.WhatsAppSettings.AddAsync(newSetting);
+            }
+
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task<WhatsAppSettingEntity?> GetSettingsByBusinessIdAsync(Guid businessId)
+        {
+            return await _dbContext.WhatsAppSettings
+                .FirstOrDefaultAsync(x => x.BusinessId == businessId && x.IsActive);
+        }
+
+        public async Task<bool> DeleteSettingsAsync(Guid businessId)
+        {
+            var setting = await _dbContext.WhatsAppSettings
+                .FirstOrDefaultAsync(x => x.BusinessId == businessId);
+
+            if (setting == null) return false;
+
+            _dbContext.WhatsAppSettings.Remove(setting);
+            await _dbContext.SaveChangesAsync();
+            return true;
+        }
+
+        /// <summary>
+        /// Provider-aware test connection. Returns a short message (✅/❌ …).
+        /// The controller may convert non-✅ messages to 400, etc.
+        /// </summary>
+        public async Task<string> TestConnectionAsync(SaveWhatsAppSettingDto dto)
+        {
+            if (string.IsNullOrWhiteSpace(dto.Provider))
+                throw new ArgumentException("Provider is required.");
+
+            // normalize provider and baseUrl
+            var provider = dto.Provider.Trim();
+            var lower = provider.ToLowerInvariant();
+            var baseUrl = (dto.ApiUrl ?? string.Empty).Trim().TrimEnd('/');
+
+            if (string.IsNullOrWhiteSpace(baseUrl))
+                throw new ArgumentException("ApiUrl is required.");
+
+            var http = _httpClientFactory.CreateClient();
+
+            // ----- Meta Cloud -----
+            if (lower == "meta_cloud")
+            {
+                if (string.IsNullOrWhiteSpace(dto.ApiToken))
+                    throw new ArgumentException("ApiToken is required for Meta Cloud.");
+                if (string.IsNullOrWhiteSpace(dto.PhoneNumberId))
+                    throw new ArgumentException("PhoneNumberId is required for Meta Cloud.");
+
+                http.DefaultRequestHeaders.Authorization =
+                    new AuthenticationHeaderValue("Bearer", dto.ApiToken);
+
+                var url = $"{baseUrl}/{dto.PhoneNumberId}";
+                var res = await http.GetAsync(url);
+                var body = await res.Content.ReadAsStringAsync();
+
+                if (!res.IsSuccessStatusCode)
+                    return $"❌ Meta Cloud test failed ({(int)res.StatusCode}). Body: {body}";
+
+                return "✅ Meta Cloud token & phone number ID are valid.";
+            }
+
+            // ----- Pinnacle (formerly Pinbot) -----
+            if (lower == "pinnacle")
+            {
+                if (string.IsNullOrWhiteSpace(dto.ApiKey))
+                    return "❌ API Key is required for Pinnacle.";
+
+                // Pinnacle requires either phone number id OR WABA id in the path
+                var pathId =
+                    !string.IsNullOrWhiteSpace(dto.PhoneNumberId) ? dto.PhoneNumberId!.Trim() :
+                    !string.IsNullOrWhiteSpace(dto.WabaId) ? dto.WabaId!.Trim() :
+                    null;
+
+                if (string.IsNullOrWhiteSpace(pathId))
+                    return "❌ Provide PhoneNumberId or WabaId for Pinnacle.";
+
+                if (string.IsNullOrWhiteSpace(dto.WhatsAppBusinessNumber))
+                    return "❌ WhatsApp Business Number is required for Pinnacle test.";
+
+                var url = $"{baseUrl}/{pathId}/messages";
+                var payload = new
+                {
+                    to = dto.WhatsAppBusinessNumber,
+                    type = "text",
+                    text = new { body = "Test message" },
+                    messaging_product = "whatsapp"
+                };
+
+                using var req = new HttpRequestMessage(HttpMethod.Post, url);
+                req.Headers.TryAddWithoutValidation("apikey", dto.ApiKey);
+                req.Content = new StringContent(JsonSerializer.Serialize(payload), Encoding.UTF8, "application/json");
+
+                var res = await http.SendAsync(req);
+                var body = await res.Content.ReadAsStringAsync();
+
+                if (!res.IsSuccessStatusCode)
+                {
+                    if ((int)res.StatusCode == 401 || (int)res.StatusCode == 403)
+                        return $"❌ Pinnacle rejected the API key for id '{pathId}'. Verify the key and id. Body: {body}";
+
+                    return $"❌ Pinnacle test failed ({(int)res.StatusCode}). Body: {body}";
+                }
+
+                return "✅ Pinnacle API key and endpoint are reachable.";
+            }
+
+            return $"❌ Unsupported provider: {dto.Provider}";
+        }
+
+        public async Task<string?> GetSenderNumberAsync(Guid businessId)
+        {
+            var setting = await _dbContext.WhatsAppSettings
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.BusinessId == businessId && x.IsActive);
+
+            return setting?.WhatsAppBusinessNumber;
+        }
+    }
+}
+
+
+//// 📄 xbytechat_api/WhatsAppSettings/Services/WhatsAppSettingsService.cs
+//using Microsoft.EntityFrameworkCore;
+//using System;
+//using System.Net.Http;
+//using System.Net.Http.Headers;
+//using System.Text;
+//using System.Text.Json;
+//using System.Threading.Tasks;
+//using xbytechat.api;
+//using xbytechat_api.WhatsAppSettings.DTOs;
+//using xbytechat_api.WhatsAppSettings.Models;
+
+//namespace xbytechat_api.WhatsAppSettings.Services
+//{
+//    public class WhatsAppSettingsService : IWhatsAppSettingsService
+//    {
+//        private readonly AppDbContext _dbContext;
+//        private readonly HttpClient _http;
+//        private readonly IHttpClientFactory _httpClientFactory;
+//        public WhatsAppSettingsService(AppDbContext dbContext, HttpClient http, IHttpClientFactory httpClientFactory)
+//        {
+//            _dbContext = dbContext;
+//            _http = http;
+//            _httpClientFactory = httpClientFactory;
+//        }
+
+//        public async Task SaveOrUpdateSettingAsync(SaveWhatsAppSettingDto dto)
+//        {
+//            if (dto.BusinessId == Guid.Empty)
+//                throw new ArgumentException("Invalid BusinessId provided.");
+
+//            var existing = await _dbContext.WhatsAppSettings
+//                .FirstOrDefaultAsync(x => x.BusinessId == dto.BusinessId);
+
+//            if (existing != null)
+//            {
+//                existing.Provider = dto.Provider?.Trim() ?? existing.Provider;
+
+//                if (!string.IsNullOrWhiteSpace(dto.ApiUrl)) existing.ApiUrl = dto.ApiUrl.Trim();
+//                if (!string.IsNullOrWhiteSpace(dto.ApiKey)) existing.ApiKey = dto.ApiKey.Trim();
+//                if (!string.IsNullOrWhiteSpace(dto.ApiToken)) existing.ApiToken = dto.ApiToken.Trim();
+//                if (!string.IsNullOrWhiteSpace(dto.PhoneNumberId)) existing.PhoneNumberId = dto.PhoneNumberId.Trim();
+//                if (!string.IsNullOrWhiteSpace(dto.WhatsAppBusinessNumber)) existing.WhatsAppBusinessNumber = dto.WhatsAppBusinessNumber.Trim();
+//                if (!string.IsNullOrWhiteSpace(dto.SenderDisplayName)) existing.SenderDisplayName = dto.SenderDisplayName.Trim();
+//                if (!string.IsNullOrWhiteSpace(dto.WabaId)) existing.WabaId = dto.WabaId.Trim();
+
+//                existing.IsActive = dto.IsActive;
+//                existing.UpdatedAt = DateTime.UtcNow;
+//            }
+//            else
+//            {
+//                var newSetting = new WhatsAppSettingEntity
+//                {
+//                    Id = Guid.NewGuid(),
+//                    BusinessId = dto.BusinessId,
+//                    Provider = dto.Provider?.Trim() ?? "pinbot",
+//                    ApiUrl = dto.ApiUrl.Trim(),
+//                    ApiKey = string.IsNullOrWhiteSpace(dto.ApiKey) ? null : dto.ApiKey.Trim(),
+//                    ApiToken = string.IsNullOrWhiteSpace(dto.ApiToken) ? null : dto.ApiToken.Trim(),
+//                    PhoneNumberId = string.IsNullOrWhiteSpace(dto.PhoneNumberId) ? null : dto.PhoneNumberId.Trim(),
+//                    WhatsAppBusinessNumber = string.IsNullOrWhiteSpace(dto.WhatsAppBusinessNumber) ? null : dto.WhatsAppBusinessNumber.Trim(),
+//                    SenderDisplayName = string.IsNullOrWhiteSpace(dto.SenderDisplayName) ? null : dto.SenderDisplayName.Trim(),
+//                    WabaId = string.IsNullOrWhiteSpace(dto.WabaId) ? null : dto.WabaId.Trim(),
+//                    IsActive = dto.IsActive,
+//                    CreatedAt = DateTime.UtcNow
+//                };
+
+//                await _dbContext.WhatsAppSettings.AddAsync(newSetting);
+//            }
+
+//            await _dbContext.SaveChangesAsync();
+//        }
+
+//        public async Task<WhatsAppSettingEntity?> GetSettingsByBusinessIdAsync(Guid businessId)
+//        {
+//            return await _dbContext.WhatsAppSettings
+//                .FirstOrDefaultAsync(x => x.BusinessId == businessId && x.IsActive);
+//        }
+
+//        public async Task<bool> DeleteSettingsAsync(Guid businessId)
+//        {
+//            var setting = await _dbContext.WhatsAppSettings
+//                .FirstOrDefaultAsync(x => x.BusinessId == businessId);
+
+//            if (setting == null) return false;
+
+//            _dbContext.WhatsAppSettings.Remove(setting);
+//            await _dbContext.SaveChangesAsync();
+//            return true;
+//        }
+
+//        /// <summary>
+//        /// Provider-aware test connection. Returns a short success message or throws an Exception with details.
+//        /// Controller turns exceptions into 500 with message/details.
+//        /// </summary>
+//        //public async Task<string> TestConnectionAsync(SaveWhatsAppSettingDto dto)
+//        //{
+//        //    if (dto is null) throw new ArgumentException("Test payload cannot be null.");
+//        //    var provider = (dto.Provider ?? "pinbot").Trim().ToLowerInvariant();
+//        //    var baseUrl = (dto.ApiUrl ?? "").Trim().TrimEnd('/');
+
+//        //    if (string.IsNullOrWhiteSpace(baseUrl))
+//        //        throw new Exception("API URL is required.");
+
+//        //    if (provider == "meta_cloud")
+//        //    {
+//        //        // Validate inputs
+//        //        if (string.IsNullOrWhiteSpace(dto.ApiToken))
+//        //            throw new Exception("ApiToken is required for Meta Cloud test.");
+//        //        if (string.IsNullOrWhiteSpace(dto.PhoneNumberId))
+//        //            throw new Exception("PhoneNumberId is required for Meta Cloud test.");
+
+//        //        // GET {apiUrl}/{phoneNumberId}
+//        //        using var req = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}/{dto.PhoneNumberId}");
+//        //        req.Headers.Authorization = new AuthenticationHeaderValue("Bearer", dto.ApiToken);
+
+//        //        var res = await _http.SendAsync(req);
+//        //        var body = await res.Content.ReadAsStringAsync();
+
+//        //        if (!res.IsSuccessStatusCode)
+//        //            throw new Exception($"Meta Cloud test failed ({(int)res.StatusCode}). Body: {body}");
+
+//        //        return "Meta Cloud token is valid and connection was successful.";
+//        //    }
+
+//        //    if (provider == "pinbot")
+//        //    {
+//        //        // Validate inputs (Pinbot needs an API key and either WABA ID or PhoneNumberId)
+//        //        if (string.IsNullOrWhiteSpace(dto.ApiKey))
+//        //            throw new Exception("ApiKey is required for Pinbot test.");
+//        //        var pathId = !string.IsNullOrWhiteSpace(dto.PhoneNumberId) ? dto.PhoneNumberId!.Trim()
+//        //                     : !string.IsNullOrWhiteSpace(dto.WabaId) ? dto.WabaId!.Trim()
+//        //                     : null;
+//        //        if (pathId == null)
+//        //            throw new Exception("Either PhoneNumberId or WabaId is required for Pinbot test.");
+
+//        //        if (string.IsNullOrWhiteSpace(dto.WhatsAppBusinessNumber))
+//        //            throw new Exception("WhatsAppBusinessNumber is required for Pinbot test.");
+
+//        //        // We do a small POST (same shape as their curl) to verify key + route
+//        //        var url = $"{baseUrl}/{pathId}/messages";
+//        //        var payload = new
+//        //        {
+//        //            to = dto.WhatsAppBusinessNumber,
+//        //            type = "text",
+//        //            text = new { body = "Test message" },
+//        //            messaging_product = "whatsapp"
+//        //        };
+
+//        //        using var req = new HttpRequestMessage(HttpMethod.Post, url);
+//        //        req.Headers.TryAddWithoutValidation("apikey", dto.ApiKey);
+//        //        req.Content = new StringContent(JsonSerializer.Serialize(payload), Encoding.UTF8, "application/json");
+
+//        //        var res = await _http.SendAsync(req);
+//        //        var body = await res.Content.ReadAsStringAsync();
+
+//        //        if (!res.IsSuccessStatusCode)
+//        //            throw new Exception($"Pinbot test failed ({(int)res.StatusCode}). Body: {body}");
+
+//        //        return "Pinbot API key is valid and endpoint accepted a test payload.";
+//        //    }
+
+//        //    throw new Exception($"Unsupported provider: {dto.Provider}");
+//        //}
+//        public async Task<string> TestConnectionAsync(SaveWhatsAppSettingDto dto)
+//        {
+//            if (string.IsNullOrWhiteSpace(dto.Provider))
+//                throw new ArgumentException("Provider is required.");
+
+//            var provider = dto.Provider.Trim().ToLowerInvariant();
+//            var baseUrl = (dto.ApiUrl ?? "").TrimEnd('/');
+//            if (string.IsNullOrWhiteSpace(baseUrl))
+//                throw new ArgumentException("ApiUrl is required.");
+
+//            var http = _httpClientFactory.CreateClient();
+
+//            if (provider == "meta_cloud")
+//            {
+//                if (string.IsNullOrWhiteSpace(dto.ApiToken))
+//                    throw new ArgumentException("ApiToken is required for Meta Cloud.");
+//                if (string.IsNullOrWhiteSpace(dto.PhoneNumberId))
+//                    throw new ArgumentException("PhoneNumberId is required for Meta Cloud.");
+
+//                http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", dto.ApiToken);
+//                var url = $"{baseUrl}/{dto.PhoneNumberId}";
+//                //var url = $"{baseUrl}/652856141236584";
+//                var res = await http.GetAsync(url);
+//                var body = await res.Content.ReadAsStringAsync();
+
+//                if (!res.IsSuccessStatusCode)
+//                {
+//                    // Return a clear message instead of throwing (keeps controller at 200/400 level)
+//                    return $"❌ Meta Cloud test failed ({(int)res.StatusCode}). Body: {body}";
+//                }
+
+//                return "✅ Meta Cloud token & phone number ID are valid.";
+//            }
+
+//            if (provider == "pinbot")
+//            {
+//                if (string.IsNullOrWhiteSpace(dto.ApiKey))
+//                    return "❌ ApiKey is required for Pinbot.";
+
+//                // Pinbot requires either phone number id OR WABA id in the path
+//                var pathId = !string.IsNullOrWhiteSpace(dto.PhoneNumberId) ? dto.PhoneNumberId!.Trim()
+//                           : !string.IsNullOrWhiteSpace(dto.WabaId)       ? dto.WabaId!.Trim()
+//                           : null;
+
+//                if (string.IsNullOrWhiteSpace(pathId))
+//                    return "❌ Provide PhoneNumberId or WabaId for Pinbot.";
+
+//                // Build POST /v3/{id}/messages
+//                var url = $"{baseUrl}/{pathId}/messages";
+//               // var url = $"{baseUrl}/652856141236584/messages";
+//                var payload = new
+//                {
+//                    to = dto.WhatsAppBusinessNumber ?? "", // can be any verified test recipient
+//                    type = "text",
+//                    text = new { body = "Test message" },
+//                    messaging_product = "whatsapp"
+//                };
+
+//                using var req = new HttpRequestMessage(HttpMethod.Post, url);
+//                req.Headers.TryAddWithoutValidation("apikey", dto.ApiKey);
+//                req.Content = new StringContent(JsonSerializer.Serialize(payload), Encoding.UTF8, "application/json");
+
+//                var res = await http.SendAsync(req);
+//                var body = await res.Content.ReadAsStringAsync();
+
+//                if (!res.IsSuccessStatusCode)
+//                {
+//                    // Map common auth failures to a friendly response
+//                    if ((int)res.StatusCode == 401 || (int)res.StatusCode == 403)
+//                    {
+//                        return $"❌ Pinbot rejected the API key for this path id ({pathId}). " +
+//                               $"Check that the apikey belongs to this account and the id is correct. Body: {body}";
+//                    }
+
+//                    return $"❌ Pinbot test failed ({(int)res.StatusCode}). Body: {body}";
+//                }
+
+//                return "✅ Pinbot API key and endpoint are reachable.";
+//            }
+
+//            return $"❌ Unsupported provider: {dto.Provider}";
+//        }
+
+//        public async Task<string?> GetSenderNumberAsync(Guid businessId)
+//        {
+//            var setting = await _dbContext.WhatsAppSettings
+//                .AsNoTracking()
+//                .FirstOrDefaultAsync(x => x.BusinessId == businessId && x.IsActive);
+
+//            return setting?.WhatsAppBusinessNumber;
+//        }
+
+//        //public async Task<string?> GetSenderNumberAsync(Guid businessId)
+//        //{
+//        //    var setting = await _dbContext.WhatsAppSettings
+//        //        .AsNoTracking()
+//        //        .FirstOrDefaultAsync(x => x.BusinessId == businessId && x.IsActive);
+
+//        //    return setting?.WhatsAppBusinessNumber;
+//        //}
+//    }
+//}
+
+
+//// 📄 xbytechat_api/WhatsAppSettings/Services/WhatsAppSettingsService.cs
+//using Microsoft.EntityFrameworkCore;
+//using System;
+//using System.Net.Http;
+//using System.Net.Http.Headers;
+//using System.Text;
+//using System.Text.Json;
+//using System.Threading.Tasks;
+//using xbytechat.api;
+//using xbytechat.api.Helpers;
+//using xbytechat_api.WhatsAppSettings.DTOs;
+//using xbytechat_api.WhatsAppSettings.Models;
+//using static System.Net.WebRequestMethods;
+
+//namespace xbytechat_api.WhatsAppSettings.Services
+//{
+//    public class WhatsAppSettingsService : IWhatsAppSettingsService
+//    {
+//        private readonly AppDbContext _dbContext;
+
+//        public WhatsAppSettingsService(AppDbContext dbContext)
+//        {
+//            _dbContext = dbContext;
+//        }
+
+//        public async Task SaveOrUpdateSettingAsync(SaveWhatsAppSettingDto dto)
+//        {
+//            if (dto.BusinessId == Guid.Empty)
+//                throw new ArgumentException("Invalid BusinessId provided.");
+
+//            var existing = await _dbContext.WhatsAppSettings
+//                .FirstOrDefaultAsync(x => x.BusinessId == dto.BusinessId);
+
+//            if (existing != null)
+//            {
+//                existing.Provider = dto.Provider?.Trim() ?? existing.Provider;
+//                if (!string.IsNullOrWhiteSpace(dto.ApiUrl)) existing.ApiUrl = dto.ApiUrl.Trim();
+//                if (!string.IsNullOrWhiteSpace(dto.ApiKey)) existing.ApiKey = dto.ApiKey.Trim();
+//                if (!string.IsNullOrWhiteSpace(dto.ApiToken)) existing.ApiToken = dto.ApiToken.Trim();
+//                if (!string.IsNullOrWhiteSpace(dto.PhoneNumberId)) existing.PhoneNumberId = dto.PhoneNumberId.Trim();
+//                if (!string.IsNullOrWhiteSpace(dto.WhatsAppBusinessNumber)) existing.WhatsAppBusinessNumber = dto.WhatsAppBusinessNumber.Trim();
+//                if (!string.IsNullOrWhiteSpace(dto.SenderDisplayName)) existing.SenderDisplayName = dto.SenderDisplayName.Trim();
+//                if (!string.IsNullOrWhiteSpace(dto.WabaId)) existing.WabaId = dto.WabaId.Trim();
+//                existing.IsActive = dto.IsActive;
+//                existing.UpdatedAt = DateTime.UtcNow;
+//            }
+//            else
+//            {
+//                var newSetting = new WhatsAppSettingEntity
+//                {
+//                    Id = Guid.NewGuid(),
+//                    BusinessId = dto.BusinessId,
+//                    Provider = dto.Provider?.Trim() ?? "pinbot",
+//                    ApiUrl = dto.ApiUrl.Trim(),
+//                    ApiKey = dto.ApiKey?.Trim(),
+//                    ApiToken = dto.ApiToken?.Trim(),
+//                    PhoneNumberId = dto.PhoneNumberId?.Trim(),
+//                    WhatsAppBusinessNumber = dto.WhatsAppBusinessNumber?.Trim(),
+//                    SenderDisplayName = dto.SenderDisplayName?.Trim(),
+//                    WabaId = dto.WabaId?.Trim(),
+//                    IsActive = dto.IsActive,
+//                    CreatedAt = DateTime.UtcNow
+//                };
+//                await _dbContext.WhatsAppSettings.AddAsync(newSetting);
+//            }
+
+//            await _dbContext.SaveChangesAsync();
+//        }
+
+//        public async Task<WhatsAppSettingEntity?> GetSettingsByBusinessIdAsync(Guid businessId)
+//        {
+//            return await _dbContext.WhatsAppSettings
+//                .FirstOrDefaultAsync(x => x.BusinessId == businessId && x.IsActive);
+//        }
+
+//        public async Task<bool> DeleteSettingsAsync(Guid businessId)
+//        {
+//            var setting = await _dbContext.WhatsAppSettings
+//                .FirstOrDefaultAsync(x => x.BusinessId == businessId);
+
+//            if (setting == null) return false;
+
+//            _dbContext.WhatsAppSettings.Remove(setting);
+//            await _dbContext.SaveChangesAsync();
+//            return true;
+//        }
+
+//        //public async Task<string> TestConnectionAsync(SaveWhatsAppSettingDto dto)
+//        //{
+//        //    using var client = new HttpClient();
+//        //    var baseUrl = dto.ApiUrl.TrimEnd('/');
+//        //    var provider = dto.Provider?.Trim().ToLowerInvariant() ?? "pinbot";
+
+//        //    if (provider == "pinbot")
+//        //    {
+//        //        if (string.IsNullOrWhiteSpace(dto.ApiKey))
+//        //            throw new Exception("ApiKey is required for Pinbot test.");
+//        //        if (string.IsNullOrWhiteSpace(dto.WabaId))
+//        //            throw new Exception("WabaId is required for Pinbot test.");
+
+//        //        var probe = new HttpRequestMessage(HttpMethod.Get, $"{baseUrl}/{dto.WabaId}/messages");
+//        //        probe.Headers.Add("apikey", dto.ApiKey);
+//        //        var resp = await client.SendAsync(probe);
+
+//        //        if ((int)resp.StatusCode == 401 || (int)resp.StatusCode == 403)
+//        //            throw new Exception("Pinbot API key rejected (401/403).");
+
+//        //        return "Pinbot API key appears valid and endpoint reachable.";
+//        //    }
+
+//        //    if (provider == "meta_cloud")
+//        //    {
+//        //        if (string.IsNullOrWhiteSpace(dto.ApiToken))
+//        //            throw new Exception("ApiToken is required for Meta Cloud test.");
+//        //        if (string.IsNullOrWhiteSpace(dto.PhoneNumberId))
+//        //            throw new Exception("PhoneNumberId is required for Meta Cloud test.");
+
+//        //        client.DefaultRequestHeaders.Authorization =
+//        //            new AuthenticationHeaderValue("Bearer", dto.ApiToken);
+
+//        //        var url = $"{baseUrl}/{dto.PhoneNumberId}";
+//        //        var res = await client.GetAsync(url);
+//        //        var content = await res.Content.ReadAsStringAsync();
+
+//        //        if (!res.IsSuccessStatusCode)
+//        //            throw new Exception($"❌ WhatsApp API Error: {content}");
+
+//        //        return "Meta Cloud token is valid and connection was successful.";
+//        //    }
+
+//        //    throw new Exception($"Unsupported provider: {dto.Provider}");
+//        //}
+//        public async Task<ResponseResult> TestConnectionAsync(WhatsAppSettingEntity setting)
+//        {
+//            if (setting.Provider.Equals("meta_cloud", StringComparison.OrdinalIgnoreCase))
+//            {
+//                // existing Meta Cloud test
+//                return await _metaTester.TestAsync(setting);
+//            }
+//            else if (setting.Provider.Equals("pinbot", StringComparison.OrdinalIgnoreCase))
+//            {
+//                try
+//                {
+//                    var url = $"{setting.ApiUrl?.TrimEnd('/')}/v3/{setting.WabaId}/messages";
+//                    var payload = new
+//                    {
+//                        to = setting.WhatsAppBusinessNumber,
+//                        type = "text",
+//                        text = new { body = "Test message" },
+//                        messaging_product = "whatsapp"
+//                    };
+
+//                    using var req = new HttpRequestMessage(HttpMethod.Post, url);
+//                    req.Headers.TryAddWithoutValidation("apikey", setting.ApiKey);
+//                    req.Content = new StringContent(JsonSerializer.Serialize(payload), Encoding.UTF8, "application/json");
+
+//                    var res = await _http.SendAsync(req);
+//                    var body = await res.Content.ReadAsStringAsync();
+
+//                    if (!res.IsSuccessStatusCode)
+//                        return ResponseResult.ErrorInfo("❌ Pinbot connection failed", body);
+
+//                    return ResponseResult.SuccessInfo("✅ Pinbot connection successful!", null, body);
+//                }
+//                catch (Exception ex)
+//                {
+//                    return ResponseResult.ErrorInfo("❌ Exception during Pinbot test", ex.Message);
+//                }
+//            }
+
+//            return ResponseResult.ErrorInfo("❌ Unknown provider type.");
+//        }
+
+//        public async Task<string?> GetSenderNumberAsync(Guid businessId)
+//        {
+//            var setting = await _dbContext.WhatsAppSettings
+//                .AsNoTracking()
+//                .FirstOrDefaultAsync(x => x.BusinessId == businessId && x.IsActive);
+
+//            return setting?.WhatsAppBusinessNumber;
+//        }
+//    }
+//}
+
+
+//using System;
+//using System.Net.Http;
+//using System.Net.Http.Headers;
+//using System.Threading.Tasks;
+//using Microsoft.EntityFrameworkCore;
+//using xbytechat.api;
+//using xbytechat_api.WhatsAppSettings.DTOs;
+//using xbytechat_api.WhatsAppSettings.Models;
+
+//namespace xbytechat_api.WhatsAppSettings.Services
+//{
+//    public class WhatsAppSettingsService : IWhatsAppSettingsService
+//    {
+//        private readonly AppDbContext _dbContext;
+
+//        public WhatsAppSettingsService(AppDbContext dbContext)
+//        {
+//            _dbContext = dbContext;
+//        }
+
+//        public async Task SaveOrUpdateSettingAsync(SaveWhatsAppSettingDto dto)
+//        {
+//            if (dto.BusinessId == Guid.Empty)
+//                throw new ArgumentException("Invalid BusinessId provided.");
+
+//            var existingSetting = await _dbContext.WhatsAppSettings
+//                .FirstOrDefaultAsync(x => x.BusinessId == dto.BusinessId);
+
+//            if (existingSetting != null)
+//            {
+//                // 🔁 Update existing record with null-safety
+//                existingSetting.ApiUrl = dto.ApiUrl?.Trim() ?? existingSetting.ApiUrl;
+//                existingSetting.ApiToken = dto.ApiToken?.Trim() ?? existingSetting.ApiToken;
+
+//                if (!string.IsNullOrWhiteSpace(dto.PhoneNumberId))
+//                    existingSetting.PhoneNumberId = dto.PhoneNumberId.Trim();
+
+//                if (!string.IsNullOrWhiteSpace(dto.WhatsAppBusinessNumber))
+//                    existingSetting.WhatsAppBusinessNumber = dto.WhatsAppBusinessNumber.Trim();
+
+//                if (!string.IsNullOrWhiteSpace(dto.SenderDisplayName))
+//                    existingSetting.SenderDisplayName = dto.SenderDisplayName.Trim();
+
+//                if (!string.IsNullOrWhiteSpace(dto.WabaId))
+//                    existingSetting.WabaId = dto.WabaId.Trim();
+
+//                existingSetting.IsActive = dto.IsActive;
+//                existingSetting.UpdatedAt = DateTime.UtcNow;
+//            }
+//            else
+//            {
+//                // ➕ Insert new record
+//                var newSetting = new WhatsAppSettingEntity
+//                {
+//                    Id = Guid.NewGuid(),
+//                    BusinessId = dto.BusinessId,
+//                    ApiUrl = dto.ApiUrl.Trim(),
+//                    ApiToken = dto.ApiToken.Trim(),
+//                    PhoneNumberId = dto.PhoneNumberId?.Trim(),
+//                    WhatsAppBusinessNumber = dto.WhatsAppBusinessNumber?.Trim(),
+//                    SenderDisplayName = dto.SenderDisplayName?.Trim(),
+//                    WabaId = dto.WabaId?.Trim(),
+//                    IsActive = dto.IsActive,
+//                    CreatedAt = DateTime.UtcNow
+//                };
+
+//                await _dbContext.WhatsAppSettings.AddAsync(newSetting);
+//            }
+
+//            try
+//            {
+//                await _dbContext.SaveChangesAsync();
+//            }
+//            catch (Exception ex)
+//            {
+//                throw new Exception("Error saving WhatsApp settings: " + ex.InnerException?.Message ?? ex.Message);
+//            }
+//        }
+
+//        public async Task<WhatsAppSettingEntity?> GetSettingsByBusinessIdAsync(Guid businessId)
+//        {
+//            // 🔎 Find active WhatsApp setting for the business
+//            return await _dbContext.WhatsAppSettings
+//                .FirstOrDefaultAsync(x => x.BusinessId == businessId && x.IsActive);
+//        }
+
+//        public async Task<bool> DeleteSettingsAsync(Guid businessId)
+//        {
+//            // 🗑 Delete settings based on businessId
+//            var setting = await _dbContext.WhatsAppSettings
+//                .FirstOrDefaultAsync(x => x.BusinessId == businessId);
+
+//            if (setting == null)
+//                return false;
+
+//            _dbContext.WhatsAppSettings.Remove(setting);
+//            await _dbContext.SaveChangesAsync();
+//            return true;
+//        }
+
+//        //public async Task<string> TestConnectionAsync(SaveWhatsAppSettingDto dto)
+//        //{
+//        //    using var client = new HttpClient();
+//        //    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", dto.ApiToken);
+
+//        //    var baseUrl = dto.ApiUrl.TrimEnd('/');
+//        //    var testUrl = $"{baseUrl}/me"; // 📡 Lightweight endpoint for connection test
+
+//        //    var response = await client.GetAsync(testUrl);
+//        //    var content = await response.Content.ReadAsStringAsync();
+
+//        //    if (!response.IsSuccessStatusCode)
+//        //        throw new Exception($"❌ WhatsApp API Error: {content}");
+
+//        //    return "WhatsApp API token is valid and connection was successful.";
+//        //}
+//        public async Task<string> TestConnectionAsync(SaveWhatsAppSettingDto dto)
+//        {
+//            using var client = new HttpClient();
+//            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", dto.ApiToken);
+
+//            var baseUrl = dto.ApiUrl.TrimEnd('/');
+//            if (string.IsNullOrWhiteSpace(dto.PhoneNumberId))
+//                throw new Exception("PhoneNumberId is required to test WhatsApp Cloud API connection.");
+
+//            // This is the official endpoint for checking the number
+//            var testUrl = $"{baseUrl}/{dto.PhoneNumberId}";
+
+//            var response = await client.GetAsync(testUrl);
+//            var content = await response.Content.ReadAsStringAsync();
+
+//            if (!response.IsSuccessStatusCode)
+//                throw new Exception($"❌ WhatsApp API Error: {content}");
+
+//            return "WhatsApp API token is valid and connection was successful.";
+//        }
+
+//        public async Task<string?> GetSenderNumberAsync(Guid businessId)
+//        {
+//            var setting = await _dbContext.WhatsAppSettings
+//                .AsNoTracking()
+//                .FirstOrDefaultAsync(x => x.BusinessId == businessId && x.IsActive);
+
+//            if (setting == null)
+//            {
+//                throw new Exception($"❌ WhatsApp settings not found for BusinessId: {businessId}");
+//            }
+
+//            return setting.WhatsAppBusinessNumber;
+//        }
+
+//    }
+//}
+ 
+ 
+====================================================== 
+FILE: D:\xbytechat\xbytechat-api\xbytechat-api\WhatsAppSettings\Services\WhatsAppTemplateFetcherService.cs 
+====================================================== 
+ 
+﻿using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using System.Net.Http.Headers;
+using System.Text.RegularExpressions;
+using xbytechat.api;
+using xbytechat.api.WhatsAppSettings.DTOs;
+
+namespace xbytechat_api.WhatsAppSettings.Services
+{
+
+    public class WhatsAppTemplateFetcherService : IWhatsAppTemplateFetcherService
+    {
+        private readonly AppDbContext _dbContext;
+        private readonly HttpClient _httpClient;
+        private readonly ILogger<WhatsAppTemplateFetcherService> _logger;
+
+        public WhatsAppTemplateFetcherService(AppDbContext dbContext, HttpClient httpClient, ILogger<WhatsAppTemplateFetcherService> logger)
+        {
+            _dbContext = dbContext;
+            _httpClient = httpClient;
+            _logger = logger;
+        }
+
+        //public async Task<List<TemplateMetadataDto>> FetchTemplatesAsync(Guid businessId)
+        //{
+        //    var templates = new List<TemplateMetadataDto>();
+
+        //    var setting = await _dbContext.WhatsAppSettings
+        //        .FirstOrDefaultAsync(x => x.BusinessId == businessId && x.IsActive);
+
+        //    if (setting == null)
+        //    {
+        //        _logger.LogWarning("WhatsApp Settings not found for BusinessId: {BusinessId}", businessId);
+        //        return templates;
+        //    }
+
+        //    if (string.IsNullOrWhiteSpace(setting.ApiToken) || string.IsNullOrWhiteSpace(setting.PhoneNumberId))
+        //    {
+        //        _logger.LogWarning("Missing API Token or WABA ID for BusinessId: {BusinessId}", businessId);
+        //        return templates;
+        //    }
+
+        //    try
+        //    {
+        //        var baseUrl = setting.ApiUrl?.TrimEnd('/') ?? "https://graph.facebook.com/v18.0";
+        //        var url = $"{baseUrl}/{setting.WabaId}/message_templates";
+
+        //        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", setting.ApiToken);
+
+        //        var response = await _httpClient.GetAsync(url);
+        //        var json = await response.Content.ReadAsStringAsync();
+        //        _logger.LogInformation("🧪 Meta Template API Raw JSON for {BusinessId}:\n{Json}", setting.BusinessId, json);
+
+
+
+        //        if (!response.IsSuccessStatusCode)
+        //        {
+        //            _logger.LogError("Failed to fetch templates from Meta: {Response}", json);
+        //            return templates;
+        //        }
+
+        //        var parsed = JsonConvert.DeserializeObject<dynamic>(json);
+
+        //        foreach (var tpl in parsed.data)
+        //        {
+        //            string name = tpl.name;
+        //            string language = tpl.language ?? "en_US";
+        //            string body = "";
+
+        //            foreach (var component in tpl.components)
+        //            {
+        //                if (component.type == "BODY")
+        //                {
+        //                    body = component.text;
+        //                    break;
+        //                }
+        //            }
+
+        //            int placeholderCount = System.Text.RegularExpressions.Regex.Matches(body, "{{(.*?)}}").Count;
+
+        //            templates.Add(new TemplateMetadataDto
+        //            {
+        //                Name = name,
+        //                Language = language,
+        //                Body = body,
+        //                PlaceholderCount = placeholderCount
+        //            });
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _logger.LogError(ex, "Exception while fetching WhatsApp templates.");
+        //    }
+
+        //    return templates;
+        //}
+        public async Task<List<TemplateMetadataDto>> FetchTemplatesAsync(Guid businessId)
+        {
+            var templates = new List<TemplateMetadataDto>();
+
+            var setting = await _dbContext.WhatsAppSettings
+                .FirstOrDefaultAsync(x => x.BusinessId == businessId && x.IsActive);
+
+            if (setting == null)
+            {
+                _logger.LogWarning("WhatsApp Settings not found for BusinessId: {BusinessId}", businessId);
+                return templates;
+            }
+
+            if (string.IsNullOrWhiteSpace(setting.ApiToken) || string.IsNullOrWhiteSpace(setting.PhoneNumberId))
+            {
+                _logger.LogWarning("Missing API Token or WABA ID for BusinessId: {BusinessId}", businessId);
+                return templates;
+            }
+
+            try
+            {
+                var baseUrl = setting.ApiUrl?.TrimEnd('/') ?? "https://graph.facebook.com/v18.0";
+                var url = $"{baseUrl}/{setting.WabaId}/message_templates";
+
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", setting.ApiToken);
+
+                var response = await _httpClient.GetAsync(url);
+                var json = await response.Content.ReadAsStringAsync();
+                _logger.LogInformation("🧪 Meta Template API Raw JSON for {BusinessId}:\n{Json}", setting.BusinessId, json);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    _logger.LogError("Failed to fetch templates from Meta: {Response}", json);
+                    return templates;
+                }
+
+                var parsed = JsonConvert.DeserializeObject<dynamic>(json);
+
+                foreach (var tpl in parsed.data)
+                {
+                    string name = tpl.name;
+                    string language = tpl.language ?? "en_US";
+                    string body = "";
+                    var buttons = new List<ButtonMetadataDto>();
+                    bool hasImageHeader = false;
+
+                    foreach (var component in tpl.components)
+                    {
+                        string type = component.type?.ToString()?.ToUpper();
+
+                        if (type == "BODY")
+                        {
+                            body = component.text?.ToString() ?? "";
+                        }
+
+                        if (type == "HEADER")
+                        {
+                            string format = component.format?.ToString()?.ToUpper();
+                            if (format == "IMAGE") hasImageHeader = true;
+                        }
+
+                        if (type == "BUTTONS")
+                        {
+                            foreach (var button in component.buttons)
+                            {
+                                try
+                                {
+                                    string btnType = button.type?.ToString()?.ToUpper() ?? "";
+                                    string text = button.text?.ToString() ?? "";
+                                    int index = buttons.Count;
+
+                                    string subType = btnType switch
+                                    {
+                                        "URL" => "url",
+                                        "PHONE_NUMBER" => "voice_call",
+                                        "QUICK_REPLY" => "quick_reply",
+                                        "COPY_CODE" => "copy_code",
+                                        "CATALOG" => "catalog",
+                                        "FLOW" => "flow",
+                                        "REMINDER" => "reminder",
+                                        "ORDER_DETAILS" => "order_details",
+                                        _ => "unknown"
+                                    };
+
+                                    string? paramValue = null;
+                                    if (button.url != null)
+                                        paramValue = button.url.ToString();
+                                    else if (button.phone_number != null)
+                                        paramValue = button.phone_number.ToString();
+                                    else if (button.coupon_code != null)
+                                        paramValue = button.coupon_code.ToString();
+                                    else if (button.flow_id != null)
+                                        paramValue = button.flow_id.ToString();
+
+                                    bool hasExample = button.example != null;
+                                    bool isDynamic = hasExample && Regex.IsMatch(button.example.ToString(), @"\{\{[0-9]+\}\}");
+                                    bool requiresParam = new[] { "url", "flow", "copy_code", "catalog", "reminder" }.Contains(subType);
+                                    bool needsRuntimeValue = requiresParam && isDynamic;
+
+                                    if (subType == "unknown" || (paramValue == null && needsRuntimeValue))
+                                    {
+                                        _logger.LogWarning("⚠️ Skipping button '{Text}' due to unknown type or missing required param.", text);
+                                        continue;
+                                    }
+
+                                    buttons.Add(new ButtonMetadataDto
+                                    {
+                                        Text = text,
+                                        Type = btnType,
+                                        SubType = subType,
+                                        Index = index,
+                                        ParameterValue = paramValue ?? ""
+                                    });
+                                }
+                                catch (Exception exBtn)
+                                {
+                                    _logger.LogWarning(exBtn, "⚠️ Failed to parse button for template {TemplateName}", name);
+                                }
+                            }
+                        }
+                    }
+
+                    int placeholderCount = Regex.Matches(body ?? "", "{{(.*?)}}").Count;
+
+                    templates.Add(new TemplateMetadataDto
+                    {
+                        Name = name,
+                        Language = language,
+                        Body = body,
+                        PlaceholderCount = placeholderCount,
+                        HasImageHeader = hasImageHeader,
+                        ButtonParams = buttons
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Exception while fetching WhatsApp templates.");
+            }
+
+            return templates;
+        }
+
+
+        //public async Task<List<TemplateForUIResponseDto>> FetchAllTemplatesAsync()
+        //{
+        //    var allTemplates = new List<TemplateForUIResponseDto>();
+
+        //    var settingsList = await _dbContext.WhatsAppSettings
+        //        .Where(x => x.IsActive)
+        //        .ToListAsync();
+
+        //    foreach (var setting in settingsList)
+        //    {
+        //        if (string.IsNullOrWhiteSpace(setting.ApiToken) || string.IsNullOrWhiteSpace(setting.PhoneNumberId))
+        //        {
+        //            _logger.LogWarning("⏭️ Skipping BusinessId {BusinessId} due to missing token or phone ID", setting.BusinessId);
+        //            continue;
+        //        }
+
+        //        try
+        //        {
+        //            var baseUrl = setting.ApiUrl?.TrimEnd('/') ?? "https://graph.facebook.com/v22.0";
+        //            var url = $"{baseUrl}/{setting.WabaId}/message_templates";
+
+        //            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", setting.ApiToken);
+
+        //            var response = await _httpClient.GetAsync(url);
+        //            var json = await response.Content.ReadAsStringAsync();
+
+        //            _logger.LogInformation("📦 Meta Template API Raw JSON for {BusinessId}:\n{Json}", setting.BusinessId, json);
+
+        //            if (!response.IsSuccessStatusCode)
+        //            {
+        //                _logger.LogError("❌ Failed to fetch templates for BusinessId {BusinessId}: {Response}", setting.BusinessId, json);
+        //                continue;
+        //            }
+
+        //            var parsed = JsonConvert.DeserializeObject<dynamic>(json);
+
+
+        //            foreach (var tpl in parsed.data)
+        //            {
+        //                string name = tpl.name;
+        //                string language = tpl.language ?? "en_US";
+        //                string body = "";
+        //                bool hasImageHeader = false;
+        //                var buttons = new List<ButtonMetadataDto>();
+
+        //                foreach (var component in tpl.components)
+        //                {
+        //                    string type = component.type?.ToString()?.ToUpper();
+
+        //                    if (type == "BODY")
+        //                    {
+        //                        try
+        //                        {
+        //                            body = component.text?.ToString() ?? "";
+        //                        }
+        //                        catch
+        //                        {
+        //                            _logger.LogWarning("⚠️ Could not read BODY component text for template: {TemplateName}", name);
+        //                            body = "";
+        //                        }
+        //                    }
+
+        //                    if (type == "HEADER")
+        //                    {
+        //                        string format = component.format?.ToString()?.ToUpper();
+        //                        if (format == "IMAGE")
+        //                        {
+        //                            hasImageHeader = true;
+        //                        }
+        //                    }
+
+        //                    if (type == "BUTTONS")
+        //                    {
+        //                        foreach (var button in component.buttons)
+        //                        {
+        //                            try
+        //                            {
+        //                                string btnType = button.type?.ToString()?.ToUpper() ?? "";
+        //                                string text = button.text?.ToString() ?? "";
+        //                                int index = buttons.Count;
+
+        //                                string subType = btnType switch
+        //                                {
+        //                                    "URL" => "url",
+        //                                    "PHONE_NUMBER" => "voice_call",
+        //                                    "QUICK_REPLY" => "quick_reply",
+        //                                    "COPY_CODE" => "copy_code",
+        //                                    "CATALOG" => "catalog",
+        //                                    "FLOW" => "flow",
+        //                                    "REMINDER" => "reminder",
+        //                                    "ORDER_DETAILS" => "order_details",
+        //                                    _ => "unknown"
+        //                                };
+
+        //                                string? paramValue = null;
+        //                                if (button.url != null)
+        //                                    paramValue = button.url.ToString();
+        //                                else if (button.phone_number != null)
+        //                                    paramValue = button.phone_number.ToString();
+        //                                else if (button.coupon_code != null)
+        //                                    paramValue = button.coupon_code.ToString();
+        //                                else if (button.flow_id != null)
+        //                                    paramValue = button.flow_id.ToString();
+
+        //                                // 🧠 Meta injects static values — no need to enforce paramValue if STATIC
+        //                                bool hasExample = button.example != null;
+        //                                bool isDynamic = hasExample && Regex.IsMatch(button.example.ToString(), @"\{\{[0-9]+\}\}");
+
+        //                                bool requiresParam = new[] { "url", "flow", "copy_code", "catalog", "reminder" }.Contains(subType);
+        //                                bool needsRuntimeValue = requiresParam && isDynamic;
+
+        //                                // ❌ Skip if invalid OR dynamic + missing runtime param
+        //                                if (subType == "unknown" || (paramValue == null && needsRuntimeValue))
+        //                                {
+        //                                    _logger.LogWarning("⚠️ Skipping button '{Text}' due to unknown type or missing required param.", text);
+        //                                    continue;
+        //                                }
+
+        //                                buttons.Add(new ButtonMetadataDto
+        //                                {
+        //                                    Text = text,
+        //                                    Type = btnType,
+        //                                    SubType = subType,
+        //                                    Index = index,
+        //                                    ParameterValue = paramValue ?? "" // ✅ Always safe for static
+        //                                });
+        //                            }
+        //                            catch (Exception exBtn)
+        //                            {
+        //                                _logger.LogWarning(exBtn, "⚠️ Failed to parse button for template {TemplateName}", name);
+        //                            }
+        //                        }
+
+        //                    }
+        //                }
+
+        //                int placeholderCount = Regex.Matches(body ?? "", "{{(.*?)}}").Count;
+
+        //                allTemplates.Add(new TemplateForUIResponseDto
+        //                {
+        //                    Name = name,
+        //                    Language = language,
+        //                    Body = body,
+        //                    ParametersCount = placeholderCount,
+        //                    HasImageHeader = hasImageHeader,
+        //                    ButtonParams = buttons
+        //                });
+        //            }
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            _logger.LogError(ex, "❌ Exception while fetching templates for BusinessId {BusinessId}", setting.BusinessId);
+        //        }
+        //    }
+
+        //    return allTemplates;
+        //}
+        public async Task<List<TemplateForUIResponseDto>> FetchAllTemplatesAsync()
+        {
+            var allTemplates = new List<TemplateForUIResponseDto>();
+
+            var settingsList = await _dbContext.WhatsAppSettings
+                .Where(x => x.IsActive)
+                .ToListAsync();
+
+            foreach (var setting in settingsList)
+            {
+                if (string.IsNullOrWhiteSpace(setting.ApiToken) || string.IsNullOrWhiteSpace(setting.PhoneNumberId))
+                {
+                    _logger.LogWarning("⏭️ Skipping BusinessId {BusinessId} due to missing token or phone ID", setting.BusinessId);
+                    continue;
+                }
+
+                try
+                {
+                    var baseUrl = setting.ApiUrl?.TrimEnd('/') ?? "https://graph.facebook.com/v22.0";
+                    // start with a large page size; we'll follow paging.next if present
+                    string nextUrl = $"{baseUrl}/{setting.WabaId}/message_templates?limit=100";
+
+                    _httpClient.DefaultRequestHeaders.Authorization =
+                        new AuthenticationHeaderValue("Bearer", setting.ApiToken);
+
+                    while (!string.IsNullOrWhiteSpace(nextUrl))
+                    {
+                        var response = await _httpClient.GetAsync(nextUrl);
+                        var json = await response.Content.ReadAsStringAsync();
+
+                        _logger.LogInformation("📦 Meta Template API Raw JSON for {BusinessId}:\n{Json}", setting.BusinessId, json);
+
+                        if (!response.IsSuccessStatusCode)
+                        {
+                            _logger.LogError("❌ Failed to fetch templates for BusinessId {BusinessId}: {Response}", setting.BusinessId, json);
+                            break;
+                        }
+
+                        dynamic parsed = JsonConvert.DeserializeObject<dynamic>(json);
+
+                        foreach (var tpl in parsed.data)
+                        {
+                            // ⛔️ Filter: only show APPROVED (or ACTIVE) templates in the dropdown
+                            string status = (tpl.status?.ToString() ?? "").ToUpperInvariant();
+                            if (status != "APPROVED" && status != "ACTIVE")
+                            {
+                                _logger.LogInformation("🔎 Skipping template {Name} with status {Status}", (string)tpl.name, status);
+                                continue;
+                            }
+
+                            string name = tpl.name;
+                            string language = tpl.language ?? "en_US";
+                            string body = "";
+                            bool hasImageHeader = false;
+                            var buttons = new List<ButtonMetadataDto>();
+
+                            foreach (var component in tpl.components)
+                            {
+                                string type = component.type?.ToString()?.ToUpperInvariant();
+
+                                if (type == "BODY")
+                                {
+                                    try
+                                    {
+                                        body = component.text?.ToString() ?? "";
+                                    }
+                                    catch
+                                    {
+                                        _logger.LogWarning("⚠️ Could not read BODY component text for template: {TemplateName}", name);
+                                        body = "";
+                                    }
+                                }
+
+                                if (type == "HEADER")
+                                {
+                                    string format = component.format?.ToString()?.ToUpperInvariant();
+                                    if (format == "IMAGE") hasImageHeader = true;
+                                }
+
+                                if (type == "BUTTONS")
+                                {
+                                    foreach (var button in component.buttons)
+                                    {
+                                        try
+                                        {
+                                            string btnType = button.type?.ToString()?.ToUpperInvariant() ?? "";
+                                            string text = button.text?.ToString() ?? "";
+                                            int index = buttons.Count;
+
+                                            string subType = btnType switch
+                                            {
+                                                "URL" => "url",
+                                                "PHONE_NUMBER" => "voice_call",
+                                                "QUICK_REPLY" => "quick_reply",
+                                                "COPY_CODE" => "copy_code",
+                                                "CATALOG" => "catalog",
+                                                "FLOW" => "flow",
+                                                "REMINDER" => "reminder",
+                                                "ORDER_DETAILS" => "order_details",
+                                                _ => "unknown"
+                                            };
+
+                                            string? paramValue = null;
+                                            if (button.url != null) paramValue = button.url.ToString();
+                                            else if (button.phone_number != null) paramValue = button.phone_number.ToString();
+                                            else if (button.coupon_code != null) paramValue = button.coupon_code.ToString();
+                                            else if (button.flow_id != null) paramValue = button.flow_id.ToString();
+
+                                            bool hasExample = button.example != null;
+                                            bool isDynamic = hasExample && Regex.IsMatch(button.example.ToString(), @"\{\{[0-9]+\}\}");
+                                            bool requiresParam = new[] { "url", "flow", "copy_code", "catalog", "reminder" }.Contains(subType);
+                                            bool needsRuntimeValue = requiresParam && isDynamic;
+
+                                            if (subType == "unknown" || (paramValue == null && needsRuntimeValue))
+                                            {
+                                                _logger.LogWarning("⚠️ Skipping button '{Text}' due to unknown type or missing required param.", text);
+                                                continue;
+                                            }
+
+                                            buttons.Add(new ButtonMetadataDto
+                                            {
+                                                Text = text,
+                                                Type = btnType,
+                                                SubType = subType,
+                                                Index = index,
+                                                ParameterValue = paramValue ?? ""
+                                            });
+                                        }
+                                        catch (Exception exBtn)
+                                        {
+                                            _logger.LogWarning(exBtn, "⚠️ Failed to parse button for template {TemplateName}", name);
+                                        }
+                                    }
+                                }
+                            }
+
+                            int placeholderCount = Regex.Matches(body ?? "", "{{(.*?)}}").Count;
+
+                            allTemplates.Add(new TemplateForUIResponseDto
+                            {
+                                Name = name,
+                                Language = language,
+                                Body = body,
+                                ParametersCount = placeholderCount,
+                                HasImageHeader = hasImageHeader,
+                                ButtonParams = buttons
+                            });
+                        }
+
+                        // follow pagination if present
+                        nextUrl = parsed?.paging?.next?.ToString();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "❌ Exception while fetching templates for BusinessId {BusinessId}", setting.BusinessId);
+                }
+            }
+
+            return allTemplates;
+        }
+
+
+        public async Task<TemplateMetadataDto?> GetTemplateByNameAsync(Guid businessId, string templateName, bool includeButtons)
+        {
+            var setting = await _dbContext.WhatsAppSettings
+                .FirstOrDefaultAsync(x => x.IsActive && x.BusinessId == businessId);
+
+            if (setting == null ||
+                string.IsNullOrWhiteSpace(setting.ApiToken) ||
+                string.IsNullOrWhiteSpace(setting.PhoneNumberId))
+            {
+                _logger.LogWarning("❌ Missing WhatsApp config for business: {BusinessId}", businessId);
+                return null;
+            }
+
+            try
+            {
+                var baseUrl = setting.ApiUrl?.TrimEnd('/') ?? "https://graph.facebook.com/v18.0";
+                var url = $"{baseUrl}/{setting.WabaId}/message_templates";
+
+                _httpClient.DefaultRequestHeaders.Authorization =
+                    new AuthenticationHeaderValue("Bearer", setting.ApiToken);
+
+                var response = await _httpClient.GetAsync(url);
+                var json = await response.Content.ReadAsStringAsync();
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    _logger.LogError("❌ Failed to fetch templates for BusinessId {BusinessId}: {Json}", businessId, json);
+                    return null;
+                }
+
+                var parsed = JsonConvert.DeserializeObject<dynamic>(json);
+
+                foreach (var tpl in parsed.data)
+                {
+                    string name = tpl.name;
+                    if (!name.Equals(templateName, StringComparison.OrdinalIgnoreCase))
+                        continue;
+
+                    string language = tpl.language ?? "en_US";
+                    string body = "";
+                    var buttons = new List<ButtonMetadataDto>();
+                    bool hasImageHeader = false;
+
+                    foreach (var component in tpl.components)
+                    {
+                        string type = component.type?.ToString()?.ToUpper();
+
+                        if (type == "BODY")
+                        {
+                            try
+                            {
+                                body = component.text?.ToString() ?? "";
+                            }
+                            catch
+                            {
+                                body = "";
+                            }
+                        }
+
+                        if (type == "HEADER")
+                        {
+                            string format = component.format?.ToString()?.ToUpper();
+                            if (format == "IMAGE") hasImageHeader = true;
+                        }
+
+                        if (includeButtons && type == "BUTTONS")
+                        {
+                            foreach (var button in component.buttons)
+                            {
+                                try
+                                {
+                                    string btnType = button.type?.ToString()?.ToUpper() ?? "";
+                                    string text = button.text?.ToString() ?? "";
+                                    int index = buttons.Count;
+
+                                    string subType = btnType switch
+                                    {
+                                        "URL" => "url",
+                                        "PHONE_NUMBER" => "voice_call",
+                                        "QUICK_REPLY" => "quick_reply",
+                                        "COPY_CODE" => "copy_code",
+                                        "CATALOG" => "catalog",
+                                        "FLOW" => "flow",
+                                        "REMINDER" => "reminder",
+                                        "ORDER_DETAILS" => "order_details",
+                                        _ => "unknown"
+                                    };
+
+                                    // ✅ Extract known dynamic values
+                                    string? paramValue = null;
+                                    if (button.url != null)
+                                        paramValue = button.url.ToString();
+                                    else if (button.phone_number != null)
+                                        paramValue = button.phone_number.ToString();
+                                    else if (button.coupon_code != null)
+                                        paramValue = button.coupon_code.ToString();
+                                    else if (button.flow_id != null)
+                                        paramValue = button.flow_id.ToString();
+
+                                    // ✅ Skip truly invalid (unknown + missing value for dynamic)
+                                    if (subType == "unknown" || (paramValue == null && new[] { "url", "flow", "copy_code" }.Contains(subType)))
+
+                                    {
+                                        _logger.LogWarning("⚠️ Skipping button '{Text}' due to unknown type or missing required param.", text);
+                                        continue;
+                                    }
+
+                                    buttons.Add(new ButtonMetadataDto
+                                    {
+                                        Text = text,
+                                        Type = btnType,
+                                        SubType = subType,
+                                        Index = index,
+                                        ParameterValue = paramValue ?? "" // ✅ Default to empty for static buttons
+                                    });
+                                }
+                                catch (Exception exBtn)
+                                {
+                                    _logger.LogWarning(exBtn, "⚠️ Failed to parse button in template {TemplateName}", name);
+                                }
+                            }
+                        }
+                    }
+
+                    int paramCount = Regex.Matches(body ?? "", "{{(.*?)}}").Count;
+
+                    return new TemplateMetadataDto
+                    {
+                        Name = name,
+                        Language = language,
+                        Body = body,
+                        PlaceholderCount = paramCount,
+                        HasImageHeader = hasImageHeader,
+                        ButtonParams = includeButtons ? buttons : new List<ButtonMetadataDto>()
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "❌ Exception in GetTemplateByNameAsync");
+            }
+
+            return null;
+        }
+
+    }
+}
+
+ 
+ 
+====================================================== 
+FILE: D:\xbytechat\xbytechat-api\xbytechat-api\WhatsAppSettings\Validators\SaveWhatsAppSettingValidator.cs 
+====================================================== 
+ 
+﻿// 📄 File: WhatsAppSettings/Validators/SaveWhatsAppSettingValidator.cs
+using FluentValidation;
+using xbytechat_api.WhatsAppSettings.DTOs;
+
+namespace xbytechat_api.WhatsAppSettings.Validators
+{
+    public class SaveWhatsAppSettingValidator : AbstractValidator<SaveWhatsAppSettingDto>
+    {
+        public SaveWhatsAppSettingValidator()
+        {
+            RuleFor(x => x.Provider)
+                .NotEmpty().WithMessage("Provider is required.")
+                .Must(p => p == "pinnacle" || p == "meta_cloud")
+                .WithMessage("Provider must be 'pinnacle' or 'meta_cloud'.");
+
+            RuleFor(x => x.ApiUrl)
+                .NotEmpty().WithMessage("API URL is required.");
+
+            // Meta Cloud requirements
+            When(x => x.Provider == "meta_cloud", () =>
+            {
+                RuleFor(x => x.ApiToken)
+                    .NotEmpty().WithMessage("API Token is required for Meta Cloud.");
+                RuleFor(x => x.PhoneNumberId)
+                    .NotEmpty().WithMessage("Phone Number ID is required for Meta Cloud.");
+            });
+
+            // Pinbot requirements
+            When(x => x.Provider == "pinnacle", () =>
+            {
+                RuleFor(x => x.ApiKey)
+                    .NotEmpty().WithMessage("API Key is required for Pinbot.");
+                RuleFor(x => x)
+                    .Must(x => !string.IsNullOrWhiteSpace(x.PhoneNumberId) || !string.IsNullOrWhiteSpace(x.WabaId))
+                    .WithMessage("Provide Phone Number ID or WABA ID for Pinbot.");
+            });
+        }
+    }
+}
+ 
+ 

@@ -31,6 +31,9 @@ namespace xbytechat_api.WhatsAppSettings.Controllers
                 templates = templates
             });
         }
+
+      
+
         [HttpGet("get-template-all")]
         public async Task<IActionResult> GetAllTemplatesAsync()
         {

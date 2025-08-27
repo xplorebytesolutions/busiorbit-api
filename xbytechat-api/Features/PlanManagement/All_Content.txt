@@ -1,0 +1,220 @@
+Folder and File Content Report
+ 
+====================================================== 
+FILE: D:\xbytechat\xbytechat-api\xbytechat-api\Features\PlanManagement\All_Content.txt 
+====================================================== 
+ 
+Folder and File Content Report
+ 
+====================================================== 
+FILE: D:\xbytechat\xbytechat-api\xbytechat-api\Features\PlanManagement\All_Content.txt 
+====================================================== 
+ 
+ 
+ 
+====================================================== 
+FILE: D:\xbytechat\xbytechat-api\xbytechat-api\Features\PlanManagement\extract_all.bat 
+====================================================== 
+ 
+@echo off
+REM This script will find all files and output their name and content into one file.
+
+set "outputFile=All_Content.txt"
+
+REM Clear the output file to start fresh
+> "%outputFile%" (echo Folder and File Content Report)
+echo. >> "%outputFile%"
+
+REM Loop through all files in the current directory and subdirectories
+for /R . %%F in (*.*) do (
+    echo ====================================================== >> "%outputFile%"
+    echo FILE: %%F >> "%outputFile%"
+    echo ====================================================== >> "%outputFile%"
+    echo. >> "%outputFile%"
+    type "%%F" >> "%outputFile%"
+    echo. >> "%outputFile%"
+    echo. >> "%outputFile%"
+)
+
+echo Finished! All content has been extracted to %outputFile% 
+ 
+====================================================== 
+FILE: D:\xbytechat\xbytechat-api\xbytechat-api\Features\PlanManagement\Models\BusinessPlanInfo.cs 
+====================================================== 
+ 
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using xbytechat.api.Features.BusinessModule.Models;
+using xbytechat.api.Features.PlanManagement.Models;
+
+namespace xbytechat.api.Models.BusinessModel
+{
+    public class BusinessPlanInfo
+    {
+        [Key]
+        public Guid Id { get; set; } = Guid.NewGuid();
+
+        // 🔗 Foreign key to Business
+        [Required]
+        public Guid BusinessId { get; set; }
+
+        [ForeignKey(nameof(BusinessId))]
+        public Business Business { get; set; }
+
+        // 📦 Plan Management
+        [Required]
+        public PlanType Plan { get; set; } = PlanType.Trial; // Default Trial
+
+        [Required]
+        public int TotalMonthlyQuota { get; set; } = 100; // Default Trial Messages
+
+        [Required]
+        public int RemainingMessages { get; set; } = 100;
+
+        public DateTime QuotaResetDate { get; set; } = DateTime.UtcNow.AddMonths(1);
+
+        // 💰 Wallet Management (optional)
+        public decimal WalletBalance { get; set; } = 0.00m;
+
+        // 📅 Timestamps
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+    }
+}
+ 
+ 
+====================================================== 
+FILE: D:\xbytechat\xbytechat-api\xbytechat-api\Features\PlanManagement\Models\PlanFeature.cs 
+====================================================== 
+ 
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace xbytechat.api.Features.PlanManagement.Models
+{
+    [Table("PlanFeatureMatrix")]
+    public class PlanFeatureMatrix
+    {
+        [Key]
+        public Guid Id { get; set; }
+
+        [Required]
+        [MaxLength(20)]
+        public string PlanName { get; set; } = string.Empty;  // "Basic", "Smart", "Advance"
+
+        [Required]
+        [MaxLength(50)]
+        public string FeatureName { get; set; } = string.Empty; // "Contacts", "Catalog", etc.
+
+        [Required]
+        public bool IsEnabled { get; set; }  // Default state for this plan-feature pair
+    }
+}
+ 
+ 
+====================================================== 
+FILE: D:\xbytechat\xbytechat-api\xbytechat-api\Features\PlanManagement\Models\PlanType.cs 
+====================================================== 
+ 
+﻿namespace xbytechat.api.Features.PlanManagement.Models
+{
+    public enum PlanType
+    {
+       
+        Basic = 0,
+        Smart = 1,
+        Advanced = 2,
+            Trial = 3,
+    }
+}
+ 
+ 
+====================================================== 
+FILE: D:\xbytechat\xbytechat-api\xbytechat-api\Features\PlanManagement\Services\IPlanManager.cs 
+====================================================== 
+ 
+﻿using xbytechat.api.Helpers;
+using xbytechat.api.Shared;
+
+namespace xbytechat.api.Features.PlanManagement.Services
+{
+    public interface IPlanManager
+    {
+        /// <summary>
+        /// Checks if business has enough quota to send a message.
+        /// </summary>
+        Task<ResponseResult> CheckQuotaBeforeSendingAsync(Guid businessId);
+        Dictionary<string, bool> GetPlanFeatureMap(string plan);
+    }
+}
+ 
+ 
+====================================================== 
+FILE: D:\xbytechat\xbytechat-api\xbytechat-api\Features\PlanManagement\Services\PlanManager.cs 
+====================================================== 
+ 
+﻿using Microsoft.EntityFrameworkCore;
+using xbytechat.api.Features.PlanManagement.Models;
+using xbytechat.api.Helpers;
+using xbytechat.api.Models.BusinessModel;
+using xbytechat.api.Shared;
+
+namespace xbytechat.api.Features.PlanManagement.Services
+{
+    public class PlanManager : IPlanManager
+    {
+        private readonly AppDbContext _db;
+
+        public PlanManager(AppDbContext db)
+        {
+            _db = db;
+        }
+
+        public async Task<ResponseResult> CheckQuotaBeforeSendingAsync(Guid businessId)
+        {
+            var business = await _db.Businesses.FirstOrDefaultAsync(b => b.Id == businessId);
+
+            if (business == null)
+                return ResponseResult.ErrorInfo("Business not found.", "Invalid business ID");
+            if (business?.BusinessPlanInfo?.RemainingMessages <= 0)
+            {
+                var msg = business?.BusinessPlanInfo?.Plan == PlanType.Trial
+                    ? "Trial limit reached. Please upgrade your plan."
+                    : "Monthly quota exhausted. Please upgrade or wait for reset.";
+
+                return ResponseResult.ErrorInfo(msg, "Quota limit exceeded");
+            }
+
+            return ResponseResult.SuccessInfo("Quota check passed.");
+        }
+
+        public Dictionary<string, bool> GetPlanFeatureMap(string plan)
+        {
+            // Example map — replace with real logic if needed
+            if (plan == "Basic")
+                return new Dictionary<string, bool>
+            {
+                { "CATALOG", true },
+                { "MESSAGE_SEND", false },
+                { "CRM_NOTES", false }
+            };
+
+            if (plan == "Advanced")
+                return new Dictionary<string, bool>
+            {
+                { "CATALOG", true },
+                { "MESSAGE_SEND", true },
+                { "CRM_NOTES", true },
+                { "CRM_TAGS", true }
+            };
+
+            // Fallback plan
+            return new Dictionary<string, bool>();
+        }
+
+    }
+}
+ 
+ 

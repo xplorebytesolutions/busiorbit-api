@@ -14,8 +14,10 @@ namespace xbytechat.api.AuthModule.Services
             string status,
             string businessId,
             string companyName,
-            string plan,
-            List<string> permissions
+                       List<string> permissions,
+            string planId,
+              List<string>? features = null,
+            bool hasAllAccess = false
         );
         string GenerateToken(IEnumerable<Claim> claims);
         TokenValidationParameters GetValidationParameters(); // ✅ For Middleware validation

@@ -6,5 +6,10 @@
         public int FailedCount { get; set; }
         public int ClickedCount { get; set; }
         public DateTime? LastSentAt { get; set; }
+
+        public int Delivered { get; set; }
+        public int Read { get; set; }
+        public int Sent { get; set; }
+
     }
 }

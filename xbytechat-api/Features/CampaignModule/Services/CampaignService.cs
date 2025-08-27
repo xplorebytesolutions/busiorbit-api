@@ -22,6 +22,8 @@ using xbytechat.api.Shared.utility;
 using xbytechat.api.Features.MessagesEngine.PayloadBuilders;
 using xbytechat.api.WhatsAppSettings.DTOs;
 using xbytechat.api.Features.BusinessModule.Models;
+using xbytechat.api.AuthModule.Services;
+using xbytechat.api.CRM.Models;
 
 namespace xbytechat.api.Features.CampaignModule.Services
 {
@@ -33,11 +35,13 @@ namespace xbytechat.api.Features.CampaignModule.Services
         private readonly ILeadTimelineService _timelineService;
         private readonly IMessageEngineService _messageEngineService;
         private readonly IWhatsAppTemplateFetcherService _templateFetcherService;
+        private readonly IUrlBuilderService _urlBuilderService;
         public CampaignService(AppDbContext context, IMessageService messageService,
                                IServiceProvider serviceProvider,
                                ILeadTimelineService timelineService,
                                IMessageEngineService messageEngineService,
-                               IWhatsAppTemplateFetcherService templateFetcherService)
+                               IWhatsAppTemplateFetcherService templateFetcherService,
+                               IUrlBuilderService urlBuilderService)
         {
             _context = context;
             _messageService = messageService;
@@ -45,6 +49,7 @@ namespace xbytechat.api.Features.CampaignModule.Services
             _timelineService = timelineService; // ✅ new
             _messageEngineService = messageEngineService;
             _templateFetcherService = templateFetcherService;
+            _urlBuilderService = urlBuilderService;
 
         }
 
@@ -760,41 +765,32 @@ namespace xbytechat.api.Features.CampaignModule.Services
             };
         }
 
-        // This is used for "Text" based campaigns sending
         public async Task<ResponseResult> SendTextTemplateCampaignAsync(Campaign campaign)
         {
             try
             {
                 if (campaign == null || campaign.IsDeleted)
-                {
-                    Log.Warning("❌ Campaign is null or marked as deleted.");
                     return ResponseResult.ErrorInfo("❌ Invalid campaign.");
-                }
-
-                if (campaign.Recipients == null || !campaign.Recipients.Any())
-                {
-                    Log.Warning("⚠️ Campaign has no assigned recipients.");
-                    return ResponseResult.ErrorInfo("⚠️ No recipients assigned to this campaign.");
-                }
 
                 var businessId = campaign.BusinessId;
+
+                var setting = await _context.WhatsAppSettings
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(s => s.BusinessId == businessId && s.IsActive);
+
+                if (setting == null)
+                {
+                    return ResponseResult.ErrorInfo("❌ WhatsApp settings not found for this business.");
+                }
+
+                var providerKey = (setting.Provider ?? "meta_cloud").ToLowerInvariant();
                 var templateName = campaign.TemplateId;
                 var templateParams = TemplateParameterHelper.ParseTemplateParams(campaign.TemplateParameters);
                 var buttons = campaign.MultiButtons?.ToList();
-
-                // ✅ Fetch WhatsApp template metadata
                 var templateMeta = await _templateFetcherService.GetTemplateByNameAsync(businessId, templateName, includeButtons: true);
-                if (templateMeta == null)
-                {
-                    Log.Error("❌ Could not fetch template metadata for {Template}.", templateName);
-                    return ResponseResult.ErrorInfo("Template metadata not found.");
-                }
 
-                if (templateParams.Count != templateMeta.PlaceholderCount)
-                {
-                    Log.Warning("⚠️ Template expects {Expected} body parameters but received {Actual}.",
-                        templateMeta.PlaceholderCount, templateParams.Count);
-                }
+                if (templateMeta == null)
+                    return ResponseResult.ErrorInfo("❌ Template metadata not found.");
 
                 int successCount = 0, failureCount = 0;
 
@@ -802,13 +798,23 @@ namespace xbytechat.api.Features.CampaignModule.Services
                 {
                     if (recipient?.Contact == null)
                     {
-                        Log.Warning("⚠️ Skipping recipient: recipient or contact is null. Recipient ID: {RecipientId}", recipient?.Id);
+                        Log.Warning("Skipping recipient {RecipientId}: contact is null", recipient?.Id);
                         continue;
                     }
 
-                    Log.Information("📨 Preparing to send to {Phone}", recipient.Contact.PhoneNumber);
+                    var campaignSendLogId = Guid.NewGuid();
 
-                    var components = BuildTextTemplateComponents(templateParams, buttons, templateMeta);
+                    List<object> components;
+                    if (providerKey == "pinnacle")
+                    {
+                        // 👇 FIX: Pass 'recipient.Contact' to the helper method
+                        components = BuildTextTemplateComponents_Pinnacle(templateParams, buttons, templateMeta, campaignSendLogId, recipient.Contact);
+                    }
+                    else // Default to Meta's rules
+                    {
+                        // 👇 FIX: Pass 'recipient.Contact' to the helper method
+                        components = BuildTextTemplateComponents_Meta(templateParams, buttons, templateMeta, campaignSendLogId, recipient.Contact);
+                    }
 
                     var payload = new
                     {
@@ -818,15 +824,12 @@ namespace xbytechat.api.Features.CampaignModule.Services
                         template = new
                         {
                             name = templateName,
-                            language = new { code = templateMeta.Language ?? "en_US" },
-                            components = components
+                            language = new { code = string.IsNullOrWhiteSpace(templateMeta.Language) ? "en_US" : templateMeta.Language },
+                            components
                         }
                     };
 
-                    Log.Debug("📦 WhatsApp Payload:\n{Payload}", JsonConvert.SerializeObject(payload, Formatting.Indented));
-
-                    ResponseResult sendResult = await _messageEngineService.SendToWhatsAppAsync(payload, businessId);
-                    Log.Information("📬 Send result: {Result}", JsonConvert.SerializeObject(sendResult));
+                    var sendResult = await _messageEngineService.SendPayloadAsync(businessId, payload);
 
                     var messageLog = new MessageLog
                     {
@@ -841,16 +844,16 @@ namespace xbytechat.api.Features.CampaignModule.Services
                         ErrorMessage = sendResult.ErrorMessage,
                         RawResponse = sendResult.RawResponse,
                         CreatedAt = DateTime.UtcNow,
-                        SentAt = sendResult.Success ? DateTime.UtcNow : null
+                        SentAt = sendResult.Success ? DateTime.UtcNow : (DateTime?)null,
+                        Source = "campaign"
                     };
-
                     await _context.MessageLogs.AddAsync(messageLog);
-                    Log.Information("✅ Added MessageLog for {Recipient}", recipient.Contact.PhoneNumber);
 
                     await _context.CampaignSendLogs.AddAsync(new CampaignSendLog
                     {
-                        Id = Guid.NewGuid(),
+                        Id = campaignSendLogId,
                         CampaignId = campaign.Id,
+                        BusinessId = businessId,
                         ContactId = recipient.ContactId,
                         RecipientId = recipient.Id,
                         MessageBody = campaign.MessageBody ?? templateName,
@@ -858,168 +861,185 @@ namespace xbytechat.api.Features.CampaignModule.Services
                         SendStatus = sendResult.Success ? "Sent" : "Failed",
                         MessageLogId = messageLog.Id,
                         MessageId = sendResult.MessageId,
+                        ErrorMessage = sendResult.Success ? null : sendResult.Message,
                         CreatedAt = DateTime.UtcNow,
                         SentAt = DateTime.UtcNow,
                         CreatedBy = campaign.CreatedBy
                     });
 
-                    Log.Information("📘 Added CampaignSendLog for recipient {Recipient}", recipient.Id);
-
-                    if (sendResult.Success) successCount++;
-                    else failureCount++;
+                    if (sendResult.Success) successCount++; else failureCount++;
                 }
 
-                Log.Information("💾 Saving all DB changes...");
                 await _context.SaveChangesAsync();
-                Log.Information("✅ All saved successfully.");
-
                 return ResponseResult.SuccessInfo($"📤 Sent to {successCount} contacts. ❌ Failed for {failureCount}.");
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "❌ Error while sending text template campaign");
+                Log.Error(ex, "Error while sending text template campaign");
                 return ResponseResult.ErrorInfo("🚨 Unexpected error while sending campaign.", ex.ToString());
             }
         }
+        #region Text Component Builders
 
-        private List<object> BuildTextTemplateComponents(List<string> templateParams, List<CampaignButton>? buttonList, TemplateMetadataDto templateMeta)
+        /// <summary>
+        /// Builds components for a Text Template for the Pinnacle API.
+        /// This logic sends a component for every button and generates a tracking URL for dynamic ones.
+        /// </summary>
+        private List<object> BuildTextTemplateComponents_Pinnacle(
+      List<string> templateParams,
+      List<CampaignButton>? buttonList,
+      TemplateMetadataDto templateMeta,
+      Guid campaignSendLogId,
+      Contact contact) // 👇 FIX: Accept the Contact object as a parameter
         {
             var components = new List<object>();
 
-            // ✅ 1. Optional Header
-            if (templateMeta.HasImageHeader)
+            // Body parameters (with safeguard)
+            if (templateParams != null && templateParams.Count > 0 && templateMeta.PlaceholderCount > 0)
             {
-                Log.Information("ℹ️ Header detected, but skipping image as it's a text template.");
-                // If you ever support header text, you can handle here
+                components.Add(new { type = "body", parameters = templateParams.Select(p => new { type = "text", text = p }).ToArray() });
             }
 
-            // ✅ 2. Body parameters
-            if (templateParams != null && templateParams.Count > 0)
+            // Button components
+            if (buttonList != null && buttonList.Count > 0 && templateMeta.ButtonParams != null && templateMeta.ButtonParams.Count > 0)
             {
-                components.Add(new
-                {
-                    type = "body",
-                    parameters = templateParams.Select(p => new
-                    {
-                        type = "text",
-                        text = p
-                    }).ToArray()
-                });
-            }
-            else if (templateMeta.PlaceholderCount > 0)
-            {
-                Log.Warning("⚠️ Body params missing but template expects {Count} placeholders.", templateMeta.PlaceholderCount);
-            }
-
-            // ✅ 3. Footer (optional, static — Meta doesn’t accept dynamic footer
-            // ly)
-            // If you want to support footer with text later, it can go like this:
-            // components.Add(new { type = "footer", parameters = new[] { new { type = "text", text = "Your footer text" } } });
-
-            // ✅ 4. Buttons
-            if (buttonList != null && buttonList.Any())
-            {
-                for (int i = 0; i < buttonList.Count && i < templateMeta.ButtonParams.Count; i++)
+                var total = Math.Min(3, Math.Min(buttonList.Count, templateMeta.ButtonParams.Count));
+                for (int i = 0; i < total; i++)
                 {
                     var btn = buttonList[i];
                     var meta = templateMeta.ButtonParams[i];
+                    var subtype = (meta.SubType ?? "url").ToLowerInvariant();
+                    var metaParam = meta.ParameterValue?.Trim();
+                    var value = btn.Value?.Trim();
+                    bool isDynamic = !string.IsNullOrWhiteSpace(metaParam) && metaParam.Contains("{{");
 
-                    string index = i.ToString();
-                    string subtype = meta.SubType?.ToLower() ?? "url";
-                    string? value = btn.Value?.Trim();
-                    string? metaParam = meta.ParameterValue?.Trim();
-
-                    // 🔍 Determine if this is a dynamic param (contains {{}})
-                    bool isDynamic = metaParam != null && metaParam.Contains("{{");
-
-                    // ✅ Skip entire button if static and no dynamic value
-                    if (!isDynamic)
+                    if (!isDynamic || string.IsNullOrWhiteSpace(value))
                     {
-                        Log.Information("⏩ Skipping static button '{Title}' as it requires no parameters", btn.Title);
+                        components.Add(new Dictionary<string, object> { ["type"] = "button", ["sub_type"] = subtype, ["index"] = i.ToString() });
                         continue;
                     }
 
-                    var paramType = subtype switch
+                    // 👇 FIX: Use the 'contact' object that was passed into this method
+                    var trackingUrl = _urlBuilderService.GenerateCampaignTrackingUrl(campaignSendLogId, btn.Title, value, contact.PhoneNumber);
+
+                    var param = subtype switch
                     {
-                        "url" => "text",
-                        "copy_code" => "coupon_code",
-                        "phone_number" => "phone_number",
-                        "flow" => "flow_id",
-                        _ => "text"
+                        "url" => new Dictionary<string, object> { ["type"] = "text", ["text"] = trackingUrl },
+                        _ => new Dictionary<string, object> { ["type"] = "text", ["text"] = trackingUrl },
                     };
 
-                    var buttonPayload = new Dictionary<string, object>
-        {
-                        { "type", "button" },
-                        { "sub_type", subtype },
-                        { "index", index },
-                        { "parameters", new[] {
-                            new Dictionary<string, object>
-                            {
-                                { "type", paramType },
-                                { paramType, value }
-                            }
-                        }}
-                    };
-
-                    components.Add(buttonPayload);
+                    components.Add(new Dictionary<string, object>
+                    {
+                        ["type"] = "button",
+                        ["sub_type"] = subtype,
+                        ["index"] = i.ToString(),
+                        ["parameters"] = new[] { param }
+                    });
                 }
-
             }
-
             return components;
         }
 
+        /// <summary>
+        /// Builds components for a Text Template for the Meta Cloud API.
+        /// This logic ONLY sends components for dynamic buttons and generates a tracking URL for each.
+        /// </summary>
+        private List<object> BuildTextTemplateComponents_Meta(
+       List<string> templateParams,
+       List<CampaignButton>? buttonList,
+       TemplateMetadataDto templateMeta,
+       Guid campaignSendLogId,
+       Contact contact) // 👇 FIX: Accept the Contact object as a parameter
+        {
+            var components = new List<object>();
 
-        // This is used for "Image" based campaigns sending
+            // Body parameters (with safeguard)
+            if (templateParams != null && templateParams.Count > 0 && templateMeta.PlaceholderCount > 0)
+            {
+                components.Add(new { type = "body", parameters = templateParams.Select(p => new { type = "text", text = p }).ToArray() });
+            }
+
+            // Button components (Meta logic: only for dynamic buttons)
+            if (buttonList != null && buttonList.Count > 0 && templateMeta.ButtonParams != null && templateMeta.ButtonParams.Count > 0)
+            {
+                var total = Math.Min(3, Math.Min(buttonList.Count, templateMeta.ButtonParams.Count));
+                for (int i = 0; i < total; i++)
+                {
+                    var meta = templateMeta.ButtonParams[i];
+                    var metaParam = meta.ParameterValue?.Trim();
+                    bool isDynamic = !string.IsNullOrWhiteSpace(metaParam) && metaParam.Contains("{{");
+
+                    if (isDynamic)
+                    {
+                        var btn = buttonList[i];
+                        var value = btn.Value?.Trim();
+                        if (string.IsNullOrWhiteSpace(value)) continue;
+
+                        var subtype = (meta.SubType ?? "url").ToLowerInvariant();
+
+                        // 👇 FIX: Use the 'contact' object that was passed into this method
+                        var trackingUrl = _urlBuilderService.GenerateCampaignTrackingUrl(campaignSendLogId, btn.Title, value, contact.PhoneNumber);
+
+                        var param = subtype switch
+                        {
+                            "url" => new Dictionary<string, object> { ["type"] = "text", ["text"] = trackingUrl },
+                            _ => new Dictionary<string, object> { ["type"] = "text", ["text"] = trackingUrl },
+                        };
+
+                        components.Add(new Dictionary<string, object>
+                        {
+                            ["type"] = "button",
+                            ["sub_type"] = subtype,
+                            ["index"] = i.ToString(),
+                            ["parameters"] = new[] { param }
+                        });
+                    }
+                }
+            }
+            return components;
+        }
+        #endregion
+
         public async Task<ResponseResult> SendImageTemplateCampaignAsync(Campaign campaign)
         {
             try
             {
                 if (campaign == null || campaign.IsDeleted)
-                {
-                    Log.Warning("❌ Campaign is null or marked as deleted.");
                     return ResponseResult.ErrorInfo("❌ Invalid campaign.");
-                }
-
-                if (campaign.Recipients == null || !campaign.Recipients.Any())
-                {
-                    Log.Warning("⚠️ Campaign has no assigned recipients.");
-                    return ResponseResult.ErrorInfo("⚠️ No recipients assigned to this campaign.");
-                }
 
                 var businessId = campaign.BusinessId;
+                var setting = await _context.WhatsAppSettings.AsNoTracking().FirstOrDefaultAsync(s => s.BusinessId == businessId && s.IsActive);
+                if (setting == null)
+                    return ResponseResult.ErrorInfo("❌ WhatsApp settings not found for this business.");
+
+                var providerKey = (setting.Provider ?? "meta_cloud").ToLowerInvariant();
                 var templateName = campaign.TemplateId;
                 var imageUrl = campaign.ImageUrl;
                 var templateParams = TemplateParameterHelper.ParseTemplateParams(campaign.TemplateParameters);
                 var buttons = campaign.MultiButtons?.ToList();
-
                 var templateMeta = await _templateFetcherService.GetTemplateByNameAsync(businessId, templateName, includeButtons: true);
-                if (templateMeta == null)
-                {
-                    Log.Error("❌ Could not fetch template metadata for {Template}.", templateName);
-                    return ResponseResult.ErrorInfo("Template metadata not found.");
-                }
 
-                if (templateParams.Count != templateMeta.PlaceholderCount)
-                {
-                    Log.Warning("⚠️ Template expects {Expected} body parameters but received {Actual}.",
-                        templateMeta.PlaceholderCount, templateParams.Count);
-                }
+                if (templateMeta == null)
+                    return ResponseResult.ErrorInfo("❌ Template metadata not found.");
 
                 int successCount = 0, failureCount = 0;
-
                 foreach (var recipient in campaign.Recipients)
                 {
-                    if (recipient?.Contact == null)
+                    if (recipient?.Contact == null) continue;
+
+                    var campaignSendLogId = Guid.NewGuid();
+
+                    List<object> components;
+                    if (providerKey == "pinnacle")
                     {
-                        Log.Warning("⚠️ Skipping recipient: recipient or contact is null. Recipient ID: {RecipientId}", recipient?.Id);
-                        continue;
+                        // 👇 FIX: Pass 'recipient.Contact' to the helper method
+                        components = BuildImageTemplateComponents_Pinnacle(imageUrl, templateParams, buttons, templateMeta, campaignSendLogId, recipient.Contact);
                     }
-
-                    Log.Information("📨 Preparing to send to {Phone}", recipient.Contact.PhoneNumber);
-
-                    var components = BuildImageTemplateComponents(templateParams, imageUrl, buttons, templateMeta);
+                    else
+                    {
+                        // 👇 FIX: Pass 'recipient.Contact' to the helper method
+                        components = BuildImageTemplateComponents_Meta(imageUrl, templateParams, buttons, templateMeta, campaignSendLogId, recipient.Contact);
+                    }
 
                     var payload = new
                     {
@@ -1029,15 +1049,12 @@ namespace xbytechat.api.Features.CampaignModule.Services
                         template = new
                         {
                             name = templateName,
-                            language = new { code = "en_US" },
-                            components = components
+                            language = new { code = string.IsNullOrWhiteSpace(templateMeta.Language) ? "en_US" : templateMeta.Language },
+                            components
                         }
                     };
 
-                    Log.Debug("📦 Final WhatsApp Payload:\n{Payload}", JsonConvert.SerializeObject(payload, Formatting.Indented));
-
-                    var sendResult = await _messageEngineService.SendToWhatsAppAsync(payload, businessId);
-                    Log.Information("📬 Send result: {Result}", JsonConvert.SerializeObject(sendResult));
+                    var sendResult = await _messageEngineService.SendPayloadAsync(businessId, payload);
 
                     var messageLog = new MessageLog
                     {
@@ -1053,15 +1070,14 @@ namespace xbytechat.api.Features.CampaignModule.Services
                         ErrorMessage = sendResult.ErrorMessage,
                         RawResponse = sendResult.RawResponse,
                         CreatedAt = DateTime.UtcNow,
-                        SentAt = sendResult.Success ? DateTime.UtcNow : null
+                        SentAt = sendResult.Success ? DateTime.UtcNow : (DateTime?)null,
+                        Source = "campaign"
                     };
-
                     await _context.MessageLogs.AddAsync(messageLog);
-                    Log.Information("📥 MessageLog saved for {Recipient}", recipient.Contact.PhoneNumber);
 
                     await _context.CampaignSendLogs.AddAsync(new CampaignSendLog
                     {
-                        Id = Guid.NewGuid(),
+                        Id = campaignSendLogId,
                         CampaignId = campaign.Id,
                         BusinessId = businessId,
                         ContactId = recipient.ContactId,
@@ -1069,6 +1085,7 @@ namespace xbytechat.api.Features.CampaignModule.Services
                         MessageBody = campaign.MessageBody ?? templateName,
                         TemplateId = templateName,
                         SendStatus = sendResult.Success ? "Sent" : "Failed",
+                        ErrorMessage = sendResult.Success ? null : sendResult.Message,
                         MessageLogId = messageLog.Id,
                         MessageId = sendResult.MessageId,
                         CreatedAt = DateTime.UtcNow,
@@ -1076,121 +1093,139 @@ namespace xbytechat.api.Features.CampaignModule.Services
                         CreatedBy = campaign.CreatedBy
                     });
 
-                    Log.Information("🗃️ CampaignSendLog saved for recipient {Recipient}", recipient.Id);
-
-                    if (sendResult.Success) successCount++;
-                    else failureCount++;
+                    if (sendResult.Success) successCount++; else failureCount++;
                 }
 
-                Log.Information("💾 Saving all DB changes...");
                 await _context.SaveChangesAsync();
-                Log.Information("✅ All saved successfully.");
-
                 return ResponseResult.SuccessInfo($"📤 Sent to {successCount} contacts. ❌ Failed for {failureCount}.");
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "❌ Error while sending image template campaign");
+                Log.Error(ex, "Error while sending image template campaign");
                 return ResponseResult.ErrorInfo("🚨 Unexpected error while sending campaign.", ex.ToString());
             }
         }
+        #region Image Component Builders
 
-        private List<object> BuildImageTemplateComponents(List<string> templateParams, string? imageUrl, List<CampaignButton>? buttonList, TemplateMetadataDto templateMeta)
+        /// <summary>
+        /// Builds components for an Image Template for the Pinnacle API.
+        /// It creates a component for every button and generates a tracking URL for dynamic ones.
+        /// </summary>
+        private List<object> BuildImageTemplateComponents_Pinnacle(
+            string? imageUrl,
+            List<string> templateParams,
+            List<CampaignButton>? buttonList,
+            TemplateMetadataDto templateMeta,
+            Guid campaignSendLogId,
+            Contact contact) // 👇 FIX: Accept the Contact object as a parameter
         {
             var components = new List<object>();
 
-            // ✅ 1. Header image
+            // Header component
             if (!string.IsNullOrWhiteSpace(imageUrl) && templateMeta.HasImageHeader)
             {
-                components.Add(new
-                {
-                    type = "header",
-                    parameters = new[]
-                    {
-                new
-                {
-                    type = "image",
-                    image = new { link = imageUrl }
-                }
-            }
-                });
+                components.Add(new { type = "header", parameters = new object[] { new { type = "image", image = new { link = imageUrl } } } });
             }
 
-            // ✅ 2. Body parameters
-            if (templateParams != null && templateParams.Count > 0)
+            // Body component (with safeguard)
+            if (templateParams != null && templateParams.Count > 0 && templateMeta.PlaceholderCount > 0)
             {
-                components.Add(new
-                {
-                    type = "body",
-                    parameters = templateParams.Select(p => new
-                    {
-                        type = "text",
-                        text = p
-                    }).ToArray()
-                });
-            }
-            else if (templateMeta.PlaceholderCount > 0)
-            {
-                Log.Warning("⚠️ Body params missing but template expects {Count} placeholders.", templateMeta.PlaceholderCount);
+                components.Add(new { type = "body", parameters = templateParams.Select(p => new { type = "text", text = p }).ToArray() });
             }
 
-            // ✅ 3. Buttons with logic to exclude parameters for static values
-            if (buttonList != null && buttonList.Any())
+            // Button components
+            if (buttonList != null && buttonList.Count > 0 && templateMeta.ButtonParams != null && templateMeta.ButtonParams.Count > 0)
             {
-                for (int i = 0; i < buttonList.Count && i < templateMeta.ButtonParams.Count; i++)
+                var total = Math.Min(3, Math.Min(buttonList.Count, templateMeta.ButtonParams.Count));
+                for (int i = 0; i < total; i++)
                 {
                     var btn = buttonList[i];
                     var meta = templateMeta.ButtonParams[i];
+                    var subtype = (meta.SubType ?? "url").ToLowerInvariant();
+                    var metaParam = meta.ParameterValue?.Trim();
+                    var value = btn.Value?.Trim();
+                    bool isDynamic = !string.IsNullOrWhiteSpace(metaParam) && metaParam.Contains("{{");
 
-                    string index = i.ToString();
-                    string subtype = meta.SubType?.ToLower() ?? "url";
-                    string? value = btn.Value?.Trim();
-                    string? metaParam = meta.ParameterValue?.Trim();
+                    var dict = new Dictionary<string, object> { ["type"] = "button", ["sub_type"] = subtype, ["index"] = i.ToString() };
 
-                    var buttonPayload = new Dictionary<string, object>
-            {
-                { "type", "button" },
-                { "sub_type", subtype },
-                { "index", index }
-            };
-
-                    // 🔍 Determine if this is a dynamic param (contains {{}})
-                    bool isDynamic = metaParam != null && metaParam.Contains("{{");
-
-                    // ✅ Only add parameters for dynamic types
                     if (isDynamic && !string.IsNullOrWhiteSpace(value))
                     {
-                        var paramType = subtype switch
-                        {
-                            "url" => "text",
-                            "copy_code" => "coupon_code",
-                            "phone_number" => "phone_number",
-                            "flow" => "flow_id",
-                            _ => "text"
-                        };
-
-                        buttonPayload["parameters"] = new[]
-                        {
-                    new Dictionary<string, object>
-                    {
-                        { "type", paramType },
-                        { paramType, value }
+                        // 👇 FIX: Use the 'contact' object that was passed into this method
+                        var trackingUrl = _urlBuilderService.GenerateCampaignTrackingUrl(campaignSendLogId, btn.Title, value, contact.PhoneNumber);
+                        var param = new Dictionary<string, object> { ["type"] = "text", ["text"] = trackingUrl };
+                        dict["parameters"] = new[] { param };
                     }
-                };
-                    }
-                    else
-                    {
-                        Log.Information("ℹ️ Skipping parameters for static button '{Title}' ({SubType})", btn.Title, subtype);
-                    }
-
-                    components.Add(buttonPayload);
+                    components.Add(dict);
                 }
             }
+            return components;
+        }
 
+        /// <summary>
+        /// Builds components for an Image Template for the Meta Cloud API.
+        /// It correctly formats the header and ONLY includes components for dynamic buttons,
+        /// generating a tracking URL for each.
+        /// </summary>
+        private List<object> BuildImageTemplateComponents_Meta(
+            string? imageUrl,
+            List<string> templateParams,
+            List<CampaignButton>? buttonList,
+            TemplateMetadataDto templateMeta,
+            Guid campaignSendLogId,
+            Contact contact) // 👇 FIX: Accept the Contact object as a parameter
+        {
+            var components = new List<object>();
+
+            // Header component
+            if (!string.IsNullOrWhiteSpace(imageUrl) && templateMeta.HasImageHeader)
+            {
+                components.Add(new { type = "header", parameters = new[] { new { type = "image", image = new { link = imageUrl } } } });
+            }
+
+            // Body component (with safeguard)
+            if (templateParams != null && templateParams.Count > 0 && templateMeta.PlaceholderCount > 0)
+            {
+                components.Add(new { type = "body", parameters = templateParams.Select(p => new { type = "text", text = p }).ToArray() });
+            }
+
+            // Button components (Meta logic: only for dynamic buttons)
+            if (buttonList != null && buttonList.Count > 0 && templateMeta.ButtonParams != null && templateMeta.ButtonParams.Count > 0)
+            {
+                var total = Math.Min(3, Math.Min(buttonList.Count, templateMeta.ButtonParams.Count));
+                for (int i = 0; i < total; i++)
+                {
+                    var meta = templateMeta.ButtonParams[i];
+                    var metaParam = meta.ParameterValue?.Trim();
+                    bool isDynamic = !string.IsNullOrWhiteSpace(metaParam) && metaParam.Contains("{{");
+
+                    if (isDynamic)
+                    {
+                        var btn = buttonList[i];
+                        var value = btn.Value?.Trim();
+                        if (string.IsNullOrWhiteSpace(value)) continue;
+
+                        var subtype = (meta.SubType ?? "url").ToLowerInvariant();
+
+                        // 👇 FIX: Use the 'contact' object that was passed into this method
+                        var trackingUrl = _urlBuilderService.GenerateCampaignTrackingUrl(campaignSendLogId, btn.Title, value, contact.PhoneNumber);
+                        var param = new Dictionary<string, object> { ["type"] = "text", ["text"] = trackingUrl };
+
+                        components.Add(new Dictionary<string, object>
+                        {
+                            ["type"] = "button",
+                            ["sub_type"] = subtype,
+                            ["index"] = i.ToString(),
+                            ["parameters"] = new[] { param }
+                        });
+                    }
+                }
+            }
             return components;
         }
 
         #endregion
+        #endregion
+
     }
 
 }
