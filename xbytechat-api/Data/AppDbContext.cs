@@ -23,6 +23,7 @@ using xbytechat.api.Features.BusinessModule.Models;
 using xbytechat.api.Features.FeatureAccessModule.Models;
 using xbytechat.api.Features.PlanManagement.Models;
 using xbytechat.api.Features.Automation.Models;
+using xbytechat.api.Features.CampaignTracking.Worker;
 
 namespace xbytechat.api
 {
@@ -85,6 +86,10 @@ namespace xbytechat.api
         public DbSet<FeatureMaster> FeatureMasters { get; set; }
         public DbSet<AutomationFlow> AutomationFlows { get; set; }
         public DbSet<WhatsAppTemplate> WhatsAppTemplates { get; set; }
+       
+        public DbSet<CampaignClickLog> CampaignClickLogs => Set<CampaignClickLog>();
+        public DbSet<CampaignClickDailyAgg> CampaignClickDailyAgg => Set<CampaignClickDailyAgg>();
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -286,6 +291,20 @@ namespace xbytechat.api
                 e.Property(x => x.ButtonsJson).HasColumnType("text");
                 e.Property(x => x.RawJson).HasColumnType("text");
             });
+            modelBuilder.Entity<CampaignClickLog>(e =>
+            {
+                e.HasIndex(x => new { x.CampaignId, x.ClickType, x.ClickedAt });
+                e.HasIndex(x => new { x.CampaignId, x.ButtonIndex });
+                e.HasIndex(x => new { x.CampaignId, x.ContactId });
+            });
+
+            modelBuilder.Entity<CampaignClickDailyAgg>(e =>
+            {
+                e.HasIndex(x => new { x.CampaignId, x.Day, x.ButtonIndex }).IsUnique();
+                e.Property(x => x.Day).HasColumnType("date");
+            });
+
+
         }
     }
 }

@@ -477,6 +477,8 @@ using xbytechat.api.Features.Automation.Services;
 using Npgsql;
 using System.Net;
 using xbytechat.api.WhatsAppSettings.Providers;
+using xbytechat.api.Features.CampaignTracking.Config;
+using xbytechat.api.Features.CampaignTracking.Worker;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -573,6 +575,13 @@ builder.Services.AddScoped<ITrackingService, TrackingService>();
 builder.Services.AddScoped<IMessageAnalyticsService, MessageAnalyticsService>();
 builder.Services.AddScoped<IUrlBuilderService, UrlBuilderService>();
 builder.Services.AddScoped<IContactJourneyService, ContactJourneyService>();
+
+builder.Services.Configure<TrackingOptions>(builder.Configuration.GetSection("Tracking"));
+builder.Services.AddSingleton<IClickTokenService, ClickTokenService>();
+builder.Services.AddSingleton<IClickEventQueue, InProcessClickEventQueue>();
+builder.Services.AddHostedService<ClickLogWorker>();
+
+
 #endregion
 
 #region 🔷 Flow Builder
@@ -624,7 +633,6 @@ builder.Services.AddScoped<IInboxRepository, InboxRepository>();
 #endregion
 
 #region 🔷 Access Control
-builder.Services.AddScoped<IAccessControlService, AccessControlService>();
 builder.Services.AddScoped<IPermissionService, PermissionService>();
 builder.Services.AddMemoryCache();
 builder.Services.AddScoped<IPermissionCacheService, PermissionCacheService>();
@@ -645,7 +653,7 @@ builder.Services.AddScoped<IAutomationFlowRepository, AutomationFlowRepository>(
 builder.Services.AddScoped<IAutomationRunner, AutomationRunner>();
 builder.Services.AddScoped<IAutomationService, AutomationService>();
 #endregion
-builder.Services.AddScoped<IAutomationService, AutomationService>();
+
 
 #region 🔐 JWT Authentication (Bearer token only, no cookies)
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -742,6 +750,19 @@ builder.Services.AddSignalR();
 builder.Services.AddSingleton<IUserIdProvider, NameUserIdProvider>();
 #endregion
 
+//builder.Services.Configure<HostOptions>(o =>
+//{
+//    o.BackgroundServiceExceptionBehavior = BackgroundServiceExceptionBehavior.Ignore;
+//});
+
+AppDomain.CurrentDomain.UnhandledException += (_, e) =>
+    Log.Error(e.ExceptionObject as Exception, "Unhandled exception (AppDomain)");
+
+TaskScheduler.UnobservedTaskException += (_, e) =>
+{
+    Log.Error(e.Exception, "Unobserved task exception");
+    e.SetObserved();
+};
 var app = builder.Build();
 
 app.MapGet("/api/debug/cors", () => Results.Ok(new
@@ -784,66 +805,6 @@ app.MapGet("/api/debug/dns", (IConfiguration cfg) =>
     }
 });
 
-// Url Tracking
-//app.MapGet("/{token}", async (string token, HttpContext http, AppDbContext db) =>
-//{
-//    ClickToken payload;
-
-//    try
-//    {
-//        payload = TrackingToken.Decode<ClickToken>(token);
-//    }
-//    catch
-//    {
-//        return Results.BadRequest("Invalid token");
-//    }
-
-//    if (!Uri.TryCreate(payload.to, UriKind.Absolute, out var dest))
-//        return Results.BadRequest("Invalid destination");
-
-//    var log = await db.CampaignSendLogs.FindAsync(payload.cid);
-//    if (log is null) return Results.NotFound("Send log not found");
-
-//    var now = DateTime.UtcNow;
-
-//    // Update your existing fields
-//    log.IsClicked = true;
-//    log.ClickedAt = now;
-//    log.ClickType = payload.btnTitle; // e.g. "View Collection"
-//    log.IpAddress = http.Connection.RemoteIpAddress?.ToString();
-//    log.DeviceInfo = http.Request.Headers.UserAgent.ToString();
-
-//    await db.SaveChangesAsync();
-
-//    return Results.Redirect(dest.ToString(), permanent: false);
-//})
-//.AllowAnonymous();
-app.MapGet("/{token}", async (string token, HttpContext http, AppDbContext db, ILoggerFactory lf) =>
-{
-    var log = lf.CreateLogger("Redirect");
-    log.LogInformation("Redirect hit with token: {Token}", token);
-
-    ClickToken payload;
-    try { payload = TrackingToken.Decode<ClickToken>(token); }
-    catch (Exception ex) { log.LogWarning(ex, "Bad token"); return Results.BadRequest("Invalid token"); }
-
-    log.LogInformation("Decoded payload: cid={Cid}, btn={Btn}, to={To}", payload.cid, payload.btnTitle, payload.to);
-
-    var row = await db.CampaignSendLogs.FindAsync(payload.cid);
-    if (row is null) { log.LogWarning("No send log for cid {Cid}", payload.cid); return Results.NotFound("Send log not found"); }
-
-    row.IsClicked = true;
-    row.ClickedAt = DateTime.UtcNow;
-    row.ClickType = payload.btnTitle;
-    row.IpAddress = http.Connection.RemoteIpAddress?.ToString();
-    row.DeviceInfo = http.Request.Headers.UserAgent.ToString();
-
-    await db.SaveChangesAsync();
-    log.LogInformation("Updated send log {Cid}", payload.cid);
-
-    return Results.Redirect(payload.to, permanent: false);
-})
-.AllowAnonymous();
 
 #region 🌐 Middleware Pipeline Setup
 AuditLoggingHelper.Configure(app.Services);
@@ -857,8 +818,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseSwagger();
 app.UseSwaggerUI();
-
-app.UseHsts();
+if (!app.Environment.IsDevelopment())
+    app.UseHsts();
 app.UseHttpsRedirection();
 
 // Security headers
