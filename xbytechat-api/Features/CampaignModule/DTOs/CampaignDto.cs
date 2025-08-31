@@ -31,6 +31,9 @@ namespace xbytechat.api.Features.CampaignModule.DTOs
         public CtaPreviewDto? Cta { get; set; }
 
         public List<CampaignButtonDto> MultiButtons { get; set; } = new();
+
+        public Guid? CTAFlowConfigId { get; set; }
+        public string? CTAFlowName { get; set; }
     }
 
     // 📦 Embedded DTO for CTA preview (title + button text only)

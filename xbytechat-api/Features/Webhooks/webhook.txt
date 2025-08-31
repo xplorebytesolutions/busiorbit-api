@@ -1,0 +1,2228 @@
+Folder and File Content Report
+ 
+====================================================== 
+FILE: D:\xbytechat\xbytechat-api\xbytechat-api\Features\Webhooks\All_Content.txt 
+====================================================== 
+ 
+Folder and File Content Report
+ 
+====================================================== 
+FILE: D:\xbytechat\xbytechat-api\xbytechat-api\Features\Webhooks\All_Content.txt 
+====================================================== 
+ 
+ 
+ 
+====================================================== 
+FILE: D:\xbytechat\xbytechat-api\xbytechat-api\Features\Webhooks\extract_all.bat 
+====================================================== 
+ 
+@echo off
+REM This script will find all files and output their name and content into one file.
+
+set "outputFile=All_Content.txt"
+
+REM Clear the output file to start fresh
+> "%outputFile%" (echo Folder and File Content Report)
+echo. >> "%outputFile%"
+
+REM Loop through all files in the current directory and subdirectories
+for /R . %%F in (*.*) do (
+    echo ====================================================== >> "%outputFile%"
+    echo FILE: %%F >> "%outputFile%"
+    echo ====================================================== >> "%outputFile%"
+    echo. >> "%outputFile%"
+    type "%%F" >> "%outputFile%"
+    echo. >> "%outputFile%"
+    echo. >> "%outputFile%"
+)
+
+echo Finished! All content has been extracted to %outputFile% 
+ 
+====================================================== 
+FILE: D:\xbytechat\xbytechat-api\xbytechat-api\Features\Webhooks\BackgroundWorkers\WebhookAutoCleanupWorker.cs 
+====================================================== 
+ 
+﻿using xbytechat.api.Features.Webhooks.Services;
+
+namespace xbytechat.api.Features.Webhooks.BackgroundWorkers
+{
+    public class WebhookAutoCleanupWorker : BackgroundService
+    {
+        private readonly ILogger<WebhookAutoCleanupWorker> _logger;
+        private readonly IServiceProvider _services;
+
+        public WebhookAutoCleanupWorker(IServiceProvider services, ILogger<WebhookAutoCleanupWorker> logger)
+        {
+            _services = services;
+            _logger = logger;
+        }
+
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+        {
+            while (!stoppingToken.IsCancellationRequested)
+            {
+                using var scope = _services.CreateScope();
+                var maintenanceService = scope.ServiceProvider.GetRequiredService<IMaintenanceService>();
+
+                if (await maintenanceService.IsAutoCleanupEnabledAsync())
+                {
+                    var count = await maintenanceService.RunCleanupAsync();
+                    _logger.LogInformation($"🧹 Auto-cleaned {count} old webhook logs.");
+                }
+
+                await Task.Delay(TimeSpan.FromHours(12), stoppingToken);
+            }
+        }
+    }
+}
+ 
+ 
+====================================================== 
+FILE: D:\xbytechat\xbytechat-api\xbytechat-api\Features\Webhooks\BackgroundWorkers\WebhookQueueWorker.cs 
+====================================================== 
+ 
+﻿using System.Text.Json;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using xbytechat.api.Features.Webhooks.Services;
+using xbytechat.api.Features.Webhooks.DTOs;
+
+public class WebhookQueueWorker : BackgroundService
+{
+    private readonly IWebhookQueueService _queueService;
+    private readonly IServiceScopeFactory _scopeFactory;
+    private readonly ILogger<WebhookQueueWorker> _logger;
+
+    public WebhookQueueWorker(
+        IWebhookQueueService queueService,
+        IServiceScopeFactory scopeFactory,
+        ILogger<WebhookQueueWorker> logger)
+    {
+        _queueService = queueService;
+        _scopeFactory = scopeFactory;
+        _logger = logger;
+    }
+
+    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+    {
+        _logger.LogInformation("🚀 Webhook Queue Worker started.");
+
+        while (!stoppingToken.IsCancellationRequested)
+        {
+            try
+            {
+                var payload = await _queueService.DequeueAsync(stoppingToken);
+                var clonedPayload = payload.Clone(); // ✅ Avoid disposal issue
+
+                using var scope = _scopeFactory.CreateScope();
+
+                // 🔄 Resolve scoped dependencies
+                var dispatcher = scope.ServiceProvider.GetRequiredService<IWhatsAppWebhookDispatcher>();
+                var failureLogger = scope.ServiceProvider.GetRequiredService<IFailedWebhookLogService>();
+
+                // 🚀 Dispatch
+                await dispatcher.DispatchAsync(clonedPayload);
+            }
+            catch (OperationCanceledException)
+            {
+                _logger.LogInformation("🛑 Graceful shutdown requested.");
+                break;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "❌ Error while processing webhook payload.");
+
+                try
+                {
+                    using var scope = _scopeFactory.CreateScope();
+                    var failureLogger = scope.ServiceProvider.GetRequiredService<IFailedWebhookLogService>();
+
+                    var fallback = new FailedWebhookLogDto
+                    {
+                        SourceModule = "WebhookQueueWorker",
+                        FailureType = "DispatchError",
+                        ErrorMessage = ex.Message,
+                       // RawJson = ex.Data["payload"]?.ToString() ?? "(unavailable)",
+                        RawJson = ex.Data["payload"]?.ToString() ?? "{}",
+                        CreatedAt = DateTime.UtcNow
+                    };
+
+                    await failureLogger.LogFailureAsync(fallback);
+                }
+                catch (Exception innerEx)
+                {
+                    _logger.LogError(innerEx, "⚠️ Failed to log to FailedWebhookLogs table.");
+                }
+            }
+        }
+
+        _logger.LogInformation("🛑 Webhook Queue Worker stopped.");
+    }
+}
+ 
+ 
+====================================================== 
+FILE: D:\xbytechat\xbytechat-api\xbytechat-api\Features\Webhooks\Controllers\FailedWebhookLogsController.cs 
+====================================================== 
+ 
+﻿using Microsoft.AspNetCore.Mvc;
+using xbytechat.api.Features.Tracking.Services;
+using xbytechat.api.Features.Tracking.Models;
+using Microsoft.EntityFrameworkCore;
+using xbytechat.api.Features.Webhooks.Services;
+
+namespace xbytechat.api.Features.Tracking.Controllers
+{
+    [ApiController]
+    [Route("api/failed-webhooks")]
+    public class FailedWebhookLogsController : ControllerBase
+    {
+        private readonly IFailedWebhookLogService _service;
+
+        public FailedWebhookLogsController(IFailedWebhookLogService service)
+        {
+            _service = service;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllAsync()
+        {
+            var logs = await _service.GetAllAsync();
+            return Ok(logs);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(Guid id)
+        {
+            var log = await _service.GetByIdAsync(id);
+            if (log == null)
+                return NotFound();
+
+            return Ok(log);
+        }
+    }
+}
+ 
+ 
+====================================================== 
+FILE: D:\xbytechat\xbytechat-api\xbytechat-api\Features\Webhooks\Controllers\MaintenanceController.cs 
+====================================================== 
+ 
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using xbytechat.api.Features.Webhooks.Models;
+using xbytechat.api.Features.Webhooks.Services;
+
+namespace xbytechat.api.Features.Webhooks.Controllers
+{
+    [ApiController]
+    [Route("api/webhooks")]
+    public class MaintenanceController : ControllerBase
+    {
+        private readonly AppDbContext _context;
+        private readonly IMaintenanceService _maintenance;
+
+        public MaintenanceController(AppDbContext context, IMaintenanceService maintenance)
+        {
+            _context = context;
+            _maintenance = maintenance;
+        }
+
+        // ✅ Injected Test Log for Dev Testing
+        [HttpPost("inject-test-log")]
+        public async Task<IActionResult> InjectTestLog()
+        {
+            var testLog = new FailedWebhookLog
+            {
+                SourceModule = "WebhookQueueWorker",
+                FailureType = "DispatchError",
+                ErrorMessage = "🧪 Simulated webhook dispatch failure for testing.",
+                RawJson = "{\"sample\":\"test_payload\",\"reason\":\"unit_test\"}",
+                CreatedAt = DateTime.UtcNow
+            };
+
+            _context.FailedWebhookLogs.Add(testLog);
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "✅ Injected test log successfully." });
+        }
+
+        // ✅ Manual Cleanup Trigger
+        [HttpPost("cleanup-now")]
+        public async Task<IActionResult> CleanupNow()
+        {
+            var cutoff = DateTime.UtcNow.AddDays(-7);
+            var oldLogs = await _context.FailedWebhookLogs
+                .Where(x => x.CreatedAt < cutoff)
+                .ToListAsync();
+
+            if (!oldLogs.Any())
+                return Ok(new { message = "✅ No logs to delete." });
+
+            _context.FailedWebhookLogs.RemoveRange(oldLogs);
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = $"✅ Deleted {oldLogs.Count} old logs." });
+        }
+
+        // ✅ Count of all failed logs
+        [HttpGet("failed/count")]
+        public async Task<IActionResult> GetFailedCount()
+        {
+            var count = await _context.FailedWebhookLogs.CountAsync();
+            return Ok(count);
+        }
+
+        // ✅ Cleanup Setting Status
+             [HttpGet("settings")]
+        public async Task<IActionResult> GetCleanupStatus()
+        {
+            var enabled = await _maintenance.IsAutoCleanupEnabledAsync();
+            var lastRun = await _maintenance.GetLastCleanupTimeAsync();
+
+            return Ok(new
+            {
+                enabled,
+                lastCleanupAt = lastRun
+            });
+        }
+
+        // ✅ Enable Auto Cleanup
+        [HttpPost("enable-cleanup")]
+        public async Task<IActionResult> EnableCleanup()
+        {
+            await _maintenance.EnableAutoCleanupAsync();
+            return Ok(new { message = "✅ Auto-cleanup enabled." });
+        }
+
+        // ✅ Disable Auto Cleanup
+        [HttpPost("disable-cleanup")]
+        public async Task<IActionResult> DisableCleanup()
+        {
+            await _maintenance.DisableAutoCleanupAsync();
+            return Ok(new { message = "✅ Auto-cleanup disabled." });
+        }
+    }
+}
+ 
+ 
+====================================================== 
+FILE: D:\xbytechat\xbytechat-api\xbytechat-api\Features\Webhooks\Controllers\WebhookTestController.cs 
+====================================================== 
+ 
+﻿using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
+using xbytechat.api.Features.Webhooks.Services;
+
+namespace xbytechat.api.Features.Webhooks.Controllers
+{
+    [ApiController]
+    [Route("api/webhooks/test")]
+    public class WebhookTestController : ControllerBase
+    {
+        private readonly IWebhookQueueService _queue;
+
+        public WebhookTestController(IWebhookQueueService queue)
+        {
+            _queue = queue;
+        }
+
+        [HttpPost("simulate-failure")]
+        public IActionResult SimulateWebhookFailure()
+        {
+            var fakePayload = new
+            {
+                entry = new[]
+                {
+                    new
+                    {
+                        changes = new[]
+                        {
+                            new
+                            {
+                                value = new
+                                {
+                                    // This will cause dispatcher to throw due to invalid structure
+                                    unexpected = "🧪 Simulated bad structure"
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+
+            var json = JsonSerializer.Serialize(fakePayload);
+            var element = JsonDocument.Parse(json).RootElement;
+
+            _queue.Enqueue(element);
+
+            return Ok(new
+            {
+                message = "✅ Test payload enqueued to simulate failure.",
+                enqueued = true
+            });
+        }
+    }
+}
+ 
+ 
+====================================================== 
+FILE: D:\xbytechat\xbytechat-api\xbytechat-api\Features\Webhooks\Controllers\WhatsAppWebhookController.cs 
+====================================================== 
+ 
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using System.Text.Json;
+using xbytechat.api.Features.Tracking.DTOs;
+using xbytechat.api.Features.Webhooks.Services;
+
+namespace xbytechat.api.Features.Webhooks.Controllers
+{
+    [ApiController]
+    [Route("api/webhooks/whatsapp")]
+    public class WhatsAppWebhookController : ControllerBase
+    {
+        private readonly ILogger<WhatsAppWebhookController> _logger;
+        private readonly IConfiguration _config;
+        private readonly AppDbContext _context;
+        private readonly IWhatsAppWebhookService _webhookService;
+        private readonly IWebhookQueueService _queue;
+            public WhatsAppWebhookController(ILogger<WhatsAppWebhookController> logger,
+            IConfiguration config, AppDbContext context, IWhatsAppWebhookService webhookService, IWebhookQueueService queue)
+        {
+            _logger = logger;
+            _config = config;
+            _context = context;
+            _webhookService = webhookService;
+            _queue = queue;
+        }
+
+        // ✅ Step 1: Meta verification endpoint (GET)
+        // Meta calls this to verify your webhook with hub.verify_token and expects you to return hub.challenge
+        [HttpGet]
+        public IActionResult VerifyWebhook(
+            [FromQuery(Name = "hub.mode")] string mode,
+            [FromQuery(Name = "hub.verify_token")] string token,
+            [FromQuery(Name = "hub.challenge")] string challenge)
+        {
+            // 🔐 Load your secret token from config or environment
+            var expectedToken = _config["WhatsApp:MetaToken"];
+
+            if (mode == "subscribe" && token == expectedToken)
+            {
+                _logger.LogInformation("✅ WhatsApp webhook verified successfully.");
+                return Ok(challenge); // Meta expects a 200 OK with the challenge value
+            }
+
+            _logger.LogWarning("❌ WhatsApp webhook verification failed.");
+            return Forbid("Token mismatch.");
+        }
+
+     
+        [HttpPost]
+        public IActionResult HandleStatus([FromBody] JsonElement payload)
+        {
+            _logger.LogWarning("📥 Webhook received at controller:\n" + payload.ToString());
+
+            try
+            {
+                var cloned = payload.Clone(); // Important to clone here
+                _queue.Enqueue(cloned);
+
+                _logger.LogInformation("📥 Webhook payload enqueued successfully.");
+                return Ok(new { received = true });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "❌ Failed to enqueue WhatsApp webhook payload.");
+                return StatusCode(500, new { error = "Webhook queue failed" });
+            }
+        }
+
+
+    }
+}
+ 
+ 
+====================================================== 
+FILE: D:\xbytechat\xbytechat-api\xbytechat-api\Features\Webhooks\DTOs\FailedWebhookLogDto.cs 
+====================================================== 
+ 
+﻿using System;
+
+namespace xbytechat.api.Features.Webhooks.DTOs
+{
+    public class FailedWebhookLogDto
+    {
+        public string? ErrorMessage { get; set; }
+        public string? SourceModule { get; set; }
+        public string? FailureType { get; set; }
+        public string RawJson { get; set; } = string.Empty;
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    }
+}
+ 
+ 
+====================================================== 
+FILE: D:\xbytechat\xbytechat-api\xbytechat-api\Features\Webhooks\Models\FailedWebhookLog.cs 
+====================================================== 
+ 
+﻿using System;
+
+namespace xbytechat.api.Features.Webhooks.Models
+{
+    public class FailedWebhookLog
+    {
+        public Guid Id { get; set; } = Guid.NewGuid();
+
+        // 🧠 Debug Metadata
+        public string? ErrorMessage { get; set; }
+        public string? SourceModule { get; set; } // e.g., StatusProcessor, ClickProcessor
+        public string? FailureType { get; set; }  // e.g., JSON_PARSE_ERROR, DB_LOOKUP_FAILED
+
+        // 📦 Raw Data Snapshot
+        public string RawJson { get; set; } = string.Empty;
+
+        // 🕒 Timeline
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    }
+}
+ 
+ 
+====================================================== 
+FILE: D:\xbytechat\xbytechat-api\xbytechat-api\Features\Webhooks\Models\WebhookSettings.cs 
+====================================================== 
+ 
+﻿namespace xbytechat.api.Features.Webhooks.Models
+{
+    public class WebhookSettings
+    {
+        public Guid Id { get; set; } = Guid.NewGuid();
+        public bool AutoCleanupEnabled { get; set; } = true;
+        public DateTime? LastCleanupAt { get; set; }
+    }
+}
+ 
+ 
+====================================================== 
+FILE: D:\xbytechat\xbytechat-api\xbytechat-api\Features\Webhooks\Services\FailedWebhookLogCleanupService.cs 
+====================================================== 
+ 
+﻿using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+
+namespace xbytechat.api.Features.Webhooks.Services
+{
+    public class FailedWebhookLogCleanupService : BackgroundService
+    {
+        private readonly ILogger<FailedWebhookLogCleanupService> _logger;
+        private readonly IServiceProvider _services;
+        private readonly TimeSpan _interval = TimeSpan.FromHours(24); // daily run
+
+        public FailedWebhookLogCleanupService(ILogger<FailedWebhookLogCleanupService> logger, IServiceProvider services)
+        {
+            _logger = logger;
+            _services = services;
+        }
+
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+        {
+            _logger.LogInformation("🧹 FailedWebhookLogCleanupService started.");
+
+            while (!stoppingToken.IsCancellationRequested)
+            {
+                try
+                {
+                    using var scope = _services.CreateScope();
+                    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+
+                    var cutoff = DateTime.UtcNow.AddDays(-7);
+                    var oldLogs = await db.FailedWebhookLogs
+                        .Where(x => x.CreatedAt < cutoff)
+                        .ToListAsync(stoppingToken);
+
+                    if (oldLogs.Any())
+                    {
+                        db.FailedWebhookLogs.RemoveRange(oldLogs);
+                        await db.SaveChangesAsync(stoppingToken);
+                        _logger.LogInformation("🧹 Deleted {Count} old failed webhook logs.", oldLogs.Count);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "❌ Failed to clean up old webhook logs.");
+                }
+
+                await Task.Delay(_interval, stoppingToken); // wait before next cleanup
+            }
+
+            _logger.LogInformation("🛑 FailedWebhookLogCleanupService stopped.");
+        }
+    }
+}
+ 
+ 
+====================================================== 
+FILE: D:\xbytechat\xbytechat-api\xbytechat-api\Features\Webhooks\Services\FailedWebhookLogService.cs 
+====================================================== 
+ 
+﻿using System;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using xbytechat.api.Features.Webhooks.DTOs;
+using xbytechat.api.Features.Webhooks.Models;
+
+namespace xbytechat.api.Features.Webhooks.Services
+{
+    public class FailedWebhookLogService : IFailedWebhookLogService
+    {
+        private readonly AppDbContext _context;
+        private readonly ILogger<FailedWebhookLogService> _logger;
+
+        public FailedWebhookLogService(AppDbContext context, ILogger<FailedWebhookLogService> logger)
+        {
+            _context = context;
+            _logger = logger;
+        }
+
+        public async Task LogFailureAsync(FailedWebhookLogDto dto)
+        {
+            try
+            {
+                var log = new FailedWebhookLog
+                {
+                    ErrorMessage = dto.ErrorMessage,
+                    SourceModule = dto.SourceModule,
+                    FailureType = dto.FailureType,
+                    RawJson = dto.RawJson,
+                    CreatedAt = dto.CreatedAt
+                };
+
+                await _context.FailedWebhookLogs.AddAsync(log);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "❌ Failed to persist webhook error log");
+            }
+        }
+
+        public async Task<List<FailedWebhookLog>> GetAllAsync()
+        {
+            return await _context.FailedWebhookLogs
+                .OrderByDescending(x => x.CreatedAt)
+                .Take(100) // prevent DB overload
+                .ToListAsync();
+        }
+
+        public async Task<FailedWebhookLog?> GetByIdAsync(Guid id)
+        {
+            return await _context.FailedWebhookLogs.FindAsync(id);
+        }
+
+    }
+}
+ 
+ 
+====================================================== 
+FILE: D:\xbytechat\xbytechat-api\xbytechat-api\Features\Webhooks\Services\IFailedWebhookLogService.cs 
+====================================================== 
+ 
+﻿using System.Threading.Tasks;
+using xbytechat.api.Features.Webhooks.DTOs;
+using xbytechat.api.Features.Webhooks.Models;
+
+namespace xbytechat.api.Features.Webhooks.Services
+{
+    public interface IFailedWebhookLogService
+    {
+        Task LogFailureAsync(FailedWebhookLogDto dto);
+        Task<List<FailedWebhookLog>> GetAllAsync();
+        Task<FailedWebhookLog?> GetByIdAsync(Guid id);
+    }
+}
+ 
+ 
+====================================================== 
+FILE: D:\xbytechat\xbytechat-api\xbytechat-api\Features\Webhooks\Services\IMaintenanceService.cs 
+====================================================== 
+ 
+﻿namespace xbytechat.api.Features.Webhooks.Services
+{
+    public interface IMaintenanceService
+    {
+        Task<bool> IsAutoCleanupEnabledAsync();
+        Task EnableAutoCleanupAsync();
+        Task DisableAutoCleanupAsync();
+        Task<DateTime?> GetLastCleanupTimeAsync();
+        Task<int> RunCleanupAsync();
+    }
+}
+ 
+ 
+====================================================== 
+FILE: D:\xbytechat\xbytechat-api\xbytechat-api\Features\Webhooks\Services\IWebhookQueueService.cs 
+====================================================== 
+ 
+﻿using System.Text.Json;
+using xbytechat.api.Features.Tracking.DTOs;
+
+namespace xbytechat.api.Features.Webhooks.Services
+{
+    public interface IWebhookQueueService
+    {
+        void Enqueue(JsonElement payload);
+        ValueTask<JsonElement> DequeueAsync(CancellationToken cancellationToken);
+        int GetQueueLength();
+    }
+}
+ 
+ 
+====================================================== 
+FILE: D:\xbytechat\xbytechat-api\xbytechat-api\Features\Webhooks\Services\IWhatsAppWebhookDispatcher.cs 
+====================================================== 
+ 
+﻿using System.Text.Json;
+using System.Threading.Tasks;
+
+namespace xbytechat.api.Features.Webhooks.Services
+{
+    public interface IWhatsAppWebhookDispatcher
+    {
+        Task DispatchAsync(JsonElement payload);
+    }
+}
+ 
+ 
+====================================================== 
+FILE: D:\xbytechat\xbytechat-api\xbytechat-api\Features\Webhooks\Services\IWhatsAppWebhookService.cs 
+====================================================== 
+ 
+﻿using System.Text.Json;
+using System.Threading.Tasks;
+
+namespace xbytechat.api.Features.Webhooks.Services
+{
+    public interface IWhatsAppWebhookService
+    {
+        Task ProcessStatusUpdateAsync(JsonElement payload);
+    }
+}
+ 
+ 
+====================================================== 
+FILE: D:\xbytechat\xbytechat-api\xbytechat-api\Features\Webhooks\Services\MaintenanceService.cs 
+====================================================== 
+ 
+﻿using Microsoft.EntityFrameworkCore;
+using xbytechat.api.Features.Webhooks.Models;
+
+namespace xbytechat.api.Features.Webhooks.Services
+{
+    public class MaintenanceService : IMaintenanceService
+    {
+        private readonly AppDbContext _context;
+
+        public MaintenanceService(AppDbContext context)
+        {
+            _context = context;
+        }
+
+        public async Task<bool> IsAutoCleanupEnabledAsync()
+        {
+            var setting = await _context.WebhookSettings
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
+
+            return setting?.AutoCleanupEnabled ?? false;
+        }
+
+        public async Task<DateTime?> GetLastCleanupTimeAsync()
+        {
+            return await _context.WebhookSettings
+                .AsNoTracking()
+                .Select(s => s.LastCleanupAt)
+                .FirstOrDefaultAsync();
+        }
+
+        public async Task EnableAutoCleanupAsync()
+        {
+            var setting = await GetOrCreateAsync();
+            setting.AutoCleanupEnabled = true;
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DisableAutoCleanupAsync()
+        {
+            var setting = await GetOrCreateAsync();
+            setting.AutoCleanupEnabled = false;
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<int> RunCleanupAsync()
+        {
+            var threshold = DateTime.UtcNow.AddDays(-7);
+            var oldLogs = await _context.FailedWebhookLogs
+                .Where(l => l.CreatedAt < threshold)
+                .ToListAsync();
+
+            if (oldLogs.Any())
+                _context.FailedWebhookLogs.RemoveRange(oldLogs);
+
+            var setting = await GetOrCreateAsync();
+            setting.LastCleanupAt = DateTime.UtcNow;
+
+            await _context.SaveChangesAsync();
+            return oldLogs.Count;
+        }
+
+        private async Task<WebhookSettings> GetOrCreateAsync()
+        {
+            var setting = await _context.WebhookSettings.FirstOrDefaultAsync();
+            if (setting == null)
+            {
+                setting = new WebhookSettings
+                {
+                    AutoCleanupEnabled = false,
+                    LastCleanupAt = null
+                };
+                _context.WebhookSettings.Add(setting);
+                await _context.SaveChangesAsync();
+            }
+            return setting;
+        }
+    }
+}
+ 
+ 
+====================================================== 
+FILE: D:\xbytechat\xbytechat-api\xbytechat-api\Features\Webhooks\Services\WebhookQueueService.cs 
+====================================================== 
+ 
+﻿using System.Text.Json;
+using System.Threading.Channels;
+
+namespace xbytechat.api.Features.Webhooks.Services
+{
+    public class WebhookQueueService : IWebhookQueueService
+    {
+        private readonly Channel<JsonElement> _queue;
+
+        public WebhookQueueService()
+        {
+            var options = new BoundedChannelOptions(5000)
+            {
+                FullMode = BoundedChannelFullMode.Wait,
+                SingleReader = true,
+                SingleWriter = false
+            };
+
+            _queue = Channel.CreateBounded<JsonElement>(options);
+        }
+
+        public void Enqueue(JsonElement item)
+        {
+            if (!_queue.Writer.TryWrite(item))
+            {
+                throw new InvalidOperationException("⚠️ Webhook queue is full.");
+            }
+        }
+
+        public async ValueTask<JsonElement> DequeueAsync(CancellationToken cancellationToken)
+        {
+            return await _queue.Reader.ReadAsync(cancellationToken);
+        }
+
+        public int GetQueueLength() => _queue.Reader.Count;
+    }
+}
+ 
+ 
+====================================================== 
+FILE: D:\xbytechat\xbytechat-api\xbytechat-api\Features\Webhooks\Services\WhatsAppWebhookDispatcher.cs 
+====================================================== 
+ 
+﻿using System;
+using System.Text.Json;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using xbytechat.api.Features.Webhooks.Services.Processors;
+using static System.Net.Mime.MediaTypeNames;
+
+namespace xbytechat.api.Features.Webhooks.Services
+{
+    /// <summary>
+    /// Central dispatcher for WhatsApp webhook events.
+    /// Routes payloads to the appropriate processor based on payload type.
+    /// </summary>
+    public class WhatsAppWebhookDispatcher : IWhatsAppWebhookDispatcher
+    {
+        private readonly IStatusWebhookProcessor _statusProcessor;
+        private readonly ITemplateWebhookProcessor _templateProcessor;
+        private readonly ILogger<WhatsAppWebhookDispatcher> _logger;
+        private readonly IClickWebhookProcessor _clickProcessor;
+        private readonly IInboundMessageProcessor _inboundMessageProcessor;
+        public WhatsAppWebhookDispatcher(
+            IStatusWebhookProcessor statusProcessor,
+            ITemplateWebhookProcessor templateProcessor,
+            ILogger<WhatsAppWebhookDispatcher> logger,
+            IClickWebhookProcessor clickProcessor,
+            IInboundMessageProcessor inboundMessageProcessor)
+        {
+            _statusProcessor = statusProcessor;
+            _templateProcessor = templateProcessor;
+            _logger = logger;
+            _clickProcessor = clickProcessor;
+            _inboundMessageProcessor = inboundMessageProcessor;
+        }
+
+
+        //public async Task DispatchAsync(JsonElement payload)
+        //{
+        //    //throw new Exception("🧪 Simulated webhook dispatch failure for testing.");
+        //    _logger.LogWarning("📦 Dispatcher Raw Payload:\n" + payload.ToString());
+        //    try
+        //    {
+        //        if (!payload.TryGetProperty("entry", out var entries)) return;
+
+        //        foreach (var entry in entries.EnumerateArray())
+        //        {
+        //            if (!entry.TryGetProperty("changes", out var changes)) continue;
+
+        //            foreach (var change in changes.EnumerateArray())
+        //            {
+        //                if (!change.TryGetProperty("value", out var value)) continue;
+
+        //                // 📨 Status Updates
+        //                if (value.TryGetProperty("statuses", out _))
+        //                {
+        //                    _logger.LogInformation("📦 Routing to Status Processor");
+        //                    await _statusProcessor.ProcessStatusUpdateAsync(payload);
+        //                    continue;
+        //                }
+
+        //                // 🧾 Template Events
+        //                if (value.TryGetProperty("event", out var eventType)
+        //                    && eventType.GetString()?.StartsWith("template_") == true)
+        //                {
+        //                    _logger.LogInformation("📦 Routing to Template Processor");
+        //                    await _templateProcessor.ProcessTemplateUpdateAsync(payload);
+        //                    continue;
+        //                }
+
+        //                // 🎯 Click Events
+        //                if (value.TryGetProperty("messages", out var messages)
+        //                    && messages.GetArrayLength() > 0
+        //                    && messages[0].TryGetProperty("type", out var type)
+        //                    && type.GetString() == "button")
+        //                {
+        //                    _logger.LogInformation("👉 Routing to Click Processor");
+        //                    await _clickProcessor.ProcessClickAsync(value);
+        //                    continue;
+        //                }
+        //                // 📥 Inbound text/image/audio messages from customer
+        //                if (value.TryGetProperty("messages", out var messages) &&
+        //                    messages.GetArrayLength() > 0 &&
+        //                    messages[0].TryGetProperty("type", out var typeProp))
+        //                {
+        //                    var type = typeProp.GetString();
+
+        //                    if (type is "text" or "image" or "audio")
+        //                    {
+        //                        _logger.LogInformation("💬 Routing to InboundMessageProcessor (type: {Type})", type);
+        //                        await _inboundProcessor.ProcessAsync(value);
+        //                        continue;
+        //                    }
+        //                }
+
+        //                _logger.LogWarning("⚠️ No matching event processor found.");
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _logger.LogError(ex, "❌ Dispatcher failed to process WhatsApp webhook.");
+        //    }
+        //}
+
+        //public async Task DispatchAsync(JsonElement payload)
+        //{
+        //    //clickMessages for button clicks
+        //    // inboundMessages for text / image / audio
+
+        //    _logger.LogWarning("📦 Dispatcher Raw Payload:\n" + payload.ToString());
+
+        //    try
+        //    {
+        //        if (!payload.TryGetProperty("entry", out var entries)) return;
+
+        //        foreach (var entry in entries.EnumerateArray())
+        //        {
+        //            if (!entry.TryGetProperty("changes", out var changes)) continue;
+
+        //            foreach (var change in changes.EnumerateArray())
+        //            {
+        //                if (!change.TryGetProperty("value", out var value)) continue;
+
+        //                // 📨 Status Updates
+        //                if (value.TryGetProperty("statuses", out _))
+        //                {
+        //                    _logger.LogInformation("📦 Routing to Status Processor");
+        //                    await _statusProcessor.ProcessStatusUpdateAsync(payload);
+        //                    continue;
+        //                }
+
+        //                // 🧾 Template Events
+        //                if (value.TryGetProperty("event", out var eventType)
+        //                    && eventType.GetString()?.StartsWith("template_") == true)
+        //                {
+        //                    _logger.LogInformation("📦 Routing to Template Processor");
+        //                    await _templateProcessor.ProcessTemplateUpdateAsync(payload);
+        //                    continue;
+        //                }
+
+        //                // 🎯 Click Events (button type)
+        //                if (value.TryGetProperty("messages", out var clickMessages)
+        //                    && clickMessages.GetArrayLength() > 0
+        //                    && clickMessages[0].TryGetProperty("type", out var clickType)
+        //                    && clickType.GetString() == "button")
+        //                {
+        //                    _logger.LogInformation("👉 Routing to Click Processor");
+        //                    await _clickProcessor.ProcessClickAsync(value);
+        //                    continue;
+        //                }
+
+        //                // 💬 Inbound Messages (text/image/audio)
+        //                if (value.TryGetProperty("messages", out var inboundMessages)
+        //                    && inboundMessages.GetArrayLength() > 0
+        //                    && inboundMessages[0].TryGetProperty("type", out var inboundType))
+        //                {
+        //                    var type = inboundType.GetString();
+
+        //                    if (type is "text" or "image" or "audio")
+        //                    {
+        //                        _logger.LogInformation("💬 Routing to InboundMessageProcessor (type: {Type})", type);
+        //                        await _inboundMessageProcessor.ProcessChatAsync(value);
+        //                        continue;
+        //                    }
+        //                }
+
+        //                _logger.LogWarning("⚠️ No matching event processor found.");
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _logger.LogError(ex, "❌ Dispatcher failed to process WhatsApp webhook.");
+        //    }
+        //}
+        public async Task DispatchAsync(JsonElement payload)
+        {
+            _logger.LogWarning("📦 Dispatcher Raw Payload:\n{Payload}", payload.ToString());
+
+            try
+            {
+                if (!payload.TryGetProperty("entry", out var entries)) return;
+
+                foreach (var entry in entries.EnumerateArray())
+                {
+                    if (!entry.TryGetProperty("changes", out var changes)) continue;
+
+                    foreach (var change in changes.EnumerateArray())
+                    {
+                        if (!change.TryGetProperty("value", out var value)) continue;
+
+                        // 📨 Status Updates
+                        if (value.TryGetProperty("statuses", out _))
+                        {
+                            _logger.LogInformation("📦 Routing to Status Processor");
+                            await _statusProcessor.ProcessStatusUpdateAsync(payload);
+                            continue;
+                        }
+
+                        // 🧾 Template Events
+                        if (value.TryGetProperty("event", out var eventType)
+                            && eventType.GetString()?.StartsWith("template_") == true)
+                        {
+                            _logger.LogInformation("📦 Routing to Template Processor");
+                            await _templateProcessor.ProcessTemplateUpdateAsync(payload);
+                            continue;
+                        }
+
+                        // 🎯 Messages block
+                        if (!value.TryGetProperty("messages", out var msgs) || msgs.GetArrayLength() == 0)
+                        {
+                            _logger.LogDebug("ℹ️ No 'messages' array present.");
+                            continue;
+                        }
+
+                        foreach (var m in msgs.EnumerateArray())
+                        {
+                            if (!m.TryGetProperty("type", out var typeProp))
+                            {
+                                _logger.LogDebug("ℹ️ Message without 'type' field.");
+                                continue;
+                            }
+
+                            var type = typeProp.GetString();
+
+                            // (A) Legacy quick-reply button
+                            if (type == "button")
+                            {
+                                _logger.LogInformation("👉 Routing to Click Processor (legacy 'button')");
+                                await _clickProcessor.ProcessClickAsync(value);
+                                continue;
+                            }
+
+                            // (B) Interactive: button_reply OR list_reply
+                            if (type == "interactive" && m.TryGetProperty("interactive", out var interactive))
+                            {
+                                // button_reply
+                                if (interactive.TryGetProperty("type", out var interactiveType) &&
+                                    interactiveType.GetString() == "button_reply")
+                                {
+                                    _logger.LogInformation("👉 Routing to Click Processor (interactive/button_reply)");
+                                    await _clickProcessor.ProcessClickAsync(value);
+                                    continue;
+                                }
+
+                                // list_reply (list menu selections are also "clicks" in our flow)
+                                if (interactive.TryGetProperty("list_reply", out _))
+                                {
+                                    _logger.LogInformation("👉 Routing to Click Processor (interactive/list_reply)");
+                                    await _clickProcessor.ProcessClickAsync(value);
+                                    continue;
+                                }
+                            }
+
+                            // (C) Inbound plain message types
+                            if (type is "text" or "image" or "audio")
+                            {
+                                _logger.LogInformation("💬 Routing to InboundMessageProcessor (type: {Type})", type);
+                                await _inboundMessageProcessor.ProcessChatAsync(value);
+                                continue;
+                            }
+
+                            _logger.LogDebug("ℹ️ Message type '{Type}' not handled by dispatcher.", type);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "❌ Dispatcher failed to process WhatsApp webhook.");
+            }
+        }
+
+    }
+}
+
+ 
+ 
+====================================================== 
+FILE: D:\xbytechat\xbytechat-api\xbytechat-api\Features\Webhooks\Services\WhatsAppWebhookService.cs 
+====================================================== 
+ 
+﻿using System;
+using System.Linq;
+using System.Text.Json;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+
+namespace xbytechat.api.Features.Webhooks.Services
+{
+    public class WhatsAppWebhookService : IWhatsAppWebhookService
+    {
+        private readonly AppDbContext _context;
+        private readonly ILogger<WhatsAppWebhookService> _logger;
+
+        public WhatsAppWebhookService(AppDbContext context, ILogger<WhatsAppWebhookService> logger)
+        {
+            _context = context;
+            _logger = logger;
+        }
+        public async Task ProcessStatusUpdateAsync(JsonElement payload)
+        {
+            _logger.LogInformation("📦 Processing Webhook Status:\n" +
+                JsonSerializer.Serialize(payload, new JsonSerializerOptions { WriteIndented = true }));
+
+            if (!payload.TryGetProperty("entry", out var entries))
+            {
+                _logger.LogWarning("⚠️ Payload missing 'entry' property.");
+                return;
+            }
+
+            foreach (var entry in entries.EnumerateArray())
+            {
+                if (!entry.TryGetProperty("changes", out var changes)) continue;
+
+                foreach (var change in changes.EnumerateArray())
+                {
+                    if (!change.TryGetProperty("value", out var value)) continue;
+
+                    if (!value.TryGetProperty("statuses", out var statuses)) continue;
+
+                    foreach (var status in statuses.EnumerateArray())
+                    {
+                        string? messageId = status.TryGetProperty("id", out var idProp) ? idProp.GetString() : null;
+                        string? statusText = status.TryGetProperty("status", out var statusProp) ? statusProp.GetString() : null;
+                        long timestamp = status.TryGetProperty("timestamp", out var tsProp) && tsProp.ValueKind == JsonValueKind.String
+                                         && long.TryParse(tsProp.GetString(), out var parsedTs)
+                                         ? parsedTs
+                                         : (tsProp.ValueKind == JsonValueKind.Number ? tsProp.GetInt64() : 0);
+
+                        if (string.IsNullOrEmpty(messageId) || string.IsNullOrEmpty(statusText))
+                        {
+                            _logger.LogWarning("⚠️ Missing messageId or statusText in webhook payload.");
+                            continue;
+                        }
+
+                        var log = await _context.CampaignSendLogs
+                            //.AsNoTracking()
+                            .FirstOrDefaultAsync(l => l.MessageId == messageId);
+
+                        if (log != null)
+                        {
+                            var time = DateTimeOffset.FromUnixTimeSeconds(timestamp).UtcDateTime;
+
+                            //log.SendStatus = statusText switch
+                            //{
+                            //    "sent" => "Sent",
+                            //    "delivered" => "Delivered",
+                            //    "read" => "Read",
+                            //    _ => log.SendStatus
+                            //};
+
+                            //if (statusText == "delivered") log.DeliveredAt = time;
+                            //if (statusText == "read") log.ReadAt = time;
+
+                            //await _context.SaveChangesAsync();
+                            // 🔁 Avoid redundant updates
+                            var newStatus = statusText switch
+                            {
+                                "sent" => "Sent",
+                                "delivered" => "Delivered",
+                                "read" => "Read",
+                                _ => null
+                            };
+
+                            bool isUpdated = false;
+
+                            if (!string.IsNullOrEmpty(newStatus) && log.SendStatus != newStatus)
+                            {
+                                log.SendStatus = newStatus;
+                                isUpdated = true;
+                            }
+
+                            if (statusText == "delivered" && log.DeliveredAt == null)
+                            {
+                                log.DeliveredAt = time;
+                                isUpdated = true;
+                            }
+
+                            if (statusText == "read" && log.ReadAt == null)
+                            {
+                                log.ReadAt = time;
+                                isUpdated = true;
+                            }
+
+                            if (isUpdated)
+                            {
+                                await _context.SaveChangesAsync();
+                                _logger.LogInformation($"✅ Log updated for MessageId: {messageId} → {newStatus}");
+                            }
+                            else
+                            {
+                                _logger.LogInformation($"🔁 Duplicate status '{statusText}' skipped for MessageId: {messageId}");
+                            }
+
+                            _logger.LogInformation($"✅ Log updated for MessageId: {messageId} → {statusText}");
+                        }
+                        else
+                        {
+                            _logger.LogWarning($"⚠️ No matching CampaignSendLog for MessageId: {messageId}");
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+}
+ 
+ 
+====================================================== 
+FILE: D:\xbytechat\xbytechat-api\xbytechat-api\Features\Webhooks\Services\Processors\ClickWebhookProcessor.cs 
+====================================================== 
+ 
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using System;
+using System.IO.Pipelines;
+using System.Text.Json;
+using System.Threading.Tasks;
+using xbytechat.api;
+using xbytechat.api.DTOs.Messages;
+using xbytechat.api.Features.CampaignTracking.Models;
+using xbytechat.api.Features.CTAFlowBuilder.Models;
+using xbytechat.api.Features.CTAFlowBuilder.Services;
+using xbytechat.api.Features.MessagesEngine.DTOs;
+using xbytechat.api.Features.MessagesEngine.Services;
+using xbytechat.api.Features.Tracking.DTOs;
+using xbytechat.api.Features.Tracking.Models;
+using xbytechat.api.Features.Tracking.Services;
+using xbytechat.api.Features.Webhooks.Services.Resolvers;
+using xbytechat.api.Helpers;
+using xbytechat.api.Shared.TrackingUtils;
+
+namespace xbytechat.api.Features.Webhooks.Services.Processors
+{
+    public class ClickWebhookProcessor : IClickWebhookProcessor
+    {
+        private readonly ILogger<ClickWebhookProcessor> _logger;
+        private readonly IMessageIdResolver _messageIdResolver;
+        private readonly ITrackingService _trackingService;
+        private readonly AppDbContext _context;
+        private readonly IMessageEngineService _messageEngine;
+        private readonly ICTAFlowService _flowService;
+        private readonly IFlowRuntimeService _flowRuntime;
+        public ClickWebhookProcessor(
+            ILogger<ClickWebhookProcessor> logger,
+            IMessageIdResolver messageIdResolver,
+            ITrackingService trackingService,
+            AppDbContext context,
+            IMessageEngineService messageEngine,
+            ICTAFlowService flowService,
+                        IFlowRuntimeService flowRuntime
+            )
+        {
+            _logger = logger;
+            _messageIdResolver = messageIdResolver;
+            _trackingService = trackingService;
+            _context = context;
+            _messageEngine = messageEngine;
+            _flowService = flowService;
+            _flowRuntime = flowRuntime;
+
+        }
+
+
+        #region Comeneted to add campignsendLogId
+        #endregion
+        public async Task ProcessClickAsync(JsonElement value)
+        {
+            _logger.LogWarning("📥 [ENTERED CLICK PROCESSOR]");
+
+            try
+            {
+                if (!value.TryGetProperty("messages", out var messages) || messages.GetArrayLength() == 0)
+                    return;
+
+                static string Norm(string? s)
+                {
+                    if (string.IsNullOrWhiteSpace(s)) return string.Empty;
+                    return string.Join(' ', s.Split(new[] { ' ', '\t', '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries))
+                                 .Trim()
+                                 .ToLowerInvariant();
+                }
+
+                foreach (var msg in messages.EnumerateArray())
+                {
+                    if (!msg.TryGetProperty("type", out var typeProp))
+                        continue;
+
+                    var type = typeProp.GetString();
+
+                    string? clickMessageId = msg.TryGetProperty("id", out var idProp) ? idProp.GetString() : null;
+                    string? originalMessageId = msg.TryGetProperty("context", out var ctx) && ctx.TryGetProperty("id", out var ctxId)
+                        ? ctxId.GetString()
+                        : null;
+                    string from = msg.TryGetProperty("from", out var fromProp) ? (fromProp.GetString() ?? "") : "";
+
+                    // ——— button label extraction
+                    string? buttonText = null;
+                    if (type == "button")
+                    {
+                        buttonText = msg.TryGetProperty("button", out var btn) &&
+                                     btn.TryGetProperty("text", out var textProp)
+                                       ? textProp.GetString()?.Trim()
+                                       : null;
+                    }
+                    else if (type == "interactive" && msg.TryGetProperty("interactive", out var interactive))
+                    {
+                        if (interactive.TryGetProperty("type", out var intrType) &&
+                            string.Equals(intrType.GetString(), "button_reply", StringComparison.OrdinalIgnoreCase) &&
+                            interactive.TryGetProperty("button_reply", out var br) &&
+                            br.TryGetProperty("title", out var titleProp))
+                        {
+                            buttonText = titleProp.GetString()?.Trim();
+                        }
+                        else if (interactive.TryGetProperty("list_reply", out var lr) &&
+                                 lr.TryGetProperty("title", out var listTitleProp))
+                        {
+                            buttonText = listTitleProp.GetString()?.Trim();
+                        }
+                    }
+
+                    if (string.IsNullOrWhiteSpace(buttonText) || string.IsNullOrWhiteSpace(originalMessageId))
+                    {
+                        _logger.LogDebug("ℹ️ Not a recognized click or missing context.id. type={Type}", type);
+                        continue;
+                    }
+
+                    _logger.LogInformation("🖱️ Button Click → From: {From}, ClickId: {ClickId}, OrigMsgId: {OrigId}, Text: {Text}",
+                        from, clickMessageId, originalMessageId, buttonText);
+
+                    // —— Try 1: originating MessageLog (for flow-sent messages)
+                    var origin = await _context.MessageLogs
+                        .AsNoTracking()
+                        .FirstOrDefaultAsync(m =>
+                            m.MessageId == originalMessageId &&
+                            m.CTAFlowConfigId != null &&
+                            m.CTAFlowStepId != null);
+
+                    Guid businessId;
+                    Guid flowId;
+                    Guid stepId;
+                    string? bundleJson = null;
+                    int? flowVersion = null;
+
+                    if (origin != null)
+                    {
+                        businessId = origin.BusinessId;
+                        flowId = origin.CTAFlowConfigId!.Value;
+                        stepId = origin.CTAFlowStepId!.Value;
+                        bundleJson = origin.ButtonBundleJson;
+                        flowVersion = origin.FlowVersion;
+                    }
+                    else
+                    {
+                        // —— Try 2: first campaign message (CampaignSendLogs)
+                        var sendLog = await _context.CampaignSendLogs
+                            .Include(sl => sl.Campaign)
+                            .AsNoTracking()
+                            .FirstOrDefaultAsync(sl => sl.MessageId == originalMessageId);
+
+                        if (sendLog == null)
+                        {
+                            _logger.LogWarning("❌ No MessageLog or CampaignSendLog for original WAMID {Orig}", originalMessageId);
+                            continue;
+                        }
+
+                        businessId = sendLog.BusinessId != Guid.Empty
+                            ? sendLog.BusinessId
+                            : (sendLog.Campaign?.BusinessId ?? Guid.Empty);
+
+                        if (businessId == Guid.Empty)
+                        {
+                            _logger.LogWarning("❌ Could not resolve BusinessId for WAMID {Orig}", originalMessageId);
+                            continue;
+                        }
+
+                        if (sendLog.CTAFlowConfigId.HasValue && sendLog.CTAFlowStepId.HasValue)
+                        {
+                            flowId = sendLog.CTAFlowConfigId.Value;
+                            stepId = sendLog.CTAFlowStepId.Value;
+                        }
+                        else if (sendLog.Campaign?.CTAFlowConfigId != null)
+                        {
+                            flowId = sendLog.Campaign.CTAFlowConfigId.Value;
+
+                            var entry = await _context.CTAFlowSteps
+                                .Where(s => s.CTAFlowConfigId == flowId)
+                                .OrderBy(s => s.StepOrder)
+                                .Select(s => s.Id)
+                                .FirstOrDefaultAsync();
+
+                            if (entry == Guid.Empty)
+                            {
+                                _logger.LogWarning("❌ No entry step found for flow {Flow}", flowId);
+                                continue;
+                            }
+
+                            stepId = entry;
+                        }
+                        else
+                        {
+                            _logger.LogWarning("❌ No flow context on CampaignSendLog for WAMID {Orig}", originalMessageId);
+                            continue;
+                        }
+
+                        bundleJson = sendLog.ButtonBundleJson;
+                    }
+
+                    // —— Map clicked text -> button index via bundle
+                    short? buttonIndex = null;
+                    FlowBtnBundleNode? hit = null;
+
+                    if (!string.IsNullOrWhiteSpace(bundleJson))
+                    {
+                        try
+                        {
+                            var nodes = System.Text.Json.JsonSerializer
+                                .Deserialize<List<FlowBtnBundleNode>>(bundleJson) ?? new();
+
+                            hit = nodes.FirstOrDefault(n =>
+                                string.Equals(n.t ?? "", buttonText, StringComparison.OrdinalIgnoreCase))
+                                ?? nodes.FirstOrDefault(n => Norm(n.t) == Norm(buttonText));
+
+                            if (hit != null)
+                                buttonIndex = (short)hit.i;
+                        }
+                        catch (Exception ex)
+                        {
+                            _logger.LogWarning(ex, "⚠️ Failed to parse ButtonBundleJson");
+                        }
+                    }
+
+                    // —— Fallback: find link by TEXT for this step
+                    FlowButtonLink? linkMatchedByText = null;
+                    if (buttonIndex == null)
+                    {
+                        var stepLinks = await _context.FlowButtonLinks
+                            .Where(l => l.CTAFlowStepId == stepId)
+                            .OrderBy(l => l.ButtonIndex)
+                            .ToListAsync();
+
+                        if (stepLinks.Count > 0)
+                        {
+                            linkMatchedByText = stepLinks.FirstOrDefault(l =>
+                                string.Equals(l.ButtonText ?? "", buttonText, StringComparison.OrdinalIgnoreCase))
+                                ?? stepLinks.FirstOrDefault(l => Norm(l.ButtonText) == Norm(buttonText));
+
+                            if (linkMatchedByText == null && stepLinks.Count == 1)
+                            {
+                                linkMatchedByText = stepLinks[0];
+                                _logger.LogInformation("🟨 Falling back to single available link for step {Step}", stepId);
+                            }
+
+                            if (linkMatchedByText != null)
+                            {
+                                buttonIndex = (short?)linkMatchedByText.ButtonIndex;
+                                _logger.LogInformation("✅ Mapped click by TEXT to index {Idx} (flow={Flow}, step={Step})",
+                                    buttonIndex, flowId, stepId);
+                            }
+                        }
+                    }
+
+                    if (buttonIndex == null)
+                    {
+                        _logger.LogInformation("🟡 Button text not found in bundle or flow links. Ref={Ref}, Text='{Text}'",
+                            originalMessageId, buttonText);
+                        continue;
+                    }
+
+                    // —— Prefer exact link by index; otherwise use the text-matched link
+                    var link = await _flowService.GetLinkAsync(flowId, stepId, buttonIndex.Value)
+                               ?? linkMatchedByText;
+
+                    if (link == null)
+                    {
+                        _logger.LogInformation("🟡 No button link for (flow={Flow}, step={Step}, idx={Idx})",
+                            flowId, stepId, buttonIndex);
+                        continue;
+                    }
+
+                    // —— SAFETY: resolve index type
+                    short linkIdx = link.ButtonIndex is short si ? si : Convert.ToInt16(link.ButtonIndex);
+                    short resolvedIndex = buttonIndex ?? linkIdx;
+
+                    // —— If this is a terminal/URL button with no next step, DO NOT call the runtime
+                    if (link.NextStepId == null)
+                    {
+                        _logger.LogInformation("🔚 Terminal/URL button: no NextStepId. flow={Flow}, step={Step}, idx={Idx}, text='{Text}'",
+                            flowId, stepId, resolvedIndex, link.ButtonText);
+
+                        // (optional) If you want to trigger URL redirect tracking here, call your tracker.
+                        // await _urlTracker.TrackAsync(...);
+
+                        continue;
+                    }
+
+                    if (_flowRuntime == null)
+                    {
+                        _logger.LogError("❌ _flowRuntime is null. Cannot execute next step. flow={Flow}, step={Step}, idx={Idx}", flowId, stepId, resolvedIndex);
+                        continue;
+                    }
+
+                    // —— Execute next
+                    var ctxObj = new NextStepContext
+                    {
+                        BusinessId = businessId,
+                        FlowId = flowId,
+                        Version = flowVersion ?? 1,
+                        SourceStepId = stepId,
+                        TargetStepId = link.NextStepId,   // not null here
+                        ButtonIndex = resolvedIndex,
+                        MessageLogId = origin?.Id ?? Guid.Empty,
+                        ContactPhone = from,
+                        RequestId = Guid.NewGuid(),
+                        ClickedButton = link
+                    };
+
+                    try
+                    {
+                        var result = await _flowRuntime.ExecuteNextAsync(ctxObj);
+
+                        if (result.Success && !string.IsNullOrWhiteSpace(result.RedirectUrl))
+                        {
+                            _logger.LogInformation("🔗 URL button redirect (logical): {Url}", result.RedirectUrl);
+                        }
+                    }
+                    catch (Exception exRun)
+                    {
+                        _logger.LogError(exRun,
+                            "❌ ExecuteNextAsync failed. ctx: flow={Flow} step={Step} next={Next} idx={Idx} from={From} orig={Orig} text='{Text}'",
+                            ctxObj.FlowId, ctxObj.SourceStepId, ctxObj.TargetStepId, ctxObj.ButtonIndex, from, originalMessageId, buttonText);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "❌ Failed to process CTA button click.");
+            }
+        }
+
+        // matches the compact bundle we store (i,t,ty,v,ns)
+        private sealed class FlowBtnBundleNode
+        {
+            public int i { get; init; }
+            public string? t { get; init; }   // button text/title
+            public string? ty { get; init; }  // button type (URL/QUICK_REPLY/FLOW)
+            public string? v { get; init; }   // value/payload (e.g., URL)
+            public Guid? ns { get; init; }    // next step id
+        }
+
+
+        // matches the compact bundle structure saved in MessageLog.ButtonBundleJson
+
+
+    }
+}
+ 
+ 
+====================================================== 
+FILE: D:\xbytechat\xbytechat-api\xbytechat-api\Features\Webhooks\Services\Processors\IClickWebhookProcessor.cs 
+====================================================== 
+ 
+﻿using System.Text.Json;
+using System.Threading.Tasks;
+
+namespace xbytechat.api.Features.Webhooks.Services.Processors
+{
+    public interface IClickWebhookProcessor
+    {
+        Task ProcessClickAsync(JsonElement value);
+    }
+}
+ 
+ 
+====================================================== 
+FILE: D:\xbytechat\xbytechat-api\xbytechat-api\Features\Webhooks\Services\Processors\IInboundMessageProcessor.cs 
+====================================================== 
+ 
+﻿using System.Text.Json;
+using System.Threading.Tasks;
+
+namespace xbytechat.api.Features.Webhooks.Services.Processors
+{
+    public interface IInboundMessageProcessor
+    {
+        Task ProcessChatAsync(JsonElement value);
+    }
+}
+ 
+ 
+====================================================== 
+FILE: D:\xbytechat\xbytechat-api\xbytechat-api\Features\Webhooks\Services\Processors\InboundMessageProcessor.cs 
+====================================================== 
+ 
+﻿using System;
+using System.Text.Json;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using xbytechat.api;
+using xbytechat.api.Features.Inbox.DTOs;
+using xbytechat.api.CRM.Models;
+using xbytechat.api.Features.Inbox.Hubs;
+using Microsoft.Extensions.DependencyInjection;
+using xbytechat.api.CRM.Interfaces;
+using xbytechat.api.Features.AutoReplyBuilder.Services;
+using xbytechat.api.Features.Inbox.Services;
+using xbytechat.api.Features.MessagesEngine.DTOs;
+using xbytechat.api.Features.MessagesEngine.Services;
+using xbytechat.api.CRM.Services;
+using xbytechat.api.Features.Automation.Services;
+
+
+namespace xbytechat.api.Features.Webhooks.Services.Processors
+{
+    public class InboundMessageProcessor : IInboundMessageProcessor
+    {
+        private readonly AppDbContext _context;
+        private readonly IHubContext<InboxHub> _hubContext;
+        private readonly ILogger<InboundMessageProcessor> _logger;
+        private readonly IInboxService _inboxService;
+        private readonly IServiceScopeFactory _serviceScopeFactory;
+        public InboundMessageProcessor(
+            AppDbContext context,
+            IHubContext<InboxHub> hubContext,
+            ILogger<InboundMessageProcessor> logger,
+            IInboxService inboxService,
+            IServiceScopeFactory serviceScopeFactory)
+        {
+            _context = context;
+            _hubContext = hubContext;
+            _logger = logger;
+            _inboxService = inboxService;
+            _serviceScopeFactory = serviceScopeFactory;
+        }
+
+
+
+        
+        public async Task ProcessChatAsync(JsonElement value)
+        {
+            try
+            {
+                using var scope = _serviceScopeFactory.CreateScope();
+                var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+                var contactService = scope.ServiceProvider.GetRequiredService<IContactService>();
+                var chatSessionStateService = scope.ServiceProvider.GetRequiredService<IChatSessionStateService>();
+                var automationService = scope.ServiceProvider.GetRequiredService<IAutomationService>();
+                var logger = scope.ServiceProvider.GetRequiredService<ILogger<InboundMessageProcessor>>();
+
+                // ✅ 1. Extract WhatsApp metadata and message
+                var msg = value.GetProperty("messages")[0];
+                var contactPhone = msg.GetProperty("from").GetString()!;
+                var content = msg.GetProperty("text").GetProperty("body").GetString();
+                var businessNumber = value.GetProperty("metadata").GetProperty("display_phone_number").GetString()!;
+
+                // ✅ 2. Resolve business by WhatsApp number
+                var business = await db.Businesses
+                    .Include(b => b.WhatsAppSettings)
+                    .FirstOrDefaultAsync(b => b.WhatsAppSettings.WhatsAppBusinessNumber == businessNumber);
+
+                if (business == null)
+                {
+                    logger.LogWarning("❌ Business not found for WhatsApp number: {Number}", businessNumber);
+                    return;
+                }
+
+                var businessId = business.Id;
+
+                // ✅ 3. Find or create contact
+                var contact = await contactService.FindOrCreateAsync(businessId, contactPhone);
+                if (contact == null)
+                {
+                    logger.LogWarning("❌ Could not resolve contact for phone: {Phone}", contactPhone);
+                    return;
+                }
+
+                // ✅ 4. Check chat mode (skip inbox sync if not agent)
+                var mode = await chatSessionStateService.GetChatModeAsync(businessId, contact.Id);
+                var isAgentMode = mode == "agent";
+
+                // ✅ 5. Log incoming message
+                var messageLog = new MessageLog
+                {
+                    Id = Guid.NewGuid(),
+                    BusinessId = businessId,
+                    ContactId = contact.Id,
+                    RecipientNumber = contactPhone,
+                    MessageContent = content,
+                    Status = "received",
+                    CreatedAt = DateTime.UtcNow,
+                    SentAt = DateTime.UtcNow,
+                    IsIncoming = true
+                };
+
+                db.MessageLogs.Add(messageLog);
+                await db.SaveChangesAsync();
+
+                // ✅ 6. Try to trigger automation by keyword
+                try
+                {
+                    var triggerKeyword = content.Trim().ToLower();
+                    var handled = await automationService.TryRunFlowByKeywordAsync(
+                        businessId,
+                        triggerKeyword,
+                        contact.PhoneNumber,
+                        sourceChannel: "whatsapp",
+                        industryTag: "default"
+                    );
+
+                    if (!handled)
+                    {
+                        logger.LogInformation("🕵️ No automation flow matched keyword: {Keyword}", triggerKeyword);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    logger.LogError(ex, "❌ Automation flow execution failed.");
+                }
+
+                // ✅ 7. Only sync to inbox if chat mode is agent
+                if (isAgentMode)
+                {
+                    var inboxService = scope.ServiceProvider.GetRequiredService<IInboxService>();
+                    await inboxService.SaveIncomingMessageAsync(new InboxMessageDto
+                    {
+                        BusinessId = businessId,
+                        ContactId = contact.Id,
+                        RecipientPhone = contact.PhoneNumber,
+                        MessageBody = messageLog.MessageContent,
+                        IsIncoming = true,
+                        Status = messageLog.Status,
+                        SentAt = messageLog.CreatedAt
+                    });
+
+                    logger.LogInformation("📥 Message synced to inbox for contact {Phone}", contactPhone);
+                }
+                else
+                {
+                    logger.LogInformation("🚫 Skipping inbox sync: chat mode is not 'agent'");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "❌ Failed to process inbound WhatsApp chat.");
+            }
+        }
+
+
+    }
+}
+ 
+ 
+====================================================== 
+FILE: D:\xbytechat\xbytechat-api\xbytechat-api\Features\Webhooks\Services\Processors\IStatusWebhookProcessor.cs 
+====================================================== 
+ 
+﻿using System.Text.Json;
+using System.Threading.Tasks;
+
+namespace xbytechat.api.Features.Webhooks.Services.Processors
+{
+    public interface IStatusWebhookProcessor
+    {
+        Task ProcessStatusUpdateAsync(JsonElement payload);
+
+    }
+}
+ 
+ 
+====================================================== 
+FILE: D:\xbytechat\xbytechat-api\xbytechat-api\Features\Webhooks\Services\Processors\ITemplateWebhookProcessor.cs 
+====================================================== 
+ 
+﻿using System.Text.Json;
+using System.Threading.Tasks;
+
+namespace xbytechat.api.Features.Webhooks.Services.Processors
+{
+    public interface ITemplateWebhookProcessor
+    {
+        Task ProcessTemplateUpdateAsync(JsonElement payload);
+    }
+}
+ 
+ 
+====================================================== 
+FILE: D:\xbytechat\xbytechat-api\xbytechat-api\Features\Webhooks\Services\Processors\StatusWebhookProcessor.cs 
+====================================================== 
+ 
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Text.Json;
+using System.Threading.Tasks;
+using xbytechat.api.Features.CampaignTracking.Models;
+using xbytechat.api.Features.Webhooks.Services.Resolvers;
+
+namespace xbytechat.api.Features.Webhooks.Services.Processors
+{
+    public class StatusWebhookProcessor : IStatusWebhookProcessor
+    {
+        private readonly AppDbContext _context;
+        private readonly ILogger<StatusWebhookProcessor> _logger;
+        private readonly IMessageIdResolver _messageIdResolver;
+
+        public StatusWebhookProcessor(
+            AppDbContext context,
+            ILogger<StatusWebhookProcessor> logger,
+            IMessageIdResolver messageIdResolver)
+        {
+            _context = context;
+            _logger = logger;
+            _messageIdResolver = messageIdResolver;
+        }
+
+        // 🔄 Extract statuses from the payload and route them to log resolver
+        public async Task ProcessAsync(JsonElement value)
+        {
+            if (!value.TryGetProperty("statuses", out var statuses))
+            {
+                _logger.LogWarning("⚠️ 'statuses' field missing in webhook payload.");
+                return;
+            }
+
+            foreach (var status in statuses.EnumerateArray())
+            {
+                var messageId = status.GetProperty("id").GetString();
+                var statusText = status.GetProperty("status").GetString();
+
+                // timestamp parsing (works for string or number)
+                long unix = 0;
+                JsonValueKind? tsKind = null;
+                if (status.TryGetProperty("timestamp", out var ts))
+                {
+                    tsKind = ts.ValueKind;
+                    if (ts.ValueKind == JsonValueKind.String && long.TryParse(ts.GetString(), out var parsed))
+                        unix = parsed;
+                    else if (ts.ValueKind == JsonValueKind.Number)
+                        unix = ts.GetInt64();
+                }
+                var time = unix > 0
+                    ? DateTimeOffset.FromUnixTimeSeconds(unix).UtcDateTime
+                    : DateTime.UtcNow;
+
+                _logger.LogDebug("🕓 Parsed timestamp(s): {Unix} kind={Kind}", unix, tsKind?.ToString() ?? "n/a");
+
+                // ✅ First try resolving a CampaignSendLog row via resolver
+                var logId = await _messageIdResolver.ResolveCampaignSendLogIdAsync(messageId);
+
+                if (logId != null)
+                {
+                    var log = await _context.CampaignSendLogs.FirstOrDefaultAsync(l => l.Id == logId.Value);
+                    if (log != null)
+                    {
+                        // Normalize statuses to your app's values
+                        log.SendStatus = statusText switch
+                        {
+                            "sent" => "Sent",
+                            "delivered" => "Delivered",
+                            "read" => "Read",
+                            _ => log.SendStatus
+                        };
+
+                        if (statusText == "delivered") log.DeliveredAt = time;
+                        if (statusText == "read") log.ReadAt = time;
+                        // If provider reports "sent" late and we missed SentAt, keep it consistent
+                        if (statusText == "sent" && log.SentAt == null) log.SentAt = time;
+
+                        await _context.SaveChangesAsync();
+                        _logger.LogInformation("✅ CampaignSendLog updated for MessageId: {MessageId} → {Status}", messageId, statusText);
+                        continue; // done with this status item
+                    }
+                }
+
+                // 🔁 Fallback: update MessageLogs (flow-driven sends) when there's no CampaignSendLog
+                var msg = await _context.MessageLogs.FirstOrDefaultAsync(m => m.MessageId == messageId);
+                if (msg != null)
+                {
+                    switch (statusText)
+                    {
+                        case "sent":
+                            msg.Status = "Sent";
+                            msg.SentAt ??= time;
+                            break;
+                        case "delivered":
+                            msg.Status = "Delivered";
+                            // keep SentAt if it was not set for some reason
+                            msg.SentAt ??= time;
+                            break;
+                        case "read":
+                            msg.Status = "Read";
+                            msg.SentAt ??= time;
+                            break;
+                        default:
+                            // leave as-is for unknown statuses
+                            break;
+                    }
+
+                    await _context.SaveChangesAsync();
+                    _logger.LogInformation("ℹ️ MessageLog updated for MessageId: {MessageId} → {Status}", messageId, statusText);
+                }
+                else
+                {
+                    // lower severity; common when a send failed before obtaining a message id
+                    _logger.LogInformation("ⓘ No matching CampaignSendLog/MessageLog for MessageId: {MessageId}", messageId);
+                }
+            }
+        }
+
+        // 🔁 Entry point from webhook dispatcher
+        public async Task ProcessStatusUpdateAsync(JsonElement payload)
+        {
+            _logger.LogWarning("🔍 Incoming timestamp raw value: {Payload}", payload.ToString());
+
+            // standard WA schema: entry[0].changes[0].value.statuses[]
+            if (!payload.TryGetProperty("entry", out var entryArray) || entryArray.GetArrayLength() == 0)
+                return;
+
+            var entry = entryArray[0];
+            if (!entry.TryGetProperty("changes", out var changesArray) || changesArray.GetArrayLength() == 0)
+                return;
+
+            var change = changesArray[0];
+            if (!change.TryGetProperty("value", out var value))
+                return;
+
+            await ProcessAsync(value);
+        }
+    }
+}
+
+
+//using Microsoft.EntityFrameworkCore;
+//using Microsoft.Extensions.Logging;
+//using System;
+//using System.Text.Json;
+//using System.Threading.Tasks;
+//using xbytechat.api.Features.CampaignTracking.Models;
+//using xbytechat.api.Features.Webhooks.Services.Resolvers;
+
+//namespace xbytechat.api.Features.Webhooks.Services.Processors
+//{
+//    public class StatusWebhookProcessor : IStatusWebhookProcessor
+//    {
+//        private readonly AppDbContext _context;
+//        private readonly ILogger<StatusWebhookProcessor> _logger;
+//        private readonly IMessageIdResolver _messageIdResolver; // ✅ Injected resolver
+
+//        public StatusWebhookProcessor(
+//            AppDbContext context,
+//            ILogger<StatusWebhookProcessor> logger,
+//            IMessageIdResolver messageIdResolver) // ✅ Accept resolver in constructor
+//        {
+//            _context = context;
+//            _logger = logger;
+//            _messageIdResolver = messageIdResolver;
+//        }
+
+//        // 🔄 Extract statuses from the payload and route them to log resolver
+//        public async Task ProcessAsync(JsonElement value)
+//        {
+//            if (!value.TryGetProperty("statuses", out var statuses))
+//            {
+//                _logger.LogWarning("⚠️ 'statuses' field missing in webhook payload.");
+//                return;
+//            }
+
+//            foreach (var status in statuses.EnumerateArray())
+//            {
+//                var messageId = status.GetProperty("id").GetString();
+//                var statusText = status.GetProperty("status").GetString();
+//                //var timestamp = status.TryGetProperty("timestamp", out var ts) ? ts.GetInt64() : 0;
+//                //var timestamp = status.TryGetProperty("timestamp", out var ts) ? ts.GetInt64() : 0;
+
+//                long timestamp = 0;
+
+//                if (status.TryGetProperty("timestamp", out var ts))
+//                {
+//                    if (ts.ValueKind == JsonValueKind.String && long.TryParse(ts.GetString(), out var parsed))
+//                    {
+//                        timestamp = parsed;
+//                    }
+//                    else if (ts.ValueKind == JsonValueKind.Number)
+//                    {
+//                        timestamp = ts.GetInt64();
+//                    }
+//                }
+
+//                var time = DateTimeOffset.FromUnixTimeSeconds(timestamp).UtcDateTime;
+//                _logger.LogDebug("🕓 Parsed timestamp: {0} from raw type: {1}", timestamp, ts.ValueKind);
+//                // ✅ Resolve the correct CampaignSendLog ID using the new resolver
+//                var logId = await _messageIdResolver.ResolveCampaignSendLogIdAsync(messageId);
+
+//                if (logId == null)
+//                {
+//                    _logger.LogWarning($"⚠️ No matching CampaignSendLog for MessageId: {messageId}");
+//                    continue;
+//                }
+
+//                // 🔍 Now load the row by resolved ID
+//                var log = await _context.CampaignSendLogs.FirstOrDefaultAsync(l => l.Id == logId.Value);
+//                if (log != null)
+//                {
+//                    log.SendStatus = statusText switch
+//                    {
+//                        "sent" => "Sent",
+//                        "delivered" => "Delivered",
+//                        "read" => "Read",
+//                        _ => log.SendStatus
+//                    };
+
+//                    if (statusText == "delivered") log.DeliveredAt = time;
+//                    if (statusText == "read") log.ReadAt = time;
+
+//                    await _context.SaveChangesAsync();
+//                    _logger.LogInformation($"✅ CampaignSendLog updated for MessageId: {messageId} → {statusText}");
+//                }
+//            }
+//        }
+
+//        // 🔁 Entry point from webhook dispatcher
+//        public async Task ProcessStatusUpdateAsync(JsonElement payload)
+//        {
+//            _logger.LogWarning("🔍 Incoming timestamp raw value: {0}", payload.ToString());
+//            var entry = payload.GetProperty("entry")[0];
+//            var changes = entry.GetProperty("changes")[0];
+//            var value = changes.GetProperty("value");
+
+//            await ProcessAsync(value); // ✅ Unified internal call
+//        }
+//    }
+//}
+ 
+ 
+====================================================== 
+FILE: D:\xbytechat\xbytechat-api\xbytechat-api\Features\Webhooks\Services\Processors\TemplateWebhookProcessor.cs 
+====================================================== 
+ 
+﻿using System;
+using System.Text.Json;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+
+namespace xbytechat.api.Features.Webhooks.Services.Processors
+{
+    public class TemplateWebhookProcessor : ITemplateWebhookProcessor
+    {
+        private readonly ILogger<TemplateWebhookProcessor> _logger;
+
+        public TemplateWebhookProcessor(ILogger<TemplateWebhookProcessor> logger)
+        {
+            _logger = logger;
+        }
+
+        public async Task ProcessTemplateUpdateAsync(JsonElement payload)
+        {
+            try
+            {
+                var entry = payload.GetProperty("entry")[0];
+                var changes = entry.GetProperty("changes")[0];
+                var value = changes.GetProperty("value");
+
+                var eventType = value.GetProperty("event").GetString();
+                var templateId = value.TryGetProperty("message_template_id", out var idProp)
+                                 ? idProp.GetString() : "(unknown)";
+
+                _logger.LogInformation($"🧾 Template Event Received: {eventType} for ID: {templateId}");
+
+                // 🧠 You can store in DB or show in admin logs in the future
+
+                await Task.CompletedTask;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "❌ Failed to process template webhook update.");
+            }
+        }
+    }
+}
+ 
+ 
+====================================================== 
+FILE: D:\xbytechat\xbytechat-api\xbytechat-api\Features\Webhooks\Services\Resolvers\IMessageIdResolver.cs 
+====================================================== 
+ 
+﻿using System;
+using System.Threading.Tasks;
+
+namespace xbytechat.api.Features.Webhooks.Services.Resolvers
+{
+    public interface IMessageIdResolver
+    {
+        Task<Guid?> ResolveCampaignSendLogIdAsync(string messageId);
+        Task<Guid?> ResolveMessageLogIdAsync(string messageId);
+        Task<Guid?> ResolveBusinessIdByMessageIdAsync(string messageId);
+
+    }
+}
+ 
+ 
+====================================================== 
+FILE: D:\xbytechat\xbytechat-api\xbytechat-api\Features\Webhooks\Services\Resolvers\MessageIdResolver.cs 
+====================================================== 
+ 
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Threading.Tasks;
+using xbytechat.api;
+
+namespace xbytechat.api.Features.Webhooks.Services.Resolvers
+{
+    public class MessageIdResolver : IMessageIdResolver
+    {
+        private readonly AppDbContext _context;
+        private readonly ILogger<MessageIdResolver> _logger;
+
+        public MessageIdResolver(AppDbContext context, ILogger<MessageIdResolver> logger)
+        {
+            _context = context;
+            _logger = logger;
+        }
+
+        public async Task<Guid?> ResolveCampaignSendLogIdAsync(string messageId)
+        {
+            var log = await _context.CampaignSendLogs
+                                .FirstOrDefaultAsync(l => l.MessageId == messageId);
+
+            if (log == null)
+            {
+                _logger.LogWarning("⚠️ CampaignSendLog not found for MessageId: {MessageId}", messageId);
+                return null;
+            }
+
+            return log.Id;
+        }
+
+        public async Task<Guid?> ResolveMessageLogIdAsync(string messageId)
+        {
+            var log = await _context.MessageLogs
+                .AsNoTracking()
+                .FirstOrDefaultAsync(l => l.MessageId == messageId);
+
+            if (log == null)
+            {
+                _logger.LogWarning("⚠️ MessageLog not found for MessageId: {MessageId}", messageId);
+                return null;
+            }
+
+            return log.Id;
+        }
+
+        public async Task<Guid?> ResolveBusinessIdByMessageIdAsync(string messageId)
+        {
+            var log = await _context.MessageLogs
+                .AsNoTracking()
+                .FirstOrDefaultAsync(l => l.MessageId == messageId);
+
+            if (log == null)
+            {
+                _logger.LogWarning("⚠️ MessageLog not found for MessageId: {MessageId}", messageId);
+                return null;
+            }
+
+            return log.BusinessId;
+        }
+
+    }
+}
+ 
+ 

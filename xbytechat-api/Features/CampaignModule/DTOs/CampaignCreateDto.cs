@@ -21,6 +21,7 @@ namespace xbytechat.api.Features.CampaignModule.DTOs
 
         public Guid? CtaId { get; set; } // 🔘 For legacy CTA support (optional)
 
+        public Guid? CTAFlowConfigId { get; set; }
         public List<CampaignButtonDto> MultiButtons { get; set; } = new(); // ✅ New multi-button support
         public DateTime? ScheduledAt { get; set; } // 📅 Optional future scheduling
 

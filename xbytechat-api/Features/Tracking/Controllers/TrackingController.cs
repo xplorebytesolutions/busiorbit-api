@@ -4,7 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using xbytechat.api; // Your using for AppDbContext
 using xbytechat.api.Features.Tracking.Services;
-using xbytechat.api.Features.Tracking.DTOs; // Your using for DTOs
+using xbytechat.api.Features.Tracking.DTOs;
+using xbytechat.api.Features.CampaignTracking.Worker; // Your using for DTOs
 
 namespace xbytechat.api.Features.Tracking.Controllers
 {
@@ -29,29 +30,100 @@ namespace xbytechat.api.Features.Tracking.Controllers
             return Ok(journeyEvents);
         }
 
- 
+
+        //[HttpGet("redirect/{campaignSendLogId}")]
+        //public async Task<IActionResult> TrackCampaignClick(
+        //    Guid campaignSendLogId,
+        //    [FromQuery] string type,
+        //    [FromQuery] string to)
+        //{
+        //    if (string.IsNullOrWhiteSpace(to))
+        //    {
+        //        return BadRequest("Missing redirect target URL.");
+        //    }
+
+        //    var log = await _context.CampaignSendLogs.FindAsync(campaignSendLogId);
+        //    if (log != null)
+        //    {
+        //        log.IsClicked = true;
+        //        log.ClickedAt = DateTime.UtcNow;
+        //        log.ClickType = type;
+        //        log.IpAddress = HttpContext.Connection.RemoteIpAddress?.ToString();
+        //        await _context.SaveChangesAsync();
+        //    }
+
+        //    return Redirect(to);
+        //}
+
         [HttpGet("redirect/{campaignSendLogId}")]
         public async Task<IActionResult> TrackCampaignClick(
-            Guid campaignSendLogId,
-            [FromQuery] string type,
-            [FromQuery] string to)
+                            Guid campaignSendLogId,
+                            [FromQuery] string type,
+                            [FromQuery] string to,
+                            [FromQuery] int? idx = null,                // optional button index if caller knows it
+                            CancellationToken ct = default)
         {
             if (string.IsNullOrWhiteSpace(to))
-            {
                 return BadRequest("Missing redirect target URL.");
-            }
 
-            var log = await _context.CampaignSendLogs.FindAsync(campaignSendLogId);
+            // Normalize & validate destination
+            if (!Uri.TryCreate(to, UriKind.Absolute, out var destUri))
+                return BadRequest("Destination URL is invalid.");
+
+            // Derive a clickType when not provided
+            string clickType = string.IsNullOrWhiteSpace(type)
+                ? ClassifyClickType(destUri)
+                : type.Trim().ToLowerInvariant();
+
+            // Load parent CSL (so we can copy RunId etc.)
+            var log = await _context.CampaignSendLogs.FindAsync(new object[] { campaignSendLogId }, ct);
             if (log != null)
             {
+                // First-click fast path on the send
                 log.IsClicked = true;
                 log.ClickedAt = DateTime.UtcNow;
-                log.ClickType = type;
+                log.ClickType = clickType;
                 log.IpAddress = HttpContext.Connection.RemoteIpAddress?.ToString();
-                await _context.SaveChangesAsync();
+
+                // Persist a CampaignClickLog row (ties this click to the same run)
+                var ua = Request.Headers.UserAgent.ToString();
+                await _context.CampaignClickLogs.AddAsync(new CampaignClickLog
+                {
+                    Id = Guid.NewGuid(),
+                    CampaignSendLogId = log.Id,
+                    CampaignId = log.CampaignId,
+                    ContactId = log.ContactId,
+                    ButtonIndex = (short)(idx ?? 0),
+                    ButtonTitle = string.IsNullOrWhiteSpace(type) ? "link" : type,
+                    Destination = destUri.ToString(),
+                    ClickedAt = DateTime.UtcNow,
+                    Ip = log.IpAddress ?? "",
+                    UserAgent = ua ?? "",
+                    ClickType = clickType,
+                    RunId = log.RunId              // ← remove if your schema doesn't have RunId yet
+                }, ct);
+
+                await _context.SaveChangesAsync(ct);
             }
 
-            return Redirect(to);
+            // Simple 302 redirect
+            return Redirect(destUri.ToString());
+        }
+
+        // Simple classifier used above
+        private static string ClassifyClickType(Uri u)
+        {
+            if (u == null) return "web";
+            var scheme = u.Scheme?.ToLowerInvariant() ?? "";
+            if (scheme == "tel") return "call";
+            if (scheme == "whatsapp") return "whatsapp";
+            if (scheme is "http" or "https")
+            {
+                var host = u.Host?.ToLowerInvariant() ?? "";
+                if (host.Contains("wa.me") || host.Contains("api.whatsapp.com"))
+                    return "whatsapp";
+            }
+            return "web";
         }
 
         /// <summary>

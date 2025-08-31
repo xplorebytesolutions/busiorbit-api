@@ -201,16 +201,22 @@ namespace xbytechat.api.Features.CTAFlowBuilder.Controllers
             return Ok(flows);
         }
 
+        // 📄 File: D:\...\Features\CTAFlowBuilder\Controllers\CTAFlowController.cs
+
         [HttpPost("execute-visual")]
         public async Task<IActionResult> ExecuteVisualFlowAsync(
             [FromQuery] Guid nextStepId,
-            [FromQuery] Guid trackingLogId)
+            [FromQuery] Guid trackingLogId,
+            // ✅ 1. ADD the new optional parameter to the endpoint
+            [FromQuery] Guid? campaignSendLogId = null)
         {
             var businessIdClaim = User.FindFirst("businessId")?.Value;
             if (!Guid.TryParse(businessIdClaim, out var businessId))
                 return BadRequest("❌ Invalid business ID");
 
-            var result = await _flowService.ExecuteVisualFlowAsync(businessId, nextStepId, trackingLogId);
+            // ✅ 2. PASS the new parameter to the service call
+            var result = await _flowService.ExecuteVisualFlowAsync(businessId, nextStepId, trackingLogId, campaignSendLogId);
+
             if (result.Success)
                 return Ok(result);
             else

@@ -302,5 +302,14 @@ namespace xbytechat.api.Features.CampaignModule.Controllers
 
             return Guid.Parse(claim);
         }
+    
+        [HttpGet("list/{businessId:guid}")]
+        public async Task<IActionResult> GetAvailableFlows(Guid businessId, [FromQuery] bool onlyPublished = true)
+        {
+            var items = await _campaignService.GetAvailableFlowsAsync(businessId, onlyPublished);
+            return Ok(new { success = true, items });
+        }
+
+
     }
 }

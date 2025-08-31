@@ -101,12 +101,80 @@ namespace xbytechat.api.Features.Webhooks.Services
         //    }
         //}
 
+        //public async Task DispatchAsync(JsonElement payload)
+        //{
+        //    //clickMessages for button clicks
+        //    // inboundMessages for text / image / audio
+
+        //    _logger.LogWarning("📦 Dispatcher Raw Payload:\n" + payload.ToString());
+
+        //    try
+        //    {
+        //        if (!payload.TryGetProperty("entry", out var entries)) return;
+
+        //        foreach (var entry in entries.EnumerateArray())
+        //        {
+        //            if (!entry.TryGetProperty("changes", out var changes)) continue;
+
+        //            foreach (var change in changes.EnumerateArray())
+        //            {
+        //                if (!change.TryGetProperty("value", out var value)) continue;
+
+        //                // 📨 Status Updates
+        //                if (value.TryGetProperty("statuses", out _))
+        //                {
+        //                    _logger.LogInformation("📦 Routing to Status Processor");
+        //                    await _statusProcessor.ProcessStatusUpdateAsync(payload);
+        //                    continue;
+        //                }
+
+        //                // 🧾 Template Events
+        //                if (value.TryGetProperty("event", out var eventType)
+        //                    && eventType.GetString()?.StartsWith("template_") == true)
+        //                {
+        //                    _logger.LogInformation("📦 Routing to Template Processor");
+        //                    await _templateProcessor.ProcessTemplateUpdateAsync(payload);
+        //                    continue;
+        //                }
+
+        //                // 🎯 Click Events (button type)
+        //                if (value.TryGetProperty("messages", out var clickMessages)
+        //                    && clickMessages.GetArrayLength() > 0
+        //                    && clickMessages[0].TryGetProperty("type", out var clickType)
+        //                    && clickType.GetString() == "button")
+        //                {
+        //                    _logger.LogInformation("👉 Routing to Click Processor");
+        //                    await _clickProcessor.ProcessClickAsync(value);
+        //                    continue;
+        //                }
+
+        //                // 💬 Inbound Messages (text/image/audio)
+        //                if (value.TryGetProperty("messages", out var inboundMessages)
+        //                    && inboundMessages.GetArrayLength() > 0
+        //                    && inboundMessages[0].TryGetProperty("type", out var inboundType))
+        //                {
+        //                    var type = inboundType.GetString();
+
+        //                    if (type is "text" or "image" or "audio")
+        //                    {
+        //                        _logger.LogInformation("💬 Routing to InboundMessageProcessor (type: {Type})", type);
+        //                        await _inboundMessageProcessor.ProcessChatAsync(value);
+        //                        continue;
+        //                    }
+        //                }
+
+        //                _logger.LogWarning("⚠️ No matching event processor found.");
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _logger.LogError(ex, "❌ Dispatcher failed to process WhatsApp webhook.");
+        //    }
+        //}
         public async Task DispatchAsync(JsonElement payload)
         {
-            //clickMessages for button clicks
-            // inboundMessages for text / image / audio
-
-            _logger.LogWarning("📦 Dispatcher Raw Payload:\n" + payload.ToString());
+            _logger.LogWarning("📦 Dispatcher Raw Payload:\n{Payload}", payload.ToString());
 
             try
             {
@@ -137,33 +205,62 @@ namespace xbytechat.api.Features.Webhooks.Services
                             continue;
                         }
 
-                        // 🎯 Click Events (button type)
-                        if (value.TryGetProperty("messages", out var clickMessages)
-                            && clickMessages.GetArrayLength() > 0
-                            && clickMessages[0].TryGetProperty("type", out var clickType)
-                            && clickType.GetString() == "button")
+                        // 🎯 Messages block
+                        if (!value.TryGetProperty("messages", out var msgs) || msgs.GetArrayLength() == 0)
                         {
-                            _logger.LogInformation("👉 Routing to Click Processor");
-                            await _clickProcessor.ProcessClickAsync(value);
+                            _logger.LogDebug("ℹ️ No 'messages' array present.");
                             continue;
                         }
 
-                        // 💬 Inbound Messages (text/image/audio)
-                        if (value.TryGetProperty("messages", out var inboundMessages)
-                            && inboundMessages.GetArrayLength() > 0
-                            && inboundMessages[0].TryGetProperty("type", out var inboundType))
+                        foreach (var m in msgs.EnumerateArray())
                         {
-                            var type = inboundType.GetString();
+                            if (!m.TryGetProperty("type", out var typeProp))
+                            {
+                                _logger.LogDebug("ℹ️ Message without 'type' field.");
+                                continue;
+                            }
 
+                            var type = typeProp.GetString();
+
+                            // (A) Legacy quick-reply button
+                            if (type == "button")
+                            {
+                                _logger.LogInformation("👉 Routing to Click Processor (legacy 'button')");
+                                await _clickProcessor.ProcessClickAsync(value);
+                                continue;
+                            }
+
+                            // (B) Interactive: button_reply OR list_reply
+                            if (type == "interactive" && m.TryGetProperty("interactive", out var interactive))
+                            {
+                                // button_reply
+                                if (interactive.TryGetProperty("type", out var interactiveType) &&
+                                    interactiveType.GetString() == "button_reply")
+                                {
+                                    _logger.LogInformation("👉 Routing to Click Processor (interactive/button_reply)");
+                                    await _clickProcessor.ProcessClickAsync(value);
+                                    continue;
+                                }
+
+                                // list_reply (list menu selections are also "clicks" in our flow)
+                                if (interactive.TryGetProperty("list_reply", out _))
+                                {
+                                    _logger.LogInformation("👉 Routing to Click Processor (interactive/list_reply)");
+                                    await _clickProcessor.ProcessClickAsync(value);
+                                    continue;
+                                }
+                            }
+
+                            // (C) Inbound plain message types
                             if (type is "text" or "image" or "audio")
                             {
                                 _logger.LogInformation("💬 Routing to InboundMessageProcessor (type: {Type})", type);
                                 await _inboundMessageProcessor.ProcessChatAsync(value);
                                 continue;
                             }
-                        }
 
-                        _logger.LogWarning("⚠️ No matching event processor found.");
+                            _logger.LogDebug("ℹ️ Message type '{Type}' not handled by dispatcher.", type);
+                        }
                     }
                 }
             }

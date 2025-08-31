@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using xbytechat.api.CRM.Models;
 using xbytechat.api.Features.CampaignModule.Models;
 
@@ -10,6 +11,7 @@ namespace xbytechat.api.Features.CampaignTracking.Models
         [Key]
         public Guid Id { get; set; }
 
+        public Guid? RunId { get; set; }
         public string? MessageId { get; set; } // Unique WAMID from WhatsApp
         // 🔗 Foreign Keys
         [Required]
@@ -72,5 +74,13 @@ namespace xbytechat.api.Features.CampaignTracking.Models
         public MessageLog? MessageLog { get; set; }
 
         public Guid BusinessId { get; set; }
+
+        // 🆕 Flow context snapshot for deterministic click resolution
+        public Guid? CTAFlowConfigId { get; set; }   // which flow this send belongs to (optional)
+        public Guid? CTAFlowStepId { get; set; }     // the entry step id (optional)
+
+        [Column(TypeName = "text")]
+        public string? ButtonBundleJson { get; set; }
+
     }
 }

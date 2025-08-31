@@ -9,6 +9,7 @@ namespace xbytechat.api.Features.CampaignTracking.Worker
     {
         [Key] public Guid Id { get; set; }
 
+        public Guid? RunId { get; set; }
         // FK through CampaignSendLog to CampaignId & ContactId
         public Guid CampaignSendLogId { get; set; }
 

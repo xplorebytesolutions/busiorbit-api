@@ -61,6 +61,9 @@ namespace xbytechat.api.Migrations
                     b.Property<Guid>("BusinessId")
                         .HasColumnType("uuid");
 
+                    b.Property<string>("ButtonBundleJson")
+                        .HasColumnType("text");
+
                     b.Property<Guid?>("CTAFlowConfigId")
                         .HasColumnType("uuid");
 
@@ -78,6 +81,9 @@ namespace xbytechat.api.Migrations
 
                     b.Property<string>("ErrorMessage")
                         .HasColumnType("text");
+
+                    b.Property<int?>("FlowVersion")
+                        .HasColumnType("integer");
 
                     b.Property<bool>("IsIncoming")
                         .HasColumnType("boolean");
@@ -524,7 +530,7 @@ namespace xbytechat.api.Migrations
                         {
                             Id = new Guid("30000000-0000-0000-0000-000000000000"),
                             Code = "dashboard.view",
-                            CreatedAt = new DateTime(2025, 8, 28, 7, 50, 38, 604, DateTimeKind.Utc).AddTicks(9574),
+                            CreatedAt = new DateTime(2025, 8, 31, 17, 45, 2, 157, DateTimeKind.Utc).AddTicks(3144),
                             Description = "Permission for dashboard.view",
                             IsActive = true,
                             Name = "dashboard.view"
@@ -533,7 +539,7 @@ namespace xbytechat.api.Migrations
                         {
                             Id = new Guid("30000000-0000-0000-0000-000000000001"),
                             Code = "campaign.view",
-                            CreatedAt = new DateTime(2025, 8, 28, 7, 50, 38, 604, DateTimeKind.Utc).AddTicks(9584),
+                            CreatedAt = new DateTime(2025, 8, 31, 17, 45, 2, 157, DateTimeKind.Utc).AddTicks(3153),
                             Description = "Permission for campaign.view",
                             IsActive = true,
                             Name = "campaign.view"
@@ -542,7 +548,7 @@ namespace xbytechat.api.Migrations
                         {
                             Id = new Guid("30000000-0000-0000-0000-000000000002"),
                             Code = "campaign.create",
-                            CreatedAt = new DateTime(2025, 8, 28, 7, 50, 38, 604, DateTimeKind.Utc).AddTicks(9586),
+                            CreatedAt = new DateTime(2025, 8, 31, 17, 45, 2, 157, DateTimeKind.Utc).AddTicks(3156),
                             Description = "Permission for campaign.create",
                             IsActive = true,
                             Name = "campaign.create"
@@ -551,7 +557,7 @@ namespace xbytechat.api.Migrations
                         {
                             Id = new Guid("30000000-0000-0000-0000-000000000003"),
                             Code = "campaign.delete",
-                            CreatedAt = new DateTime(2025, 8, 28, 7, 50, 38, 604, DateTimeKind.Utc).AddTicks(9589),
+                            CreatedAt = new DateTime(2025, 8, 31, 17, 45, 2, 157, DateTimeKind.Utc).AddTicks(3158),
                             Description = "Permission for campaign.delete",
                             IsActive = true,
                             Name = "campaign.delete"
@@ -560,7 +566,7 @@ namespace xbytechat.api.Migrations
                         {
                             Id = new Guid("30000000-0000-0000-0000-000000000004"),
                             Code = "product.view",
-                            CreatedAt = new DateTime(2025, 8, 28, 7, 50, 38, 604, DateTimeKind.Utc).AddTicks(9590),
+                            CreatedAt = new DateTime(2025, 8, 31, 17, 45, 2, 157, DateTimeKind.Utc).AddTicks(3161),
                             Description = "Permission for product.view",
                             IsActive = true,
                             Name = "product.view"
@@ -569,7 +575,7 @@ namespace xbytechat.api.Migrations
                         {
                             Id = new Guid("30000000-0000-0000-0000-000000000005"),
                             Code = "product.create",
-                            CreatedAt = new DateTime(2025, 8, 28, 7, 50, 38, 604, DateTimeKind.Utc).AddTicks(9593),
+                            CreatedAt = new DateTime(2025, 8, 31, 17, 45, 2, 157, DateTimeKind.Utc).AddTicks(3164),
                             Description = "Permission for product.create",
                             IsActive = true,
                             Name = "product.create"
@@ -578,7 +584,7 @@ namespace xbytechat.api.Migrations
                         {
                             Id = new Guid("30000000-0000-0000-0000-000000000006"),
                             Code = "product.delete",
-                            CreatedAt = new DateTime(2025, 8, 28, 7, 50, 38, 604, DateTimeKind.Utc).AddTicks(9595),
+                            CreatedAt = new DateTime(2025, 8, 31, 17, 45, 2, 157, DateTimeKind.Utc).AddTicks(3166),
                             Description = "Permission for product.delete",
                             IsActive = true,
                             Name = "product.delete"
@@ -587,7 +593,7 @@ namespace xbytechat.api.Migrations
                         {
                             Id = new Guid("30000000-0000-0000-0000-000000000007"),
                             Code = "contacts.view",
-                            CreatedAt = new DateTime(2025, 8, 28, 7, 50, 38, 604, DateTimeKind.Utc).AddTicks(9597),
+                            CreatedAt = new DateTime(2025, 8, 31, 17, 45, 2, 157, DateTimeKind.Utc).AddTicks(3168),
                             Description = "Permission for contacts.view",
                             IsActive = true,
                             Name = "contacts.view"
@@ -596,7 +602,7 @@ namespace xbytechat.api.Migrations
                         {
                             Id = new Guid("30000000-0000-0000-0000-000000000008"),
                             Code = "tags.edit",
-                            CreatedAt = new DateTime(2025, 8, 28, 7, 50, 38, 604, DateTimeKind.Utc).AddTicks(9651),
+                            CreatedAt = new DateTime(2025, 8, 31, 17, 45, 2, 157, DateTimeKind.Utc).AddTicks(3170),
                             Description = "Permission for tags.edit",
                             IsActive = true,
                             Name = "tags.edit"
@@ -605,7 +611,7 @@ namespace xbytechat.api.Migrations
                         {
                             Id = new Guid("30000000-0000-0000-0000-000000000009"),
                             Code = "admin.business.approve",
-                            CreatedAt = new DateTime(2025, 8, 28, 7, 50, 38, 604, DateTimeKind.Utc).AddTicks(9670),
+                            CreatedAt = new DateTime(2025, 8, 31, 17, 45, 2, 157, DateTimeKind.Utc).AddTicks(3183),
                             Description = "Permission for admin.business.approve",
                             IsActive = true,
                             Name = "admin.business.approve"
@@ -614,7 +620,7 @@ namespace xbytechat.api.Migrations
                         {
                             Id = new Guid("30000000-0000-0000-0000-000000000010"),
                             Code = "admin.logs.view",
-                            CreatedAt = new DateTime(2025, 8, 28, 7, 50, 38, 604, DateTimeKind.Utc).AddTicks(9672),
+                            CreatedAt = new DateTime(2025, 8, 31, 17, 45, 2, 157, DateTimeKind.Utc).AddTicks(3185),
                             Description = "Permission for admin.logs.view",
                             IsActive = true,
                             Name = "admin.logs.view"
@@ -709,7 +715,7 @@ namespace xbytechat.api.Migrations
                         new
                         {
                             Id = new Guid("00000000-0000-0000-0000-000000000001"),
-                            CreatedAt = new DateTime(2025, 8, 28, 7, 50, 38, 604, DateTimeKind.Utc).AddTicks(8932),
+                            CreatedAt = new DateTime(2025, 8, 31, 17, 45, 2, 157, DateTimeKind.Utc).AddTicks(2327),
                             Description = "Super Admin",
                             IsActive = true,
                             IsSystemDefined = false,
@@ -718,7 +724,7 @@ namespace xbytechat.api.Migrations
                         new
                         {
                             Id = new Guid("00000000-0000-0000-0000-000000000002"),
-                            CreatedAt = new DateTime(2025, 8, 28, 7, 50, 38, 604, DateTimeKind.Utc).AddTicks(8934),
+                            CreatedAt = new DateTime(2025, 8, 31, 17, 45, 2, 157, DateTimeKind.Utc).AddTicks(2330),
                             Description = "Business Partner",
                             IsActive = true,
                             IsSystemDefined = false,
@@ -727,7 +733,7 @@ namespace xbytechat.api.Migrations
                         new
                         {
                             Id = new Guid("00000000-0000-0000-0000-000000000003"),
-                            CreatedAt = new DateTime(2025, 8, 28, 7, 50, 38, 604, DateTimeKind.Utc).AddTicks(8935),
+                            CreatedAt = new DateTime(2025, 8, 31, 17, 45, 2, 157, DateTimeKind.Utc).AddTicks(2331),
                             Description = "Reseller Partner",
                             IsActive = true,
                             IsSystemDefined = false,
@@ -736,7 +742,7 @@ namespace xbytechat.api.Migrations
                         new
                         {
                             Id = new Guid("00000000-0000-0000-0000-000000000004"),
-                            CreatedAt = new DateTime(2025, 8, 28, 7, 50, 38, 604, DateTimeKind.Utc).AddTicks(8936),
+                            CreatedAt = new DateTime(2025, 8, 31, 17, 45, 2, 157, DateTimeKind.Utc).AddTicks(2333),
                             Description = "Business Owner",
                             IsActive = true,
                             IsSystemDefined = false,
@@ -745,7 +751,7 @@ namespace xbytechat.api.Migrations
                         new
                         {
                             Id = new Guid("00000000-0000-0000-0000-000000000005"),
-                            CreatedAt = new DateTime(2025, 8, 28, 7, 50, 38, 604, DateTimeKind.Utc).AddTicks(8937),
+                            CreatedAt = new DateTime(2025, 8, 31, 17, 45, 2, 157, DateTimeKind.Utc).AddTicks(2334),
                             Description = "Staff",
                             IsActive = true,
                             IsSystemDefined = false,
@@ -788,8 +794,8 @@ namespace xbytechat.api.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("711f93f3-c6c3-4ae8-aa24-c4e573361755"),
-                            AssignedAt = new DateTime(2025, 8, 28, 7, 50, 38, 604, DateTimeKind.Utc).AddTicks(9989),
+                            Id = new Guid("b2ddd2c1-f33e-4983-98bb-9875dd1a5644"),
+                            AssignedAt = new DateTime(2025, 8, 31, 17, 45, 2, 157, DateTimeKind.Utc).AddTicks(3521),
                             IsActive = true,
                             IsRevoked = false,
                             PermissionId = new Guid("30000000-0000-0000-0000-000000000000"),
@@ -797,8 +803,8 @@ namespace xbytechat.api.Migrations
                         },
                         new
                         {
-                            Id = new Guid("db725e4c-7bc0-4a65-a537-65f46fb0048d"),
-                            AssignedAt = new DateTime(2025, 8, 28, 7, 50, 38, 604, DateTimeKind.Utc).AddTicks(9997),
+                            Id = new Guid("b635e084-dc9d-45a0-9c15-a26afc5eba7f"),
+                            AssignedAt = new DateTime(2025, 8, 31, 17, 45, 2, 157, DateTimeKind.Utc).AddTicks(3534),
                             IsActive = true,
                             IsRevoked = false,
                             PermissionId = new Guid("30000000-0000-0000-0000-000000000001"),
@@ -806,8 +812,8 @@ namespace xbytechat.api.Migrations
                         },
                         new
                         {
-                            Id = new Guid("efaed2b9-bf79-4f15-a633-f25f65f1b9ab"),
-                            AssignedAt = new DateTime(2025, 8, 28, 7, 50, 38, 605, DateTimeKind.Utc).AddTicks(17),
+                            Id = new Guid("175680fc-64b6-4c76-b15a-98d7b6fc39f7"),
+                            AssignedAt = new DateTime(2025, 8, 31, 17, 45, 2, 157, DateTimeKind.Utc).AddTicks(3538),
                             IsActive = true,
                             IsRevoked = false,
                             PermissionId = new Guid("30000000-0000-0000-0000-000000000002"),
@@ -815,8 +821,8 @@ namespace xbytechat.api.Migrations
                         },
                         new
                         {
-                            Id = new Guid("3e68fda3-767b-4cd0-95e0-c0126ad39669"),
-                            AssignedAt = new DateTime(2025, 8, 28, 7, 50, 38, 605, DateTimeKind.Utc).AddTicks(22),
+                            Id = new Guid("7ca1dc9f-7412-4bf8-bc8b-f8f2b4ff18aa"),
+                            AssignedAt = new DateTime(2025, 8, 31, 17, 45, 2, 157, DateTimeKind.Utc).AddTicks(3541),
                             IsActive = true,
                             IsRevoked = false,
                             PermissionId = new Guid("30000000-0000-0000-0000-000000000003"),
@@ -824,8 +830,8 @@ namespace xbytechat.api.Migrations
                         },
                         new
                         {
-                            Id = new Guid("65070bb1-fdac-4ccf-bbaa-81f9e30f03da"),
-                            AssignedAt = new DateTime(2025, 8, 28, 7, 50, 38, 605, DateTimeKind.Utc).AddTicks(30),
+                            Id = new Guid("7a2a1b8a-cdf5-4cd4-955a-d65046c36e89"),
+                            AssignedAt = new DateTime(2025, 8, 31, 17, 45, 2, 157, DateTimeKind.Utc).AddTicks(3551),
                             IsActive = true,
                             IsRevoked = false,
                             PermissionId = new Guid("30000000-0000-0000-0000-000000000004"),
@@ -833,8 +839,8 @@ namespace xbytechat.api.Migrations
                         },
                         new
                         {
-                            Id = new Guid("0eb801e8-842e-411a-b95f-a352fcf6f89f"),
-                            AssignedAt = new DateTime(2025, 8, 28, 7, 50, 38, 605, DateTimeKind.Utc).AddTicks(34),
+                            Id = new Guid("d7a90f87-4926-434b-8d95-3c9e58647c47"),
+                            AssignedAt = new DateTime(2025, 8, 31, 17, 45, 2, 157, DateTimeKind.Utc).AddTicks(3555),
                             IsActive = true,
                             IsRevoked = false,
                             PermissionId = new Guid("30000000-0000-0000-0000-000000000005"),
@@ -842,8 +848,8 @@ namespace xbytechat.api.Migrations
                         },
                         new
                         {
-                            Id = new Guid("484e51a8-4f56-417f-a95e-93ff61033886"),
-                            AssignedAt = new DateTime(2025, 8, 28, 7, 50, 38, 605, DateTimeKind.Utc).AddTicks(52),
+                            Id = new Guid("3e553c5b-843a-4e0b-bf42-216778612653"),
+                            AssignedAt = new DateTime(2025, 8, 31, 17, 45, 2, 157, DateTimeKind.Utc).AddTicks(3578),
                             IsActive = true,
                             IsRevoked = false,
                             PermissionId = new Guid("30000000-0000-0000-0000-000000000006"),
@@ -851,8 +857,8 @@ namespace xbytechat.api.Migrations
                         },
                         new
                         {
-                            Id = new Guid("31e684d2-b12c-4029-9a50-85be6a18192f"),
-                            AssignedAt = new DateTime(2025, 8, 28, 7, 50, 38, 605, DateTimeKind.Utc).AddTicks(56),
+                            Id = new Guid("5dc3ce66-5350-4657-bf8b-4885f9235824"),
+                            AssignedAt = new DateTime(2025, 8, 31, 17, 45, 2, 157, DateTimeKind.Utc).AddTicks(3581),
                             IsActive = true,
                             IsRevoked = false,
                             PermissionId = new Guid("30000000-0000-0000-0000-000000000007"),
@@ -860,8 +866,8 @@ namespace xbytechat.api.Migrations
                         },
                         new
                         {
-                            Id = new Guid("c160a6c7-07a8-47e0-ac39-637b35a53e59"),
-                            AssignedAt = new DateTime(2025, 8, 28, 7, 50, 38, 605, DateTimeKind.Utc).AddTicks(59),
+                            Id = new Guid("81070c02-877f-472e-b827-db6bbba33bd2"),
+                            AssignedAt = new DateTime(2025, 8, 31, 17, 45, 2, 157, DateTimeKind.Utc).AddTicks(3584),
                             IsActive = true,
                             IsRevoked = false,
                             PermissionId = new Guid("30000000-0000-0000-0000-000000000008"),
@@ -869,8 +875,8 @@ namespace xbytechat.api.Migrations
                         },
                         new
                         {
-                            Id = new Guid("0124132b-d34c-481d-a733-f6dd64c02568"),
-                            AssignedAt = new DateTime(2025, 8, 28, 7, 50, 38, 605, DateTimeKind.Utc).AddTicks(62),
+                            Id = new Guid("41dee7ea-3cf0-4a35-a5f9-856d122ba68a"),
+                            AssignedAt = new DateTime(2025, 8, 31, 17, 45, 2, 157, DateTimeKind.Utc).AddTicks(3588),
                             IsActive = true,
                             IsRevoked = false,
                             PermissionId = new Guid("30000000-0000-0000-0000-000000000009"),
@@ -878,8 +884,8 @@ namespace xbytechat.api.Migrations
                         },
                         new
                         {
-                            Id = new Guid("3ed30a59-5fe8-4f34-b92d-2eae6c19f8d1"),
-                            AssignedAt = new DateTime(2025, 8, 28, 7, 50, 38, 605, DateTimeKind.Utc).AddTicks(68),
+                            Id = new Guid("b9477047-560b-4ad3-bd16-3c0a8300a0ef"),
+                            AssignedAt = new DateTime(2025, 8, 31, 17, 45, 2, 157, DateTimeKind.Utc).AddTicks(3591),
                             IsActive = true,
                             IsRevoked = false,
                             PermissionId = new Guid("30000000-0000-0000-0000-000000000010"),
@@ -887,8 +893,8 @@ namespace xbytechat.api.Migrations
                         },
                         new
                         {
-                            Id = new Guid("8e9f8211-1766-4008-b7b9-015eb334c308"),
-                            AssignedAt = new DateTime(2025, 8, 28, 7, 50, 38, 605, DateTimeKind.Utc).AddTicks(77),
+                            Id = new Guid("cbf6ac1b-991c-4079-84f4-e6630c0ab13e"),
+                            AssignedAt = new DateTime(2025, 8, 31, 17, 45, 2, 157, DateTimeKind.Utc).AddTicks(3600),
                             IsActive = true,
                             IsRevoked = false,
                             PermissionId = new Guid("30000000-0000-0000-0000-000000000000"),
@@ -896,8 +902,8 @@ namespace xbytechat.api.Migrations
                         },
                         new
                         {
-                            Id = new Guid("04272662-2142-4346-9b04-c829f44058c0"),
-                            AssignedAt = new DateTime(2025, 8, 28, 7, 50, 38, 605, DateTimeKind.Utc).AddTicks(80),
+                            Id = new Guid("c9bab964-9b19-4f1e-b699-8dca3c981d22"),
+                            AssignedAt = new DateTime(2025, 8, 31, 17, 45, 2, 157, DateTimeKind.Utc).AddTicks(3604),
                             IsActive = true,
                             IsRevoked = false,
                             PermissionId = new Guid("30000000-0000-0000-0000-000000000001"),
@@ -905,8 +911,8 @@ namespace xbytechat.api.Migrations
                         },
                         new
                         {
-                            Id = new Guid("6425b294-7571-49b8-a47b-3e86df106956"),
-                            AssignedAt = new DateTime(2025, 8, 28, 7, 50, 38, 605, DateTimeKind.Utc).AddTicks(83),
+                            Id = new Guid("4945ab25-2bb2-4f2b-822a-86bc67e7cafa"),
+                            AssignedAt = new DateTime(2025, 8, 31, 17, 45, 2, 157, DateTimeKind.Utc).AddTicks(3607),
                             IsActive = true,
                             IsRevoked = false,
                             PermissionId = new Guid("30000000-0000-0000-0000-000000000007"),
@@ -914,8 +920,8 @@ namespace xbytechat.api.Migrations
                         },
                         new
                         {
-                            Id = new Guid("bc7cd27e-85f4-4e86-8a26-bd4e0ab10373"),
-                            AssignedAt = new DateTime(2025, 8, 28, 7, 50, 38, 605, DateTimeKind.Utc).AddTicks(93),
+                            Id = new Guid("1908ead2-193f-4ef5-b408-ae44bc41084b"),
+                            AssignedAt = new DateTime(2025, 8, 31, 17, 45, 2, 157, DateTimeKind.Utc).AddTicks(3619),
                             IsActive = true,
                             IsRevoked = false,
                             PermissionId = new Guid("30000000-0000-0000-0000-000000000004"),
@@ -923,8 +929,8 @@ namespace xbytechat.api.Migrations
                         },
                         new
                         {
-                            Id = new Guid("9b720fb7-0f64-4dd9-95ee-4bcb4decfb6c"),
-                            AssignedAt = new DateTime(2025, 8, 28, 7, 50, 38, 605, DateTimeKind.Utc).AddTicks(99),
+                            Id = new Guid("66bd78f6-ad55-4034-a60d-2540705ff83a"),
+                            AssignedAt = new DateTime(2025, 8, 31, 17, 45, 2, 157, DateTimeKind.Utc).AddTicks(3626),
                             IsActive = true,
                             IsRevoked = false,
                             PermissionId = new Guid("30000000-0000-0000-0000-000000000000"),
@@ -932,8 +938,8 @@ namespace xbytechat.api.Migrations
                         },
                         new
                         {
-                            Id = new Guid("74db2ccd-a7d7-4902-920d-1639fcaa3961"),
-                            AssignedAt = new DateTime(2025, 8, 28, 7, 50, 38, 605, DateTimeKind.Utc).AddTicks(104),
+                            Id = new Guid("f62eb640-caa9-4d01-9c9b-7ad79056d586"),
+                            AssignedAt = new DateTime(2025, 8, 31, 17, 45, 2, 157, DateTimeKind.Utc).AddTicks(3630),
                             IsActive = true,
                             IsRevoked = false,
                             PermissionId = new Guid("30000000-0000-0000-0000-000000000007"),
@@ -1437,6 +1443,9 @@ namespace xbytechat.api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<short>("ButtonIndex")
+                        .HasColumnType("smallint");
+
                     b.Property<string>("ButtonSubType")
                         .IsRequired()
                         .HasColumnType("text");
@@ -1475,6 +1484,12 @@ namespace xbytechat.api.Migrations
                     b.Property<Guid>("BusinessId")
                         .HasColumnType("uuid");
 
+                    b.Property<short?>("ButtonIndex")
+                        .HasColumnType("smallint");
+
+                    b.Property<Guid?>("CampaignSendLogId")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("ContactPhone")
                         .HasColumnType("text");
 
@@ -1487,8 +1502,17 @@ namespace xbytechat.api.Migrations
                     b.Property<Guid?>("FlowId")
                         .HasColumnType("uuid");
 
+                    b.Property<Guid?>("MessageLogId")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("RawResponse")
                         .HasColumnType("text");
+
+                    b.Property<Guid?>("RequestId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("RunId")
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("StepId")
                         .HasColumnType("uuid");
@@ -1569,6 +1593,9 @@ namespace xbytechat.api.Migrations
                     b.Property<Guid>("BusinessId")
                         .HasColumnType("uuid");
 
+                    b.Property<Guid?>("CTAFlowConfigId")
+                        .HasColumnType("uuid");
+
                     b.Property<Guid?>("CampaignId")
                         .HasColumnType("uuid");
 
@@ -1635,6 +1662,8 @@ namespace xbytechat.api.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("BusinessId");
+
+                    b.HasIndex("CTAFlowConfigId");
 
                     b.HasIndex("CtaId");
 
@@ -1781,6 +1810,15 @@ namespace xbytechat.api.Migrations
                     b.Property<Guid>("BusinessId")
                         .HasColumnType("uuid");
 
+                    b.Property<string>("ButtonBundleJson")
+                        .HasColumnType("text");
+
+                    b.Property<Guid?>("CTAFlowConfigId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("CTAFlowStepId")
+                        .HasColumnType("uuid");
+
                     b.Property<Guid>("CampaignId")
                         .HasColumnType("uuid");
 
@@ -1850,6 +1888,9 @@ namespace xbytechat.api.Migrations
 
                     b.Property<int>("RetryCount")
                         .HasColumnType("integer");
+
+                    b.Property<Guid?>("RunId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("SendStatus")
                         .HasColumnType("text");
@@ -1947,6 +1988,9 @@ namespace xbytechat.api.Migrations
                         .IsRequired()
                         .HasMaxLength(64)
                         .HasColumnType("character varying(64)");
+
+                    b.Property<Guid?>("RunId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("UserAgent")
                         .IsRequired()
@@ -2889,6 +2933,10 @@ namespace xbytechat.api.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("xbytechat.api.Features.CTAFlowBuilder.Models.CTAFlowConfig", "CTAFlowConfig")
+                        .WithMany()
+                        .HasForeignKey("CTAFlowConfigId");
+
                     b.HasOne("xbytechat.api.Features.CTAManagement.Models.CTADefinition", "Cta")
                         .WithMany()
                         .HasForeignKey("CtaId");
@@ -2898,6 +2946,8 @@ namespace xbytechat.api.Migrations
                         .HasForeignKey("SourceCampaignId");
 
                     b.Navigation("Business");
+
+                    b.Navigation("CTAFlowConfig");
 
                     b.Navigation("Cta");
 

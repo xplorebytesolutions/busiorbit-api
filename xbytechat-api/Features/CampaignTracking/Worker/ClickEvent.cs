@@ -10,6 +10,6 @@ namespace xbytechat.api.Features.CampaignTracking.Worker
         string Ip,
         string UserAgent,
          string ClickType
-
+         
     );
 }

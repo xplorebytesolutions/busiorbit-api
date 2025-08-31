@@ -479,6 +479,7 @@ using System.Net;
 using xbytechat.api.WhatsAppSettings.Providers;
 using xbytechat.api.Features.CampaignTracking.Config;
 using xbytechat.api.Features.CampaignTracking.Worker;
+using xbytechat.api.Infrastructure.Flows;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -562,6 +563,9 @@ builder.Services.AddHostedService<WebhookQueueWorker>();
 builder.Services.AddHostedService<FailedWebhookLogCleanupService>();
 builder.Services.AddScoped<IMaintenanceService, MaintenanceService>();
 builder.Services.AddHostedService<WebhookAutoCleanupWorker>();
+
+
+
 #endregion
 
 #region 🔷 Access Control & Permission
@@ -586,6 +590,10 @@ builder.Services.AddHostedService<ClickLogWorker>();
 
 #region 🔷 Flow Builder
 builder.Services.AddScoped<ICTAFlowService, CTAFlowService>();
+builder.Services.Configure<FlowClickTokenOptions>(
+    builder.Configuration.GetSection("FlowClickTokens"));
+builder.Services.AddSingleton<IFlowClickTokenService, FlowClickTokenService>();
+builder.Services.AddScoped<IFlowRuntimeService, FlowRuntimeService>();  //
 #endregion
 
 #region 🔷 Audit Trail Logging

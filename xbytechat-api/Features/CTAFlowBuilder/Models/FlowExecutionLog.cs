@@ -12,6 +12,7 @@ namespace xbytechat.api.Features.CTAFlowBuilder.Models
         [Key]
         public Guid Id { get; set; }
 
+        public Guid? RunId { get; set; }
         [Required]
         public Guid BusinessId { get; set; }
 
@@ -21,6 +22,7 @@ namespace xbytechat.api.Features.CTAFlowBuilder.Models
 
         public Guid? FlowId { get; set; }
 
+        public Guid? CampaignSendLogId { get; set; }
         public Guid? TrackingLogId { get; set; }
 
         public string? ContactPhone { get; set; }
@@ -39,6 +41,9 @@ namespace xbytechat.api.Features.CTAFlowBuilder.Models
 
         public DateTime ExecutedAt { get; set; } = DateTime.UtcNow;
 
-       
+        public Guid? MessageLogId { get; set; }              // tie to originating message
+        public short? ButtonIndex { get; set; }              // which button was clicked (0..2)
+        public Guid? RequestId { get; set; }
+
     }
 }

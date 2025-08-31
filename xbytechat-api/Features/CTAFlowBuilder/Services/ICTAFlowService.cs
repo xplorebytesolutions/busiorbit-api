@@ -35,8 +35,14 @@ namespace xbytechat.api.Features.CTAFlowBuilder.Services
         // ✅ Editor loading (visual builder)
         Task<SaveVisualFlowDto?> GetVisualFlowByIdAsync(Guid id);
 
-        Task<ResponseResult> ExecuteVisualFlowAsync(Guid businessId, Guid startStepId, Guid trackingLogId);
+      //  Task<ResponseResult> ExecuteVisualFlowAsync(Guid businessId, Guid startStepId, Guid trackingLogId);
+        Task<ResponseResult> ExecuteVisualFlowAsync(Guid businessId, Guid startStepId, Guid trackingLogId, Guid? campaignSendLogId);
+        Task<FlowButtonLink?> GetLinkAsync(Guid flowId, Guid sourceStepId, short buttonIndex);
 
+        public interface IFlowRuntimeService
+        {
+            Task<NextStepResult> ExecuteNextAsync(NextStepContext context);
+        }
     }
 }
 
