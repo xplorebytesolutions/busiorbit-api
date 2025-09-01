@@ -1,0 +1,179 @@
+2025-09-01 08:12:32.070 +05:30 [WRN] Sensitive data logging is enabled. Log entries and exception messages may include sensitive application data; this mode should only be enabled during development.
+2025-09-01 08:12:54.592 +05:30 [WRN] Sensitive data logging is enabled. Log entries and exception messages may include sensitive application data; this mode should only be enabled during development.
+2025-09-01 08:12:55.096 +05:30 [INF] Executed DbCommand (34ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1 FROM pg_catalog.pg_class c
+    JOIN pg_catalog.pg_namespace n ON n.oid=c.relnamespace
+    WHERE n.nspname='public' AND
+          c.relname='__EFMigrationsHistory'
+)
+2025-09-01 08:12:55.114 +05:30 [INF] Executed DbCommand (5ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+2025-09-01 08:12:55.167 +05:30 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1 FROM pg_catalog.pg_class c
+    JOIN pg_catalog.pg_namespace n ON n.oid=c.relnamespace
+    WHERE n.nspname='public' AND
+          c.relname='__EFMigrationsHistory'
+)
+2025-09-01 08:12:55.223 +05:30 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1 FROM pg_catalog.pg_class c
+    JOIN pg_catalog.pg_namespace n ON n.oid=c.relnamespace
+    WHERE n.nspname='public' AND
+          c.relname='__EFMigrationsHistory'
+)
+2025-09-01 08:12:55.223 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+2025-09-01 08:12:55.230 +05:30 [INF] Applying migration '20250901024233_AddRunIdToMessageLog_AndIndexes'.
+2025-09-01 08:12:55.339 +05:30 [INF] Executed DbCommand (11ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "RolePermissions"
+WHERE "Id" = '175680fc-64b6-4c76-b15a-98d7b6fc39f7';
+2025-09-01 08:12:55.340 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "RolePermissions"
+WHERE "Id" = '1908ead2-193f-4ef5-b408-ae44bc41084b';
+2025-09-01 08:12:55.340 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "RolePermissions"
+WHERE "Id" = '3e553c5b-843a-4e0b-bf42-216778612653';
+2025-09-01 08:12:55.340 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "RolePermissions"
+WHERE "Id" = '41dee7ea-3cf0-4a35-a5f9-856d122ba68a';
+2025-09-01 08:12:55.341 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "RolePermissions"
+WHERE "Id" = '4945ab25-2bb2-4f2b-822a-86bc67e7cafa';
+2025-09-01 08:12:55.341 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "RolePermissions"
+WHERE "Id" = '5dc3ce66-5350-4657-bf8b-4885f9235824';
+2025-09-01 08:12:55.341 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "RolePermissions"
+WHERE "Id" = '66bd78f6-ad55-4034-a60d-2540705ff83a';
+2025-09-01 08:12:55.341 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "RolePermissions"
+WHERE "Id" = '7a2a1b8a-cdf5-4cd4-955a-d65046c36e89';
+2025-09-01 08:12:55.341 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "RolePermissions"
+WHERE "Id" = '7ca1dc9f-7412-4bf8-bc8b-f8f2b4ff18aa';
+2025-09-01 08:12:55.342 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "RolePermissions"
+WHERE "Id" = '81070c02-877f-472e-b827-db6bbba33bd2';
+2025-09-01 08:12:55.342 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "RolePermissions"
+WHERE "Id" = 'b2ddd2c1-f33e-4983-98bb-9875dd1a5644';
+2025-09-01 08:12:55.342 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "RolePermissions"
+WHERE "Id" = 'b635e084-dc9d-45a0-9c15-a26afc5eba7f';
+2025-09-01 08:12:55.342 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "RolePermissions"
+WHERE "Id" = 'b9477047-560b-4ad3-bd16-3c0a8300a0ef';
+2025-09-01 08:12:55.342 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "RolePermissions"
+WHERE "Id" = 'c9bab964-9b19-4f1e-b699-8dca3c981d22';
+2025-09-01 08:12:55.343 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "RolePermissions"
+WHERE "Id" = 'cbf6ac1b-991c-4079-84f4-e6630c0ab13e';
+2025-09-01 08:12:55.343 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "RolePermissions"
+WHERE "Id" = 'd7a90f87-4926-434b-8d95-3c9e58647c47';
+2025-09-01 08:12:55.343 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM "RolePermissions"
+WHERE "Id" = 'f62eb640-caa9-4d01-9c9b-7ad79056d586';
+2025-09-01 08:12:55.349 +05:30 [INF] Executed DbCommand (5ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE "MessageLogs" ADD "RunId" uuid;
+2025-09-01 08:12:55.354 +05:30 [INF] Executed DbCommand (5ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Permissions" SET "CreatedAt" = TIMESTAMPTZ '2025-09-01T02:42:32.501325Z'
+WHERE "Id" = '30000000-0000-0000-0000-000000000000';
+2025-09-01 08:12:55.354 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Permissions" SET "CreatedAt" = TIMESTAMPTZ '2025-09-01T02:42:32.501325Z'
+WHERE "Id" = '30000000-0000-0000-0000-000000000001';
+2025-09-01 08:12:55.354 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Permissions" SET "CreatedAt" = TIMESTAMPTZ '2025-09-01T02:42:32.501326Z'
+WHERE "Id" = '30000000-0000-0000-0000-000000000002';
+2025-09-01 08:12:55.355 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Permissions" SET "CreatedAt" = TIMESTAMPTZ '2025-09-01T02:42:32.501326Z'
+WHERE "Id" = '30000000-0000-0000-0000-000000000003';
+2025-09-01 08:12:55.355 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Permissions" SET "CreatedAt" = TIMESTAMPTZ '2025-09-01T02:42:32.501326Z'
+WHERE "Id" = '30000000-0000-0000-0000-000000000004';
+2025-09-01 08:12:55.355 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Permissions" SET "CreatedAt" = TIMESTAMPTZ '2025-09-01T02:42:32.501326Z'
+WHERE "Id" = '30000000-0000-0000-0000-000000000005';
+2025-09-01 08:12:55.355 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Permissions" SET "CreatedAt" = TIMESTAMPTZ '2025-09-01T02:42:32.501327Z'
+WHERE "Id" = '30000000-0000-0000-0000-000000000006';
+2025-09-01 08:12:55.356 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Permissions" SET "CreatedAt" = TIMESTAMPTZ '2025-09-01T02:42:32.501327Z'
+WHERE "Id" = '30000000-0000-0000-0000-000000000007';
+2025-09-01 08:12:55.356 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Permissions" SET "CreatedAt" = TIMESTAMPTZ '2025-09-01T02:42:32.501327Z'
+WHERE "Id" = '30000000-0000-0000-0000-000000000008';
+2025-09-01 08:12:55.356 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Permissions" SET "CreatedAt" = TIMESTAMPTZ '2025-09-01T02:42:32.501328Z'
+WHERE "Id" = '30000000-0000-0000-0000-000000000009';
+2025-09-01 08:12:55.356 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Permissions" SET "CreatedAt" = TIMESTAMPTZ '2025-09-01T02:42:32.501328Z'
+WHERE "Id" = '30000000-0000-0000-0000-000000000010';
+2025-09-01 08:12:55.364 +05:30 [INF] Executed DbCommand (8ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "RolePermissions" ("Id", "AssignedAt", "AssignedBy", "IsActive", "IsRevoked", "PermissionId", "RoleId")
+VALUES ('01cc914d-0166-43cb-ac34-4d86c143b5a1', TIMESTAMPTZ '2025-09-01T02:42:32.501368Z', NULL, TRUE, FALSE, '30000000-0000-0000-0000-000000000008', '00000000-0000-0000-0000-000000000001');
+INSERT INTO "RolePermissions" ("Id", "AssignedAt", "AssignedBy", "IsActive", "IsRevoked", "PermissionId", "RoleId")
+VALUES ('1673849e-1a35-45ef-99bc-c2714c8c2c54', TIMESTAMPTZ '2025-09-01T02:42:32.501369Z', NULL, TRUE, FALSE, '30000000-0000-0000-0000-000000000010', '00000000-0000-0000-0000-000000000001');
+INSERT INTO "RolePermissions" ("Id", "AssignedAt", "AssignedBy", "IsActive", "IsRevoked", "PermissionId", "RoleId")
+VALUES ('1c472684-79be-432f-908c-80d4b12dfa8f', TIMESTAMPTZ '2025-09-01T02:42:32.501369Z', NULL, TRUE, FALSE, '30000000-0000-0000-0000-000000000009', '00000000-0000-0000-0000-000000000001');
+INSERT INTO "RolePermissions" ("Id", "AssignedAt", "AssignedBy", "IsActive", "IsRevoked", "PermissionId", "RoleId")
+VALUES ('2443a874-9924-4b94-928c-ff33bbb17376', TIMESTAMPTZ '2025-09-01T02:42:32.50137Z', NULL, TRUE, FALSE, '30000000-0000-0000-0000-000000000001', '00000000-0000-0000-0000-000000000004');
+INSERT INTO "RolePermissions" ("Id", "AssignedAt", "AssignedBy", "IsActive", "IsRevoked", "PermissionId", "RoleId")
+VALUES ('278e527b-1749-4672-88a8-8b0391556b4f', TIMESTAMPTZ '2025-09-01T02:42:32.50137Z', NULL, TRUE, FALSE, '30000000-0000-0000-0000-000000000007', '00000000-0000-0000-0000-000000000004');
+INSERT INTO "RolePermissions" ("Id", "AssignedAt", "AssignedBy", "IsActive", "IsRevoked", "PermissionId", "RoleId")
+VALUES ('2833217d-0988-4c78-9838-8d2e94c87668', TIMESTAMPTZ '2025-09-01T02:42:32.501364Z', NULL, TRUE, FALSE, '30000000-0000-0000-0000-000000000002', '00000000-0000-0000-0000-000000000001');
+INSERT INTO "RolePermissions" ("Id", "AssignedAt", "AssignedBy", "IsActive", "IsRevoked", "PermissionId", "RoleId")
+VALUES ('767ffebf-a490-4d8c-8f7e-bb05fb2fd071', TIMESTAMPTZ '2025-09-01T02:42:32.501371Z', NULL, TRUE, FALSE, '30000000-0000-0000-0000-000000000004', '00000000-0000-0000-0000-000000000004');
+INSERT INTO "RolePermissions" ("Id", "AssignedAt", "AssignedBy", "IsActive", "IsRevoked", "PermissionId", "RoleId")
+VALUES ('7cbcece2-1080-48a7-a386-1657335518e2', TIMESTAMPTZ '2025-09-01T02:42:32.501363Z', NULL, TRUE, FALSE, '30000000-0000-0000-0000-000000000000', '00000000-0000-0000-0000-000000000001');
+INSERT INTO "RolePermissions" ("Id", "AssignedAt", "AssignedBy", "IsActive", "IsRevoked", "PermissionId", "RoleId")
+VALUES ('83d15d08-cf44-49d0-9315-bc49832c8496', TIMESTAMPTZ '2025-09-01T02:42:32.501364Z', NULL, TRUE, FALSE, '30000000-0000-0000-0000-000000000001', '00000000-0000-0000-0000-000000000001');
+INSERT INTO "RolePermissions" ("Id", "AssignedAt", "AssignedBy", "IsActive", "IsRevoked", "PermissionId", "RoleId")
+VALUES ('8c6863c4-cfbe-460e-8deb-af11eb909763', TIMESTAMPTZ '2025-09-01T02:42:32.501372Z', NULL, TRUE, FALSE, '30000000-0000-0000-0000-000000000000', '00000000-0000-0000-0000-000000000005');
+INSERT INTO "RolePermissions" ("Id", "AssignedAt", "AssignedBy", "IsActive", "IsRevoked", "PermissionId", "RoleId")
+VALUES ('931f83f1-ee94-43fc-9844-6513ae50db64', TIMESTAMPTZ '2025-09-01T02:42:32.501366Z', NULL, TRUE, FALSE, '30000000-0000-0000-0000-000000000005', '00000000-0000-0000-0000-000000000001');
+INSERT INTO "RolePermissions" ("Id", "AssignedAt", "AssignedBy", "IsActive", "IsRevoked", "PermissionId", "RoleId")
+VALUES ('b144c403-d4b7-4db4-ad86-83d3d7e2adb1', TIMESTAMPTZ '2025-09-01T02:42:32.501372Z', NULL, TRUE, FALSE, '30000000-0000-0000-0000-000000000007', '00000000-0000-0000-0000-000000000005');
+INSERT INTO "RolePermissions" ("Id", "AssignedAt", "AssignedBy", "IsActive", "IsRevoked", "PermissionId", "RoleId")
+VALUES ('b29d7cbb-8e69-47ba-af3c-1d5533b44ca7', TIMESTAMPTZ '2025-09-01T02:42:32.50137Z', NULL, TRUE, FALSE, '30000000-0000-0000-0000-000000000000', '00000000-0000-0000-0000-000000000004');
+INSERT INTO "RolePermissions" ("Id", "AssignedAt", "AssignedBy", "IsActive", "IsRevoked", "PermissionId", "RoleId")
+VALUES ('bd09481f-9202-46b8-a8f0-51f9df74be0c', TIMESTAMPTZ '2025-09-01T02:42:32.501366Z', NULL, TRUE, FALSE, '30000000-0000-0000-0000-000000000004', '00000000-0000-0000-0000-000000000001');
+INSERT INTO "RolePermissions" ("Id", "AssignedAt", "AssignedBy", "IsActive", "IsRevoked", "PermissionId", "RoleId")
+VALUES ('d988a214-5ee1-4ae8-821e-7423c3ef9200', TIMESTAMPTZ '2025-09-01T02:42:32.501365Z', NULL, TRUE, FALSE, '30000000-0000-0000-0000-000000000003', '00000000-0000-0000-0000-000000000001');
+INSERT INTO "RolePermissions" ("Id", "AssignedAt", "AssignedBy", "IsActive", "IsRevoked", "PermissionId", "RoleId")
+VALUES ('ebff8fce-64bb-4adc-aff9-6658c4eb1160', TIMESTAMPTZ '2025-09-01T02:42:32.501368Z', NULL, TRUE, FALSE, '30000000-0000-0000-0000-000000000007', '00000000-0000-0000-0000-000000000001');
+INSERT INTO "RolePermissions" ("Id", "AssignedAt", "AssignedBy", "IsActive", "IsRevoked", "PermissionId", "RoleId")
+VALUES ('fe1dad12-9253-4dc3-bd0d-e5a30534f517', TIMESTAMPTZ '2025-09-01T02:42:32.501367Z', NULL, TRUE, FALSE, '30000000-0000-0000-0000-000000000006', '00000000-0000-0000-0000-000000000001');
+2025-09-01 08:12:55.365 +05:30 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Roles" SET "CreatedAt" = TIMESTAMPTZ '2025-09-01T02:42:32.501266Z'
+WHERE "Id" = '00000000-0000-0000-0000-000000000001';
+2025-09-01 08:12:55.365 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Roles" SET "CreatedAt" = TIMESTAMPTZ '2025-09-01T02:42:32.501266Z'
+WHERE "Id" = '00000000-0000-0000-0000-000000000002';
+2025-09-01 08:12:55.366 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Roles" SET "CreatedAt" = TIMESTAMPTZ '2025-09-01T02:42:32.501266Z'
+WHERE "Id" = '00000000-0000-0000-0000-000000000003';
+2025-09-01 08:12:55.366 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Roles" SET "CreatedAt" = TIMESTAMPTZ '2025-09-01T02:42:32.501266Z'
+WHERE "Id" = '00000000-0000-0000-0000-000000000004';
+2025-09-01 08:12:55.366 +05:30 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Roles" SET "CreatedAt" = TIMESTAMPTZ '2025-09-01T02:42:32.501266Z'
+WHERE "Id" = '00000000-0000-0000-0000-000000000005';
+2025-09-01 08:12:55.378 +05:30 [INF] Executed DbCommand (12ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX "IX_MessageLogs_MessageId" ON "MessageLogs" ("MessageId");
+2025-09-01 08:12:55.380 +05:30 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX "IX_MessageLogs_RunId" ON "MessageLogs" ("RunId");
+2025-09-01 08:12:55.384 +05:30 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX "IX_CampaignSendLogs_MessageId" ON "CampaignSendLogs" ("MessageId");
+2025-09-01 08:12:55.386 +05:30 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX "IX_CampaignSendLogs_RunId" ON "CampaignSendLogs" ("RunId");
+2025-09-01 08:12:55.387 +05:30 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
+VALUES ('20250901024233_AddRunIdToMessageLog_AndIndexes', '8.0.18');

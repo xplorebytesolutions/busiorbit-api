@@ -480,6 +480,7 @@ using xbytechat.api.WhatsAppSettings.Providers;
 using xbytechat.api.Features.CampaignTracking.Config;
 using xbytechat.api.Features.CampaignTracking.Worker;
 using xbytechat.api.Infrastructure.Flows;
+using xbytechat.api.Features.Webhooks.Pinnacle.Services.Adapters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -564,8 +565,8 @@ builder.Services.AddHostedService<FailedWebhookLogCleanupService>();
 builder.Services.AddScoped<IMaintenanceService, MaintenanceService>();
 builder.Services.AddHostedService<WebhookAutoCleanupWorker>();
 
-
-
+//Pinnacle
+builder.Services.AddScoped<IPinnacleToMetaAdapter, PinnacleToMetaAdapter>();
 #endregion
 
 #region 🔷 Access Control & Permission

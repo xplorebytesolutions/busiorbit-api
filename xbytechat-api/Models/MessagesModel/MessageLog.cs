@@ -10,8 +10,8 @@ public class MessageLog
     public Guid Id { get; set; }
 
     public string? MessageId { get; set; } // WAMID from WhatsApp — alternate key
-   // public ICollection<MessageStatusLog> StatusUpdates { get; set; } = new List<MessageStatusLog>();
-
+                                           // public ICollection<MessageStatusLog> StatusUpdates { get; set; } = new List<MessageStatusLog>();
+    public Guid? RunId { get; set; }
     // 🔗 FK to Business
     public Guid BusinessId { get; set; }
     public Business Business { get; set; }

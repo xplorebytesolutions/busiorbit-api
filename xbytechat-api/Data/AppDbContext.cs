@@ -304,6 +304,15 @@ namespace xbytechat.api
                 e.Property(x => x.Day).HasColumnType("date");
             });
 
+            modelBuilder.Entity<MessageLog>()
+       .HasIndex(x => x.MessageId);
+            modelBuilder.Entity<MessageLog>()
+                .HasIndex(x => x.RunId);
+
+            modelBuilder.Entity<CampaignSendLog>()
+                .HasIndex(x => x.MessageId);
+            modelBuilder.Entity<CampaignSendLog>()
+                .HasIndex(x => x.RunId);
 
         }
     }

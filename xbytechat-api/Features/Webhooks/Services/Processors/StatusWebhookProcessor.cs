@@ -121,22 +121,30 @@ namespace xbytechat.api.Features.Webhooks.Services.Processors
         // 🔁 Entry point from webhook dispatcher
         public async Task ProcessStatusUpdateAsync(JsonElement payload)
         {
-            _logger.LogWarning("🔍 Incoming timestamp raw value: {Payload}", payload.ToString());
+            _logger.LogDebug("status_webhook_in");
 
-            // standard WA schema: entry[0].changes[0].value.statuses[]
-            if (!payload.TryGetProperty("entry", out var entryArray) || entryArray.GetArrayLength() == 0)
+            if (payload.ValueKind == JsonValueKind.Object &&
+                payload.TryGetProperty("entry", out var entry) &&
+                entry.ValueKind == JsonValueKind.Array && entry.GetArrayLength() > 0 &&
+                entry[0].TryGetProperty("changes", out var changes) &&
+                changes.ValueKind == JsonValueKind.Array && changes.GetArrayLength() > 0 &&
+                changes[0].TryGetProperty("value", out var valueFromEnvelope) &&
+                valueFromEnvelope.ValueKind == JsonValueKind.Object)
+            {
+                await ProcessAsync(valueFromEnvelope);
                 return;
+            }
 
-            var entry = entryArray[0];
-            if (!entry.TryGetProperty("changes", out var changesArray) || changesArray.GetArrayLength() == 0)
+            if (payload.ValueKind == JsonValueKind.Object &&
+                (payload.TryGetProperty("statuses", out _) || payload.TryGetProperty("messages", out _)))
+            {
+                await ProcessAsync(payload);
                 return;
+            }
 
-            var change = changesArray[0];
-            if (!change.TryGetProperty("value", out var value))
-                return;
-
-            await ProcessAsync(value);
+            _logger.LogWarning("Unrecognized status payload shape.");
         }
+
     }
 }
 
