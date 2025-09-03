@@ -224,6 +224,16 @@ namespace xbytechat_api.WhatsAppSettings.Controllers
 
             return null;
         }
+
+        [HttpGet("callback-url")]
+        public async Task<IActionResult> GetMyCallbackUrl([FromServices] IConfiguration cfg)
+        {
+            var businessId = User.GetBusinessId();
+            var baseUrl = cfg["App:PublicBaseUrl"] ?? string.Empty;
+            var url = await _svc.GetCallbackUrlAsync(businessId, baseUrl);
+            return Ok(new { callbackUrl = url });
+        }
+
     }
 }
 

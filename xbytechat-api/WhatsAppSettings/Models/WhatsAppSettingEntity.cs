@@ -43,6 +43,10 @@ namespace xbytechat_api.WhatsAppSettings.Models
         [MaxLength(200)]
         public string? WebhookVerifyToken { get; set; }
 
+        [MaxLength(1000)]
+        public string? WebhookCallbackUrl { get; set; }
+
+
         [Required]
         public bool IsActive { get; set; } = true;
 

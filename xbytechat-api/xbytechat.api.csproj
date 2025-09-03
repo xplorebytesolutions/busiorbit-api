@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>xbytechat.api</RootNamespace>
+    <UserSecretsId>54c16f50-f987-4162-a877-70088aa68997</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>

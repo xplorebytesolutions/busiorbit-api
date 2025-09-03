@@ -1,9 +1,0 @@
-2025-08-08 13:27:43.377 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/api/auth/session - null null
-2025-08-08 13:27:43.585 +05:30 [INF] Authorization failed. These requirements were not met:
-DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
-2025-08-08 13:27:43.613 +05:30 [INF] AuthenticationScheme: Bearer was challenged.
-2025-08-08 13:27:43.618 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/api/auth/session - 401 0 null 262.6829ms
-2025-08-08 13:28:58.439 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/_framework/aspnetcore-browser-refresh.js - null null
-2025-08-08 13:28:58.448 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/_framework/aspnetcore-browser-refresh.js - 200 13762 application/javascript; charset=utf-8 8.9559ms
-2025-08-08 13:28:58.790 +05:30 [INF] Request starting HTTP/1.1 GET http://localhost:7113/swagger/v1/swagger.json - null null
-2025-08-08 13:28:59.068 +05:30 [INF] Request finished HTTP/1.1 GET http://localhost:7113/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 278.2683ms

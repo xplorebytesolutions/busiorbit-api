@@ -86,7 +86,7 @@ namespace xbytechat.api
         public DbSet<FeatureMaster> FeatureMasters { get; set; }
         public DbSet<AutomationFlow> AutomationFlows { get; set; }
         public DbSet<WhatsAppTemplate> WhatsAppTemplates { get; set; }
-       
+
         public DbSet<CampaignClickLog> CampaignClickLogs => Set<CampaignClickLog>();
         public DbSet<CampaignClickDailyAgg> CampaignClickDailyAgg => Set<CampaignClickDailyAgg>();
 
@@ -284,7 +284,7 @@ namespace xbytechat.api
             modelBuilder.Entity<FeatureAccess>()
             .HasIndex(f => new { f.BusinessId, f.FeatureName })
             .IsUnique();
-            
+
             modelBuilder.Entity<WhatsAppTemplate>(e =>
             {
                 e.Property(x => x.Body).HasColumnType("text");
@@ -314,6 +314,44 @@ namespace xbytechat.api
             modelBuilder.Entity<CampaignSendLog>()
                 .HasIndex(x => x.RunId);
 
+            // ---------- WhatsAppSettingEntity indexes (for webhook → BusinessId resolution) ----------
+            modelBuilder.Entity<WhatsAppSettingEntity>(b =>
+            {
+                b.HasIndex(x => new { x.Provider, x.PhoneNumberId })
+                 .HasDatabaseName("IX_WhatsAppSettings_Provider_PhoneNumberId");
+
+                b.HasIndex(x => new { x.Provider, x.WhatsAppBusinessNumber })
+                 .HasDatabaseName("IX_WhatsAppSettings_Provider_BusinessNumber");
+
+                b.HasIndex(x => new { x.Provider, x.WabaId })
+                 .HasDatabaseName("IX_WhatsAppSettings_Provider_WabaId");
+
+                // Handy for admin views / quick filters
+                b.HasIndex(x => new { x.BusinessId, x.Provider, x.IsActive })
+                 .HasDatabaseName("IX_WhatsAppSettings_Business_Provider_IsActive");
+
+                b.HasIndex(x => new { x.Provider, x.WebhookCallbackUrl })
+                 .HasDatabaseName("IX_WhatsAppSettings_Provider_CallbackUrl");
+
+              
+            });
+
+            // ---------- CampaignSendLog composite index (fast status reconciliation) ----------
+            modelBuilder.Entity<CampaignSendLog>(b =>
+            {
+                b.HasIndex(x => new { x.BusinessId, x.MessageId })
+                 .HasDatabaseName("IX_CampaignSendLogs_Business_MessageId");
+            });
+
+            // ---------- MessageLog composite indexes (fast joins & inbound lookups) ----------
+            modelBuilder.Entity<MessageLog>(b =>
+            {
+                b.HasIndex(x => new { x.BusinessId, x.MessageId })
+                 .HasDatabaseName("IX_MessageLogs_Business_MessageId");
+
+                b.HasIndex(x => new { x.BusinessId, x.RecipientNumber })
+                 .HasDatabaseName("IX_MessageLogs_Business_Recipient");
+            });
         }
     }
 }

@@ -28,26 +28,92 @@ namespace xbytechat_api.WhatsAppSettings.Services
             _httpClientFactory = httpClientFactory;
         }
 
+        //public async Task SaveOrUpdateSettingAsync(SaveWhatsAppSettingDto dto)
+        //{
+        //    if (dto.BusinessId == Guid.Empty)
+        //        throw new ArgumentException("Invalid BusinessId provided.");
+
+        //    var existing = await _dbContext.WhatsAppSettings
+        //        .FirstOrDefaultAsync(x => x.BusinessId == dto.BusinessId);
+
+        //    if (existing != null)
+        //    {
+        //        // keep provider if not passed; otherwise trim
+        //        existing.Provider = dto.Provider?.Trim() ?? existing.Provider;
+
+        //        if (!string.IsNullOrWhiteSpace(dto.ApiUrl)) existing.ApiUrl = dto.ApiUrl.Trim();
+        //        if (!string.IsNullOrWhiteSpace(dto.ApiKey)) existing.ApiKey = dto.ApiKey.Trim();
+        //        if (!string.IsNullOrWhiteSpace(dto.ApiToken)) existing.ApiToken = dto.ApiToken.Trim();
+        //        if (!string.IsNullOrWhiteSpace(dto.PhoneNumberId)) existing.PhoneNumberId = dto.PhoneNumberId.Trim();
+        //        if (!string.IsNullOrWhiteSpace(dto.WhatsAppBusinessNumber)) existing.WhatsAppBusinessNumber = dto.WhatsAppBusinessNumber.Trim();
+        //        if (!string.IsNullOrWhiteSpace(dto.SenderDisplayName)) existing.SenderDisplayName = dto.SenderDisplayName.Trim();
+        //        if (!string.IsNullOrWhiteSpace(dto.WabaId)) existing.WabaId = dto.WabaId.Trim();
+
+        //        existing.IsActive = dto.IsActive;
+        //        existing.UpdatedAt = DateTime.UtcNow;
+        //    }
+        //    else
+        //    {
+        //        var newSetting = new WhatsAppSettingEntity
+        //        {
+        //            Id = Guid.NewGuid(),
+        //            BusinessId = dto.BusinessId,
+        //            // default to Pinnacle
+        //            Provider = dto.Provider?.Trim() ?? "Pinnacle",
+        //            ApiUrl = (dto.ApiUrl ?? string.Empty).Trim(),
+        //            ApiKey = string.IsNullOrWhiteSpace(dto.ApiKey) ? null : dto.ApiKey.Trim(),
+        //            ApiToken = string.IsNullOrWhiteSpace(dto.ApiToken) ? null : dto.ApiToken.Trim(),
+        //            PhoneNumberId = string.IsNullOrWhiteSpace(dto.PhoneNumberId) ? null : dto.PhoneNumberId.Trim(),
+        //            WhatsAppBusinessNumber = string.IsNullOrWhiteSpace(dto.WhatsAppBusinessNumber) ? null : dto.WhatsAppBusinessNumber.Trim(),
+        //            SenderDisplayName = string.IsNullOrWhiteSpace(dto.SenderDisplayName) ? null : dto.SenderDisplayName.Trim(),
+        //            WabaId = string.IsNullOrWhiteSpace(dto.WabaId) ? null : dto.WabaId.Trim(),
+        //            IsActive = dto.IsActive,
+        //            CreatedAt = DateTime.UtcNow
+        //        };
+
+        //        await _dbContext.WhatsAppSettings.AddAsync(newSetting);
+        //    }
+
+        //    await _dbContext.SaveChangesAsync();
+        //}
+
+
         public async Task SaveOrUpdateSettingAsync(SaveWhatsAppSettingDto dto)
         {
             if (dto.BusinessId == Guid.Empty)
-                throw new ArgumentException("Invalid BusinessId provided.");
+                throw new ArgumentException("Invalid BusinessId provided.", nameof(dto.BusinessId));
 
+            // Normalize provider (store lower-case for consistency)
+            var provider = (dto.Provider ?? "pinnacle").Trim();
+            if (string.IsNullOrWhiteSpace(provider))
+                provider = "pinnacle";
+            var providerNorm = provider.ToLowerInvariant();
+
+            // Look up by BusinessId + Provider (case-insensitive)
             var existing = await _dbContext.WhatsAppSettings
-                .FirstOrDefaultAsync(x => x.BusinessId == dto.BusinessId);
+                .FirstOrDefaultAsync(x => x.BusinessId == dto.BusinessId && x.Provider.ToLower() == providerNorm);
 
             if (existing != null)
             {
-                // keep provider if not passed; otherwise trim
-                existing.Provider = dto.Provider?.Trim() ?? existing.Provider;
+                // keep provider normalized
+                existing.Provider = providerNorm;
 
+                // Only overwrite when incoming value is non-empty (avoid wiping secrets/tokens accidentally)
                 if (!string.IsNullOrWhiteSpace(dto.ApiUrl)) existing.ApiUrl = dto.ApiUrl.Trim();
                 if (!string.IsNullOrWhiteSpace(dto.ApiKey)) existing.ApiKey = dto.ApiKey.Trim();
-                if (!string.IsNullOrWhiteSpace(dto.ApiToken)) existing.ApiToken = dto.ApiToken.Trim();
-                if (!string.IsNullOrWhiteSpace(dto.PhoneNumberId)) existing.PhoneNumberId = dto.PhoneNumberId.Trim();
-                if (!string.IsNullOrWhiteSpace(dto.WhatsAppBusinessNumber)) existing.WhatsAppBusinessNumber = dto.WhatsAppBusinessNumber.Trim();
-                if (!string.IsNullOrWhiteSpace(dto.SenderDisplayName)) existing.SenderDisplayName = dto.SenderDisplayName.Trim();
-                if (!string.IsNullOrWhiteSpace(dto.WabaId)) existing.WabaId = dto.WabaId.Trim();
+                if (!string.IsNullOrWhiteSpace(dto.ApiToken)) existing.ApiToken = dto.ApiToken!.Trim();
+
+                if (!string.IsNullOrWhiteSpace(dto.PhoneNumberId)) existing.PhoneNumberId = dto.PhoneNumberId!.Trim();
+                if (!string.IsNullOrWhiteSpace(dto.WhatsAppBusinessNumber)) existing.WhatsAppBusinessNumber = dto.WhatsAppBusinessNumber!.Trim();
+                if (!string.IsNullOrWhiteSpace(dto.SenderDisplayName)) existing.SenderDisplayName = dto.SenderDisplayName!.Trim();
+                if (!string.IsNullOrWhiteSpace(dto.WabaId)) existing.WabaId = dto.WabaId!.Trim();
+
+                // 🔐 Webhook auth fields (optional)
+                if (!string.IsNullOrWhiteSpace(dto.WebhookSecret)) existing.WebhookSecret = dto.WebhookSecret!.Trim();
+                if (!string.IsNullOrWhiteSpace(dto.WebhookVerifyToken)) existing.WebhookVerifyToken = dto.WebhookVerifyToken!.Trim();
+
+                // 🌐 NEW: provider callback URL (optional)
+                if (!string.IsNullOrWhiteSpace(dto.WebhookCallbackUrl)) existing.WebhookCallbackUrl = dto.WebhookCallbackUrl!.Trim();
 
                 existing.IsActive = dto.IsActive;
                 existing.UpdatedAt = DateTime.UtcNow;
@@ -58,15 +124,22 @@ namespace xbytechat_api.WhatsAppSettings.Services
                 {
                     Id = Guid.NewGuid(),
                     BusinessId = dto.BusinessId,
-                    // default to Pinnacle
-                    Provider = dto.Provider?.Trim() ?? "Pinnacle",
+                    Provider = providerNorm,
                     ApiUrl = (dto.ApiUrl ?? string.Empty).Trim(),
-                    ApiKey = string.IsNullOrWhiteSpace(dto.ApiKey) ? null : dto.ApiKey.Trim(),
-                    ApiToken = string.IsNullOrWhiteSpace(dto.ApiToken) ? null : dto.ApiToken.Trim(),
-                    PhoneNumberId = string.IsNullOrWhiteSpace(dto.PhoneNumberId) ? null : dto.PhoneNumberId.Trim(),
-                    WhatsAppBusinessNumber = string.IsNullOrWhiteSpace(dto.WhatsAppBusinessNumber) ? null : dto.WhatsAppBusinessNumber.Trim(),
-                    SenderDisplayName = string.IsNullOrWhiteSpace(dto.SenderDisplayName) ? null : dto.SenderDisplayName.Trim(),
-                    WabaId = string.IsNullOrWhiteSpace(dto.WabaId) ? null : dto.WabaId.Trim(),
+                    ApiKey = string.IsNullOrWhiteSpace(dto.ApiKey) ? null : dto.ApiKey!.Trim(),
+                    ApiToken = string.IsNullOrWhiteSpace(dto.ApiToken) ? null : dto.ApiToken!.Trim(),
+                    PhoneNumberId = string.IsNullOrWhiteSpace(dto.PhoneNumberId) ? null : dto.PhoneNumberId!.Trim(),
+                    WhatsAppBusinessNumber = string.IsNullOrWhiteSpace(dto.WhatsAppBusinessNumber) ? null : dto.WhatsAppBusinessNumber!.Trim(),
+                    SenderDisplayName = string.IsNullOrWhiteSpace(dto.SenderDisplayName) ? null : dto.SenderDisplayName!.Trim(),
+                    WabaId = string.IsNullOrWhiteSpace(dto.WabaId) ? null : dto.WabaId!.Trim(),
+
+                    // 🔐 Webhook auth fields (optional)
+                    WebhookSecret = string.IsNullOrWhiteSpace(dto.WebhookSecret) ? null : dto.WebhookSecret!.Trim(),
+                    WebhookVerifyToken = string.IsNullOrWhiteSpace(dto.WebhookVerifyToken) ? null : dto.WebhookVerifyToken!.Trim(),
+
+                    // 🌐 NEW: provider callback URL (optional)
+                    WebhookCallbackUrl = string.IsNullOrWhiteSpace(dto.WebhookCallbackUrl) ? null : dto.WebhookCallbackUrl!.Trim(),
+
                     IsActive = dto.IsActive,
                     CreatedAt = DateTime.UtcNow
                 };
@@ -191,6 +264,19 @@ namespace xbytechat_api.WhatsAppSettings.Services
 
             return setting?.WhatsAppBusinessNumber;
         }
+
+        public async Task<string> GetCallbackUrlAsync(Guid businessId, string appBaseUrl)
+        {
+            var s = await _dbContext.WhatsAppSettings
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.BusinessId == businessId && x.IsActive);
+
+            if (!string.IsNullOrWhiteSpace(s?.WebhookCallbackUrl))
+                return s!.WebhookCallbackUrl!;
+
+            return $"{appBaseUrl.TrimEnd('/')}/api/webhookcallback";
+        }
+
     }
 }
 

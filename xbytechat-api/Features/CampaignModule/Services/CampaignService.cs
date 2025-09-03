@@ -1223,6 +1223,7 @@ namespace xbytechat.api.Features.CampaignModule.Services
             };
         }
 
+
         //public async Task<ResponseResult> SendTextTemplateCampaignAsync(Campaign campaign)
         //{
         //    try
@@ -1241,7 +1242,7 @@ namespace xbytechat.api.Features.CampaignModule.Services
         //            ? entryTemplate!
         //            : (campaign.TemplateId ?? campaign.MessageTemplate ?? "");
 
-        //        // fetch template meta (+buttons if you need)
+        //        // 🧠 Fetch template meta (+buttons if you need)
         //        var templateMeta = await _templateFetcherService
         //            .GetTemplateByNameAsync(businessId, templateName, includeButtons: true);
 
@@ -1275,6 +1276,7 @@ namespace xbytechat.api.Features.CampaignModule.Services
         //        }
 
         //        // 🧰 Build & freeze a "button bundle" (exact labels/positions user sees)
+        //        // IMPORTANT: store zero-based 'i' and label 't' to match ProcessClickAsync mapping.
         //        string? buttonBundleJson = null;
         //        if (templateMeta.ButtonParams != null && templateMeta.ButtonParams.Count > 0)
         //        {
@@ -1282,8 +1284,13 @@ namespace xbytechat.api.Features.CampaignModule.Services
         //                .Take(3)
         //                .Select((b, i) => new
         //                {
-        //                    position = i + 1,                 // 1-based
-        //                    text = (b.Text ?? "").Trim(), // label shown to user
+        //                    // 👇 keys your click-mapper expects
+        //                    i = i,                                // zero-based index used by provider & mapper
+        //                    t = (b.Text ?? "").Trim(),            // button label used for text matching
+
+        //                    // 👇 keep these redundant fields for dev tools/inspection (harmless)
+        //                    position = i + 1,                     // 1-based for readability
+        //                    text = (b.Text ?? "").Trim(),
         //                    type = b.Type,
         //                    subType = b.SubType
         //                })
@@ -1297,6 +1304,9 @@ namespace xbytechat.api.Features.CampaignModule.Services
         //        foreach (var r in campaign.Recipients)
         //        {
         //            if (r?.Contact == null) continue;
+
+        //            // 🔑 New run per recipient send (prevents cross-run mixing in journey)
+        //            var runId = Guid.NewGuid();
 
         //            // Build provider components (use your existing builders)
         //            var campaignSendLogId = Guid.NewGuid(); // used by tracked URLs
@@ -1328,7 +1338,7 @@ namespace xbytechat.api.Features.CampaignModule.Services
         //                CampaignId = campaign.Id,
         //                ContactId = r.ContactId,
         //                RecipientNumber = r.Contact.PhoneNumber,
-        //                MessageContent = templateName,
+        //                MessageContent = templateName, // NOT NULL (fixes previous constraint)
         //                Status = result.Success ? "Sent" : "Failed",
         //                MessageId = result.MessageId,
         //                ErrorMessage = result.ErrorMessage,
@@ -1365,6 +1375,8 @@ namespace xbytechat.api.Features.CampaignModule.Services
         //                CTAFlowConfigId = campaign.CTAFlowConfigId,
         //                CTAFlowStepId = entryStepId,
         //                ButtonBundleJson = buttonBundleJson,
+
+        //                // 🧵 NEW: per-send session id (used by journey UI)
         //                RunId = runId
         //            });
 
@@ -1380,6 +1392,7 @@ namespace xbytechat.api.Features.CampaignModule.Services
         //        return ResponseResult.ErrorInfo("🚨 Unexpected error while sending campaign.", ex.ToString());
         //    }
         //}
+
         public async Task<ResponseResult> SendTextTemplateCampaignAsync(Campaign campaign)
         {
             try
@@ -1404,6 +1417,11 @@ namespace xbytechat.api.Features.CampaignModule.Services
 
                 if (templateMeta == null)
                     return ResponseResult.ErrorInfo("❌ Template metadata not found.");
+
+                // 🚫 Do not hardcode language; require provider meta language
+                var languageCode = (templateMeta.Language ?? "").Trim();
+                if (string.IsNullOrWhiteSpace(languageCode))
+                    return ResponseResult.ErrorInfo("❌ Template language not resolved from provider meta.");
 
                 var templateParams = TemplateParameterHelper.ParseTemplateParams(campaign.TemplateParameters);
 
@@ -1440,12 +1458,9 @@ namespace xbytechat.api.Features.CampaignModule.Services
                         .Take(3)
                         .Select((b, i) => new
                         {
-                            // 👇 keys your click-mapper expects
-                            i = i,                                // zero-based index used by provider & mapper
-                            t = (b.Text ?? "").Trim(),            // button label used for text matching
-
-                            // 👇 keep these redundant fields for dev tools/inspection (harmless)
-                            position = i + 1,                     // 1-based for readability
+                            i = i,                                  // zero-based index used by provider & mapper
+                            t = (b.Text ?? "").Trim(),              // label used for text matching
+                            position = i + 1,                       // redundant (for readability in tools)
                             text = (b.Text ?? "").Trim(),
                             type = b.Type,
                             subType = b.SubType
@@ -1478,14 +1493,14 @@ namespace xbytechat.api.Features.CampaignModule.Services
                         template = new
                         {
                             name = templateName,
-                            language = new { code = string.IsNullOrWhiteSpace(templateMeta.Language) ? "en_US" : templateMeta.Language },
+                            language = new { code = languageCode }, // ✅ from provider meta
                             components
                         }
                     };
 
                     var result = await _messageEngineService.SendPayloadAsync(businessId, payload);
 
-                    // 📌 Persist logs WITH flow context and button bundle
+                    // 📌 Persist logs WITH flow context, RunId, and frozen button bundle
                     var logId = Guid.NewGuid();
                     var log = new MessageLog
                     {
@@ -1494,19 +1509,18 @@ namespace xbytechat.api.Features.CampaignModule.Services
                         CampaignId = campaign.Id,
                         ContactId = r.ContactId,
                         RecipientNumber = r.Contact.PhoneNumber,
-                        MessageContent = templateName, // NOT NULL (fixes previous constraint)
+                        MessageContent = templateName,                       // NOT NULL
                         Status = result.Success ? "Sent" : "Failed",
-                        MessageId = result.MessageId,
-                        ErrorMessage = result.ErrorMessage,
+                        MessageId = result.MessageId,                        // join key (provider msg id)
+                        ErrorMessage = result.ErrorMessage,                  // single source
                         RawResponse = result.RawResponse,
                         CreatedAt = DateTime.UtcNow,
-                        SentAt = result.Success ? DateTime.UtcNow : (DateTime?)null,
+                        SentAt = result.Success ? DateTime.UtcNow : (DateTime?)null, // only when sent
                         Source = "campaign",
-
-                        // 🧩 Save flow context + the exact button bundle shown
                         CTAFlowConfigId = campaign.CTAFlowConfigId,
                         CTAFlowStepId = entryStepId,
-                        ButtonBundleJson = buttonBundleJson
+                        ButtonBundleJson = buttonBundleJson,
+                        RunId = runId                                        // ✅ journey key
                     };
                     _context.MessageLogs.Add(log);
 
@@ -1521,19 +1535,15 @@ namespace xbytechat.api.Features.CampaignModule.Services
                         TemplateId = templateName,
                         SendStatus = result.Success ? "Sent" : "Failed",
                         MessageLogId = log.Id,
-                        MessageId = result.MessageId,
-                        ErrorMessage = result.Success ? null : result.Message,
+                        MessageId = result.MessageId,                        // join key (provider msg id)
+                        ErrorMessage = result.ErrorMessage,                  // ✅ same source as MessageLog
                         CreatedAt = DateTime.UtcNow,
-                        SentAt = DateTime.UtcNow,
+                        SentAt = result.Success ? DateTime.UtcNow : (DateTime?)null, // ✅ guard SentAt
                         CreatedBy = campaign.CreatedBy,
-
-                        // 🧩 Save flow context + the exact button bundle shown
                         CTAFlowConfigId = campaign.CTAFlowConfigId,
                         CTAFlowStepId = entryStepId,
                         ButtonBundleJson = buttonBundleJson,
-
-                        // 🧵 NEW: per-send session id (used by journey UI)
-                        RunId = runId
+                        RunId = runId                                        // ✅ journey key
                     });
 
                     if (result.Success) successCount++; else failureCount++;
@@ -1608,124 +1618,331 @@ namespace xbytechat.api.Features.CampaignModule.Services
                     abs.Scheme.Equals(Uri.UriSchemeHttps, StringComparison.OrdinalIgnoreCase));
         }
 
-       
+
+        //private List<object> BuildTextTemplateComponents_Meta(
+        //                    List<string> templateParams,
+        //                    List<CampaignButton>? buttonList,
+        //                    TemplateMetadataDto templateMeta,
+        //                    Guid campaignSendLogId,
+        //                    Contact contact)
+        //                        {
+        //                            var components = new List<object>();
+
+        //                            // Body
+        //                            if (templateParams != null && templateParams.Count > 0 && templateMeta.PlaceholderCount > 0)
+        //                            {
+        //                                components.Add(new
+        //                                {
+        //                                    type = "body",
+        //                                    parameters = templateParams.Select(p => new { type = "text", text = p }).ToArray()
+        //                                });
+        //                            }
+
+        //                            // No buttons or template has no button params
+        //                            if (buttonList == null || buttonList.Count == 0 ||
+        //                                templateMeta.ButtonParams == null || templateMeta.ButtonParams.Count == 0)
+        //                                return components;
+
+        //                            // ✅ Ensure index alignment with the template by ordering by Position (then original index)
+        //                            var orderedButtons = buttonList
+        //                                .Select((b, idx) => new { Btn = b, idx })
+        //                                .OrderBy(x => (int?)x.Btn.Position ?? int.MaxValue) // if Position is null, push to the end
+        //                                .ThenBy(x => x.idx)
+        //                                .Select(x => x.Btn)
+        //                                .ToList();
+
+        //                            var total = Math.Min(3, Math.Min(orderedButtons.Count, templateMeta.ButtonParams.Count));
+
+        //                            for (int i = 0; i < total; i++)
+        //                            {
+        //                                var meta = templateMeta.ButtonParams[i];
+        //                                var subType = (meta.SubType ?? "url").ToLowerInvariant();
+        //                                var metaParam = meta.ParameterValue?.Trim();
+
+        //                                // Meta needs parameters ONLY for dynamic URL buttons
+        //                                if (!string.Equals(subType, "url", StringComparison.OrdinalIgnoreCase))
+        //                                    continue;
+
+        //                                var isDynamic = !string.IsNullOrWhiteSpace(metaParam) && metaParam.Contains("{{");
+        //                                if (!isDynamic)
+        //                                    continue;
+
+        //                                var btn = orderedButtons[i];
+        //                                var btnType = (btn?.Type ?? "URL").ToUpperInvariant();
+        //                                if (!string.Equals(btnType, "URL", StringComparison.OrdinalIgnoreCase))
+        //                                {
+        //                                    // Template expects a dynamic URL param at this index; if our campaign button isn't URL, skip to avoid 131008.
+        //                                    // If you prefer strict behavior, replace with an InvalidOperationException instead.
+        //                                    continue;
+        //                                }
+
+        //                                var valueRaw = btn.Value?.Trim();
+        //                                if (string.IsNullOrWhiteSpace(valueRaw))
+        //                                {
+        //                                    // Missing value for a required dynamic URL param → better to fail fast than get Meta error 131008.
+        //                                    throw new InvalidOperationException(
+        //                                        $"Template requires a dynamic URL at button index {i}, but campaign button value is empty.");
+        //                                }
+
+        //                                // Optional phone substitution in destination
+        //                                var phone = string.IsNullOrWhiteSpace(contact?.PhoneNumber)
+        //                                    ? ""
+        //                                    : (contact.PhoneNumber.StartsWith("+") ? contact.PhoneNumber : "+" + contact.PhoneNumber);
+        //                                var encodedPhone = Uri.EscapeDataString(phone);
+
+        //                                var resolvedDestination = valueRaw.Contains("{{1}}")
+        //                                    ? valueRaw.Replace("{{1}}", encodedPhone)
+        //                                    : valueRaw;
+
+        //                                resolvedDestination = NormalizeAbsoluteUrlOrThrowForButton(resolvedDestination, btn.Title, i);
+
+        //                                // Build both; choose which to send based on template base style
+        //                                var fullTrackedUrl = _urlBuilderService.BuildTrackedButtonUrl(
+        //                                    campaignSendLogId, i, btn.Title, resolvedDestination);
+
+        //                                var tokenParam = BuildTokenParam(campaignSendLogId, i, btn.Title, resolvedDestination);
+
+        //                                var templateHasAbsoluteBase = LooksLikeAbsoluteBaseUrlWithPlaceholder(metaParam);
+        //                                var valueToSend = templateHasAbsoluteBase ? tokenParam : fullTrackedUrl;
+
+        //                                components.Add(new Dictionary<string, object>
+        //                                {
+        //                                    ["type"] = "button",
+        //                                    ["sub_type"] = "url",
+        //                                    ["index"] = i.ToString(), // "0"/"1"/"2"
+        //                                    ["parameters"] = new[] {
+        //                                new Dictionary<string, object> { ["type"] = "text", ["text"] = valueToSend }
+        //                            }
+        //                                });
+        //                            }
+
+        //                            return components;
+        //                        }
+
+        //private List<object> BuildTextTemplateComponents_Pinnacle(
+        //    List<string> templateParams,
+        //    List<CampaignButton>? buttonList,
+        //    TemplateMetadataDto templateMeta,
+        //    Guid campaignSendLogId,
+        //    Contact contact)
+        //{
+        //    var components = new List<object>();
+
+        //    // BODY params (only if template has placeholders)
+        //    if (templateParams != null && templateParams.Count > 0 && templateMeta.PlaceholderCount > 0)
+        //    {
+        //        components.Add(new
+        //        {
+        //            type = "body",
+        //            parameters = templateParams.Select(p => new { type = "text", text = p }).ToArray()
+        //        });
+        //    }
+
+        //    // No buttons to map → return body-only
+        //    if (buttonList == null || buttonList.Count == 0 ||
+        //        templateMeta.ButtonParams == null || templateMeta.ButtonParams.Count == 0)
+        //        return components;
+
+        //    // ✅ Ensure index alignment with the template by ordering by Position (then original index)
+        //    var orderedButtons = buttonList
+        //        .Select((b, idx) => new { Btn = b, idx })
+        //        .OrderBy(x => (int?)x.Btn.Position ?? int.MaxValue)
+        //        .ThenBy(x => x.idx)
+        //        .Select(x => x.Btn)
+        //        .ToList();
+
+        //    var total = Math.Min(3, Math.Min(orderedButtons.Count, templateMeta.ButtonParams.Count));
+
+        //    for (int i = 0; i < total; i++)
+        //    {
+        //        var meta = templateMeta.ButtonParams[i];
+        //        var subType = (meta.SubType ?? "url").ToLowerInvariant();
+        //        var metaParam = meta.ParameterValue?.Trim();
+
+        //        // Pinnacle path currently supports dynamic URL params only
+        //        if (!string.Equals(subType, "url", StringComparison.OrdinalIgnoreCase))
+        //            continue;
+
+        //        var isDynamic = !string.IsNullOrWhiteSpace(metaParam) && metaParam.Contains("{{");
+        //        if (!isDynamic)
+        //            continue;
+
+        //        var btn = orderedButtons[i];
+        //        var btnType = (btn?.Type ?? "URL").ToUpperInvariant();
+        //        if (!string.Equals(btnType, "URL", StringComparison.OrdinalIgnoreCase))
+        //        {
+        //            // Template expects a dynamic URL param at this index; if our campaign button isn't URL, fail fast like Meta
+        //            throw new InvalidOperationException(
+        //                $"Template expects a dynamic URL at button index {i}, but campaign button type is '{btn?.Type}'.");
+        //        }
+
+        //        var valueRaw = btn?.Value?.Trim();
+        //        if (string.IsNullOrWhiteSpace(valueRaw))
+        //        {
+        //            // Missing value for a required dynamic URL param → fail fast (parity with Meta)
+        //            throw new InvalidOperationException(
+        //                $"Template requires a dynamic URL at button index {i}, but campaign button value is empty.");
+        //        }
+
+        //        // Optional phone substitution
+        //        var phone = string.IsNullOrWhiteSpace(contact?.PhoneNumber)
+        //            ? ""
+        //            : (contact.PhoneNumber.StartsWith("+") ? contact.PhoneNumber : "+" + contact.PhoneNumber);
+        //        var encodedPhone = Uri.EscapeDataString(phone);
+
+        //        var resolvedDestination = valueRaw.Contains("{{1}}")
+        //            ? valueRaw.Replace("{{1}}", encodedPhone)
+        //            : valueRaw;
+
+        //        // Validate + normalize absolute URL
+        //        resolvedDestination = NormalizeAbsoluteUrlOrThrowForButton(resolvedDestination, btn!.Title, i);
+
+        //        // Build both options: full tracked URL vs token param (for absolute-base placeholders)
+        //        var fullTrackedUrl = _urlBuilderService.BuildTrackedButtonUrl(
+        //            campaignSendLogId, i, btn.Title, resolvedDestination);
+
+        //        var tokenParam = BuildTokenParam(campaignSendLogId, i, btn.Title, resolvedDestination);
+
+        //        var templateHasAbsoluteBase = LooksLikeAbsoluteBaseUrlWithPlaceholder(metaParam);
+        //        var valueToSend = templateHasAbsoluteBase ? tokenParam : fullTrackedUrl;
+
+        //        // Pinnacle payload shape (aligned with Meta for consistency)
+        //        components.Add(new Dictionary<string, object>
+        //        {
+        //            ["type"] = "button",
+        //            ["sub_type"] = "url",
+        //            ["index"] = i.ToString(),
+        //            ["parameters"] = new[] {
+        //        new Dictionary<string, object> { ["type"] = "text", ["text"] = valueToSend }
+        //    }
+        //        });
+        //    }
+
+        //    return components;
+        //}
+
+
+        private static object[] BuildBodyParameters(List<string>? templateParams, int requiredCount)
+        {
+            if (requiredCount <= 0) return Array.Empty<object>();
+
+            var src = templateParams ?? new List<string>();
+            // Trim if more were provided than required
+            if (src.Count > requiredCount) src = src.Take(requiredCount).ToList();
+            // Pad with empty strings if fewer were provided
+            while (src.Count < requiredCount) src.Add(string.Empty);
+
+            // Return in the shape Meta/Pinnacle expect
+            return src.Select(p => (object)new { type = "text", text = p ?? string.Empty }).ToArray();
+        }
         private List<object> BuildTextTemplateComponents_Meta(
-                            List<string> templateParams,
-                            List<CampaignButton>? buttonList,
-                            TemplateMetadataDto templateMeta,
-                            Guid campaignSendLogId,
-                            Contact contact)
-                                {
-                                    var components = new List<object>();
-
-                                    // Body
-                                    if (templateParams != null && templateParams.Count > 0 && templateMeta.PlaceholderCount > 0)
-                                    {
-                                        components.Add(new
-                                        {
-                                            type = "body",
-                                            parameters = templateParams.Select(p => new { type = "text", text = p }).ToArray()
-                                        });
-                                    }
-
-                                    // No buttons or template has no button params
-                                    if (buttonList == null || buttonList.Count == 0 ||
-                                        templateMeta.ButtonParams == null || templateMeta.ButtonParams.Count == 0)
-                                        return components;
-
-                                    // ✅ Ensure index alignment with the template by ordering by Position (then original index)
-                                    var orderedButtons = buttonList
-                                        .Select((b, idx) => new { Btn = b, idx })
-                                        .OrderBy(x => (int?)x.Btn.Position ?? int.MaxValue) // if Position is null, push to the end
-                                        .ThenBy(x => x.idx)
-                                        .Select(x => x.Btn)
-                                        .ToList();
-
-                                    var total = Math.Min(3, Math.Min(orderedButtons.Count, templateMeta.ButtonParams.Count));
-
-                                    for (int i = 0; i < total; i++)
-                                    {
-                                        var meta = templateMeta.ButtonParams[i];
-                                        var subType = (meta.SubType ?? "url").ToLowerInvariant();
-                                        var metaParam = meta.ParameterValue?.Trim();
-
-                                        // Meta needs parameters ONLY for dynamic URL buttons
-                                        if (!string.Equals(subType, "url", StringComparison.OrdinalIgnoreCase))
-                                            continue;
-
-                                        var isDynamic = !string.IsNullOrWhiteSpace(metaParam) && metaParam.Contains("{{");
-                                        if (!isDynamic)
-                                            continue;
-
-                                        var btn = orderedButtons[i];
-                                        var btnType = (btn?.Type ?? "URL").ToUpperInvariant();
-                                        if (!string.Equals(btnType, "URL", StringComparison.OrdinalIgnoreCase))
-                                        {
-                                            // Template expects a dynamic URL param at this index; if our campaign button isn't URL, skip to avoid 131008.
-                                            // If you prefer strict behavior, replace with an InvalidOperationException instead.
-                                            continue;
-                                        }
-
-                                        var valueRaw = btn.Value?.Trim();
-                                        if (string.IsNullOrWhiteSpace(valueRaw))
-                                        {
-                                            // Missing value for a required dynamic URL param → better to fail fast than get Meta error 131008.
-                                            throw new InvalidOperationException(
-                                                $"Template requires a dynamic URL at button index {i}, but campaign button value is empty.");
-                                        }
-
-                                        // Optional phone substitution in destination
-                                        var phone = string.IsNullOrWhiteSpace(contact?.PhoneNumber)
-                                            ? ""
-                                            : (contact.PhoneNumber.StartsWith("+") ? contact.PhoneNumber : "+" + contact.PhoneNumber);
-                                        var encodedPhone = Uri.EscapeDataString(phone);
-
-                                        var resolvedDestination = valueRaw.Contains("{{1}}")
-                                            ? valueRaw.Replace("{{1}}", encodedPhone)
-                                            : valueRaw;
-
-                                        resolvedDestination = NormalizeAbsoluteUrlOrThrowForButton(resolvedDestination, btn.Title, i);
-
-                                        // Build both; choose which to send based on template base style
-                                        var fullTrackedUrl = _urlBuilderService.BuildTrackedButtonUrl(
-                                            campaignSendLogId, i, btn.Title, resolvedDestination);
-
-                                        var tokenParam = BuildTokenParam(campaignSendLogId, i, btn.Title, resolvedDestination);
-
-                                        var templateHasAbsoluteBase = LooksLikeAbsoluteBaseUrlWithPlaceholder(metaParam);
-                                        var valueToSend = templateHasAbsoluteBase ? tokenParam : fullTrackedUrl;
-
-                                        components.Add(new Dictionary<string, object>
-                                        {
-                                            ["type"] = "button",
-                                            ["sub_type"] = "url",
-                                            ["index"] = i.ToString(), // "0"/"1"/"2"
-                                            ["parameters"] = new[] {
-                                        new Dictionary<string, object> { ["type"] = "text", ["text"] = valueToSend }
-                                    }
-                                        });
-                                    }
-
-                                    return components;
-                                }
-
-        private List<object> BuildTextTemplateComponents_Pinnacle(
-                            List<string> templateParams,
-                            List<CampaignButton>? buttonList,
-                            TemplateMetadataDto templateMeta,
-                            Guid campaignSendLogId,
-                            Contact contact)
+            List<string> templateParams,
+            List<CampaignButton>? buttonList,
+            TemplateMetadataDto templateMeta,
+            Guid campaignSendLogId,
+            Contact contact)
         {
             var components = new List<object>();
 
-            // BODY params (only if template has placeholders)
-            if (templateParams != null && templateParams.Count > 0 && templateMeta.PlaceholderCount > 0)
+            // BODY: send exactly PlaceholderCount
+            if (templateMeta.PlaceholderCount > 0)
             {
-                components.Add(new
+                var bodyParams = BuildBodyParameters(templateParams, templateMeta.PlaceholderCount);
+                components.Add(new { type = "body", parameters = bodyParams });
+            }
+
+            // No buttons or template has no button params
+            if (buttonList == null || buttonList.Count == 0 ||
+                templateMeta.ButtonParams == null || templateMeta.ButtonParams.Count == 0)
+                return components;
+
+            // ✅ Ensure index alignment with the template by ordering by Position (then original index)
+            var orderedButtons = buttonList
+                .Select((b, idx) => new { Btn = b, idx })
+                .OrderBy(x => (int?)x.Btn.Position ?? int.MaxValue)
+                .ThenBy(x => x.idx)
+                .Select(x => x.Btn)
+                .ToList();
+
+            var total = Math.Min(3, Math.Min(orderedButtons.Count, templateMeta.ButtonParams.Count));
+
+            for (int i = 0; i < total; i++)
+            {
+                var meta = templateMeta.ButtonParams[i];
+                var subType = (meta.SubType ?? "url").ToLowerInvariant();
+                var metaParam = meta.ParameterValue?.Trim();
+
+                // Meta needs parameters ONLY for dynamic URL buttons
+                if (!string.Equals(subType, "url", StringComparison.OrdinalIgnoreCase))
+                    continue;
+
+                var isDynamic = !string.IsNullOrWhiteSpace(metaParam) && metaParam.Contains("{{");
+                if (!isDynamic)
+                    continue;
+
+                var btn = orderedButtons[i];
+                var btnType = (btn?.Type ?? "URL").ToUpperInvariant();
+                if (!string.Equals(btnType, "URL", StringComparison.OrdinalIgnoreCase))
                 {
-                    type = "body",
-                    parameters = templateParams.Select(p => new { type = "text", text = p }).ToArray()
+                    // If template expects dynamic URL at this index and your campaign button isn't URL, skip to avoid 131008
+                    continue;
+                }
+
+                var valueRaw = btn.Value?.Trim();
+                if (string.IsNullOrWhiteSpace(valueRaw))
+                {
+                    throw new InvalidOperationException(
+                        $"Template requires a dynamic URL at button index {i}, but campaign button value is empty.");
+                }
+
+                // Optional phone substitution in destination
+                var phone = string.IsNullOrWhiteSpace(contact?.PhoneNumber)
+                    ? ""
+                    : (contact.PhoneNumber.StartsWith("+") ? contact.PhoneNumber : "+" + contact.PhoneNumber);
+                var encodedPhone = Uri.EscapeDataString(phone);
+
+                var resolvedDestination = valueRaw.Contains("{{1}}")
+                    ? valueRaw.Replace("{{1}}", encodedPhone)
+                    : valueRaw;
+
+                resolvedDestination = NormalizeAbsoluteUrlOrThrowForButton(resolvedDestination, btn.Title, i);
+
+                // Build both; choose which to send based on template base style
+                var fullTrackedUrl = _urlBuilderService.BuildTrackedButtonUrl(
+                    campaignSendLogId, i, btn.Title, resolvedDestination);
+
+                var tokenParam = BuildTokenParam(campaignSendLogId, i, btn.Title, resolvedDestination);
+
+                var templateHasAbsoluteBase = LooksLikeAbsoluteBaseUrlWithPlaceholder(metaParam);
+                var valueToSend = templateHasAbsoluteBase ? tokenParam : fullTrackedUrl;
+
+                components.Add(new Dictionary<string, object>
+                {
+                    ["type"] = "button",
+                    ["sub_type"] = "url",
+                    ["index"] = i.ToString(), // "0"/"1"/"2"
+                    ["parameters"] = new[] {
+                new Dictionary<string, object> { ["type"] = "text", ["text"] = valueToSend }
+            }
                 });
+            }
+
+            return components;
+        }
+        private List<object> BuildTextTemplateComponents_Pinnacle(
+            List<string> templateParams,
+            List<CampaignButton>? buttonList,
+            TemplateMetadataDto templateMeta,
+            Guid campaignSendLogId,
+            Contact contact)
+        {
+            var components = new List<object>();
+
+            // BODY: Pinnacle is strict → always send exactly PlaceholderCount
+            if (templateMeta.PlaceholderCount > 0)
+            {
+                var bodyParams = BuildBodyParameters(templateParams, templateMeta.PlaceholderCount);
+                components.Add(new { type = "body", parameters = bodyParams });
             }
 
             // No buttons to map → return body-only
@@ -1733,7 +1950,7 @@ namespace xbytechat.api.Features.CampaignModule.Services
                 templateMeta.ButtonParams == null || templateMeta.ButtonParams.Count == 0)
                 return components;
 
-            // Keep template index alignment: order by Position then by original index
+            // ✅ Ensure index alignment with the template by ordering by Position (then original index)
             var orderedButtons = buttonList
                 .Select((b, idx) => new { Btn = b, idx })
                 .OrderBy(x => (int?)x.Btn.Position ?? int.MaxValue)
@@ -1753,7 +1970,6 @@ namespace xbytechat.api.Features.CampaignModule.Services
                 if (!string.Equals(subType, "url", StringComparison.OrdinalIgnoreCase))
                     continue;
 
-                // Only add a parameter when template truly expects a dynamic value like {{1}}
                 var isDynamic = !string.IsNullOrWhiteSpace(metaParam) && metaParam.Contains("{{");
                 if (!isDynamic)
                     continue;
@@ -1762,15 +1978,13 @@ namespace xbytechat.api.Features.CampaignModule.Services
                 var btnType = (btn?.Type ?? "URL").ToUpperInvariant();
                 if (!string.Equals(btnType, "URL", StringComparison.OrdinalIgnoreCase))
                 {
-                    // Template expects a URL param here; if our campaign button isn't URL, skip (don’t fail the whole send)
-                    Log.Warning("⚠️ Template expects URL at index {Idx} but campaign button type is '{Type}'. Skipping.", i, btn?.Type);
-                    continue;
+                    throw new InvalidOperationException(
+                        $"Template expects a dynamic URL at button index {i}, but campaign button type is '{btn?.Type}'.");
                 }
 
                 var valueRaw = btn?.Value?.Trim();
                 if (string.IsNullOrWhiteSpace(valueRaw))
                 {
-                    // Hard failure: template requires a value here
                     throw new InvalidOperationException(
                         $"Template requires a dynamic URL at button index {i}, but campaign button value is empty.");
                 }
@@ -1797,12 +2011,12 @@ namespace xbytechat.api.Features.CampaignModule.Services
                 var templateHasAbsoluteBase = LooksLikeAbsoluteBaseUrlWithPlaceholder(metaParam);
                 var valueToSend = templateHasAbsoluteBase ? tokenParam : fullTrackedUrl;
 
-                // Pinnacle payload shape (kept aligned with Meta for consistency)
+                // Pinnacle payload shape (aligned with Meta)
                 components.Add(new Dictionary<string, object>
                 {
                     ["type"] = "button",
                     ["sub_type"] = "url",
-                    ["index"] = i.ToString(), // "0"/"1"/"2"
+                    ["index"] = i.ToString(),
                     ["parameters"] = new[] {
                 new Dictionary<string, object> { ["type"] = "text", ["text"] = valueToSend }
             }
@@ -1811,7 +2025,6 @@ namespace xbytechat.api.Features.CampaignModule.Services
 
             return components;
         }
-
 
         #region SendImagetemplate
 
