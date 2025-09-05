@@ -9,19 +9,15 @@ using xbytechat.api.Features.CampaignModule.Models;
 using xbytechat.api.Shared;
 using xbytechat.api.Features.CampaignTracking.Models;
 using xbytechat.api.Services.Messages.Interfaces;
-using xbytechat.api.DTOs.Messages;
 using Microsoft.Extensions.DependencyInjection;
 using xbytechat.api.Features.xbTimeline.Services;
 using xbytechat.api.Features.MessagesEngine.DTOs;
 using xbytechat.api.Features.MessagesEngine.Services;
 using xbytechat.api.CRM.Dtos;
-using System.Text.Json;
 using xbytechat.api.Helpers;
 using xbytechat_api.WhatsAppSettings.Services;
 using xbytechat.api.Shared.utility;
-using xbytechat.api.Features.MessagesEngine.PayloadBuilders;
 using xbytechat.api.WhatsAppSettings.DTOs;
-using xbytechat.api.Features.BusinessModule.Models;
 using xbytechat.api.CRM.Models;
 using xbytechat.api.Features.Tracking.Services;
 using xbytechat.api.Features.CTAFlowBuilder.Models;
@@ -270,147 +266,6 @@ namespace xbytechat.api.Features.CampaignModule.Services
         #endregion
 
         #region // 🆕 CreateCampaignAsync(Text/Image)
-
-
-
-        //        public async Task<Guid?> CreateTextCampaignAsync(CampaignCreateDto dto, Guid businessId, string createdBy)
-        //        {
-        //            try
-        //            {
-        //                var campaignId = Guid.NewGuid();
-
-        //                // 🔁 Parse/normalize template parameters once
-
-        //                var parsedParams = TemplateParameterHelper.ParseTemplateParams(
-        //    JsonConvert.SerializeObject(dto.TemplateParameters ?? new List<string>())
-        //);
-
-        //                // 🧠 Fetch template (for body + buttons)
-        //                var template = await _templateFetcherService.GetTemplateByNameAsync(businessId, dto.TemplateId, true);
-
-        //                // 🧠 Resolve message body using template body (if available) else dto.MessageTemplate
-        //                var templateBody = template?.Body ?? dto.MessageTemplate ?? string.Empty;
-        //                var resolvedBody = TemplateParameterHelper.FillPlaceholders(templateBody, parsedParams);
-
-        //                // ✅ Step 1: Create campaign (restored all fields from old code)
-        //                var campaign = new Campaign
-        //                {
-        //                    Id = campaignId,
-        //                    BusinessId = businessId,
-        //                    Name = dto.Name,
-        //                    MessageTemplate = dto.MessageTemplate,               // original message template name/content
-        //                    TemplateId = dto.TemplateId,
-        //                    FollowUpTemplateId = dto.FollowUpTemplateId,            // restored
-        //                    CampaignType = dto.CampaignType ?? "text",        // default to "text" (restored)
-        //                    CtaId = dto.CtaId,
-        //                    ScheduledAt = dto.ScheduledAt,
-        //                    CreatedBy = createdBy,
-        //                    CreatedAt = DateTime.UtcNow,
-        //                    UpdatedAt = DateTime.UtcNow,
-        //                    Status = "Draft",
-        //                    ImageUrl = dto.ImageUrl,                      // restored
-        //                    ImageCaption = dto.ImageCaption,                  // restored
-        //                    TemplateParameters = JsonConvert.SerializeObject(dto.TemplateParameters ?? new List<string>()),
-        //                    MessageBody = resolvedBody                        // restored: final resolved message
-        //                };
-
-        //                await _context.Campaigns.AddAsync(campaign);
-
-        //                // ✅ Step 2: Assign contacts (keep semantics; set SentAt = null until actually sent)
-        //                if (dto.ContactIds != null && dto.ContactIds.Any())
-        //                {
-        //                    var recipients = dto.ContactIds.Select(contactId => new CampaignRecipient
-        //                    {
-        //                        Id = Guid.NewGuid(),
-        //                        CampaignId = campaignId,
-        //                        ContactId = contactId,
-        //                        BusinessId = businessId,
-        //                        Status = "Pending",
-        //                        SentAt = null,                  // <-- changed from UtcNow to null as requested
-        //                        UpdatedAt = DateTime.UtcNow
-        //                    });
-
-        //                    await _context.CampaignRecipients.AddRangeAsync(recipients);
-        //                }
-
-        //                // ✅ Step 3a: Save manual buttons from frontend (unchanged from old code)
-        //                if (dto.MultiButtons != null && dto.MultiButtons.Any())
-        //                {
-        //                    var buttons = dto.MultiButtons
-        //                        .Where(btn => !string.IsNullOrWhiteSpace(btn.ButtonText) && !string.IsNullOrWhiteSpace(btn.TargetUrl))
-        //                        .Take(3)
-        //                        .Select((btn, index) => new CampaignButton
-        //                        {
-        //                            Id = Guid.NewGuid(),
-        //                            CampaignId = campaignId,
-        //                            Title = btn.ButtonText,
-        //                            Type = btn.ButtonType ?? "url",
-        //                            Value = btn.TargetUrl,
-        //                            Position = index + 1,
-        //                            IsFromTemplate = false
-        //                        });
-
-        //                    await _context.CampaignButtons.AddRangeAsync(buttons);
-        //                }
-
-        //                // ======================== Dynamic buttons merge (your new logic, enhanced) ========================
-        //                // ✅ Step 3b: Save buttons auto-fetched from template, merging with UI "buttonParams" for dynamic buttons
-        //                if (template != null && template.ButtonParams?.Count > 0)
-        //                {
-        //                    var buttonsToSave = new List<CampaignButton>();
-
-        //                    // Expecting dto.ButtonParams from the React page
-        //                    var userButtons = dto.ButtonParams ?? new List<CampaignButtonParamFromMetaDto>();
-
-        //                    var total = Math.Min(3, template.ButtonParams.Count);
-        //                    for (int i = 0; i < total; i++)
-        //                    {
-        //                        var tplBtn = template.ButtonParams[i];
-        //                        var isDynamic = (tplBtn.ParameterValue?.Contains("{{1}}") ?? false);
-
-        //                        // Find matching UI-provided param by position (1-based)
-        //                        var userBtn = userButtons.FirstOrDefault(b => b.Position == i + 1);
-
-        //                        // If dynamic and user provided a value, use that; otherwise fall back to template's static parameter
-        //                        var valueToSave = (isDynamic && userBtn != null)
-        //                            ? userBtn.Value?.Trim()
-        //                            : tplBtn.ParameterValue;
-
-        //                        buttonsToSave.Add(new CampaignButton
-        //                        {
-        //                            Id = Guid.NewGuid(),
-        //                            CampaignId = campaignId,
-        //                            Title = tplBtn.Text,
-        //                            Type = tplBtn.Type,
-        //                            Value = valueToSave,
-        //                            Position = i + 1,
-        //                            IsFromTemplate = true
-        //                        });
-        //                    }
-
-        //                    await _context.CampaignButtons.AddRangeAsync(buttonsToSave);
-        //                }
-        //                // ==================================================================================================
-
-        //                // ✅ Final Save
-        //                await _context.SaveChangesAsync();
-
-        //                Log.Information("✅ Campaign '{Name}' created with {Contacts} recipients, {ManualButtons} user buttons, {TemplateButtons} template buttons and {Params} template parameters",
-        //                    dto.Name,
-        //                    dto.ContactIds?.Count ?? 0,
-        //                    dto.MultiButtons?.Count ?? 0,
-        //                    template?.ButtonParams?.Count ?? 0,
-        //                    dto.TemplateParameters?.Count ?? 0
-        //                );
-
-        //                return campaignId;
-        //            }
-        //            catch (Exception ex)
-        //            {
-        //                Log.Error(ex, "❌ Failed to create campaign");
-        //                return null;
-        //            }
-        //        }
 
         public async Task<Guid?> CreateTextCampaignAsync(CampaignCreateDto dto, Guid businessId, string createdBy)
         {
@@ -812,102 +667,6 @@ namespace xbytechat.api.Features.CampaignModule.Services
 
             return campaignId;
         }
-
-        //public async Task<Guid> CreateImageCampaignAsync(Guid businessId, CampaignCreateDto dto, string createdBy)
-        //{
-        //    // 🔐 Optional CTA validation
-        //    if (dto.CtaId.HasValue)
-        //    {
-        //        var cta = await _context.CTADefinitions
-        //            .FirstOrDefaultAsync(c => c.Id == dto.CtaId && c.BusinessId == businessId && c.IsActive);
-
-        //        if (cta == null)
-        //            throw new UnauthorizedAccessException("❌ The selected CTA does not belong to your business or is inactive.");
-        //    }
-
-        //    // 🎯 Create campaign
-        //    var campaign = new Campaign
-        //    {
-        //        Id = Guid.NewGuid(),
-        //        BusinessId = businessId,
-        //        Name = dto.Name,
-        //        MessageTemplate = dto.MessageTemplate,
-        //        TemplateId = dto.TemplateId,
-        //        FollowUpTemplateId = dto.FollowUpTemplateId,
-        //        CampaignType = "image",
-        //        ImageUrl = dto.ImageUrl,
-        //        ImageCaption = dto.ImageCaption,
-        //        CtaId = dto.CtaId,
-        //        CreatedBy = createdBy,
-        //        CreatedAt = DateTime.UtcNow,
-        //        UpdatedAt = DateTime.UtcNow,
-        //        Status = "Draft"
-        //    };
-
-        //    await _context.Campaigns.AddAsync(campaign);
-
-        //    // 🔘 Save manual buttons from UI
-        //    if (dto.MultiButtons?.Any() == true)
-        //    {
-        //        var buttons = dto.MultiButtons
-        //            .Where(btn => !string.IsNullOrWhiteSpace(btn.ButtonText) && !string.IsNullOrWhiteSpace(btn.TargetUrl))
-        //            .Take(3)
-        //            .Select((btn, index) => new CampaignButton
-        //            {
-        //                Id = Guid.NewGuid(),
-        //                CampaignId = campaign.Id,
-        //                Title = btn.ButtonText,
-        //                Type = string.IsNullOrWhiteSpace(btn.ButtonType) ? "url" : btn.ButtonType,
-        //                Value = btn.TargetUrl,
-        //                Position = index + 1,
-        //                IsFromTemplate = false
-        //            }).ToList();
-
-        //        if (buttons.Any())
-        //            await _context.CampaignButtons.AddRangeAsync(buttons);
-        //    }
-
-        //    // 🔘 Save template buttons (from Meta) with proper dynamic/static handling
-        //    if (dto.ButtonParams?.Any() == true)
-        //    {
-        //        var templateButtons = dto.ButtonParams
-        //            .Where(btn => !string.IsNullOrWhiteSpace(btn.Text) && !string.IsNullOrWhiteSpace(btn.Type))
-        //            .Take(3)
-        //            .Select((btn, index) =>
-        //            {
-        //                var subType = btn.SubType?.ToLower();
-        //                var isDynamic = subType == "url" || subType == "flow" || subType == "copy_code";
-
-        //                // ✅ Prefer user-provided value if dynamic, fallback to Meta value
-        //                var userInput = dto.MultiButtons?.ElementAtOrDefault(index)?.TargetUrl?.Trim();
-        //                var valueToSave = isDynamic && !string.IsNullOrWhiteSpace(userInput)
-        //                    ? userInput
-        //                    : btn.Value;
-
-        //                return new CampaignButton
-        //                {
-        //                    Id = Guid.NewGuid(),
-        //                    CampaignId = campaign.Id,
-        //                    Title = btn.Text,
-        //                    Type = btn.Type,
-        //                    Value = valueToSave,
-        //                    Position = index + 1,
-        //                    IsFromTemplate = true
-        //                };
-        //            })
-        //            .Where(btn => !string.IsNullOrWhiteSpace(btn.Value)) // ✅ Prevent null insert error
-        //            .ToList();
-
-        //        if (templateButtons.Any())
-        //            await _context.CampaignButtons.AddRangeAsync(templateButtons);
-        //    }
-
-        //    await _context.SaveChangesAsync();
-        //    return campaign.Id;
-        //}
-
-
-
         #endregion
         public async Task<bool> SendCampaignAsync(Guid campaignId, string ipAddress, string userAgent)
         {
@@ -1203,8 +962,6 @@ namespace xbytechat.api.Features.CampaignModule.Services
 
         #region  This region include all the code related to sending text and image based
 
-
-
         public async Task<ResponseResult> SendTemplateCampaignWithTypeDetectionAsync(Guid campaignId)
         {
             var campaign = await _context.Campaigns
@@ -1222,177 +979,6 @@ namespace xbytechat.api.Features.CampaignModule.Services
                 _ => ResponseResult.ErrorInfo("❌ Unsupported campaign type.")
             };
         }
-
-
-        //public async Task<ResponseResult> SendTextTemplateCampaignAsync(Campaign campaign)
-        //{
-        //    try
-        //    {
-        //        if (campaign == null || campaign.IsDeleted)
-        //            return ResponseResult.ErrorInfo("❌ Invalid campaign.");
-
-        //        if (campaign.Recipients == null || campaign.Recipients.Count == 0)
-        //            return ResponseResult.ErrorInfo("❌ No recipients to send.");
-
-        //        var businessId = campaign.BusinessId;
-
-        //        // 🔑 Use Flow entry template if flow is attached; else fallback to campaign.TemplateId/MessageTemplate
-        //        var (_, entryTemplate) = await ResolveFlowEntryAsync(businessId, campaign.CTAFlowConfigId);
-        //        var templateName = !string.IsNullOrWhiteSpace(entryTemplate)
-        //            ? entryTemplate!
-        //            : (campaign.TemplateId ?? campaign.MessageTemplate ?? "");
-
-        //        // 🧠 Fetch template meta (+buttons if you need)
-        //        var templateMeta = await _templateFetcherService
-        //            .GetTemplateByNameAsync(businessId, templateName, includeButtons: true);
-
-        //        if (templateMeta == null)
-        //            return ResponseResult.ErrorInfo("❌ Template metadata not found.");
-
-        //        var templateParams = TemplateParameterHelper.ParseTemplateParams(campaign.TemplateParameters);
-
-        //        // Existing manual buttons (for dynamic URL values)
-        //        var buttons = campaign.MultiButtons?.OrderBy(b => b.Position).ToList();
-
-        //        // Provider detection (Meta vs anything else you support)
-        //        var setting = await _context.WhatsAppSettings
-        //            .AsNoTracking()
-        //            .FirstOrDefaultAsync(s => s.BusinessId == businessId && s.IsActive);
-
-        //        if (setting == null)
-        //            return ResponseResult.ErrorInfo("❌ WhatsApp settings not found.");
-
-        //        var providerKey = (setting.Provider ?? "meta_cloud").ToLowerInvariant();
-
-        //        // 🧭 Resolve entry step id (so we can persist context for click processing)
-        //        Guid? entryStepId = null;
-        //        if (campaign.CTAFlowConfigId.HasValue)
-        //        {
-        //            entryStepId = await _context.CTAFlowSteps
-        //                .Where(s => s.CTAFlowConfigId == campaign.CTAFlowConfigId.Value)
-        //                .OrderBy(s => s.StepOrder)
-        //                .Select(s => (Guid?)s.Id)
-        //                .FirstOrDefaultAsync();
-        //        }
-
-        //        // 🧰 Build & freeze a "button bundle" (exact labels/positions user sees)
-        //        // IMPORTANT: store zero-based 'i' and label 't' to match ProcessClickAsync mapping.
-        //        string? buttonBundleJson = null;
-        //        if (templateMeta.ButtonParams != null && templateMeta.ButtonParams.Count > 0)
-        //        {
-        //            var bundle = templateMeta.ButtonParams
-        //                .Take(3)
-        //                .Select((b, i) => new
-        //                {
-        //                    // 👇 keys your click-mapper expects
-        //                    i = i,                                // zero-based index used by provider & mapper
-        //                    t = (b.Text ?? "").Trim(),            // button label used for text matching
-
-        //                    // 👇 keep these redundant fields for dev tools/inspection (harmless)
-        //                    position = i + 1,                     // 1-based for readability
-        //                    text = (b.Text ?? "").Trim(),
-        //                    type = b.Type,
-        //                    subType = b.SubType
-        //                })
-        //                .ToList();
-
-        //            buttonBundleJson = JsonConvert.SerializeObject(bundle);
-        //        }
-
-        //        int successCount = 0, failureCount = 0;
-
-        //        foreach (var r in campaign.Recipients)
-        //        {
-        //            if (r?.Contact == null) continue;
-
-        //            // 🔑 New run per recipient send (prevents cross-run mixing in journey)
-        //            var runId = Guid.NewGuid();
-
-        //            // Build provider components (use your existing builders)
-        //            var campaignSendLogId = Guid.NewGuid(); // used by tracked URLs
-        //            List<object> components = providerKey == "pinnacle"
-        //                ? BuildTextTemplateComponents_Pinnacle(templateParams, buttons, templateMeta, campaignSendLogId, r.Contact)
-        //                : BuildTextTemplateComponents_Meta(templateParams, buttons, templateMeta, campaignSendLogId, r.Contact);
-
-        //            var payload = new
-        //            {
-        //                messaging_product = "whatsapp",
-        //                to = r.Contact.PhoneNumber,
-        //                type = "template",
-        //                template = new
-        //                {
-        //                    name = templateName,
-        //                    language = new { code = string.IsNullOrWhiteSpace(templateMeta.Language) ? "en_US" : templateMeta.Language },
-        //                    components
-        //                }
-        //            };
-
-        //            var result = await _messageEngineService.SendPayloadAsync(businessId, payload);
-
-        //            // 📌 Persist logs WITH flow context and button bundle
-        //            var logId = Guid.NewGuid();
-        //            var log = new MessageLog
-        //            {
-        //                Id = logId,
-        //                BusinessId = businessId,
-        //                CampaignId = campaign.Id,
-        //                ContactId = r.ContactId,
-        //                RecipientNumber = r.Contact.PhoneNumber,
-        //                MessageContent = templateName, // NOT NULL (fixes previous constraint)
-        //                Status = result.Success ? "Sent" : "Failed",
-        //                MessageId = result.MessageId,
-        //                ErrorMessage = result.ErrorMessage,
-        //                RawResponse = result.RawResponse,
-        //                CreatedAt = DateTime.UtcNow,
-        //                SentAt = result.Success ? DateTime.UtcNow : (DateTime?)null,
-        //                Source = "campaign",
-
-        //                // 🧩 Save flow context + the exact button bundle shown
-        //                CTAFlowConfigId = campaign.CTAFlowConfigId,
-        //                CTAFlowStepId = entryStepId,
-        //                ButtonBundleJson = buttonBundleJson
-        //            };
-        //            _context.MessageLogs.Add(log);
-
-        //            await _context.CampaignSendLogs.AddAsync(new CampaignSendLog
-        //            {
-        //                Id = campaignSendLogId,
-        //                CampaignId = campaign.Id,
-        //                BusinessId = businessId,
-        //                ContactId = r.ContactId,
-        //                RecipientId = r.Id,
-        //                MessageBody = campaign.MessageBody ?? templateName,
-        //                TemplateId = templateName,
-        //                SendStatus = result.Success ? "Sent" : "Failed",
-        //                MessageLogId = log.Id,
-        //                MessageId = result.MessageId,
-        //                ErrorMessage = result.Success ? null : result.Message,
-        //                CreatedAt = DateTime.UtcNow,
-        //                SentAt = DateTime.UtcNow,
-        //                CreatedBy = campaign.CreatedBy,
-
-        //                // 🧩 Save flow context + the exact button bundle shown
-        //                CTAFlowConfigId = campaign.CTAFlowConfigId,
-        //                CTAFlowStepId = entryStepId,
-        //                ButtonBundleJson = buttonBundleJson,
-
-        //                // 🧵 NEW: per-send session id (used by journey UI)
-        //                RunId = runId
-        //            });
-
-        //            if (result.Success) successCount++; else failureCount++;
-        //        }
-
-        //        await _context.SaveChangesAsync();
-        //        return ResponseResult.SuccessInfo($"📤 Sent to {successCount} contacts. ❌ Failed for {failureCount}.");
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Log.Error(ex, "Error while sending text template campaign");
-        //        return ResponseResult.ErrorInfo("🚨 Unexpected error while sending campaign.", ex.ToString());
-        //    }
-        //}
-
         public async Task<ResponseResult> SendTextTemplateCampaignAsync(Campaign campaign)
         {
             try
@@ -1560,7 +1146,7 @@ namespace xbytechat.api.Features.CampaignModule.Services
         }
 
 
-        #region Text Component Builders New
+        #region Text Component Builders
         private string BuildTokenParam(Guid campaignSendLogId, int buttonIndex, string? buttonTitle, string destinationUrlAbsolute)
         {
             var full = _urlBuilderService.BuildTrackedButtonUrl(campaignSendLogId, buttonIndex, buttonTitle, destinationUrlAbsolute);
@@ -1568,16 +1154,14 @@ namespace xbytechat.api.Features.CampaignModule.Services
             return (pos >= 0) ? full.Substring(pos + 3) : full; // fallback: if not found, return full (rare)
         }
 
+        //private static string CleanForUri(string s)
+        //{
+        //    if (s is null) return string.Empty;
+        //    var t = s.Trim();
+        //    return new string(Array.FindAll(t.ToCharArray(), c => !char.IsControl(c)));
+        //}
 
-
-        private static string CleanForUri(string s)
-        {
-            if (s is null) return string.Empty;
-            var t = s.Trim();
-            return new string(Array.FindAll(t.ToCharArray(), c => !char.IsControl(c)));
-        }
-
-         private static string NormalizeAbsoluteUrlOrThrowForButton(string input, string buttonTitle, int buttonIndex)
+        private static string NormalizeAbsoluteUrlOrThrowForButton(string input, string buttonTitle, int buttonIndex)
         {
             if (string.IsNullOrWhiteSpace(input))
                 throw new ArgumentException($"Destination is required for button '{buttonTitle}' (index {buttonIndex}).");
@@ -1617,210 +1201,6 @@ namespace xbytechat.api.Features.CampaignModule.Services
                    (abs.Scheme.Equals(Uri.UriSchemeHttp, StringComparison.OrdinalIgnoreCase) ||
                     abs.Scheme.Equals(Uri.UriSchemeHttps, StringComparison.OrdinalIgnoreCase));
         }
-
-
-        //private List<object> BuildTextTemplateComponents_Meta(
-        //                    List<string> templateParams,
-        //                    List<CampaignButton>? buttonList,
-        //                    TemplateMetadataDto templateMeta,
-        //                    Guid campaignSendLogId,
-        //                    Contact contact)
-        //                        {
-        //                            var components = new List<object>();
-
-        //                            // Body
-        //                            if (templateParams != null && templateParams.Count > 0 && templateMeta.PlaceholderCount > 0)
-        //                            {
-        //                                components.Add(new
-        //                                {
-        //                                    type = "body",
-        //                                    parameters = templateParams.Select(p => new { type = "text", text = p }).ToArray()
-        //                                });
-        //                            }
-
-        //                            // No buttons or template has no button params
-        //                            if (buttonList == null || buttonList.Count == 0 ||
-        //                                templateMeta.ButtonParams == null || templateMeta.ButtonParams.Count == 0)
-        //                                return components;
-
-        //                            // ✅ Ensure index alignment with the template by ordering by Position (then original index)
-        //                            var orderedButtons = buttonList
-        //                                .Select((b, idx) => new { Btn = b, idx })
-        //                                .OrderBy(x => (int?)x.Btn.Position ?? int.MaxValue) // if Position is null, push to the end
-        //                                .ThenBy(x => x.idx)
-        //                                .Select(x => x.Btn)
-        //                                .ToList();
-
-        //                            var total = Math.Min(3, Math.Min(orderedButtons.Count, templateMeta.ButtonParams.Count));
-
-        //                            for (int i = 0; i < total; i++)
-        //                            {
-        //                                var meta = templateMeta.ButtonParams[i];
-        //                                var subType = (meta.SubType ?? "url").ToLowerInvariant();
-        //                                var metaParam = meta.ParameterValue?.Trim();
-
-        //                                // Meta needs parameters ONLY for dynamic URL buttons
-        //                                if (!string.Equals(subType, "url", StringComparison.OrdinalIgnoreCase))
-        //                                    continue;
-
-        //                                var isDynamic = !string.IsNullOrWhiteSpace(metaParam) && metaParam.Contains("{{");
-        //                                if (!isDynamic)
-        //                                    continue;
-
-        //                                var btn = orderedButtons[i];
-        //                                var btnType = (btn?.Type ?? "URL").ToUpperInvariant();
-        //                                if (!string.Equals(btnType, "URL", StringComparison.OrdinalIgnoreCase))
-        //                                {
-        //                                    // Template expects a dynamic URL param at this index; if our campaign button isn't URL, skip to avoid 131008.
-        //                                    // If you prefer strict behavior, replace with an InvalidOperationException instead.
-        //                                    continue;
-        //                                }
-
-        //                                var valueRaw = btn.Value?.Trim();
-        //                                if (string.IsNullOrWhiteSpace(valueRaw))
-        //                                {
-        //                                    // Missing value for a required dynamic URL param → better to fail fast than get Meta error 131008.
-        //                                    throw new InvalidOperationException(
-        //                                        $"Template requires a dynamic URL at button index {i}, but campaign button value is empty.");
-        //                                }
-
-        //                                // Optional phone substitution in destination
-        //                                var phone = string.IsNullOrWhiteSpace(contact?.PhoneNumber)
-        //                                    ? ""
-        //                                    : (contact.PhoneNumber.StartsWith("+") ? contact.PhoneNumber : "+" + contact.PhoneNumber);
-        //                                var encodedPhone = Uri.EscapeDataString(phone);
-
-        //                                var resolvedDestination = valueRaw.Contains("{{1}}")
-        //                                    ? valueRaw.Replace("{{1}}", encodedPhone)
-        //                                    : valueRaw;
-
-        //                                resolvedDestination = NormalizeAbsoluteUrlOrThrowForButton(resolvedDestination, btn.Title, i);
-
-        //                                // Build both; choose which to send based on template base style
-        //                                var fullTrackedUrl = _urlBuilderService.BuildTrackedButtonUrl(
-        //                                    campaignSendLogId, i, btn.Title, resolvedDestination);
-
-        //                                var tokenParam = BuildTokenParam(campaignSendLogId, i, btn.Title, resolvedDestination);
-
-        //                                var templateHasAbsoluteBase = LooksLikeAbsoluteBaseUrlWithPlaceholder(metaParam);
-        //                                var valueToSend = templateHasAbsoluteBase ? tokenParam : fullTrackedUrl;
-
-        //                                components.Add(new Dictionary<string, object>
-        //                                {
-        //                                    ["type"] = "button",
-        //                                    ["sub_type"] = "url",
-        //                                    ["index"] = i.ToString(), // "0"/"1"/"2"
-        //                                    ["parameters"] = new[] {
-        //                                new Dictionary<string, object> { ["type"] = "text", ["text"] = valueToSend }
-        //                            }
-        //                                });
-        //                            }
-
-        //                            return components;
-        //                        }
-
-        //private List<object> BuildTextTemplateComponents_Pinnacle(
-        //    List<string> templateParams,
-        //    List<CampaignButton>? buttonList,
-        //    TemplateMetadataDto templateMeta,
-        //    Guid campaignSendLogId,
-        //    Contact contact)
-        //{
-        //    var components = new List<object>();
-
-        //    // BODY params (only if template has placeholders)
-        //    if (templateParams != null && templateParams.Count > 0 && templateMeta.PlaceholderCount > 0)
-        //    {
-        //        components.Add(new
-        //        {
-        //            type = "body",
-        //            parameters = templateParams.Select(p => new { type = "text", text = p }).ToArray()
-        //        });
-        //    }
-
-        //    // No buttons to map → return body-only
-        //    if (buttonList == null || buttonList.Count == 0 ||
-        //        templateMeta.ButtonParams == null || templateMeta.ButtonParams.Count == 0)
-        //        return components;
-
-        //    // ✅ Ensure index alignment with the template by ordering by Position (then original index)
-        //    var orderedButtons = buttonList
-        //        .Select((b, idx) => new { Btn = b, idx })
-        //        .OrderBy(x => (int?)x.Btn.Position ?? int.MaxValue)
-        //        .ThenBy(x => x.idx)
-        //        .Select(x => x.Btn)
-        //        .ToList();
-
-        //    var total = Math.Min(3, Math.Min(orderedButtons.Count, templateMeta.ButtonParams.Count));
-
-        //    for (int i = 0; i < total; i++)
-        //    {
-        //        var meta = templateMeta.ButtonParams[i];
-        //        var subType = (meta.SubType ?? "url").ToLowerInvariant();
-        //        var metaParam = meta.ParameterValue?.Trim();
-
-        //        // Pinnacle path currently supports dynamic URL params only
-        //        if (!string.Equals(subType, "url", StringComparison.OrdinalIgnoreCase))
-        //            continue;
-
-        //        var isDynamic = !string.IsNullOrWhiteSpace(metaParam) && metaParam.Contains("{{");
-        //        if (!isDynamic)
-        //            continue;
-
-        //        var btn = orderedButtons[i];
-        //        var btnType = (btn?.Type ?? "URL").ToUpperInvariant();
-        //        if (!string.Equals(btnType, "URL", StringComparison.OrdinalIgnoreCase))
-        //        {
-        //            // Template expects a dynamic URL param at this index; if our campaign button isn't URL, fail fast like Meta
-        //            throw new InvalidOperationException(
-        //                $"Template expects a dynamic URL at button index {i}, but campaign button type is '{btn?.Type}'.");
-        //        }
-
-        //        var valueRaw = btn?.Value?.Trim();
-        //        if (string.IsNullOrWhiteSpace(valueRaw))
-        //        {
-        //            // Missing value for a required dynamic URL param → fail fast (parity with Meta)
-        //            throw new InvalidOperationException(
-        //                $"Template requires a dynamic URL at button index {i}, but campaign button value is empty.");
-        //        }
-
-        //        // Optional phone substitution
-        //        var phone = string.IsNullOrWhiteSpace(contact?.PhoneNumber)
-        //            ? ""
-        //            : (contact.PhoneNumber.StartsWith("+") ? contact.PhoneNumber : "+" + contact.PhoneNumber);
-        //        var encodedPhone = Uri.EscapeDataString(phone);
-
-        //        var resolvedDestination = valueRaw.Contains("{{1}}")
-        //            ? valueRaw.Replace("{{1}}", encodedPhone)
-        //            : valueRaw;
-
-        //        // Validate + normalize absolute URL
-        //        resolvedDestination = NormalizeAbsoluteUrlOrThrowForButton(resolvedDestination, btn!.Title, i);
-
-        //        // Build both options: full tracked URL vs token param (for absolute-base placeholders)
-        //        var fullTrackedUrl = _urlBuilderService.BuildTrackedButtonUrl(
-        //            campaignSendLogId, i, btn.Title, resolvedDestination);
-
-        //        var tokenParam = BuildTokenParam(campaignSendLogId, i, btn.Title, resolvedDestination);
-
-        //        var templateHasAbsoluteBase = LooksLikeAbsoluteBaseUrlWithPlaceholder(metaParam);
-        //        var valueToSend = templateHasAbsoluteBase ? tokenParam : fullTrackedUrl;
-
-        //        // Pinnacle payload shape (aligned with Meta for consistency)
-        //        components.Add(new Dictionary<string, object>
-        //        {
-        //            ["type"] = "button",
-        //            ["sub_type"] = "url",
-        //            ["index"] = i.ToString(),
-        //            ["parameters"] = new[] {
-        //        new Dictionary<string, object> { ["type"] = "text", ["text"] = valueToSend }
-        //    }
-        //        });
-        //    }
-
-        //    return components;
-        //}
-
 
         private static object[] BuildBodyParameters(List<string>? templateParams, int requiredCount)
         {
@@ -2026,6 +1406,7 @@ namespace xbytechat.api.Features.CampaignModule.Services
             return components;
         }
 
+        #endregion
         #region SendImagetemplate
 
         public async Task<ResponseResult> SendImageTemplateCampaignAsync(Campaign campaign)
@@ -2110,88 +1491,88 @@ namespace xbytechat.api.Features.CampaignModule.Services
                             TemplateMetadataDto templateMeta,
                             Guid campaignSendLogId,
                             Contact contact)
-                        {
-                            var components = new List<object>();
+        {
+            var components = new List<object>();
 
-                            // Header (image header only if template supports it)
-                            if (!string.IsNullOrWhiteSpace(imageUrl) && templateMeta.HasImageHeader)
-                            {
-                                components.Add(new
-                                {
-                                    type = "header",
-                                    parameters = new object[]
-                                    {
+            // Header (image header only if template supports it)
+            if (!string.IsNullOrWhiteSpace(imageUrl) && templateMeta.HasImageHeader)
+            {
+                components.Add(new
+                {
+                    type = "header",
+                    parameters = new object[]
+                    {
                                 new { type = "image", image = new { link = imageUrl } }
-                                    }
-                                });
-                            }
+                    }
+                });
+            }
 
-                            // Body
-                            if (templateParams != null && templateParams.Count > 0 && templateMeta.PlaceholderCount > 0)
-                            {
-                                components.Add(new
-                                {
-                                    type = "body",
-                                    parameters = templateParams.Select(p => new { type = "text", text = p }).ToArray()
-                                });
-                            }
+            // Body
+            if (templateParams != null && templateParams.Count > 0 && templateMeta.PlaceholderCount > 0)
+            {
+                components.Add(new
+                {
+                    type = "body",
+                    parameters = templateParams.Select(p => new { type = "text", text = p }).ToArray()
+                });
+            }
 
-                            // Buttons
-                            if (buttonList == null || buttonList.Count == 0 ||
-                                templateMeta.ButtonParams == null || templateMeta.ButtonParams.Count == 0)
-                                return components;
+            // Buttons
+            if (buttonList == null || buttonList.Count == 0 ||
+                templateMeta.ButtonParams == null || templateMeta.ButtonParams.Count == 0)
+                return components;
 
-                            var total = Math.Min(3, Math.Min(buttonList.Count, templateMeta.ButtonParams.Count));
+            var total = Math.Min(3, Math.Min(buttonList.Count, templateMeta.ButtonParams.Count));
 
-                            for (int i = 0; i < total; i++)
-                            {
-                                var btn = buttonList[i];
-                                var meta = templateMeta.ButtonParams[i];
-                                var subtype = (meta.SubType ?? "url").ToLowerInvariant();
-                                var metaParam = meta.ParameterValue?.Trim() ?? string.Empty;   // expects /r/{{1}} in template
-                                var btnValue = btn.Value?.Trim();
-                                var isDynamic = metaParam.Contains("{{");
+            for (int i = 0; i < total; i++)
+            {
+                var btn = buttonList[i];
+                var meta = templateMeta.ButtonParams[i];
+                var subtype = (meta.SubType ?? "url").ToLowerInvariant();
+                var metaParam = meta.ParameterValue?.Trim() ?? string.Empty;   // expects /r/{{1}} in template
+                var btnValue = btn.Value?.Trim();
+                var isDynamic = metaParam.Contains("{{");
 
-                                // Non-dynamic → no parameters
-                                if (!isDynamic)
-                                {
-                                    components.Add(new Dictionary<string, object>
-                                    {
-                                        ["type"] = "button",
-                                        ["sub_type"] = subtype,
-                                        ["index"] = i  // Pinnacle accepts numeric
-                                    });
-                                    continue;
-                                }
+                // Non-dynamic → no parameters
+                if (!isDynamic)
+                {
+                    components.Add(new Dictionary<string, object>
+                    {
+                        ["type"] = "button",
+                        ["sub_type"] = subtype,
+                        ["index"] = i  // Pinnacle accepts numeric
+                    });
+                    continue;
+                }
 
-                                if (string.IsNullOrWhiteSpace(btnValue)) continue;
+                if (string.IsNullOrWhiteSpace(btnValue)) continue;
 
-                                // Normalize phone and resolve inside destination if needed
-                                var phone = string.IsNullOrWhiteSpace(contact?.PhoneNumber)
-                                    ? ""
-                                    : (contact.PhoneNumber.StartsWith("+") ? contact.PhoneNumber : "+" + contact.PhoneNumber);
-                                var encodedPhone = Uri.EscapeDataString(phone);
+                // Normalize phone and resolve inside destination if needed
+                var phone = string.IsNullOrWhiteSpace(contact?.PhoneNumber)
+                    ? ""
+                    : (contact.PhoneNumber.StartsWith("+") ? contact.PhoneNumber : "+" + contact.PhoneNumber);
+                var encodedPhone = Uri.EscapeDataString(phone);
 
-                                var resolvedDestination = btnValue.Contains("{{1}}")
-                                    ? btnValue.Replace("{{1}}", encodedPhone)
-                                    : btnValue;
+                var resolvedDestination = btnValue.Contains("{{1}}")
+                    ? btnValue.Replace("{{1}}", encodedPhone)
+                    : btnValue;
 
-                                // Build full tracked URL then extract token for {{1}}
-                                var tokenParam = BuildTokenParam(campaignSendLogId, i, btn.Title, resolvedDestination);
+                // Build full tracked URL then extract token for {{1}}
+                var tokenParam = BuildTokenParam(campaignSendLogId, i, btn.Title, resolvedDestination);
 
-                                var param = new Dictionary<string, object> { ["type"] = "text", ["text"] = tokenParam };
+                var param = new Dictionary<string, object> { ["type"] = "text", ["text"] = tokenParam };
 
-                                components.Add(new Dictionary<string, object>
-                                {
-                                    ["type"] = "button",
-                                    ["sub_type"] = subtype,
-                                    ["index"] = i,
-                                    ["parameters"] = new[] { param }
-                                });
-                            }
+                components.Add(new Dictionary<string, object>
+                {
+                    ["type"] = "button",
+                    ["sub_type"] = subtype,
+                    ["index"] = i,
+                    ["parameters"] = new[] { param }
+                });
+            }
 
-                            return components;
-                        }
+            return components;
+        }
         private List<object> BuildImageTemplateComponents_Meta(
                             string? imageUrl,
                             List<string> templateParams,
@@ -2274,10 +1655,6 @@ namespace xbytechat.api.Features.CampaignModule.Services
         }
 
 
-        #endregion
-        #endregion
-
-        #region Helper Method
         private static string NormalizePhoneForTel(string? raw)
         {
             if (string.IsNullOrWhiteSpace(raw)) return "";
@@ -2285,6 +1662,7 @@ namespace xbytechat.api.Features.CampaignModule.Services
             if (!p.StartsWith("+")) p = "+" + new string(p.Where(char.IsDigit).ToArray());
             return p;
         }
+        #endregion
 
         #endregion
 
@@ -2304,7 +1682,7 @@ namespace xbytechat.api.Features.CampaignModule.Services
         }
     }
 
-    #endregion
+
 }
 
 

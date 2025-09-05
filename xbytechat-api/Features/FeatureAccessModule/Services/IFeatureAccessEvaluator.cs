@@ -5,7 +5,6 @@ namespace xbytechat.api.Features.FeatureAccessModule.Services
 {
     public interface IFeatureAccessEvaluator
     {
-        //Task<bool> CanUseAsync(Guid businessId, string featureName);
         Task<bool> CanUseAsync(Guid businessId, string featureName, Guid? userId = null);
 
     }

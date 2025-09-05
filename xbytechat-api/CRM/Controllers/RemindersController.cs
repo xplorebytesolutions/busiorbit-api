@@ -2,8 +2,8 @@
 using xbytechat.api.CRM.Dtos;
 using xbytechat.api.CRM.Interfaces;
 using xbytechat.api.CRM.Models;
-using xbytechat.api.Helpers; // For ResponseResult
-using xbytechat.api.Shared;  // For GetBusinessId extension
+using xbytechat.api.Helpers;
+using xbytechat.api.Shared;
 
 namespace xbytechat.api.CRM.Controllers
 {

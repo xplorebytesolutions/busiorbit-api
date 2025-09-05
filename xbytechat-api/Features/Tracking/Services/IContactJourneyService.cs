@@ -7,7 +7,6 @@ namespace xbytechat.api.Features.Tracking.Services
 {
     public interface IContactJourneyService
     {
-        //Task<List<JourneyEventDto>> GetJourneyEventsAsync(Guid initialCampaignSendLogId);
         Task<JourneyResponseDto> GetJourneyEventsAsync(Guid initialCampaignSendLogId);
     }
 }

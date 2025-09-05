@@ -8,8 +8,6 @@ namespace xbytechat.api.Features.CampaignTracking.Services
 {
     public interface ICampaignSendLogService
     {
-        // 📊 Get all logs for a specific campaign
-        //Task<List<CampaignSendLogDto>> GetLogsByCampaignIdAsync(Guid campaignId);
         // This is the NEW signature that matches your updated service and controller
         Task<PagedResult<CampaignSendLogDto>> GetLogsByCampaignIdAsync(
             Guid campaignId, string? status, string? search, int page, int pageSize);

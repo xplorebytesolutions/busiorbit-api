@@ -305,7 +305,7 @@ namespace xbytechat.api
             });
 
             modelBuilder.Entity<MessageLog>()
-       .HasIndex(x => x.MessageId);
+            .HasIndex(x => x.MessageId);
             modelBuilder.Entity<MessageLog>()
                 .HasIndex(x => x.RunId);
 
@@ -352,6 +352,11 @@ namespace xbytechat.api
                 b.HasIndex(x => new { x.BusinessId, x.RecipientNumber })
                  .HasDatabaseName("IX_MessageLogs_Business_Recipient");
             });
+
+            modelBuilder.Entity<Contact>()
+                .HasIndex(c => new { c.BusinessId, c.PhoneNumber })
+                .IsUnique();
+
         }
     }
 }

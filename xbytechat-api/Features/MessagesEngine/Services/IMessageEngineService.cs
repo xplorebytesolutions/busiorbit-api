@@ -13,12 +13,9 @@ namespace xbytechat.api.Features.MessagesEngine.Services
         Task<ResponseResult> SendTemplateMessageAsync(SendMessageDto dto); //
         Task<ResponseResult> SendTextDirectAsync(TextMessageSendDto dto);
         Task<ResponseResult> SendAutomationReply(TextMessageSendDto dto);
-        Task<ResponseResult> SendTemplateMessageSimpleAsync(Guid businessId,SimpleTemplateMessageDto dto);
+        Task<ResponseResult> SendTemplateMessageSimpleAsync(Guid businessId, SimpleTemplateMessageDto dto);
         Task<ResponseResult> SendImageCampaignAsync(Guid campaignId, Guid businessId, string triggeredBy);
-        //Task<ResponseResult> SendImageTemplateMessageAsync(ImageTemplateMessageDto dto);
         Task<ResponseResult> SendImageTemplateMessageAsync(ImageTemplateMessageDto dto, Guid businessId);
-       // Task<ResponseResult> SendToWhatsAppAsync(object payload, Guid businessId);
-        //Task<IEnumerable<MessageLogDto>> GetLogsByBusinessIdAsync(Guid businessId);
         Task<ResponseResult> SendPayloadAsync(Guid businessId, object payload);
     }
 }

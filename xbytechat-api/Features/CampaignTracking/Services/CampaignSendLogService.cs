@@ -15,47 +15,13 @@ namespace xbytechat.api.Features.CampaignTracking.Services
     {
         private readonly AppDbContext _context;
         private readonly ICampaignSendLogEnricher _enricher;
-        
+
 
         public CampaignSendLogService(AppDbContext context, ICampaignSendLogEnricher enricher)
         {
             _context = context;
             _enricher = enricher;
         }
-
-        // 📊 Get all send logs for a given campaign
-        //public async Task<List<CampaignSendLogDto>> GetLogsByCampaignIdAsync(Guid campaignId)
-        //{
-        //    return await _context.CampaignSendLogs
-        //        .Where(log => log.CampaignId == campaignId)
-        //        .Include(log => log.Contact)
-        //        .Select(log => new CampaignSendLogDto
-        //        {
-        //            Id = log.Id,
-        //            CampaignId = log.CampaignId,
-        //            ContactId = log.ContactId,
-        //            ContactName = log.Contact != null ? log.Contact.Name : "N/A",
-        //            ContactPhone = log.Contact != null ? log.Contact.PhoneNumber : "-",
-        //            MessageBody = log.MessageBody,
-        //            TemplateId = log.TemplateId,
-        //            SendStatus = log.SendStatus,
-        //            ErrorMessage = log.ErrorMessage,
-        //            CreatedAt = log.CreatedAt,
-        //            SentAt = log.SentAt,
-        //            DeliveredAt = log.DeliveredAt,
-        //            ReadAt = log.ReadAt,
-        //            IpAddress = log.IpAddress,
-        //            DeviceInfo = log.DeviceInfo,
-        //            MacAddress = log.MacAddress,
-        //            SourceChannel = log.SourceChannel,
-        //            IsClicked = log.IsClicked,
-        //            ClickedAt = log.ClickedAt,
-        //            ClickType = log.ClickType
-        //        })
-        //        .ToListAsync();
-        //}
-
-        // 📍 Get logs for a specific contact in a campaign
 
         public async Task<PagedResult<CampaignSendLogDto>> GetLogsByCampaignIdAsync(Guid campaignId, string? status, string? search, int page, int pageSize)
         {
@@ -200,57 +166,6 @@ namespace xbytechat.api.Features.CampaignTracking.Services
             await _context.SaveChangesAsync();
             return true;
         }
-
-        // 📊 Get summary of campaign logs
-        //public async Task<CampaignLogSummaryDto> GetCampaignSummaryAsync(Guid campaignId)
-        //{
-        //    var logs = await _context.CampaignSendLogs
-        //        .Where(l => l.CampaignId == campaignId)
-        //        .ToListAsync();
-
-        //    return new CampaignLogSummaryDto
-        //    {
-        //        TotalSent = logs.Count,
-        //        FailedCount = logs.Count(l => l.SendStatus == "Failed"),
-        //        ClickedCount = logs.Count(l => l.IsClicked),
-        //        LastSentAt = logs.Max(l => l.SentAt)
-        //    };
-        //}
-
-        // Add this method to your updated CampaignSendLogService.cs file
-
-        //public async Task<CampaignLogSummaryDto> GetCampaignSummaryAsync(Guid campaignId)
-        //{
-        //    // This query is now more efficient as it calculates in the database
-        //    var summary = await _context.CampaignSendLogs
-        //        .Where(l => l.CampaignId == campaignId)
-        //        .GroupBy(l => 1) // Group by a constant to aggregate all results
-        //        .Select(g => new
-        //        {
-        //            TotalSent = g.Count(),
-        //            FailedCount = g.Count(l => l.SendStatus == "Failed"),
-        //            ClickedCount = g.Count(l => l.IsClicked),
-        //            DeliveredCount = g.Count(l => l.DeliveredAt != null),
-        //            ReadCount = g.Count(l => l.ReadAt != null),
-        //            LastSentAt = g.Max(l => l.SentAt)
-        //        })
-        //        .FirstOrDefaultAsync();
-
-        //    if (summary == null)
-        //    {
-        //        return new CampaignLogSummaryDto(); // Return empty summary if no logs
-        //    }
-
-        //    return new CampaignLogSummaryDto
-        //    {
-        //        TotalSent = summary.TotalSent,
-        //        FailedCount = summary.FailedCount,
-        //        ClickedCount = summary.ClickedCount,
-        //        Delivered = summary.DeliveredCount, // New Property
-        //        Read = summary.ReadCount,         // New Property
-        //        LastSentAt = summary.LastSentAt
-        //    };
-        //}
         public async Task<CampaignLogSummaryDto> GetCampaignSummaryAsync(Guid campaignId)
         {
             // This single, efficient query calculates all stats directly in the database.
