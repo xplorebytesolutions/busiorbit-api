@@ -1,6 +1,6 @@
 {
   "name": "xbytechat-api/Controllers",
-  "generatedAt": "2025-08-11 18:04:10 +00:00",
+  "generatedAt": "2025-09-05 11:57:45 +00:00",
   "files": [
     {
       "path": "xbytechat-api/Controllers/BusinessLoginController.cs",
@@ -10,11 +10,18 @@
       "content": "using Microsoft.AspNetCore.Mvc;\nusing xbytechat.api.DTOs;\nusing xbytechat.api.DTOs.Tenants;\nusing xbytechat.api.Services.Interfaces;\n\nnamespace xbytechat.api.Controllers\n{\n    [ApiController]\n    [Route(\"api/tenants\")]\n    public class BusinessLoginController : ControllerBase\n    {\n        private readonly IBusinessService _tenantService;\n\n        public BusinessLoginController(IBusinessService tenantService)\n        {\n            _tenantService = tenantService;\n        }\n\n        [HttpPost(\"login\")]\n        public async Task<IActionResult> Login([FromBody] BusinessLoginRequest request)\n        {\n            try\n            {\n                var tenant = await _tenantService.LoginAsync(request);\n\n                return Ok(new\n                {\n                    tenant.Id,\n                    tenant.Email,\n                    tenant.CompanyName,\n                    //tenant.Role,\n                    //tenant.Plan,\n                    Message = \"Login successful\"\n                });\n            }\n            catch (Exception ex)\n            {\n                return Unauthorized(new { Message = ex.Message });\n            }\n        }\n    }\n}\n"
     },
     {
-      "path": "xbytechat-api/Controllers/HealthCheckController.cs",
-      "sha256": "f21f78c4303d754e255e05ed501dcefe6aaff8d18a8a9aa878e4bfa22da44eb2",
+      "path": "xbytechat-api/Controllers/DevSeedController.cs",
+      "sha256": "e42997ea8140347d4c505532f1a7a654901109f62e13ac56dc8622ae0a20b3d8",
       "language": "csharp",
-      "size": 226,
-      "content": "using Microsoft.AspNetCore.Mvc;\n\n[ApiController]\n[Route(\"api/[controller]\")]\npublic class HealthCheckController : ControllerBase\n{\n    [HttpGet]\n    public IActionResult Get() => Ok(\"✅ xByteChat backend is running 🚀\");\n}\n"
+      "size": 2166,
+      "content": "#if DEBUG\nusing Microsoft.AspNetCore.Authorization;\nusing Microsoft.AspNetCore.Hosting;\nusing Microsoft.AspNetCore.Identity;\nusing Microsoft.AspNetCore.Mvc;\nusing System.Linq;\nusing System.Threading.Tasks;\n\n[ApiController]\n[Route(\"api/dev-seed\")]\n[ApiExplorerSettings(IgnoreApi = true)]\npublic class DevSeedController : ControllerBase\n{\n    private readonly UserManager<IdentityUser> _users;\n    private readonly RoleManager<IdentityRole> _roles;\n    private readonly IWebHostEnvironment _env;\n\n    public DevSeedController(\n        UserManager<IdentityUser> users,\n        RoleManager<IdentityRole> roles,\n        IWebHostEnvironment env)\n    {\n        _users = users;\n        _roles = roles;\n        _env = env;\n    }\n\n    [AllowAnonymous]\n    [HttpPost(\"e2e-user\")]\n    public async Task<IActionResult> SeedE2E([FromBody] SeedReq req)\n    {\n        // Only allow in Development\n        if (!_env.IsDevelopment())\n            return Forbid();\n\n        var email = (req.Email ?? \"\").Trim();\n        if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(req.Password))\n            return BadRequest(new { message = \"email/password required\" });\n\n        // Idempotent create/update\n        var user = await _users.FindByEmailAsync(email);\n        if (user == null)\n        {\n            user = new IdentityUser { UserName = email, Email = email, EmailConfirmed = true };\n            var create = await _users.CreateAsync(user, req.Password);\n            if (!create.Succeeded)\n                return BadRequest(new { message = \"create failed\", errors = create.Errors.Select(e => e.Description) });\n        }\n\n        // Ensure role (use \"superadmin\" or a minimal CRM role your app understands)\n        var role = string.IsNullOrWhiteSpace(req.Role) ? \"superadmin\" : req.Role.Trim();\n        if (!await _roles.RoleExistsAsync(role))\n            await _roles.CreateAsync(new IdentityRole(role));\n        if (!await _users.IsInRoleAsync(user, role))\n            await _users.AddToRoleAsync(user, role);\n\n        return Ok(new { ok = true, email, role });\n    }\n\n    public record SeedReq(string Email, string Password, string Role = \"superadmin\");\n}\n#endif\n"
+    },
+    {
+      "path": "xbytechat-api/Controllers/HealthCheckController.cs",
+      "sha256": "52d69ec41e8cd4fc50bc1281507a30e39bc629677df7bbd0e1cfb876e2623086",
+      "language": "csharp",
+      "size": 799,
+      "content": "// xbytechat-api/Controllers/HealthCheckController.cs\nusing Microsoft.AspNetCore.Authorization;\nusing Microsoft.AspNetCore.Mvc;\nusing System.Reflection;\n\nnamespace xbytechat.api.Controllers\n{\n    [ApiController]\n    [Route(\"api/[controller]\")]\n    public class HealthCheckController : ControllerBase\n    {\n        [HttpGet]\n        public IActionResult Get() => Ok(\"✅ xByteChat backend is running 🚀\");\n\n        [AllowAnonymous]\n        [HttpGet(\"ping\")]\n        public IActionResult Ping()\n        {\n            var version = Assembly.GetExecutingAssembly()?.GetName()?.Version?.ToString() ?? \"0.0.0\";\n            return Ok(new\n            {\n                status = \"ok\",\n                version,\n                serverTimeUtc = DateTime.UtcNow.ToString(\"o\")\n            });\n        }\n    }\n}\n"
     },
     {
       "path": "xbytechat-api/Controllers/MessageLogsController.cs",

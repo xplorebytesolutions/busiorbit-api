@@ -1,13 +1,13 @@
 {
   "name": "xbytechat-api/Features/ReportingModule",
-  "generatedAt": "2025-08-11 18:04:10 +00:00",
+  "generatedAt": "2025-09-05 11:57:45 +00:00",
   "files": [
     {
       "path": "xbytechat-api/Features/ReportingModule/Controllers/MessageAnalyticsController.cs",
-      "sha256": "37e850b94dae6b33e4c44fb129fe331ae8a36706c9e377dee456c03d4a6e57f7",
+      "sha256": "99dc4aa00c1bae7339a4b7cf1c00c7946b5aebeb41f493a46adb22e6d15af298",
       "language": "csharp",
-      "size": 1216,
-      "content": "using Microsoft.AspNetCore.Mvc;\nusing xbytechat.api.Features.ReportingModule.Services;\nusing xbytechat.api.Shared;\n\n\nnamespace xbytechat.api.Features.ReportingModule.Controllers\n{\n    [ApiController]\n    [Route(\"api/reporting/messages\")]\n    public class MessageAnalyticsController : ControllerBase\n    {\n        private readonly IMessageAnalyticsService _service;\n\n        public MessageAnalyticsController(IMessageAnalyticsService service)\n        {\n            _service = service;\n        }\n\n        [HttpGet(\"recent\")]\n        public async Task<IActionResult> GetRecentLogs([FromQuery] int limit = 20)\n        {\n            var businessId = User.GetBusinessId(); // 🔒 assumes claims extension\n            var logs = await _service.GetRecentLogsAsync(businessId, limit);\n            return Ok(new { success = true, data = logs });\n        }\n        [HttpGet(\"history\")]\n        public async Task<IActionResult> GetPaginatedLogs([FromQuery] PaginatedRequest request)\n        {\n            var businessId = User.GetBusinessId(); // 🔐 via claims\n            var result = await _service.GetPaginatedLogsAsync(businessId, request);\n            return Ok(new { success = true, data = result });\n        }\n\n    }\n}"
+      "size": 1238,
+      "content": "using Microsoft.AspNetCore.Authorization;\nusing Microsoft.AspNetCore.Mvc;\nusing xbytechat.api.Features.ReportingModule.Services;\nusing xbytechat.api.Shared;\n\nnamespace xbytechat.api.Features.ReportingModule.Controllers\n{\n    [ApiController]\n    [Authorize] // ✅ add this\n    [Route(\"api/reporting/messages\")]\n    public class MessageAnalyticsController : ControllerBase\n    {\n        private readonly IMessageAnalyticsService _service;\n\n        public MessageAnalyticsController(IMessageAnalyticsService service)\n        {\n            _service = service;\n        }\n\n        [HttpGet(\"recent\")]\n        public async Task<IActionResult> GetRecentLogs([FromQuery] int limit = 20)\n        {\n            var businessId = User.GetBusinessId();\n            var logs = await _service.GetRecentLogsAsync(businessId, limit);\n            return Ok(new { success = true, data = logs });\n        }\n\n        [HttpGet(\"history\")]\n        public async Task<IActionResult> GetPaginatedLogs([FromQuery] PaginatedRequest request)\n        {\n            var businessId = User.GetBusinessId();\n            var result = await _service.GetPaginatedLogsAsync(businessId, request);\n            return Ok(new { success = true, data = result });\n        }\n    }\n}\n"
     },
     {
       "path": "xbytechat-api/Features/ReportingModule/DTOs/DirectMessageLogFilterDto.cs",

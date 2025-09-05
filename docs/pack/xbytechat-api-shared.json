@@ -1,6 +1,6 @@
 {
   "name": "xbytechat-api/Shared",
-  "generatedAt": "2025-08-11 18:04:10 +00:00",
+  "generatedAt": "2025-09-05 11:57:45 +00:00",
   "files": [
     {
       "path": "xbytechat-api/Shared/AutoMapperProfile.cs",
@@ -10,11 +10,25 @@
       "content": "using AutoMapper;\nusing xbytechat.api.CRM.Dtos;\nusing xbytechat.api.CRM.Models;\nusing xbytechat.api.Features.CampaignModule.DTOs;\nusing xbytechat.api.Features.CampaignModule.Models;\nusing xbytechat.api.DTOs.Messages;\nusing xbytechat.api.Features.Tracking.DTOs;\nusing xbytechat.api.Features.Tracking.Models;\nusing xbytechat.api.Features.MessageManagement.DTOs;\n\nnamespace xbytechat.api.Shared\n{\n    public class AutoMapperProfile : Profile\n    {\n        public AutoMapperProfile()\n        {\n            CreateMap<Contact, ContactDto>();\n            CreateMap<Campaign, CampaignDto>();\n            CreateMap<MessageLog, MessageLogDto>();\n            CreateMap<TrackingLog, TrackingLogDto>();\n        }\n    }\n}\n"
     },
     {
+      "path": "xbytechat-api/Shared/BusinessControllerBase.cs",
+      "sha256": "ae04266e74cbbdfb58a81d85d24db83b9151ebef9e42b000430e8853ac2aa32f",
+      "language": "csharp",
+      "size": 343,
+      "content": "using System;\nusing Microsoft.AspNetCore.Mvc;\n\nnamespace xbytechat.api.Shared\n{\n    // Do NOT add [ApiController] here; keep it on concrete controllers.\n    public abstract class BusinessControllerBase : ControllerBase\n    {\n        protected Guid BusinessId => User.GetBusinessId();\n        protected Guid UserId => User.GetUserId();\n    }\n}\n"
+    },
+    {
       "path": "xbytechat-api/Shared/ClaimsBusinessDetails.cs",
       "sha256": "c2e6949a61ef96fc2c06636f297b8d8d033f3f29fa5d7b57230743db945ed0a2",
       "language": "csharp",
       "size": 939,
       "content": "using System;\nusing System.Security.Claims;\n\nnamespace xbytechat.api.Shared\n{\n    public static class ClaimsBusinessDetails\n    {\n        public static Guid GetBusinessId(this ClaimsPrincipal user)\n        {\n            var businessIdClaim = user.FindFirst(\"businessId\")?.Value; // lowercase only!\n            if (string.IsNullOrEmpty(businessIdClaim) || !Guid.TryParse(businessIdClaim, out var businessId))\n                throw new UnauthorizedAccessException(\"Invalid or missing businessId in token.\");\n            return businessId;\n        }\n\n        public static Guid GetUserId(this ClaimsPrincipal user)\n        {\n            var userIdClaim = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;\n            if (string.IsNullOrEmpty(userIdClaim) || !Guid.TryParse(userIdClaim, out var userId))\n                throw new UnauthorizedAccessException(\"Invalid or missing userId in token.\");\n            return userId;\n        }\n    }\n}\n"
+    },
+    {
+      "path": "xbytechat-api/Shared/ClaimsPrincipalExtensions.cs",
+      "sha256": "aceea513e3338cb16f3558e4dea2d6cafd833f7786da41a6c718b9b2c7294670",
+      "language": "csharp",
+      "size": 90,
+      "content": "namespace xbytechat.api.Shared\n{\n    public class ClaimsPrincipalExtensions\n    {\n    }\n}\n"
     },
     {
       "path": "xbytechat-api/Shared/PaginatedRequest.cs",
