@@ -19,7 +19,7 @@ namespace xbytechat.api.Features.CTAFlowBuilder.Services
         // ✅ Load and manage flow steps
         Task<List<CTAFlowStep>> GetStepsForFlowAsync(Guid flowId);
 
-        //Task<CTAFlowStep?> MatchStepByButtonAsync(Guid businessId, string buttonText, string buttonType);
+      
         Task<CTAFlowStep?> MatchStepByButtonAsync(Guid businessId, string buttonText,string buttonType,string currentTemplateName,Guid? campaignId = null);
 
 
@@ -35,8 +35,14 @@ namespace xbytechat.api.Features.CTAFlowBuilder.Services
         // ✅ Editor loading (visual builder)
         Task<SaveVisualFlowDto?> GetVisualFlowByIdAsync(Guid id);
 
-        Task<ResponseResult> ExecuteVisualFlowAsync(Guid businessId, Guid startStepId, Guid trackingLogId);
+      
+        Task<ResponseResult> ExecuteVisualFlowAsync(Guid businessId, Guid startStepId, Guid trackingLogId, Guid? campaignSendLogId);
+        Task<FlowButtonLink?> GetLinkAsync(Guid flowId, Guid sourceStepId, short buttonIndex);
 
+        public interface IFlowRuntimeService
+        {
+            Task<NextStepResult> ExecuteNextAsync(NextStepContext context);
+        }
     }
 }
 

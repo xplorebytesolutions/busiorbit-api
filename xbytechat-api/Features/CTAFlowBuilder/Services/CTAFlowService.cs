@@ -227,6 +227,7 @@ namespace xbytechat.api.Features.CTAFlowBuilder.Services
                 return ResponseResult.ErrorInfo("❌ Could not publish flow.");
             }
         }
+
         public async Task<ResponseResult> SaveVisualFlowAsync(SaveVisualFlowDto dto, Guid businessId, string createdBy)
         {
             try
@@ -239,12 +240,13 @@ namespace xbytechat.api.Features.CTAFlowBuilder.Services
                     return ResponseResult.ErrorInfo("❌ Cannot save an empty flow. Please add at least one step.");
                 }
 
-                var existing = await _context.CTAFlowConfigs
+                // 1) Upsert FlowConfig
+                var flow = await _context.CTAFlowConfigs
                     .FirstOrDefaultAsync(f => f.FlowName == dto.FlowName && f.BusinessId == businessId);
 
-                if (existing == null)
+                if (flow == null)
                 {
-                    existing = new CTAFlowConfig
+                    flow = new CTAFlowConfig
                     {
                         Id = Guid.NewGuid(),
                         BusinessId = businessId,
@@ -255,13 +257,14 @@ namespace xbytechat.api.Features.CTAFlowBuilder.Services
                         IsActive = true,
                         IsPublished = dto.IsPublished
                     };
-                    _context.CTAFlowConfigs.Add(existing);
-                    Log.Information("✅ New FlowConfig created with ID: {Id}", existing.Id);
+                    _context.CTAFlowConfigs.Add(flow);
+                    Log.Information("✅ New FlowConfig created with ID: {Id}", flow.Id);
                 }
                 else
                 {
+                    // wipe old steps+links for a clean replace
                     var oldSteps = await _context.CTAFlowSteps
-                        .Where(s => s.CTAFlowConfigId == existing.Id)
+                        .Where(s => s.CTAFlowConfigId == flow.Id)
                         .Include(s => s.ButtonLinks)
                         .ToListAsync();
 
@@ -269,11 +272,13 @@ namespace xbytechat.api.Features.CTAFlowBuilder.Services
                         _context.FlowButtonLinks.RemoveRange(step.ButtonLinks);
 
                     _context.CTAFlowSteps.RemoveRange(oldSteps);
-                    existing.IsPublished = dto.IsPublished;
-                    existing.UpdatedAt = DateTime.UtcNow;
+
+                    flow.IsPublished = dto.IsPublished;
+                    flow.UpdatedAt = DateTime.UtcNow;
                 }
 
-                var stepMap = new Dictionary<string, CTAFlowStep>();
+                // 2) Build Steps (map by incoming node.Id string)
+                var stepMap = new Dictionary<string, CTAFlowStep>(StringComparer.OrdinalIgnoreCase);
 
                 foreach (var (node, index) in dto.Nodes.Select((n, i) => (n, i)))
                 {
@@ -283,7 +288,7 @@ namespace xbytechat.api.Features.CTAFlowBuilder.Services
                     var step = new CTAFlowStep
                     {
                         Id = Guid.NewGuid(),
-                        CTAFlowConfigId = existing.Id,
+                        CTAFlowConfigId = flow.Id,
                         StepOrder = index,
                         TemplateToSend = node.TemplateName,
                         TemplateType = node.TemplateType ?? "UNKNOWN",
@@ -298,32 +303,74 @@ namespace xbytechat.api.Features.CTAFlowBuilder.Services
                     _context.CTAFlowSteps.Add(step);
                 }
 
-                foreach (var edge in dto.Edges)
+                // 3) Build Links PER NODE using buttons order (with Index), not per-edge blindly
+                foreach (var node in dto.Nodes)
                 {
-                    if (!stepMap.TryGetValue(edge.FromNodeId, out var fromStep) ||
-                        !stepMap.TryGetValue(edge.ToNodeId, out var toStep))
+                    if (string.IsNullOrWhiteSpace(node.Id) || !stepMap.TryGetValue(node.Id, out var fromStep))
                         continue;
 
-                    var sourceNode = dto.Nodes.FirstOrDefault(n => n.Id == edge.FromNodeId);
-                    var button = sourceNode?.Buttons?.FirstOrDefault(b => b.Text == edge.SourceHandle);
-                    var fallbackText = edge.SourceHandle ?? "[unnamed]";
+                    // outgoing edges from this node
+                    var outEdges = dto.Edges?.Where(e => string.Equals(e.FromNodeId, node.Id, StringComparison.OrdinalIgnoreCase)).ToList()
+                                   ?? new List<FlowEdgeDto>();
 
-                    var link = new FlowButtonLink
+                    // dedupe by button text to avoid ambiguous routing
+                    var seenTexts = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+                    // stable ordering: by provided Index (0..N), then by Text
+                    var orderedButtons = (node.Buttons ?? new List<LinkButtonDto>())
+                        .OrderBy(b => b.Index < 0 ? int.MaxValue : b.Index)
+                        .ThenBy(b => b.Text ?? string.Empty)
+                        .ToList();
+
+                    short nextIdx = 0;
+
+                    foreach (var btn in orderedButtons)
                     {
-                        Id = Guid.NewGuid(),
-                        CTAFlowStepId = fromStep.Id,
-                        ButtonText = fallbackText,
-                        ButtonType = button?.Type ?? "QUICK_REPLY",
-                        ButtonSubType = button?.SubType ?? "",
-                        ButtonValue = button?.Value ?? "",
-                        NextStepId = toStep.Id
-                    };
+                        var text = (btn.Text ?? string.Empty).Trim();
+                        if (string.IsNullOrEmpty(text))
+                            continue;
 
-                    _context.FlowButtonLinks.Add(link); // ✅ Force EF to track this link properly
-                    fromStep.ButtonLinks.Add(link);     // ✅ Optional if navigation is used
+                        if (!seenTexts.Add(text))
+                        {
+                            Log.Warning("⚠️ Duplicate button text '{Text}' on node {NodeId}; keeping first, skipping duplicates.", text, node.Id);
+                            continue;
+                        }
 
-                    toStep.TriggerButtonText = fallbackText;
-                    toStep.TriggerButtonType = button?.Type ?? "quick_reply";
+                        // match edge by SourceHandle == button text (how ReactFlow wires handles)
+                        var edge = outEdges.FirstOrDefault(e =>
+                            string.Equals(e.SourceHandle ?? string.Empty, text, StringComparison.OrdinalIgnoreCase));
+                        if (edge == null)
+                        {
+                            // no wire from this button → skip link creation but keep button metadata in UI on reload
+                            continue;
+                        }
+
+                        if (!stepMap.TryGetValue(edge.ToNodeId, out var toStep))
+                            continue;
+
+                        // final index: prefer incoming payload Index; else fallback to a sequential counter
+                        var finalIndex = btn.Index >= 0 ? btn.Index : nextIdx;
+                        nextIdx = (short)(finalIndex + 1);
+
+                        var link = new FlowButtonLink
+                        {
+                            Id = Guid.NewGuid(),
+                            CTAFlowStepId = fromStep.Id,
+                            NextStepId = toStep.Id,
+                            ButtonText = text,
+                            ButtonType = string.IsNullOrWhiteSpace(btn.Type) ? "QUICK_REPLY" : btn.Type,
+                            ButtonSubType = btn.SubType ?? string.Empty,
+                            ButtonValue = btn.Value ?? string.Empty,
+                            ButtonIndex = (short)finalIndex // 🔑 persist the index
+                        };
+
+                        _context.FlowButtonLinks.Add(link);
+                        fromStep.ButtonLinks.Add(link);
+
+                        // propagate trigger info on the target step for convenience
+                        toStep.TriggerButtonText = text;
+                        toStep.TriggerButtonType = (btn.Type ?? "QUICK_REPLY").ToLowerInvariant();
+                    }
                 }
 
                 await _context.SaveChangesAsync();
@@ -395,11 +442,20 @@ namespace xbytechat.api.Features.CTAFlowBuilder.Services
                     RequiredTag = step.RequiredTag,
                     RequiredSource = step.RequiredSource,
 
+                    //Buttons = step.ButtonLinks.Select(link => new LinkButtonDto
+                    //{
+                    //    Text = link.ButtonText,
+                    //    TargetNodeId = link.NextStepId.ToString()
+                    //}).ToList()
                     Buttons = step.ButtonLinks.Select(link => new LinkButtonDto
                     {
                         Text = link.ButtonText,
-                        TargetNodeId = link.NextStepId.ToString()
+                        Type = link.ButtonType,
+                        SubType = link.ButtonSubType,
+                        Value = link.ButtonValue,
+                        TargetNodeId = link.NextStepId?.ToString()
                     }).ToList()
+
                              .Concat((template?.ButtonParams ?? new List<ButtonMetadataDto>())
                                  .Where(btn => !step.ButtonLinks.Any(bl => bl.ButtonText == btn.Text))
                                  .Select(btn => new LinkButtonDto
@@ -557,49 +613,6 @@ namespace xbytechat.api.Features.CTAFlowBuilder.Services
                 return ResponseResult.ErrorInfo("Failed to send follow-up.");
             }
         }
-        //public async Task<CTAFlowStep?> GetChainedStepAsync(Guid businessId, Guid? nextStepId)
-        //{
-        //    // 🧠 If there's no next step to look up, just return null
-        //    if (nextStepId == null)
-        //    {
-        //        Log.Information("ℹ️ No NextStepId provided — skipping follow-up.");
-        //        return null;
-        //    }
-
-        //    try
-        //    {
-        //        // 🧲 Step 1: Find the flow that contains the step and belongs to the business
-        //        var flow = await _context.CTAFlowConfigs
-        //            .Include(f => f.Steps)
-        //            .FirstOrDefaultAsync(f =>
-        //                f.BusinessId == businessId &&
-        //                f.Steps.Any(s => s.Id == nextStepId));
-
-        //        if (flow == null)
-        //        {
-        //            Log.Warning("⚠️ No flow found containing NextStepId: {NextStepId} for business: {BusinessId}", nextStepId, businessId);
-        //            return null;
-        //        }
-
-        //        // 🔁 Step 2: Extract the matching step from the flow's step list
-        //        var followUpStep = flow.Steps.FirstOrDefault(s => s.Id == nextStepId);
-
-        //        if (followUpStep == null)
-        //        {
-        //            Log.Warning("❌ NextStepId matched in flow but not found in step list: {NextStepId}", nextStepId);
-        //            return null;
-        //        }
-
-        //        Log.Information("✅ Follow-up step found → StepId: {StepId}, Template: {Template}", followUpStep.Id, followUpStep.TemplateToSend);
-        //        return followUpStep;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Log.Error(ex, "❌ Exception while fetching chained step for NextStepId: {NextStepId}", nextStepId);
-        //        throw;
-        //    }
-        //}
-        // ✅ Interface-compatible method (required by ICTAFlowService)
         public Task<CTAFlowStep?> GetChainedStepAsync(Guid businessId, Guid? nextStepId)
         {
             return GetChainedStepAsync(businessId, nextStepId, null, null); // Forward to full logic
@@ -679,8 +692,8 @@ namespace xbytechat.api.Features.CTAFlowBuilder.Services
 
             return await GetChainedStepAsync(businessId, nextStepId, log, log?.Contact);
         }
-
-        public async Task<ResponseResult> ExecuteVisualFlowAsync(Guid businessId, Guid startStepId, Guid trackingLogId)
+       
+        public async Task<ResponseResult> ExecuteVisualFlowAsync(Guid businessId, Guid startStepId, Guid trackingLogId, Guid? campaignSendLogId)
         {
             try
             {
@@ -708,6 +721,7 @@ namespace xbytechat.api.Features.CTAFlowBuilder.Services
 
                 ResponseResult sendResult;
 
+                // This switch block remains unchanged
                 switch (step.TemplateType?.ToLower())
                 {
                     case "image_template":
@@ -731,16 +745,16 @@ namespace xbytechat.api.Features.CTAFlowBuilder.Services
                         };
                         sendResult = await _messageEngineService.SendTemplateMessageSimpleAsync(businessId, textDto);
                         break;
-
                 }
 
-                // ✅ Save FlowExecutionLog
+                // ✅ 2. SAVE the new ID to the log
                 var executionLog = new FlowExecutionLog
                 {
                     Id = Guid.NewGuid(),
                     BusinessId = businessId,
                     StepId = step.Id,
                     FlowId = step.CTAFlowConfigId,
+                    CampaignSendLogId = campaignSendLogId, // <-- THE NEW VALUE IS SAVED HERE
                     TrackingLogId = trackingLogId,
                     ContactPhone = log.ContactPhone,
                     TriggeredByButton = step.TriggerButtonText,
@@ -773,6 +787,16 @@ namespace xbytechat.api.Features.CTAFlowBuilder.Services
             }
         }
 
+        public async Task<FlowButtonLink?> GetLinkAsync(Guid flowId, Guid sourceStepId, short buttonIndex)
+        {
+            return await _context.FlowButtonLinks
+     .Where(l => l.CTAFlowStepId == sourceStepId
+              && l.NextStepId != null
+              && l.Step.CTAFlowConfigId == flowId
+              && l.ButtonIndex == buttonIndex)
+     .SingleOrDefaultAsync();
+
+        }
 
     }
 }

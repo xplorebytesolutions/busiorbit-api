@@ -5,7 +5,7 @@ using System.Globalization;
 using xbytechat.api.CRM.Dtos;
 using xbytechat.api.CRM.Interfaces;
 using xbytechat.api.Features.CampaignModule.DTOs;
-using xbytechat.api.Helpers; // <-- For ResponseResult
+using xbytechat.api.Helpers;
 using xbytechat.api.Shared;  // <-- For GetBusinessId extension
 
 namespace xbytechat.api.CRM.Controllers
@@ -23,15 +23,30 @@ namespace xbytechat.api.CRM.Controllers
         }
 
         // POST: api/contacts
-        [HttpPost]
+        [HttpPost("create")]
         public async Task<IActionResult> AddContact([FromBody] ContactDto dto)
         {
-            var businessId = HttpContext.User.GetBusinessId();
-            var result = await _contactService.AddContactAsync(businessId, dto);
-            return Ok(ResponseResult.SuccessInfo("Contact created.", result));
+            if (!ModelState.IsValid)
+                return BadRequest(ResponseResult.ErrorInfo("❌ Invalid contact payload."));
+
+            try
+            {
+                var businessId = HttpContext.User.GetBusinessId();
+                var result = await _contactService.AddContactAsync(businessId, dto);
+
+                return result.Success
+                    ? Ok(result)
+                    : BadRequest(result); // Already ResponseResult.ErrorInfo
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "🚨 Unexpected error in AddContact");
+                return StatusCode(500, ResponseResult.ErrorInfo("🚨 Server error while creating contact.", ex.ToString()));
+            }
         }
 
-     
+
+
 
         // GET: api/contacts/{id}
         [HttpGet("{id}")]

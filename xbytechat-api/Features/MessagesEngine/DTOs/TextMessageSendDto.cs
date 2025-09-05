@@ -16,6 +16,6 @@
         // ✅ NEW: Optional message ID for campaign tracing
         public string? MessageId { get; set; }
 
-
+        public bool IsSaveContact { get; set; } = false; // default true
     }
 }

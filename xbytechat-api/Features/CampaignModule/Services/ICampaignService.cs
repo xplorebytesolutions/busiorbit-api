@@ -41,6 +41,7 @@ namespace xbytechat.api.Features.CampaignModule.Services
         Task<ResponseResult> SendTextTemplateCampaignAsync(Campaign campaign);
         Task<ResponseResult> SendImageTemplateCampaignAsync(Campaign campaign);
 
+        Task<List<FlowListItemDto>> GetAvailableFlowsAsync(Guid businessId, bool onlyPublished = true);
 
     }
 }

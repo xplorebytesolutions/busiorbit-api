@@ -23,6 +23,7 @@ using xbytechat.api.Features.BusinessModule.Models;
 using xbytechat.api.Features.FeatureAccessModule.Models;
 using xbytechat.api.Features.PlanManagement.Models;
 using xbytechat.api.Features.Automation.Models;
+using xbytechat.api.Features.CampaignTracking.Worker;
 
 namespace xbytechat.api
 {
@@ -85,6 +86,10 @@ namespace xbytechat.api
         public DbSet<FeatureMaster> FeatureMasters { get; set; }
         public DbSet<AutomationFlow> AutomationFlows { get; set; }
         public DbSet<WhatsAppTemplate> WhatsAppTemplates { get; set; }
+
+        public DbSet<CampaignClickLog> CampaignClickLogs => Set<CampaignClickLog>();
+        public DbSet<CampaignClickDailyAgg> CampaignClickDailyAgg => Set<CampaignClickDailyAgg>();
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -279,13 +284,79 @@ namespace xbytechat.api
             modelBuilder.Entity<FeatureAccess>()
             .HasIndex(f => new { f.BusinessId, f.FeatureName })
             .IsUnique();
-            
+
             modelBuilder.Entity<WhatsAppTemplate>(e =>
             {
                 e.Property(x => x.Body).HasColumnType("text");
                 e.Property(x => x.ButtonsJson).HasColumnType("text");
                 e.Property(x => x.RawJson).HasColumnType("text");
             });
+            modelBuilder.Entity<CampaignClickLog>(e =>
+            {
+                e.HasIndex(x => new { x.CampaignId, x.ClickType, x.ClickedAt });
+                e.HasIndex(x => new { x.CampaignId, x.ButtonIndex });
+                e.HasIndex(x => new { x.CampaignId, x.ContactId });
+            });
+
+            modelBuilder.Entity<CampaignClickDailyAgg>(e =>
+            {
+                e.HasIndex(x => new { x.CampaignId, x.Day, x.ButtonIndex }).IsUnique();
+                e.Property(x => x.Day).HasColumnType("date");
+            });
+
+            modelBuilder.Entity<MessageLog>()
+            .HasIndex(x => x.MessageId);
+            modelBuilder.Entity<MessageLog>()
+                .HasIndex(x => x.RunId);
+
+            modelBuilder.Entity<CampaignSendLog>()
+                .HasIndex(x => x.MessageId);
+            modelBuilder.Entity<CampaignSendLog>()
+                .HasIndex(x => x.RunId);
+
+            // ---------- WhatsAppSettingEntity indexes (for webhook → BusinessId resolution) ----------
+            modelBuilder.Entity<WhatsAppSettingEntity>(b =>
+            {
+                b.HasIndex(x => new { x.Provider, x.PhoneNumberId })
+                 .HasDatabaseName("IX_WhatsAppSettings_Provider_PhoneNumberId");
+
+                b.HasIndex(x => new { x.Provider, x.WhatsAppBusinessNumber })
+                 .HasDatabaseName("IX_WhatsAppSettings_Provider_BusinessNumber");
+
+                b.HasIndex(x => new { x.Provider, x.WabaId })
+                 .HasDatabaseName("IX_WhatsAppSettings_Provider_WabaId");
+
+                // Handy for admin views / quick filters
+                b.HasIndex(x => new { x.BusinessId, x.Provider, x.IsActive })
+                 .HasDatabaseName("IX_WhatsAppSettings_Business_Provider_IsActive");
+
+                b.HasIndex(x => new { x.Provider, x.WebhookCallbackUrl })
+                 .HasDatabaseName("IX_WhatsAppSettings_Provider_CallbackUrl");
+
+              
+            });
+
+            // ---------- CampaignSendLog composite index (fast status reconciliation) ----------
+            modelBuilder.Entity<CampaignSendLog>(b =>
+            {
+                b.HasIndex(x => new { x.BusinessId, x.MessageId })
+                 .HasDatabaseName("IX_CampaignSendLogs_Business_MessageId");
+            });
+
+            // ---------- MessageLog composite indexes (fast joins & inbound lookups) ----------
+            modelBuilder.Entity<MessageLog>(b =>
+            {
+                b.HasIndex(x => new { x.BusinessId, x.MessageId })
+                 .HasDatabaseName("IX_MessageLogs_Business_MessageId");
+
+                b.HasIndex(x => new { x.BusinessId, x.RecipientNumber })
+                 .HasDatabaseName("IX_MessageLogs_Business_Recipient");
+            });
+
+            modelBuilder.Entity<Contact>()
+                .HasIndex(c => new { c.BusinessId, c.PhoneNumber })
+                .IsUnique();
+
         }
     }
 }

@@ -9,10 +9,8 @@ namespace xbytechat.api.Features.BusinessModule.Services
     public interface IBusinessService
     {
         IQueryable<Business> Query();
-        //  This is move to AuthController 
         Task<ResponseResult> SignupBusinessAsync(SignupBusinessDto dto); /// Signup + create admin user
 
-        //  Task<List<PendingBusinessDto>> GetPendingBusinessesAsync();      // Admin: list of unapproved businesses
         Task<ResponseResult> ApproveBusinessAsync(Guid businessId);      // Admin action
         Task<ResponseResult> RejectBusinessAsync(Guid businessId);       // Admin action
         Task<ResponseResult> HoldBusinessAsync(Guid businessId);         // Admin action

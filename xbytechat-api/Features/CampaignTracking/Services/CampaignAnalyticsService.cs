@@ -4,7 +4,7 @@ using xbytechat.api.Features.CampaignTracking.Models;
 
 namespace xbytechat.api.Features.CampaignTracking.Services
 {
-    
+
 
     public class CampaignAnalyticsService : ICampaignAnalyticsService
     {
@@ -38,39 +38,6 @@ namespace xbytechat.api.Features.CampaignTracking.Services
                 LastReadAt = logs.Max(l => l.ReadAt)
             };
         }
-
-        //public async Task<CampaignStatusDashboardDto> GetStatusDashboardAsync(Guid businessId)
-        //{
-        //    var stats = await _context.CampaignSendLogs
-        //        .Where(log => log.BusinessId == businessId)
-        //        .GroupBy(log => 1) // Group by a constant to aggregate all rows
-        //        .Select(g => new
-        //        {
-        //            TotalSent = g.Count(),
-        //            TotalDelivered = g.Count(l => l.DeliveredAt != null),
-        //            TotalRead = g.Count(l => l.ReadAt != null),
-        //            TotalClicked = g.Count(l => l.ClickedAt != null),
-        //            TotalFailed = g.Count(l => l.Status == "failed")
-        //        })
-        //        .FirstOrDefaultAsync();
-
-        //    if (stats == null)
-        //    {
-        //        return new CampaignStatusDashboardDto(); // Return empty DTO if no logs found
-        //    }
-
-        //    //return new CampaignStatusDashboardDto
-        //    //{
-        //    //    TotalSent = stats.TotalSent,
-        //    //    TotalDelivered = stats.TotalDelivered,
-        //    //    TotalRead = stats.TotalRead,
-        //    //    TotalClicked = stats.TotalClicked,
-        //    //    TotalFailed = stats.TotalFailed,
-        //    //    DeliveryRate = stats.TotalSent > 0 ? Math.Round((double)stats.TotalDelivered / stats.TotalSent * 100, 2) : 0,
-        //    //    ReadRate = stats.TotalDelivered > 0 ? Math.Round((double)stats.TotalRead / stats.TotalDelivered * 100, 2) : 0,
-        //    //    ClickRate = stats.TotalDelivered > 0 ? Math.Round((double)stats.TotalClicked / stats.TotalDelivered * 100, 2) : 0
-        //    //};
-        //}
 
         public async Task<IEnumerable<TopCampaignDto>> GetTopCampaignsAsync(Guid businessId, int count = 5)
         {

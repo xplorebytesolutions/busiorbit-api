@@ -10,8 +10,8 @@ public class MessageLog
     public Guid Id { get; set; }
 
     public string? MessageId { get; set; } // WAMID from WhatsApp — alternate key
-   // public ICollection<MessageStatusLog> StatusUpdates { get; set; } = new List<MessageStatusLog>();
-
+                                           // public ICollection<MessageStatusLog> StatusUpdates { get; set; } = new List<MessageStatusLog>();
+    public Guid? RunId { get; set; }
     // 🔗 FK to Business
     public Guid BusinessId { get; set; }
     public Business Business { get; set; }
@@ -40,6 +40,10 @@ public class MessageLog
     // 🔗 CTA Flow Tracking
     public Guid? CTAFlowConfigId { get; set; }  // Which visual flow config this message belongs to
     public Guid? CTAFlowStepId { get; set; }    // Which flow step (template) this message originated from
+
+    public int? FlowVersion { get; set; }                // which version of the flow this message belongs to
+    public string? ButtonBundleJson { get; set; }
+
     public Campaign? SourceCampaign { get; set; } // renamed from "Campaign" to avoid name conflict
 
     public bool IsIncoming { get; set; }

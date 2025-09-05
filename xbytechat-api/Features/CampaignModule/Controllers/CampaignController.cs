@@ -203,7 +203,8 @@ namespace xbytechat.api.Features.CampaignModule.Controllers
                 return StatusCode(500, new { message = "Error removing recipient", detail = ex.Message });
             }
         }
-        // Send campaign method
+        
+        // Send campaign method (Core Method to send template message)
         [HttpPost("send-campaign/{campaignId}")] // use to send free text and Template campaigns
         public async Task<IActionResult> SendTemplateCampaign(Guid campaignId)
         {
@@ -301,5 +302,14 @@ namespace xbytechat.api.Features.CampaignModule.Controllers
 
             return Guid.Parse(claim);
         }
+    
+        [HttpGet("list/{businessId:guid}")]
+        public async Task<IActionResult> GetAvailableFlows(Guid businessId, [FromQuery] bool onlyPublished = true)
+        {
+            var items = await _campaignService.GetAvailableFlowsAsync(businessId, onlyPublished);
+            return Ok(new { success = true, items });
+        }
+
+
     }
 }

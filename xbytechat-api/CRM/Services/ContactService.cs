@@ -13,6 +13,7 @@ using xbytechat.api;
 using xbytechat.api.CRM.Dtos;
 using xbytechat.api.CRM.Interfaces;
 using xbytechat.api.CRM.Models;
+using xbytechat.api.Helpers;
 
 namespace xbytechat.api.CRM.Services
 {
@@ -27,69 +28,248 @@ namespace xbytechat.api.CRM.Services
             _logger = logger;
         }
 
-        public async Task<ContactDto> AddContactAsync(Guid businessId, ContactDto dto)
+        //public async Task<ContactDto> AddContactAsync(Guid businessId, ContactDto dto)
+        //{
+        //    _logger.LogInformation("AddContactAsync called for businessId={BusinessId}, Name={Name}", businessId, dto.Name);
+
+        //    var contact = new Contact
+        //    {
+        //        Id = Guid.NewGuid(),
+        //        BusinessId = businessId,
+        //        Name = dto.Name,
+        //        PhoneNumber = dto.PhoneNumber,
+        //        Email = dto.Email,
+        //        LeadSource = dto.LeadSource,
+        //        LastContactedAt = dto.LastContactedAt?.ToUniversalTime(),
+        //        NextFollowUpAt = dto.NextFollowUpAt?.ToUniversalTime(),
+        //        Notes = dto.Notes,
+        //        CreatedAt = DateTime.UtcNow,
+        //        IsFavorite = dto.IsFavorite,
+        //        IsArchived = dto.IsArchived,
+        //        Group = dto.Group
+        //    };
+
+        //    if (dto.Tags != null && dto.Tags.Any())
+        //    {
+        //        contact.ContactTags = dto.Tags.Select(t => new ContactTag
+        //        {
+        //            Id = Guid.NewGuid(),
+        //            ContactId = contact.Id,
+        //            TagId = t.TagId,
+        //            BusinessId = businessId,
+        //            AssignedAt = DateTime.UtcNow,
+        //            AssignedBy = "system"
+        //        }).ToList();
+        //    }
+
+        //    _db.Contacts.Add(contact);
+
+        //    try
+        //    {
+        //        await _db.SaveChangesAsync();
+        //        _logger.LogInformation("Contact added: {ContactId} for businessId={BusinessId}", contact.Id, businessId);
+        //    }
+        //    catch (DbUpdateException ex)
+        //    {
+        //        _logger.LogError(ex, "DB error in AddContactAsync (Contact: {Contact}, BusinessId={BusinessId})", contact, businessId);
+        //        var innerMessage = ex.InnerException?.Message ?? ex.Message;
+        //        throw new Exception("❌ DB save error (Contact): " + innerMessage, ex);
+        //    }
+
+        //    return new ContactDto
+        //    {
+        //        Id = contact.Id,
+        //        Name = contact.Name,
+        //        PhoneNumber = contact.PhoneNumber,
+        //        Email = contact.Email,
+        //        LeadSource = contact.LeadSource,
+        //        LastContactedAt = contact.LastContactedAt,
+        //        NextFollowUpAt = contact.NextFollowUpAt,
+        //        Notes = contact.Notes,
+        //        CreatedAt = contact.CreatedAt,
+        //        Tags = dto.Tags ?? new List<ContactTagDto>()
+        //    };
+        //}
+
+        //public async Task<ResponseResult> AddContactAsync(Guid businessId, ContactDto dto)
+        //{
+        //    _logger.LogInformation("📩 AddContactAsync called for businessId={BusinessId}, Name={Name}", businessId, dto.Name);
+
+        //    try
+        //    {
+        //        // 1. Duplicate check
+        //        if (!string.IsNullOrWhiteSpace(dto.PhoneNumber))
+        //        {
+        //            var existingContact = await _db.Contacts.FirstOrDefaultAsync(c =>
+        //                c.BusinessId == businessId && c.PhoneNumber == dto.PhoneNumber);
+
+        //            if (existingContact != null)
+        //            {
+        //                _logger.LogWarning("⚠️ Duplicate contact attempt for phone {Phone}", dto.PhoneNumber);
+        //                return ResponseResult.ErrorInfo(
+        //                    $"❌ A contact with the phone number '{dto.PhoneNumber}' already exists."
+        //                );
+        //            }
+        //        }
+
+        //        // 2. Build entity
+        //        var contact = new Contact
+        //        {
+        //            Id = Guid.NewGuid(),
+        //            BusinessId = businessId,
+        //            Name = dto.Name,
+        //            PhoneNumber = dto.PhoneNumber,
+        //            Email = dto.Email,
+        //            LeadSource = dto.LeadSource,
+        //            LastContactedAt = dto.LastContactedAt?.ToUniversalTime(),
+        //            NextFollowUpAt = dto.NextFollowUpAt?.ToUniversalTime(),
+        //            Notes = dto.Notes,
+        //            CreatedAt = DateTime.UtcNow,
+        //            IsFavorite = dto.IsFavorite,
+        //            IsArchived = dto.IsArchived,
+        //            Group = dto.Group
+        //        };
+
+        //        // 3. Tags mapping
+        //        if (dto.Tags != null && dto.Tags.Any())
+        //        {
+        //            contact.ContactTags = dto.Tags.Select(t => new ContactTag
+        //            {
+        //                Id = Guid.NewGuid(),
+        //                ContactId = contact.Id,
+        //                TagId = t.TagId,
+        //                BusinessId = businessId,
+        //                AssignedAt = DateTime.UtcNow,
+        //                AssignedBy = "system"
+        //            }).ToList();
+        //        }
+
+        //        _db.Contacts.Add(contact);
+
+        //        // 4. Save
+        //        try
+        //        {
+        //            await _db.SaveChangesAsync();
+        //            _logger.LogInformation("✅ Contact added successfully: {ContactId} (BusinessId={BusinessId})", contact.Id, businessId);
+        //        }
+        //        catch (DbUpdateException ex)
+        //        {
+        //            _logger.LogError(ex, "❌ DB error in AddContactAsync (BusinessId={BusinessId})", businessId);
+        //            var innerMessage = ex.InnerException?.Message ?? ex.Message;
+        //            return ResponseResult.ErrorInfo("❌ Database save error (Contact): " + innerMessage);
+        //        }
+
+        //        // 5. Map back to DTO
+        //        var resultDto = new ContactDto
+        //        {
+        //            Id = contact.Id,
+        //            Name = contact.Name,
+        //            PhoneNumber = contact.PhoneNumber,
+        //            Email = contact.Email,
+        //            LeadSource = contact.LeadSource,
+        //            LastContactedAt = contact.LastContactedAt,
+        //            NextFollowUpAt = contact.NextFollowUpAt,
+        //            Notes = contact.Notes,
+        //            CreatedAt = contact.CreatedAt,
+        //            IsFavorite = contact.IsFavorite,
+        //            IsArchived = contact.IsArchived,
+        //            Group = contact.Group,
+        //            Tags = dto.Tags ?? new List<ContactTagDto>()
+        //        };
+
+        //        return ResponseResult.SuccessInfo("✅ Contact created successfully.", resultDto);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _logger.LogError(ex, "🚨 Unexpected error in AddContactAsync (BusinessId={BusinessId})", businessId);
+        //        return ResponseResult.ErrorInfo("🚨 A server error occurred while creating the contact.", ex.Message);
+        //    }
+        //}
+
+        public async Task<ResponseResult> AddContactAsync(Guid businessId, ContactDto dto)
         {
-            _logger.LogInformation("AddContactAsync called for businessId={BusinessId}, Name={Name}", businessId, dto.Name);
-
-            var contact = new Contact
-            {
-                Id = Guid.NewGuid(),
-                BusinessId = businessId,
-                Name = dto.Name,
-                PhoneNumber = dto.PhoneNumber,
-                Email = dto.Email,
-                LeadSource = dto.LeadSource,
-                LastContactedAt = dto.LastContactedAt?.ToUniversalTime(),
-                NextFollowUpAt = dto.NextFollowUpAt?.ToUniversalTime(),
-                Notes = dto.Notes,
-                CreatedAt = DateTime.UtcNow,
-                IsFavorite = dto.IsFavorite,
-                IsArchived = dto.IsArchived,
-                Group = dto.Group
-            };
-
-            if (dto.Tags != null && dto.Tags.Any())
-            {
-                contact.ContactTags = dto.Tags.Select(t => new ContactTag
-                {
-                    Id = Guid.NewGuid(),
-                    ContactId = contact.Id,
-                    TagId = t.TagId,
-                    BusinessId = businessId,
-                    AssignedAt = DateTime.UtcNow,
-                    AssignedBy = "system"
-                }).ToList();
-            }
-
-            _db.Contacts.Add(contact);
+            _logger.LogInformation("📩 AddContactAsync called for businessId={BusinessId}, Name={Name}", businessId, dto.Name);
 
             try
             {
+                // 1. Normalize the phone number using your private method first.
+                var normalizedPhone = NormalizePhone(dto.PhoneNumber);
+
+                // 2. Validate the normalized number.
+                // Your NormalizePhone method returns an empty string for invalid numbers.
+                if (string.IsNullOrWhiteSpace(normalizedPhone))
+                {
+                    return ResponseResult.ErrorInfo("❌ Phone number is invalid. It must contain exactly 10 digits.");
+                }
+
+                // 3. Use the clean, normalized number for the duplicate check.
+                var existingContact = await _db.Contacts.FirstOrDefaultAsync(c =>
+                    c.BusinessId == businessId && c.PhoneNumber == normalizedPhone);
+
+                if (existingContact != null)
+                {
+                    _logger.LogWarning("⚠️ Duplicate contact attempt for phone {Phone}", dto.PhoneNumber);
+                    return ResponseResult.ErrorInfo(
+                        $"❌ A contact with the phone number '{dto.PhoneNumber}' already exists."
+                    );
+                }
+
+                // 4. Build the new contact entity, SAVING the normalized number.
+                var contact = new Contact
+                {
+                    Id = Guid.NewGuid(),
+                    BusinessId = businessId,
+                    Name = dto.Name,
+                    PhoneNumber = normalizedPhone, // Save the standardized number
+                    Email = dto.Email,
+                    LeadSource = dto.LeadSource,
+                    LastContactedAt = dto.LastContactedAt?.ToUniversalTime(),
+                    NextFollowUpAt = dto.NextFollowUpAt?.ToUniversalTime(),
+                    Notes = dto.Notes,
+                    CreatedAt = DateTime.UtcNow,
+                    IsFavorite = dto.IsFavorite,
+                    IsArchived = dto.IsArchived,
+                    Group = dto.Group
+                };
+
+                // Map tags if they are provided
+                if (dto.Tags != null && dto.Tags.Any())
+                {
+                    contact.ContactTags = dto.Tags.Select(t => new ContactTag
+                    {
+                        Id = Guid.NewGuid(),
+                        ContactId = contact.Id,
+                        TagId = t.TagId,
+                        BusinessId = businessId,
+                        AssignedAt = DateTime.UtcNow,
+                        AssignedBy = "system"
+                    }).ToList();
+                }
+
+                _db.Contacts.Add(contact);
                 await _db.SaveChangesAsync();
-                _logger.LogInformation("Contact added: {ContactId} for businessId={BusinessId}", contact.Id, businessId);
-            }
-            catch (DbUpdateException ex)
-            {
-                _logger.LogError(ex, "DB error in AddContactAsync (Contact: {Contact}, BusinessId={BusinessId})", contact, businessId);
-                var innerMessage = ex.InnerException?.Message ?? ex.Message;
-                throw new Exception("❌ DB save error (Contact): " + innerMessage, ex);
-            }
+                _logger.LogInformation("✅ Contact added successfully: {ContactId}", contact.Id);
 
-            return new ContactDto
+                // Map the created entity back to a DTO for the response
+                var resultDto = new ContactDto
+                {
+                    Id = contact.Id,
+                    Name = contact.Name,
+                    PhoneNumber = contact.PhoneNumber,
+                    Email = contact.Email,
+                    LeadSource = contact.LeadSource,
+                    CreatedAt = contact.CreatedAt,
+                    Tags = contact.ContactTags?.Select(ct => new ContactTagDto { TagId = ct.TagId }).ToList() ?? new List<ContactTagDto>()
+                };
+
+                return ResponseResult.SuccessInfo("✅ Contact created successfully.", resultDto);
+            }
+            catch (Exception ex)
             {
-                Id = contact.Id,
-                Name = contact.Name,
-                PhoneNumber = contact.PhoneNumber,
-                Email = contact.Email,
-                LeadSource = contact.LeadSource,
-                LastContactedAt = contact.LastContactedAt,
-                NextFollowUpAt = contact.NextFollowUpAt,
-                Notes = contact.Notes,
-                CreatedAt = contact.CreatedAt,
-                Tags = dto.Tags ?? new List<ContactTagDto>()
-            };
+                _logger.LogError(ex, "🚨 Unexpected error in AddContactAsync for business {BusinessId}", businessId);
+                return ResponseResult.ErrorInfo("🚨 A server error occurred while creating the contact.", ex.Message);
+            }
         }
-
         public async Task<ContactDto> GetContactByIdAsync(Guid businessId, Guid contactId)
         {
             _logger.LogInformation("GetContactByIdAsync: businessId={BusinessId}, contactId={ContactId}", businessId, contactId);
@@ -195,52 +375,7 @@ namespace xbytechat.api.CRM.Services
             }
         }
 
-        //public async Task<CsvImportResult<ContactDto>> ParseCsvToContactsAsync(Guid businessId, Stream csvStream)
-        //{
-        //    _logger.LogInformation("ParseCsvToContactsAsync: businessId={BusinessId}", businessId);
-        //    var result = new CsvImportResult<ContactDto>();
-
-        //    var config = new CsvConfiguration(CultureInfo.InvariantCulture)
-        //    {
-        //        HeaderValidated = null,
-        //        MissingFieldFound = null
-        //    };
-
-        //    using var reader = new StreamReader(csvStream);
-        //    using var csv = new CsvReader(reader, config);
-
-        //    csv.Context.RegisterClassMap<ContactDtoCsvMap>();
-
-        //    int rowNumber = 1; // Assuming header row is 1
-
-        //    await csv.ReadAsync();
-        //    csv.ReadHeader();
-
-        //    while (await csv.ReadAsync())
-        //    {
-        //        rowNumber++;
-        //        try
-        //        {
-        //            var record = csv.GetRecord<ContactDto>();
-        //            record.CreatedAt = DateTime.UtcNow;
-        //            result.SuccessRecords.Add(record);
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            result.Errors.Add(new CsvImportError
-        //            {
-        //                RowNumber = rowNumber, 
-        //                ErrorMessage = ex.Message
-        //            });
-        //        }
-        //    }
-
-        //    _logger.LogInformation("CSV parsed with {SuccessCount} successes and {ErrorCount} errors.",
-        //        result.SuccessRecords.Count, result.Errors.Count);
-
-        //    return result;
-        //}
-
+        
         public async Task<CsvImportResult<ContactDto>> ParseCsvToContactsAsync(Guid businessId, Stream csvStream)
         {
             _logger.LogInformation("ParseCsvToContactsAsync: businessId={BusinessId}", businessId);
@@ -292,13 +427,71 @@ namespace xbytechat.api.CRM.Services
             return result;
         }
 
+        //private string NormalizePhone(string phoneNumber)
+        //{
+        //    if (string.IsNullOrWhiteSpace(phoneNumber))
+        //        return phoneNumber;
+
+        //    var digits = new string(phoneNumber.Where(char.IsDigit).ToArray());
+
+        //    // If it starts with "91" and length = 12 → add +
+        //    if (digits.StartsWith("91") && digits.Length == 12)
+        //        return "+" + digits;
+
+        //    // If it starts with "91" and length = 10 (missing country code) → add +91
+        //    if (digits.Length == 10)
+        //        return "+91" + digits;
+
+        //    // If it already includes country code with + (13 digits for India)
+        //    if (digits.StartsWith("91") && digits.Length == 12)
+        //        return "+" + digits;
+
+        //    // Fallback → return with +
+        //    if (!digits.StartsWith("+"))
+        //        return "+" + digits;
+
+        //    return digits;
+        //}
+
+        private string NormalizePhone(string phoneNumber)
+        {
+            // 1. Handle empty or null input
+            if (string.IsNullOrWhiteSpace(phoneNumber))
+            {
+                return string.Empty;
+            }
+
+            // 2. Extract only the numeric digits from the string
+            var digits = new string(phoneNumber.Where(char.IsDigit).ToArray());
+
+            // 3. If the number starts with India's country code (91) and is 12 digits long,
+            //    strip the country code to get the core 10-digit number.
+            if (digits.StartsWith("91") && digits.Length == 12)
+            {
+                digits = digits.Substring(2);
+            }
+
+            // 4. NEW: Strictly validate that the result is 10 digits long.
+            if (digits.Length != 10)
+            {
+                // If the number of digits is not exactly 10, it's invalid.
+                // Return an empty string to signal that it could not be normalized.
+                return string.Empty;
+            }
+
+            // 5. If the number is a valid 10 digits, return it in the standard +91 format.
+            return "+91" + digits;
+        }
         public async Task<Contact> FindOrCreateAsync(Guid businessId, string phoneNumber)
         {
-            _logger.LogInformation("FindOrCreateAsync: businessId={BusinessId}, phoneNumber={PhoneNumber}", businessId, phoneNumber);
+            var normalized = NormalizePhone(phoneNumber);
+            _logger.LogInformation("FindOrCreateAsync: businessId={BusinessId}, rawPhone={PhoneNumber}, normalized={Normalized}",
+                businessId, phoneNumber, normalized);
+
             try
             {
                 var contact = await _db.Contacts
-                    .FirstOrDefaultAsync(c => c.BusinessId == businessId && c.PhoneNumber == phoneNumber);
+                    .FirstOrDefaultAsync(c => c.BusinessId == businessId && c.PhoneNumber == normalized);
 
                 if (contact != null)
                 {
@@ -311,7 +504,7 @@ namespace xbytechat.api.CRM.Services
                     Id = Guid.NewGuid(),
                     BusinessId = businessId,
                     Name = "WhatsApp User",
-                    PhoneNumber = phoneNumber,
+                    PhoneNumber = normalized,
                     CreatedAt = DateTime.UtcNow
                 };
 

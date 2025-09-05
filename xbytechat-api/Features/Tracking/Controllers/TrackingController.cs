@@ -4,7 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using xbytechat.api; // Your using for AppDbContext
 using xbytechat.api.Features.Tracking.Services;
-using xbytechat.api.Features.Tracking.DTOs; // Your using for DTOs
+using xbytechat.api.Features.Tracking.DTOs;
+using xbytechat.api.Features.CampaignTracking.Worker; // Your using for DTOs
 
 namespace xbytechat.api.Features.Tracking.Controllers
 {
@@ -29,35 +30,100 @@ namespace xbytechat.api.Features.Tracking.Controllers
             return Ok(journeyEvents);
         }
 
-        /// <summary>
-        /// This is the primary endpoint for tracking a campaign button click.
-        /// It records the click details and redirects the user to the final destination URL.
-        /// </summary>
-        /// <param name="campaignSendLogId">The unique ID of the campaign send log.</param>
-        /// <param name="type">The type of button clicked (e.g., "shop_now").</param>
-        /// <param name="to">The final destination URL to redirect the user to.</param>
+
+        //[HttpGet("redirect/{campaignSendLogId}")]
+        //public async Task<IActionResult> TrackCampaignClick(
+        //    Guid campaignSendLogId,
+        //    [FromQuery] string type,
+        //    [FromQuery] string to)
+        //{
+        //    if (string.IsNullOrWhiteSpace(to))
+        //    {
+        //        return BadRequest("Missing redirect target URL.");
+        //    }
+
+        //    var log = await _context.CampaignSendLogs.FindAsync(campaignSendLogId);
+        //    if (log != null)
+        //    {
+        //        log.IsClicked = true;
+        //        log.ClickedAt = DateTime.UtcNow;
+        //        log.ClickType = type;
+        //        log.IpAddress = HttpContext.Connection.RemoteIpAddress?.ToString();
+        //        await _context.SaveChangesAsync();
+        //    }
+
+        //    return Redirect(to);
+        //}
+
         [HttpGet("redirect/{campaignSendLogId}")]
         public async Task<IActionResult> TrackCampaignClick(
-            Guid campaignSendLogId,
-            [FromQuery] string type,
-            [FromQuery] string to)
+                            Guid campaignSendLogId,
+                            [FromQuery] string type,
+                            [FromQuery] string to,
+                            [FromQuery] int? idx = null,                // optional button index if caller knows it
+                            CancellationToken ct = default)
         {
             if (string.IsNullOrWhiteSpace(to))
-            {
                 return BadRequest("Missing redirect target URL.");
-            }
 
-            var log = await _context.CampaignSendLogs.FindAsync(campaignSendLogId);
+            // Normalize & validate destination
+            if (!Uri.TryCreate(to, UriKind.Absolute, out var destUri))
+                return BadRequest("Destination URL is invalid.");
+
+            // Derive a clickType when not provided
+            string clickType = string.IsNullOrWhiteSpace(type)
+                ? ClassifyClickType(destUri)
+                : type.Trim().ToLowerInvariant();
+
+            // Load parent CSL (so we can copy RunId etc.)
+            var log = await _context.CampaignSendLogs.FindAsync(new object[] { campaignSendLogId }, ct);
             if (log != null)
             {
+                // First-click fast path on the send
                 log.IsClicked = true;
                 log.ClickedAt = DateTime.UtcNow;
-                log.ClickType = type;
+                log.ClickType = clickType;
                 log.IpAddress = HttpContext.Connection.RemoteIpAddress?.ToString();
-                await _context.SaveChangesAsync();
+
+                // Persist a CampaignClickLog row (ties this click to the same run)
+                var ua = Request.Headers.UserAgent.ToString();
+                await _context.CampaignClickLogs.AddAsync(new CampaignClickLog
+                {
+                    Id = Guid.NewGuid(),
+                    CampaignSendLogId = log.Id,
+                    CampaignId = log.CampaignId,
+                    ContactId = log.ContactId,
+                    ButtonIndex = (short)(idx ?? 0),
+                    ButtonTitle = string.IsNullOrWhiteSpace(type) ? "link" : type,
+                    Destination = destUri.ToString(),
+                    ClickedAt = DateTime.UtcNow,
+                    Ip = log.IpAddress ?? "",
+                    UserAgent = ua ?? "",
+                    ClickType = clickType,
+                    RunId = log.RunId              // ← remove if your schema doesn't have RunId yet
+                }, ct);
+
+                await _context.SaveChangesAsync(ct);
             }
 
-            return Redirect(to);
+            // Simple 302 redirect
+            return Redirect(destUri.ToString());
+        }
+
+        // Simple classifier used above
+        private static string ClassifyClickType(Uri u)
+        {
+            if (u == null) return "web";
+            var scheme = u.Scheme?.ToLowerInvariant() ?? "";
+            if (scheme == "tel") return "call";
+            if (scheme == "whatsapp") return "whatsapp";
+            if (scheme is "http" or "https")
+            {
+                var host = u.Host?.ToLowerInvariant() ?? "";
+                if (host.Contains("wa.me") || host.Contains("api.whatsapp.com"))
+                    return "whatsapp";
+            }
+            return "web";
         }
 
         /// <summary>
@@ -100,261 +166,3 @@ namespace xbytechat.api.Features.Tracking.Controllers
         }
     }
 }
-
-//using Microsoft.AspNetCore.Authorization;
-//using Microsoft.AspNetCore.Mvc;
-//using Microsoft.EntityFrameworkCore;
-//using Serilog;
-//using System;
-//using System.Linq;
-//using System.Threading.Tasks;
-//using xbytechat.api.Features.Tracking.DTOs;
-//using xbytechat.api.Features.Tracking.Models;
-//using xbytechat.api.Features.Tracking.Services;
-//using xbytechat.api.Shared.TrackingUtils;
-
-//namespace xbytechat.api.Features.Tracking.Controllers
-//{
-//    [ApiController]
-//    [Route("api/tracking")]
-//    public class TrackingController : ControllerBase
-//    {
-//        private readonly ITrackingService _tracker;
-
-//        public TrackingController(ITrackingService tracker)
-//        {
-//            _tracker = tracker;
-//        }
-//        #region "Tracking Logs"
-//        //       [HttpGet("redirect")]
-//        //       public async Task<IActionResult> TrackAndRedirect(
-//        //                                        [FromQuery] string src,
-//        //                                        [FromQuery] Guid id,
-//        //                                        [FromQuery] string btn,
-//        //                                        [FromQuery] string? to = null,
-//        //                                        [FromQuery] string? type = null,
-//        //                                        [FromQuery] Guid? msg = null,
-//        //                                        [FromQuery] Guid? contact = null,
-//        //                                        [FromQuery] string? phone = null,
-//        //                                        [FromQuery] string? session = null,
-//        //                                        [FromQuery] string? thread = null
-//        //)
-//        //       {
-//        //           var userAgent = Request.Headers["User-Agent"].FirstOrDefault() ?? "unknown";
-//        //           var ipAddress = Request.Headers["X-Forwarded-For"].FirstOrDefault()
-//        //                        ?? HttpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown";
-
-//        //           var country = await GeoHelper.GetCountryFromIP(ipAddress);
-//        //           var deviceType = DeviceHelper.GetDeviceType(userAgent);
-
-//        //           var businessIdClaim = User.FindFirst("businessId")?.Value;
-//        //           if (!Guid.TryParse(businessIdClaim, out var businessId))
-//        //               return Unauthorized("Invalid business context");
-
-//        //           var dto = new TrackingLogDto
-//        //           {
-//        //               BusinessId = businessId,// Guid.Empty, // TODO: Replace with actual business lookup if available
-//        //               ContactId = contact,
-//        //               ContactPhone = phone,
-//        //               SourceType = src,
-//        //               SourceId = id,
-//        //               ButtonText = btn,
-//        //               CTAType = type ?? btn,
-//        //               MessageId = msg?.ToString(),
-//        //               SessionId = session,
-//        //               ThreadId = thread,
-//        //               ClickedAt = DateTime.UtcNow,
-//        //               IPAddress = ipAddress,
-//        //               Browser = userAgent,
-//        //               DeviceType = deviceType,
-//        //               Country = country,
-//        //               ClickedVia = "web"
-//        //           };
-
-//        //           await _tracker.LogCTAClickAsync(dto);
-
-//        //           if (string.IsNullOrWhiteSpace(to))
-//        //               return BadRequest("Missing redirect target.");
-
-//        //           var decodedUrl = Uri.UnescapeDataString(to);
-//        //           return Redirect(decodedUrl);
-//        //       }
-
-//        #endregion
-
-//        //        [HttpGet("redirect")]
-//        //        public async Task<IActionResult> TrackAndRedirect(
-//        //            [FromQuery] string src,
-//        //            [FromQuery] Guid id,
-//        //            [FromQuery] string btn,
-//        //            [FromQuery] string? to = null,
-//        //            [FromQuery] string? type = null,
-//        //            [FromQuery] Guid? msg = null,
-//        //            [FromQuery] Guid? contact = null,
-//        //            [FromQuery] string? phone = null,
-//        //            [FromQuery] string? session = null,
-//        //            [FromQuery] string? thread = null
-//        //)
-//        //        {
-//        //            var userAgent = Request.Headers["User-Agent"].FirstOrDefault() ?? "unknown";
-//        //            var ipAddress = Request.Headers["X-Forwarded-For"].FirstOrDefault()
-//        //                         ?? HttpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown";
-
-//        //            var country = await GeoHelper.GetCountryFromIP(ipAddress);
-//        //            var deviceType = DeviceHelper.GetDeviceType(userAgent);
-
-//        //            // 🔍 1. Attempt to extract businessId from claims
-//        //            var businessIdClaim = User.FindFirst("businessId")?.Value;
-//        //            var hasBusinessId = Guid.TryParse(businessIdClaim, out var businessId);
-
-//        //            // 🧠 2. Create base DTO
-//        //            var dto = new TrackingLogDto
-//        //            {
-//        //                BusinessId = hasBusinessId ? businessId : Guid.Empty, // fallback — will enrich later
-//        //                ContactId = contact,
-//        //                ContactPhone = phone,
-//        //                SourceType = src,
-//        //                SourceId = id,
-//        //                ButtonText = btn,
-//        //                CTAType = type ?? btn,
-//        //                MessageId = msg?.ToString(),
-//        //                SessionId = session,
-//        //                ThreadId = thread,
-//        //                ClickedAt = DateTime.UtcNow,
-//        //                IPAddress = ipAddress,
-//        //                Browser = userAgent,
-//        //                DeviceType = deviceType,
-//        //                Country = country,
-//        //                ClickedVia = "web"
-//        //            };
-
-//        //            // 🔁 3. Fallback enrichment from MessageLog
-//        //            if (msg.HasValue)
-//        //            {
-//        //                var messageLog = await _context.MessageLogs
-//        //                    .AsNoTracking()
-//        //                    .FirstOrDefaultAsync(m => m.Id == msg.Value || m.MessageId == msg.ToString());
-
-//        //                if (messageLog != null)
-//        //                {
-//        //                    // 🧩 Backfill missing fields if needed
-//        //                    dto.BusinessId = dto.BusinessId == Guid.Empty ? messageLog.BusinessId : dto.BusinessId;
-//        //                    dto.ContactId ??= messageLog.ContactId;
-//        //                    dto.CampaignId ??= messageLog.CampaignId;
-//        //                    dto.MessageLogId ??= messageLog.Id;
-//        //                }
-//        //            }
-
-//        //            // 🔁 4. Fallback from CampaignSendLog (if SourceType is "campaign")
-//        //            if (src == "campaign" && msg.HasValue && dto.CampaignId == null)
-//        //            {
-//        //                var sendLog = await _context.CampaignSendLogs
-//        //                    .AsNoTracking()
-//        //                    .FirstOrDefaultAsync(c => c.MessageId == msg.ToString());
-
-//        //                if (sendLog != null)
-//        //                {
-//        //                    dto.BusinessId = dto.BusinessId == Guid.Empty ? sendLog.BusinessId : dto.BusinessId;
-//        //                    dto.ContactId ??= sendLog.ContactId;
-//        //                    dto.CampaignId ??= sendLog.CampaignId;
-//        //                    dto.CampaignSendLogId ??= sendLog.Id;
-//        //                }
-//        //            }
-
-//        //            // ✅ 5. Final safety check
-//        //            if (dto.BusinessId == Guid.Empty)
-//        //            {
-//        //                Log.Warning("⚠️ TrackingLog DTO missing valid BusinessId. msg={@msg}", msg);
-//        //                return Unauthorized("Business context missing or invalid.");
-//        //            }
-
-//        //            // 💾 6. Save to database
-//        //            await _tracker.LogCTAClickAsync(dto);
-
-//        //            // 🌐 7. Redirect to final URL
-//        //            if (string.IsNullOrWhiteSpace(to))
-//        //                return BadRequest("Missing redirect target.");
-
-//        //            var decodedUrl = Uri.UnescapeDataString(to);
-//        //            return Redirect(decodedUrl);
-//        //        }
-//        [HttpGet("redirect")]
-//        public async Task<IActionResult> TrackAndRedirect([FromQuery] string src, [FromQuery] Guid id,
-//            [FromQuery] string btn, [FromQuery] string? to = null, [FromQuery] string? type = null,
-//            [FromQuery] Guid? msg = null, [FromQuery] Guid? contact = null, [FromQuery] string? phone = null,
-//            [FromQuery] string? session = null, [FromQuery] string? thread = null)
-//        {
-//            var userAgent = Request.Headers["User-Agent"].FirstOrDefault() ?? "unknown";
-//            var ipAddress = Request.Headers["X-Forwarded-For"].FirstOrDefault()
-//                         ?? HttpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown";
-
-//            var country = await GeoHelper.GetCountryFromIP(ipAddress);
-//            var deviceType = DeviceHelper.GetDeviceType(userAgent);
-
-//            var businessIdClaim = User.FindFirst("businessId")?.Value;
-//            var hasBusinessId = Guid.TryParse(businessIdClaim, out var businessId);
-
-//            var dto = new TrackingLogDto
-//            {
-//                BusinessId = hasBusinessId ? businessId : Guid.Empty,
-//                ContactId = contact,
-//                ContactPhone = phone,
-//                SourceType = src,
-//                SourceId = id,
-//                ButtonText = btn,
-//                CTAType = type ?? btn,
-//                MessageId = msg?.ToString(),
-//                SessionId = session,
-//                ThreadId = thread,
-//                ClickedAt = DateTime.UtcNow,
-//                IPAddress = ipAddress,
-//                Browser = userAgent,
-//                DeviceType = deviceType,
-//                Country = country,
-//                ClickedVia = "web"
-//            };
-
-//            var result = await _tracker.LogCTAClickWithEnrichmentAsync(dto);
-//            if (!result.Success)
-//                return Unauthorized(result.Message);
-
-//            if (string.IsNullOrWhiteSpace(to))
-//                return BadRequest("Missing redirect target.");
-
-//            return Redirect(Uri.UnescapeDataString(to));
-//        }
-
-//        [HttpGet("logs/{id}/details")]
-//        public async Task<IActionResult> GetLogDetails(Guid id)
-//        {
-//            var result = await _tracker.GetLogDetailsAsync(id);
-//            if (result == null)
-//                return NotFound("Tracking log not found");
-
-//            return Ok(result);
-//        }
-//        [HttpGet("flow-clicks")]
-
-//        public async Task<IActionResult> GetFlowClickLogs()
-//        {
-//            var businessIdClaim = User.FindFirst("businessId")?.Value;
-//            if (!Guid.TryParse(businessIdClaim, out var businessId))
-//                return BadRequest("❌ Invalid or missing business ID");
-
-//            var logs = await _tracker.GetFlowClickLogsAsync(businessId);
-
-//            var dtoList = logs.Select(x => new
-//            {
-//                x.Id,
-//                x.StepId,
-//                x.ContactPhone,
-//                x.ButtonText,
-//                x.TemplateId,
-//                x.FollowUpSent,
-//                x.ClickedAt
-//            });
-
-//            return Ok(dtoList);
-//        }
-//    }
-//}

@@ -73,7 +73,7 @@ namespace xbytechat.api.Features.CampaignModule.Services
             var recipient = await _context.CampaignRecipients.FindAsync(recipientId);
             if (recipient == null) return false;
 
-            recipient.ClickedCTA = replyText; // You may later rename this to something like `LastReply`
+            recipient.ClickedCTA = replyText;
             recipient.UpdatedAt = DateTime.UtcNow;
 
             await _context.SaveChangesAsync();
@@ -111,32 +111,6 @@ namespace xbytechat.api.Features.CampaignModule.Services
                 .ToListAsync();
         }
 
-        //public async Task AssignContactsToCampaignAsync(Guid campaignId, List<Guid> contactIds)
-        //{
-        //    var existing = await _context.CampaignRecipients
-        //        .Where(r => r.CampaignId == campaignId && contactIds.Contains(r.ContactId))
-        //        .Select(r => r.ContactId)
-        //        .ToListAsync();
-
-        //    var newRecipients = contactIds
-        //        .Where(id => !existing.Contains(id))
-        //        .Select(contactId => new CampaignRecipient
-        //        {
-        //            Id = Guid.NewGuid(),
-        //            CampaignId = campaignId,
-        //            ContactId = contactId,
-        //            Status = "Pending",
-        //            SentAt = DateTime.UtcNow,
-        //            UpdatedAt = DateTime.UtcNow,
-        //            IsAutoTagged = false
-        //        }).ToList();
-
-        //    if (newRecipients.Any())
-        //    {
-        //        await _context.CampaignRecipients.AddRangeAsync(newRecipients);
-        //        await _context.SaveChangesAsync();
-        //    }
-        //}
         public async Task AssignContactsToCampaignAsync(Guid campaignId, List<Guid> contactIds)
         {
             var campaign = await _context.Campaigns

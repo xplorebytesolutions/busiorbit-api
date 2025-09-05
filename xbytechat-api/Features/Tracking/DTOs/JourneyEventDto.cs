@@ -2,10 +2,16 @@
 {
     public class JourneyEventDto
     {
-        public string EventType { get; set; } // e.g., "MessageSent", "ButtonClicked"
-        public string Source { get; set; } // "System" or "User"
-        public string Title { get; set; } // e.g., "Sent Template:" or "Clicked Button:"
-        public string Details { get; set; } // e.g., the template name or the button text
         public DateTime Timestamp { get; set; }
+        public string Source { get; set; } = "System"; // System/User/Provider
+        public string EventType { get; set; } = "";    // MessageSent/Delivered/Read/ButtonClicked/FlowStep/FlowSend/Redirect/Error
+        public string Title { get; set; } = "";
+        public string Details { get; set; } = "";
+        public Guid? StepId { get; set; }
+        public string? StepName { get; set; }
+        public int? ButtonIndex { get; set; }
+        public string? ButtonTitle { get; set; }
+        public string? Url { get; set; }
+        public string? TemplateName { get; set; }
     }
 }

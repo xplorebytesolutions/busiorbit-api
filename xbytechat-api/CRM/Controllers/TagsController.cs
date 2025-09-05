@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using xbytechat.api.CRM.Dtos;
 using xbytechat.api.CRM.Interfaces;
-using xbytechat.api.Helpers; // For ResponseResult
-using xbytechat.api.Shared;  // For GetBusinessId extension
+using xbytechat.api.Helpers; 
+using xbytechat.api.Shared;  
 
 namespace xbytechat.api.CRM.Controllers
 {
@@ -35,7 +35,7 @@ namespace xbytechat.api.CRM.Controllers
             return Ok(ResponseResult.SuccessInfo("Tag updated."));
         }
 
-        [HttpGet]
+        [HttpGet("get-tags")]
         public async Task<IActionResult> GetAllTags()
         {
             var businessId = HttpContext.User.GetBusinessId();

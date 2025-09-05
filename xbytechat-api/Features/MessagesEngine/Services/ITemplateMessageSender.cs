@@ -11,19 +11,16 @@ namespace xbytechat.api.Features.MessagesEngine.Services
 {
     public interface ITemplateMessageSender
     {
-        /// <summary>
-        /// Sends a template message to a single contact (used in AutoReply/Flows).
-        /// </summary>
         Task<ResponseResult> SendTemplateMessageToContactAsync(
-            Guid businessId,
-            Contact contact,
-            string templateName,
-            List<string> templateParams,
-            string? imageUrl = null,
-            List<CampaignButton>? buttons = null,
-            string? source = null,
-            Guid? refMessageId = null
-        );
+           Guid businessId,
+           Contact contact,
+           string templateName,
+           List<string> templateParams,
+           string? imageUrl = null,
+           List<CampaignButton>? buttons = null,
+           string? source = null,
+           Guid? refMessageId = null
+       );
 
         Task<ResponseResult> SendTemplateCampaignAsync(Campaign campaign);
     }

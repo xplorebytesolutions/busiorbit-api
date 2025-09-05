@@ -12,5 +12,6 @@ namespace xbytechat_api.WhatsAppSettings.Services
         Task<bool> DeleteSettingsAsync(Guid businessId);
         Task<string> TestConnectionAsync(SaveWhatsAppSettingDto dto);
         Task<string?> GetSenderNumberAsync(Guid businessId);
+        Task<string> GetCallbackUrlAsync(Guid businessId, string appBaseUrl);
     }
 }

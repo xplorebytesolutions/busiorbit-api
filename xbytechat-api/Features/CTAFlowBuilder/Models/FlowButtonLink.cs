@@ -13,5 +13,7 @@
         // Optional FK back to Step if needed
         public Guid CTAFlowStepId { get; set; }
         public CTAFlowStep? Step { get; set; }
+
+        public short ButtonIndex { get; set; }
     }
 }

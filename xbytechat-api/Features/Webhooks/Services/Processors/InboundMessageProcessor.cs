@@ -41,9 +41,6 @@ namespace xbytechat.api.Features.Webhooks.Services.Processors
             _serviceScopeFactory = serviceScopeFactory;
         }
 
-
-
-        
         public async Task ProcessChatAsync(JsonElement value)
         {
             try
